@@ -1,16 +1,16 @@
 ---
-title: "Time Series Dashboard"
+title: "Forecasting Dashboard"
 output: 
   flexdashboard::flex_dashboard:
     orientation: rows
     vertical_layout: fill
     css: css/styles-default.css
-    logo: img/logo.png
+    # logo: img/logo.png
     social: ["menu"]
-    source_code: https://github.com/marcozanotti/tsforecasting-course
+    source_code: https://github.com/marcozanotti/tsforecasting-dashboard
     navbar:
       - { title: "About", href: "https://marcozanotti.netlify.app/", align: right }
-      - { title: "Manual", href: "https://example.com/about", align: right }
+      - { title: "Manual", href: "https://marcozanotti.github.io/tsforecasting-dashboard/manual/tsforecasting-manual.html", align: right }
 runtime: shiny
 ---
 
