@@ -1,0 +1,7 @@
+---
+title: "Time Series Forecasting - Manual"
+author: "Marco Zanotti"
+format: html
+---
+
+## COOMING SOON!
