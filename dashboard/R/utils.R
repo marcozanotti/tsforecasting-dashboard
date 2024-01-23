@@ -3,6 +3,10 @@ set_options <- function() {
 
   op <- options()
   op.tsf.dashboard <- list(
+  	tsf.dashboard.datasets = c(
+  		"Air Passengers", "EU Population", # "Electricity Demand", 
+  		"People Traffic", "Stock Price", "Tobacco Prod", ""
+  	),
     tsf.dashboard.methods = list(
       "ts" = c("Naive", "Seasonal Naive", "Rolling Average", "ETS", "Theta", "SARIMA", "TBATS", "STLM", "Prophet"),
       "ml" = c("Linear Regression", "Elastic Net", "MARS", "KNN", "SVM", "Random Forest", "Boosted Trees", "Cubist"),
