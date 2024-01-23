@@ -10,9 +10,9 @@ Next steps:
 - aggiornamento cluster h2o
 
 To Do:
-- aggiungere logica di transform_back i forecast - pensare bene a questo con feature eng
-- XAI
+- togliere titoli dai grafici XAI
 - pensare e aggiungere la sezione di feature engineering (con in mente il save)
+- aggiungere logica di transform_back i forecast - pensare bene a questo con feature eng
 
 - modificare output modello con parsing
 - pensare e aggiungere il save del modello ottimizzato + use optimize in altre sezioni

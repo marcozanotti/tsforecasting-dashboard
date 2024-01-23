@@ -785,20 +785,15 @@ get_features <- function(object, names_only = FALSE) {
 }
 
 # function to get observation with features from data
-get_observation <- function(data, date, n_assess, assess_type) {
+get_observation <- function(data, date, method, n_assess, assess_type) {
 	
+	# attention: just from test data, adapt in case it is needed for train 
 	splits <- generate_initial_split(data, n_assess, assess_type)
-	# train_tbl <- rsample::training(splits) |> dplyr::select(-id, -frequency)
 	test_tbl <- rsample::testing(splits) |> dplyr::select(-id, -frequency)
-	
-	rcp_spec_tmp <- generate_recipe_spec(train_tbl, method)
-	# exp_train_tbl <- rcp_spec_tmp |> 
-	# 	recipes::prep() |> 
-	# 	recipes::bake(new_data = train_tbl)
-	exp_test_tbl <- rcp_spec_tmp |> 
+	exp_test_tbl <- test_tbl |>   
+		generate_recipe_spec(method) |> 
 		recipes::prep() |> 
 		recipes::bake(new_data = test_tbl)
-	
 	observation <- exp_test_tbl[which(test_tbl$date == date), ]
 	return(observation)
 	

@@ -1446,7 +1446,7 @@ Input {.sidebar}
 ```{r}
 useShinyjs(rmd = TRUE) # use Shiny JavaScript to allow delay on buttons
 dropdownButton(
-  numericInput(
+	numericInput(
     inputId = "exp_n_future", label = "Forecast Horizon", 
     value = 12, min = 1, max = Inf, step = 1, width = "100%"
   ),
@@ -1466,13 +1466,12 @@ dropdownButton(
 pickerInput(
   inputId = "exp_method", label = h3("Forecast Algorithm"), multiple = FALSE,
   choices = list(
-    `Time Series` = ts_methods, 
     `Machine Learning` = ml_methods,
     `Deep Learning` = dl_methods,
     `Mixed Algorithms` = mix_methods,
     `Auto ML` = aml_methods
   ), 
-  selected = "ETS"
+  selected = "Random Forest"
 )
 
 actionButton(inputId = "exp_apply_forecast", label = "Explain!", icon = icon("play"))
@@ -1480,10 +1479,10 @@ actionButton(inputId = "exp_reset", label = "Reset", icon = icon("sync"))
 observeEvent(
   eventExpr = input$exp_reset, 
   handlerExpr = {
-    updateNumericInput(session = session, inputId = "exp_n_future", value = 12)
+  	updateNumericInput(session = session, inputId = "exp_n_future", value = 12)
     updateNumericInput(session = session, inputId = "exp_n_assess", value = 24)
     updatePrettyRadioButtons(session = session, inputId = "exp_assess_type", selected = "Rolling")
-    updateSelectInput(session = session, inputId = "exp_method", selected = "ETS")
+    updateSelectInput(session = session, inputId = "exp_method", selected = "Random Forest")
     updateTextInput(session = session, inputId = "exp_features", value = "")
     updateTextInput(session = session, inputId = "exp_date", value = "")
     # shinyjs::delay(ms = 300, expr = {shinyjs::click(id = "tune_apply_forecast")})
@@ -1494,10 +1493,14 @@ br()
 br()
 br()
 
-textInput(inputId = "exp_features", label = h5("Feature to explain"), value = "")
-textInput(inputId = "exp_date", label = h5("Date to explain"), value = "")
-
-actionButton(inputId = "exp_apply_local", label = "Check", icon = icon("play"))
+pickerInput(
+  inputId = "exp_features", label = h5("Feature to explain"), multiple = FALSE,
+  choices = NULL, selected = NULL, options = list("actions-box" = TRUE)
+)
+dateInput(
+	inputId = "exp_date", label = h5("Date to explain"), value = NULL,
+	min = as.Date("1940-01-01"), max = Sys.Date()
+)
 ```
 
 ```{r}
@@ -1518,81 +1521,99 @@ exp_forecast_results <- eventReactive(
   }
 )
 
+observeEvent(
+  eventExpr = input$exp_apply_forecast,
+  handlerExpr = {
+  	req(exp_forecast_results())
+    updatePickerInput(
+    	session = session, inputId = "exp_features",
+    	choices = get_features(exp_forecast_results()$fit[[1]], names_only = TRUE),
+    	selected = get_features(exp_forecast_results()$fit[[1]], names_only = TRUE)[1]
+    )
+  }
+)
+
+observeEvent(
+  eventExpr = input$exp_apply_forecast,
+  handlerExpr = {
+    req(data_cleaned())
+    updateDateInput(
+      session = session, inputId = "exp_date", 
+      value = dplyr::slice_tail(data_cleaned(), n = input$exp_n_assess)$date[1], 
+      min = dplyr::slice_tail(data_cleaned(), n = input$exp_n_assess)$date[1], 
+      max = dplyr::slice_tail(data_cleaned(), n = input$exp_n_assess)$date[input$exp_n_assess]
+    )
+  }
+)
+
 explainer_results <- eventReactive(
   eventExpr = input$exp_apply_forecast,
   valueExpr = {
-   	data_cleaned() |> 
+   	data_cleaned() |>
 		generate_model_explainer(
-			method = input$exp_method, params = input, 
+			method = input$exp_method, params = input,
 			n_assess = input$exp_n_assess, assess_type = input$exp_assess_type
 		)
   }
 )
-
-exp_observation <- eventReactive(
-  eventExpr = input$exp_apply_local,
-  valueExpr = {
-  	req(input$exp_date)
-		get_observation(
-			data = data_cleaned(), date = lubridate::ymd(input$exp_date), 
-			n_assess = input$exp_n_assess, assess_type = input$exp_assess_type
-		)
-  }
-)
-
-exp_features <- eventReactive(
-  eventExpr = input$exp_apply_local,
-  valueExpr = { 
-  	req(input$exp_features)
-  	input$exp_features 
-  }
-)
-	
-
-output$plot_exp_test_forecast <- renderPlotly({
-  exp_forecast_results()$test_forecast |> 
-    plot_modeltime_forecast(.legend_show = FALSE, .title = FALSE, .conf_interval_fill = "lightblue")
-})
 
 output$exp_features_table <- renderDT({
    tibble::tibble(
-   	"Features" = get_features(exp_forecast_results()$fit[[1]], names_only = TRUE)
-   ) |> 
+   	get_features(exp_forecast_results()$fit[[1]], names_only = TRUE)
+   ) |>
 		datatable(
       options = list(
         ordering = FALSE, pageLength = 50, lengthChange = FALSE, searching = FALSE,
         info = FALSE, paging = FALSE, scrollY = 760, scrollCollapse = TRUE
-      ), 
+      ),
       rownames = FALSE, colnames = ""
     )
 })
 
+output$plot_exp_test_forecast <- renderPlotly({
+  exp_forecast_results()$test_forecast |>
+    plot_modeltime_forecast(.legend_show = FALSE, .title = FALSE, .conf_interval_fill = "lightblue")
+})
+
 output$plot_exp_featimp <- renderPlot({
-	explain_model(explainer_results(), type = "feature_importance") |> 
+	req(explainer_results())
+	explainer_results() |> 
+		explain_model(type = "feature_importance") |>
 		plot()
 })
 
 output$plot_exp_varresp <- renderPlot({
-	explain_model(
-		explainer_results(), type = "variable_response", 
-		features = exp_features()
-	) |> 
+	req(explainer_results())
+	req(input$exp_features)
+	explainer_results() |> 
+		explain_model(type = "variable_response",	features = input$exp_features) |>
 		plot()
 })
 
 output$plot_exp_bd <- renderPlot({
-	explain_model(
-		explainer_results(), type = "break_down", 
-		observation = exp_observation()
-	) |> 
+	req(data_cleaned())
+	req(explainer_results())
+	req(input$exp_date)
+	exp_obs <- get_observation(
+		data = data_cleaned(), date = input$exp_date, method = input$exp_method,
+		n_assess = input$exp_n_assess, assess_type = input$exp_assess_type
+	)
+	explainer_results() |> 
+		explain_model(type = "break_down", observation = exp_obs) |>
 		plot()
 })
 
 output$plot_exp_locstab <- renderPlot({
-	explain_model(
-		explainer_results(), type = "local_stability", 
-		observation = exp_observation(), features = exp_features()
-	) |> 
+	req(data_cleaned())
+	req(explainer_results())
+	req(input$exp_date)
+	req(input$exp_features)
+	exp_obs <- get_observation(
+		data = data_cleaned(), date = input$exp_date, method = input$exp_method,
+		n_assess = input$exp_n_assess, assess_type = input$exp_assess_type
+	)
+	explainer_results() |> 
+		explain_model(type = "local_stability",	observation = exp_obs, features = input$exp_features) |>
 		plot()
 })
 ```
@@ -1617,7 +1638,7 @@ Column {data-width=425}
 plotlyOutput(outputId = "plot_exp_test_forecast")
 ```
 
-### Exp 1 {.no-padding}
+### Feature Importance {.no-padding}
 
 ```{r}
 plotOutput(outputId = "plot_exp_featimp")
@@ -1627,19 +1648,19 @@ plotOutput(outputId = "plot_exp_featimp")
 Column {data-width=425}
 ---------------------------------------------------------------------------
 
-### Exp 2 {.no-padding}
+### Variable Response Analysis {.no-padding}
 
 ```{r}
 plotOutput(outputId = "plot_exp_varresp")
 ```
 
-### Exp 3 {.no-padding}
+### Break-Down Analysis {.no-padding}
 
 ```{r}
 plotOutput(outputId = "plot_exp_bd")
 ```
 
-### Exp 4 {.no-padding}
+### Local Stability Analysis {.no-padding}
 
 ```{r}
 plotOutput(outputId = "plot_exp_locstab")
