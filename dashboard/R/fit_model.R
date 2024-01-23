@@ -708,7 +708,7 @@ fit_model_tuning <- function(
 }
 
 # function to generate model explainer
-generate_model_explainer <- function(data, method, params, n_asses, assess_type, features = NULL) {
+generate_model_explainer <- function(data, method, params, n_assess, assess_type, features = NULL) {
 	
 	logging::loginfo("*** Explaining Algorithm ***")
 	logging::loginfo(paste("Method(s):", paste0(method, collapse = ", ")))
@@ -762,6 +762,7 @@ generate_model_explainer <- function(data, method, params, n_asses, assess_type,
 # function to get the features from a recipe or workflow
 get_features <- function(object, names_only = FALSE) {
 	
+	logging::loginfo("Extracting Features...")
 	if (inherits(object, "workflow")) {
 		feats <- object |> 
 			workflows::extract_preprocessor() |> 
@@ -806,6 +807,7 @@ get_observation <- function(data, date, n_assess, assess_type) {
 # function to explain model
 explain_model <- function(explainer, type, features = NULL, observation = NULL) {
 	
+	logging::loginfo("Explaining Algorithm...")
 	if (type == "feature_importance") {
 		res_explain <- DALEX::model_parts(explainer)
 	} else if (type == "variable_response") {

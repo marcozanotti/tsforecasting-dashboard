@@ -33,6 +33,7 @@ pkgs <- c(
   "tidymodels", 
   "modeltime", "modeltime.ensemble", "modeltime.resample", "modeltime.h2o",
   "plotly", "DT", "timetk",
+  "DALEX", "DALEXtra",
   "rmarkdown", "flexdashboard",
   "shiny", "shinyWidgets", "shinyjs", "shinymanager"
 )
@@ -1495,6 +1496,8 @@ br()
 
 textInput(inputId = "exp_features", label = h5("Feature to explain"), value = "")
 textInput(inputId = "exp_date", label = h5("Date to explain"), value = "")
+
+actionButton(inputId = "exp_apply_local", label = "Check", icon = icon("play"))
 ```
 
 ```{r}
@@ -1515,6 +1518,37 @@ exp_forecast_results <- eventReactive(
   }
 )
 
+explainer_results <- eventReactive(
+  eventExpr = input$exp_apply_forecast,
+  valueExpr = {
+   	data_cleaned() |> 
+		generate_model_explainer(
+			method = input$exp_method, params = input, 
+			n_assess = input$exp_n_assess, assess_type = input$exp_assess_type
+		)
+  }
+)
+
+exp_observation <- eventReactive(
+  eventExpr = input$exp_apply_local,
+  valueExpr = {
+  	req(input$exp_date)
+		get_observation(
+			data = data_cleaned(), date = lubridate::ymd(input$exp_date), 
+			n_assess = input$exp_n_assess, assess_type = input$exp_assess_type
+		)
+  }
+)
+
+exp_features <- eventReactive(
+  eventExpr = input$exp_apply_local,
+  valueExpr = { 
+  	req(input$exp_features)
+  	input$exp_features 
+  }
+)
+	
+
 output$plot_exp_test_forecast <- renderPlotly({
   exp_forecast_results()$test_forecast |> 
     plot_modeltime_forecast(.legend_show = FALSE, .title = FALSE, .conf_interval_fill = "lightblue")
@@ -1531,6 +1565,35 @@ output$exp_features_table <- renderDT({
       ), 
       rownames = FALSE, colnames = ""
     )
+})
+
+output$plot_exp_featimp <- renderPlot({
+	explain_model(explainer_results(), type = "feature_importance") |> 
+		plot()
+})
+
+output$plot_exp_varresp <- renderPlot({
+	explain_model(
+		explainer_results(), type = "variable_response", 
+		features = exp_features()
+	) |> 
+		plot()
+})
+
+output$plot_exp_bd <- renderPlot({
+	explain_model(
+		explainer_results(), type = "break_down", 
+		observation = exp_observation()
+	) |> 
+		plot()
+})
+
+output$plot_exp_locstab <- renderPlot({
+	explain_model(
+		explainer_results(), type = "local_stability", 
+		observation = exp_observation(), features = exp_features()
+	) |> 
+		plot()
 })
 ```
 
@@ -1556,18 +1619,31 @@ plotlyOutput(outputId = "plot_exp_test_forecast")
 
 ### Exp 1 {.no-padding}
 
+```{r}
+plotOutput(outputId = "plot_exp_featimp")
+```
+
 
 Column {data-width=425}
 ---------------------------------------------------------------------------
 
 ### Exp 2 {.no-padding}
 
+```{r}
+plotOutput(outputId = "plot_exp_varresp")
+```
 
 ### Exp 3 {.no-padding}
 
+```{r}
+plotOutput(outputId = "plot_exp_bd")
+```
 
 ### Exp 4 {.no-padding}
 
+```{r}
+plotOutput(outputId = "plot_exp_locstab")
+```
 
 
 

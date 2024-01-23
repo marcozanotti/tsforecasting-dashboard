@@ -487,30 +487,6 @@ fitted_model_list <- map(
 	)
 )
 
-forecast_results <- generate_forecast(
-	fitted_model_list = fitted_model_list, data = data_selected,
-	method = input$method, n_future = input$n_future,
-	n_assess = input$n_assess, assess_type = input$assess_type
-)
-
-forecast_results$fit |> get_features()
-
-tibble::tibble(
-	"Features" = get_features(forecast_results$fit[[1]], names_only = TRUE)
-) |> 
-	datatable(
-		options = list(
-			ordering = FALSE, pageLength = 50, lengthChange = FALSE, searching = FALSE,
-			info = FALSE, paging = FALSE, scrollY = 550, scrollCollapse = TRUE
-		), 
-		rownames = FALSE
-	)
-
-
-fitted_model <- fitted_model_list[[1]]
-
-
-
 explainer <- generate_model_explainer(data, method, params, n_assess, assess_type)
 
 date = ymd("1959-02-01")
@@ -518,6 +494,7 @@ observation <- get_observation(data, date, n_assess, assess_type)
 features = "date_week4"
 type = "feature_importance"
 
+explain_model(explainer, type)
 
 
 
