@@ -96,7 +96,7 @@ set_options <- function() {
     ),
     tsf.dashboard.transfs = c("log", "boxcox", "norm", "stand", "diff", "sdiff"),
     tsf.dashboard.test_transfs = c("test_log", "test_diff", "test_sdiff"),
-    tsf.dashboard.metrics = c("mae", "mape", "mase", "smape", "rmse"),
+    tsf.dashboard.metrics = c("mae", "mape", "mase", "smape", "rmse", "rmspe"),
     tsf.dashboard.aggreg_funs = c("sum", "mean", "median")
   )
   toset <- !(names(op.tsf.dashboard) %in% names(op))

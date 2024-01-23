@@ -442,3 +442,82 @@ ggplot() +
     alpha = .conf_interval_alpha, linetype = 0)
 
 
+
+# XAI ---------------------------------------------------------------------
+data_selected <- get_data(datasets[1])
+ts_freq <- data_selected$frequency |> unique() |> parse_frequency()
+input <- list(
+	n_future = 120,
+	n_assess = 24,
+	assess_type = "Rolling",
+	method = "ETS",
+	auto_ets = TRUE,
+	error = "additive",
+	trend = "additive",
+	season = get_default("season"),
+	damping = get_default("damping"),
+	smooth_level = get_default("smooth_level"),
+	smooth_trend = 0.1,
+	smooth_season = get_default("smooth_season")
+)
+
+input <- list(
+	n_future = 120,
+	n_assess = 24,
+	assess_type = "Rolling",
+	method = "Random Forest",
+	rf_mtry = 5,
+	rf_trees = 1000, 
+	rf_min_n = 5
+)
+
+data = data_selected
+method = input$method
+params = input
+n_assess = input$n_assess
+assess_type = input$assess_type
+seed = 1992
+n_future = input$n_future
+
+fitted_model_list <- map(
+	input$method,
+	~ fit_model(
+		data = data_selected, method = ., params = input,
+		n_assess = input$n_assess, assess_type = input$assess_type, seed = 1992
+	)
+)
+
+forecast_results <- generate_forecast(
+	fitted_model_list = fitted_model_list, data = data_selected,
+	method = input$method, n_future = input$n_future,
+	n_assess = input$n_assess, assess_type = input$assess_type
+)
+
+forecast_results$fit |> get_features()
+
+tibble::tibble(
+	"Features" = get_features(forecast_results$fit[[1]], names_only = TRUE)
+) |> 
+	datatable(
+		options = list(
+			ordering = FALSE, pageLength = 50, lengthChange = FALSE, searching = FALSE,
+			info = FALSE, paging = FALSE, scrollY = 550, scrollCollapse = TRUE
+		), 
+		rownames = FALSE
+	)
+
+
+fitted_model <- fitted_model_list[[1]]
+
+
+
+explainer <- generate_model_explainer(data, method, params, n_assess, assess_type)
+
+date = ymd("1959-02-01")
+observation <- get_observation(data, date, n_assess, assess_type)
+features = "date_week4"
+type = "feature_importance"
+
+
+
+
