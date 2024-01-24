@@ -60,7 +60,7 @@ compute_hptests <- function(data, digits = 4) {
   res[4, 5] <- tmp$p.value
 
   # stationarity
-  logging::loginfo("Statinarity Tests")
+  logging::loginfo("Stationarity Tests")
   tmp <- suppressWarnings(tseries::adf.test(x, k = k))
   res[5, 4] <- unname(tmp$statistic)
   res[5, 5] <- tmp$p.value

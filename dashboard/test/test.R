@@ -498,3 +498,41 @@ explain_model(explainer, type)
 
 
 
+# Graphics ----------------------------------------------------------------
+
+data_selected <- get_data(datasets[1])
+ts_freq <- data_selected$frequency |> unique() |> parse_frequency()
+
+# Vizualize
+data_selected |> 
+	plot_time_series(date, value, .color_var = lubridate::year(date), .smooth = FALSE)
+
+# Feature Eng
+data_selected |>
+	plot_time_series_regression(
+		.date_var     = date,
+		.formula      = log(value) ~ as.numeric(date) + lubridate::month(date, label = TRUE),
+		.interactive  = TRUE,
+		.show_summary = FALSE
+	)
+
+# distribution plot of value
+g <- data_selected |> 
+  ggplot2::ggplot(ggplot2::aes(x = value)) +
+  ggplot2::geom_density(fill = "lightblue", alpha = 0.5) +
+  ggplot2::labs(title = NULL, x = NULL, y = NULL) +
+  timetk:::theme_tq()
+plotly::ggplotly(g, dynamicTicks = TRUE)
+
+	
+
+
+
+
+
+
+
+
+
+
+

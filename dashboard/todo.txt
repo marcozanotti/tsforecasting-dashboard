@@ -10,7 +10,7 @@ Next steps:
 - aggiornamento cluster h2o
 
 To Do:
-- togliere titoli dai grafici XAI
+- bug XAI su h2o
 - pensare e aggiungere la sezione di feature engineering (con in mente il save)
 - aggiungere logica di transform_back i forecast - pensare bene a questo con feature eng
 

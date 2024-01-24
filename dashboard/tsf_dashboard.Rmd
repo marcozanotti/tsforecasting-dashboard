@@ -15,14 +15,7 @@ runtime: shiny
 ---
 
 ```{r setup, include=FALSE, message=FALSE}
-source("R/utils.R")
-source("R/utils-packages.R")
-source("R/get_data.R")
-source("R/transform_data.R")
-source("R/hp_testing.R")
-source("R/metrics.R")
-source("R/fit_model.R")
-source("R/generate_forecast.R")
+lapply(list.files("R", full.names = TRUE), source)
 
 # Packages
 pkgs <- c(
@@ -133,7 +126,7 @@ output$data_table <- renderDT({
       datatable(
         options = list(
           ordering = TRUE, pageLength = 20, lengthChange = TRUE, searching = TRUE, 
-          info = FALSE, paging = TRUE, scrollCollapse = TRUE, scrollY = 560 # 250
+          info = FALSE, paging = TRUE, scrollCollapse = TRUE, scrollY = 700 # 250
         )
       )
 })
@@ -448,11 +441,20 @@ output$test_table <- renderDT({
     )
 })
 
+output$test_dist_plot <- renderPlotly({
+	g <- data_test() |>
+		ggplot2::ggplot(ggplot2::aes(x = value)) +
+    ggplot2::geom_density(fill = "lightblue", alpha = 0.5) +
+    ggplot2::labs(title = "Distribution", x = NULL, y = NULL) +
+    timetk:::theme_tq()
+	plotly::ggplotly(g, dynamicTicks = TRUE)
+})
+
 output$test_ts_plot <- renderPlotly({
   data_test() |>
     timetk::plot_time_series(
       .date_var = date, .value = value,
-      .smooth = FALSE, .interactive = TRUE, .title = NULL
+      .smooth = FALSE, .interactive = TRUE, .title = "Time Series Plot"
     )
 })
 
@@ -461,7 +463,7 @@ output$test_autocorr_plot <- renderPlotly({
     timetk::plot_acf_diagnostics(
       .date_var = date, .value = value, 
       .lags = ifelse(ts_freq() < 60, ts_freq() * 3, 150),
-      .interactive = TRUE, .title = NULL, .y_lab = NULL
+      .interactive = TRUE, .title = "Autocorrelation", .y_lab = NULL
     )
 })
 ```
@@ -470,12 +472,17 @@ output$test_autocorr_plot <- renderPlotly({
 Row {data-height=500}
 ---------------------------------------------------------------------------
 
-### 
+### {.no-padding}
 
 ```{r}
 DTOutput(outputId = "test_table")
 ```
 
+### {.no-padding}
+
+```{r}
+plotlyOutput(outputId = "test_dist_plot")
+```
 
 Row {data-height=500}
 ---------------------------------------------------------------------------
@@ -1528,7 +1535,7 @@ observeEvent(
     updatePickerInput(
     	session = session, inputId = "exp_features",
     	choices = get_features(exp_forecast_results()$fit[[1]], names_only = TRUE),
-    	selected = get_features(exp_forecast_results()$fit[[1]], names_only = TRUE)[1]
+    	selected = get_features(exp_forecast_results()$fit[[1]], names_only = TRUE)[2]
     )
   }
 )
@@ -1558,7 +1565,8 @@ explainer_results <- eventReactive(
 )
 
 output$exp_features_table <- renderDT({
-   tibble::tibble(
+  req(exp_forecast_results()) 
+	tibble::tibble(
    	get_features(exp_forecast_results()$fit[[1]], names_only = TRUE)
    ) |>
 		datatable(
@@ -1571,6 +1579,7 @@ output$exp_features_table <- renderDT({
 })
 
 output$plot_exp_test_forecast <- renderPlotly({
+	req(exp_forecast_results())
   exp_forecast_results()$test_forecast |>
     plot_modeltime_forecast(.legend_show = FALSE, .title = FALSE, .conf_interval_fill = "lightblue")
 })
@@ -1579,7 +1588,7 @@ output$plot_exp_featimp <- renderPlot({
 	req(explainer_results())
 	explainer_results() |> 
 		explain_model(type = "feature_importance") |>
-		plot()
+		plot() + labs(title = NULL, subtitle = NULL, caption = NULL)
 })
 
 output$plot_exp_varresp <- renderPlot({
@@ -1587,7 +1596,7 @@ output$plot_exp_varresp <- renderPlot({
 	req(input$exp_features)
 	explainer_results() |> 
 		explain_model(type = "variable_response",	features = input$exp_features) |>
-		plot()
+		plot() + labs(title = NULL, subtitle = NULL, caption = NULL)	
 })
 
 output$plot_exp_bd <- renderPlot({
@@ -1600,7 +1609,7 @@ output$plot_exp_bd <- renderPlot({
 	)
 	explainer_results() |> 
 		explain_model(type = "break_down", observation = exp_obs) |>
-		plot()
+		plot() + labs(title = NULL, subtitle = NULL, caption = NULL)
 })
 
 output$plot_exp_locstab <- renderPlot({
@@ -1614,7 +1623,7 @@ output$plot_exp_locstab <- renderPlot({
 	)
 	explainer_results() |> 
 		explain_model(type = "local_stability",	observation = exp_obs, features = input$exp_features) |>
-		plot()
+		plot() + labs(title = NULL, subtitle = NULL, caption = NULL)
 })
 ```
 
@@ -1632,13 +1641,13 @@ DTOutput(outputId = "exp_features_table")
 Column {data-width=425}
 ---------------------------------------------------------------------------
 
-### Test Forecasts {.no-padding}
+### Test Forecasts {data-height=320 .no-padding}
 
 ```{r}
 plotlyOutput(outputId = "plot_exp_test_forecast")
 ```
 
-### Feature Importance {.no-padding}
+### Feature Importance {data-height=680 .no-padding}
 
 ```{r}
 plotOutput(outputId = "plot_exp_featimp")
