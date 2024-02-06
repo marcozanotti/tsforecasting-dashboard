@@ -39,9 +39,10 @@ body {
     border-color: #fff;
 }
 
-/*.navbar-logo {
-    width: 50px;
-}*/
+.navbar-logo {
+	padding-left: 0px !important;
+  width: 45px;
+}
 
 
 /* SIDEBAR */
@@ -121,7 +122,6 @@ body {
 
 
 /* BUTTON - SUCCESS */
-
 .btn-success {
     color: #ffffff;
     background-color: #18BC9C;
@@ -166,8 +166,8 @@ body {
     background-color: #ffffff
 }
 
-/* VALUE BOXES */
 
+/* VALUE BOXES */
 .bg-danger {
     background-color: #E31A1C;
 }
@@ -179,7 +179,3 @@ body {
 .bg-warning {
     background-color: #FF7F00;
 }
-
-
-
-

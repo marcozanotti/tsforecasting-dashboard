@@ -5,7 +5,7 @@ output:
     orientation: rows
     vertical_layout: fill
     css: css/styles-default.css
-    # logo: img/logo.png
+    logo: img/tsf_logo.png
     social: ["menu"]
     source_code: https://github.com/marcozanotti/tsforecasting-dashboard
     navbar:

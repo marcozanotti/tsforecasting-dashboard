@@ -5,8 +5,6 @@ data-icon="fa-list"
 
 Next steps:
 - rotellina o messaggio per operazioni in corso
-- documentazione in alto a destra
-- cambiare logo
 - deployment su github actions
 - aggiornamento cluster h2o
 install.packages("h2o", type = "source", repos = (c("http://h2o-release.s3.amazonaws.com/h2o/latest_stable_R")))
