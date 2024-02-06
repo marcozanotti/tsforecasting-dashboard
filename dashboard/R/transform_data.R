@@ -1,7 +1,7 @@
 # function to impute missing values
-impute_data <- function(data, params, freq) {
+impute_data <- function(data, impute = FALSE, freq) {
 
-  if (params$impute == FALSE) {
+  if (impute == FALSE) {
     return(data)
   } else {
     logging::loginfo("Imputing missing values...")
@@ -15,104 +15,60 @@ impute_data <- function(data, params, freq) {
 }
 
 # function to transform data
-transform_data <- function(data, section, params, freq) {
+transform_data <- function(data, transformations, freq) {
 
-  if (section == "viz_transf") {
+	trf_prm <- getOption("tsf.dashboard.transfs")
+	if (any(!names(transformations) %in% trf_prm)) {
+		stop("Invalid transformation.")
+	}
+	transformations <- purrr::map(transformations, as.logical)
 
-    trf_prm <- getOption("tsf.dashboard.transfs")
-    if (!all(trf_prm %in% names(params))) {
-      stop(paste("Unknown transformations!"))
-    }
-    transf_params <- c(
-      params$log, params$boxcox, params$norm,
-      params$stand, params$diff, params$sdiff
-    ) |> as.logical()
-
-    if (all(!transf_params)) {
-      return(data)
-    } else {
-      logging::loginfo("Transforming data...")
-      data_transf <- data
-      if (params$log) { # Log
-        logging::loginfo("Log")
-        data_transf <- data_transf |> 
-        	dplyr::mutate(value = log1p(value))
-      }
-      if (params$boxcox) { # Box-Cox
-        logging::loginfo("Box-Cox")
-        data_transf <- data_transf |> 
-        	dplyr::mutate(value = timetk::box_cox_vec(value + 1, lambda = "auto"))
-      }
-      if (params$norm) { # Normalization
-        logging::loginfo("Normalization")
-        data_transf <- data_transf |> 
-        	dplyr::mutate(value = timetk::normalize_vec(value))
-      }
-      if (params$stand) { # Standardization
-        logging::loginfo("Standardization")
-        data_transf <- data_transf |> 
-        	dplyr::mutate(value = timetk::standardize_vec(value))
-      }
-      if (params$diff) { # Differencing
-        logging::loginfo("Differencing")
-        data_transf <- data_transf |> 
-        	dplyr::mutate(value = timetk::diff_vec(value, difference = 1)) |> 
-        	tidyr::drop_na()
-      }
-      if (params$sdiff) { # Seasonal differencing
-        logging::loginfo("Seasonal Differencing")
-        data_transf <- data_transf |> 
-        	dplyr::mutate(value = timetk::diff_vec(value, difference = 1, lag = freq)) |> 
-        	tidyr::drop_na()
-      }
-      return(data_transf)
-    }
-
-  } else if (section == "test_hp") {
-
-    trf_prm <- getOption("tsf.dashboard.test_transfs")
-    if (!all(trf_prm %in% names(params))) {
-      stop(paste("Unknown transformations!"))
-    }
-    transf_params <- c(
-      params$test_log, params$test_diff, params$test_sdiff
-    ) |> as.logical()
-
-    if (all(!transf_params)) {
-      return(data)
-    } else {
-      logging::loginfo("Transforming data...")
-      data_transf <- data
-      if (params$test_log) { # Log
-        logging::loginfo("Log")
-        data_transf <- data_transf |> 
-        	dplyr::mutate(value = log1p(value))
-      }
-      if (params$test_diff) { # Differencing
-        logging::loginfo("Differencing")
-        data_transf <- data_transf |> 
-        	dplyr::mutate(value = timetk::diff_vec(value, difference = 1)) |> 
-        	tidyr::drop_na()
-      }
-      if (params$test_sdiff) { # Seasonal differencing
-        logging::loginfo("Seasonal Differencing")
-        data_transf <- data_transf |> 
-        	dplyr::mutate(value = timetk::diff_vec(value, difference = 1, lag = freq)) |> 
-        	tidyr::drop_na()
-      }
-      return(data_transf)
-    }
-
-  } else {
-    stop(paste("Unknown section", section))
-  }
+	if (all(!transformations)) {
+		return(data)
+	} else {
+		logging::loginfo("Transforming data...")
+		data_transf <- data
+		if (transformations$log) { # Log
+			logging::loginfo("Log")
+			data_transf <- data_transf |> 
+				dplyr::mutate(value = log1p(value))
+		}
+		if (transformations$boxcox) { # Box-Cox
+			logging::loginfo("Box-Cox")
+			data_transf <- data_transf |> 
+				dplyr::mutate(value = timetk::box_cox_vec(value + 1, lambda = "auto"))
+		}
+		if (transformations$norm) { # Normalization
+			logging::loginfo("Normalization")
+			data_transf <- data_transf |> 
+				dplyr::mutate(value = timetk::normalize_vec(value))
+		}
+		if (transformations$stand) { # Standardization
+			logging::loginfo("Standardization")
+			data_transf <- data_transf |> 
+				dplyr::mutate(value = timetk::standardize_vec(value))
+		}
+		if (transformations$diff) { # Differencing
+			logging::loginfo("Differencing")
+			data_transf <- data_transf |> 
+				dplyr::mutate(value = timetk::diff_vec(value, difference = 1)) |> 
+				tidyr::drop_na()
+		}
+		if (transformations$sdiff) { # Seasonal differencing
+			logging::loginfo("Seasonal Differencing")
+			data_transf <- data_transf |> 
+				dplyr::mutate(value = timetk::diff_vec(value, difference = 1, lag = freq)) |> 
+				tidyr::drop_na()
+		}
+		return(data_transf)
+	}
 
 }
 
 # function to clean data from anomalies
-clean_data <- function(data, params) {
+clean_data <- function(data, clean = FALSE) {
 
-  if (params$clean == FALSE) {
+  if (clean == FALSE) {
     return(data)
   } else {
     logging::loginfo("Cleaning data from anomalies...")

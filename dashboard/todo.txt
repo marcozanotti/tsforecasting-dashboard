@@ -1,18 +1,18 @@
 UI:
-
 Link to [Forecast - Scenario](#page-4)
 data-icon="fa-list"
 
 Next steps:
 - rotellina o messaggio per operazioni in corso
 - deployment su github actions
-- aggiornamento cluster h2o
-install.packages("h2o", type = "source", repos = (c("http://h2o-release.s3.amazonaws.com/h2o/latest_stable_R")))
 
 To Do:
-- bug XAI su h2o
-- pensare e aggiungere la sezione di feature engineering (con in mente il save)
+- correggere transform senza section!
 - aggiungere logica di transform_back i forecast - pensare bene a questo con feature eng
+- bug XAI su h2o
+- bug RMSPE negativo, replicare con log + ETS
+- pensare e aggiungere la sezione di feature engineering (con in mente il save)
+
 
 - modificare output modello con parsing
 - pensare e aggiungere il save del modello ottimizzato + use optimize in altre sezioni
@@ -20,4 +20,3 @@ To Do:
 - option tune stack? per il tuning degli stack
 - cambiare assegnazione nomi ai parametri in UI
 - creazione fanchart
-

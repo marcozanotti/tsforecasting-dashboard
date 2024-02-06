@@ -157,17 +157,15 @@ conditionalPanel(
 
 
 
-Visualize & Transform {data-navmenu="Analyze" data-orientation=rows}
+Visualize {data-navmenu="Analyze" data-orientation=rows}
 ===========================================================================
 
 Input {.sidebar}
 ---------------------------------------------------------------------------
 
 ```{r}
-h3("Visualize")
-
 dateRangeInput(
-  inputId = "date_range", label = NULL,
+  inputId = "viz_date_range", label = h5("Date Period"),
   start = as.Date("1940-01-01"), end = as.Date("2023-12-31")
 )
 observeEvent(
@@ -175,103 +173,97 @@ observeEvent(
   handlerExpr = {
     req(data_selected())
     updateDateRangeInput(
-      session = session, inputId = "date_range",
+      session = session, inputId = "viz_date_range",
       start = min(data_selected()$date), end = max(data_selected()$date)
     )
   }
 )
 
 materialSwitch(
-  inputId = "smooth_line", label = h5("Smooth Line"), 
+  inputId = "viz_smooth_line", label = h5("Smooth Line"), 
   value = TRUE, status = "primary", inline = TRUE
 )
 
 numericInput(
-  inputId = "acf_lag", label = h5("ACF Lag"),
+  inputId = "viz_acf_lag", label = h5("ACF Lag"),
   value = 48, min = 1, max = 300, step = 1, width = "45%"
 )
 observeEvent(
   eventExpr = input$dataset, 
   handlerExpr = {
     updateNumericInput(
-      session = session, inputId = "acf_lag", 
+      session = session, inputId = "viz_acf_lag", 
       value = ifelse(ts_freq() < 60, ts_freq() * 3, 150), 
       min = 1, max = 300, step = 1
     )
   }
 )
 
-hr()
-h3("Missing Imputation")
+br()
+
+h5("Missing imputation")
 switchInput(inputId = "impute", value = FALSE, size = "mini")
-
-hr()
-h3("Transform")
-
-materialSwitch(inputId = "log", label = "Log", value = FALSE, status = "primary")
-materialSwitch(inputId = "boxcox", label = "Box-Cox", value = FALSE, status = "primary")
-materialSwitch(inputId = "norm", label = "Normalize", value = FALSE, status = "primary")
-materialSwitch(inputId = "stand", label = "Standardize", value = FALSE, status = "primary")
-materialSwitch(inputId = "diff", label = "Diff", value = FALSE, status = "primary")
-materialSwitch(inputId = "sdiff", label = "Seasonal Diff", value = FALSE, status = "primary")
 
 br()
 
-actionButton(inputId = "transf_reset", label = "Reset", icon = icon("sync"))
+actionButton(inputId = "viz_reset", label = "Reset", icon = icon("sync"))
 observeEvent(
-  eventExpr = input$transf_reset, 
+  eventExpr = input$viz_reset, 
   handlerExpr = {
-    updateMaterialSwitch(session = session, inputId = "smooth_line", value = TRUE)
-    updateNumericInput(session = session, inputId = "acf_lag", value = ifelse(ts_freq() < 60, ts_freq() * 3, ts_freq()))
-    updateSwitchInput(session = session, inputId = "impute", value = FALSE)
-    updateMaterialSwitch(session = session, inputId = "log", value = FALSE)
-    updateMaterialSwitch(session = session, inputId = "boxcox", value = FALSE)
-    updateMaterialSwitch(session = session, inputId = "norm", value = FALSE)
-    updateMaterialSwitch(session = session, inputId = "stand", value = FALSE)
-    updateMaterialSwitch(session = session, inputId = "diff", value = FALSE)
-    updateMaterialSwitch(session = session, inputId = "sdiff", value = FALSE)
+    updateMaterialSwitch(session = session, inputId = "viz_smooth_line", value = TRUE)
+    updateNumericInput(session = session, inputId = "viz_acf_lag", value = ifelse(ts_freq() < 60, ts_freq() * 3, ts_freq()))
+    updateSwitchInput(session = session, inputId = "viz_impute", value = FALSE)
   }
 )
 ```
 
 ```{r}
-data_transformed <- reactive({
+data_imputed <- reactive({
+	req(data_selected())
   data_selected() |> 
-    impute_data(params = input, freq = ts_freq()) |> 
-    transform_data(section = "viz_transf", params = input, freq = ts_freq()) |> 
-    filter(between(date, input$date_range[1], input$date_range[2]))
+    impute_data(impute = input$impute, freq = ts_freq())
 })
 
-output$ts_plot_smooth <- renderPlotly({
-  data_transformed() |>
+data_visualized <- reactive({
+	req(data_imputed())
+  data_imputed() |> 
+    filter(between(date, input$viz_date_range[1], input$viz_date_range[2]))
+})
+
+output$viz_ts_plot_smooth <- renderPlotly({
+	req(data_visualized())
+  data_visualized() |>
     timetk::plot_time_series(
       .date_var = date, .value = value,
-      .smooth = input$smooth_line, # ifelse(ts_freq() > 60, FALSE, TRUE),
+      .smooth = input$viz_smooth_line, # ifelse(ts_freq() > 60, FALSE, TRUE),
       .interactive = TRUE
     )
 })
 
-output$autocorr_plot <- renderPlotly({
-  data_transformed() |>
+output$viz_autocorr_plot <- renderPlotly({
+	req(data_visualized())
+  data_visualized() |>
     timetk::plot_acf_diagnostics(
       .date_var = date, .value = value, 
-      .lags = input$acf_lag, # ifelse(ts_freq() < 60, ts_freq() * 3, 150)
+      .lags = input$viz_acf_lag, # ifelse(ts_freq() < 60, ts_freq() * 3, 150)
       .interactive = TRUE,
       .title = "Autocorrelation", .y_lab = NULL,
     )
 })
 
-output$decomp_plot <- renderPlotly({
-    data_transformed() |>
-      timetk::plot_stl_diagnostics(
-    .date_var = date, .value = value, 
-    .feature_set = c("season", "trend", "remainder"), .interactive = TRUE,
-    .title = "Decomposition"
-  )
+output$viz_decomp_plot <- renderPlotly({
+	req(data_visualized())
+  data_visualized() |>
+    timetk::plot_stl_diagnostics(
+    	.date_var = date, .value = value, 
+    	.feature_set = c("season", "trend", "remainder"), .interactive = TRUE,
+    	.title = "Decomposition"
+    )
 })
 
-output$season_plot <- renderPlotly({
-  data_transformed() |>
+output$viz_season_plot <- renderPlotly({
+	req(data_visualized())
+  data_visualized() |>
     timetk::plot_seasonal_diagnostics(
       .date_var = date, .value = value, 
       .interactive = TRUE, .title = "Seasonality"
@@ -286,13 +278,13 @@ Row 1 {data-height=400}
 ### {.no-padding}
 
 ```{r}
-plotlyOutput(outputId = "ts_plot_smooth")
+plotlyOutput(outputId = "viz_ts_plot_smooth")
 ```
 
 ### {.no-padding}
 
 ```{r}
-plotlyOutput(outputId = "autocorr_plot")
+plotlyOutput(outputId = "viz_autocorr_plot")
 ```
 
 
@@ -302,88 +294,13 @@ Row 2 {data-height=600}
 ### {.no-padding}
 
 ```{r}
-plotlyOutput(outputId = "decomp_plot")
+plotlyOutput(outputId = "viz_decomp_plot")
 ```
 
 ### {.no-padding}
 
 ```{r}
-plotlyOutput(outputId = "season_plot")
-```
-
-
-
-Anomaly Detection & Cleaning {data-navmenu="Analyze" data-orientation=rows}
-===========================================================================
-
-Input {.sidebar}
----------------------------------------------------------------------------
-
-```{r}
-h3("Anomaly Detection")
-
-sliderInput(inputId = "alpha", label = h4("Confidence Level"), min = 0.01, max = 1, value = 0.02, step = 0.01)
-sliderInput(inputId = "max_anomalies", label = h4("Max Anomalies (%)"), min = 0.01, max = 1, value = 0.1, step = 0.01)
-
-hr()
-h3("Anomaly Cleaning")
-switchInput(inputId = "clean", value = FALSE, size = "mini")
-
-br()
-
-actionButton(inputId = "anomaly_reset", label = "Reset", icon = icon("sync"))
-observeEvent(
-  eventExpr = input$anomaly_reset, 
-  handlerExpr = {
-    updateSliderInput(session = session, inputId = "alpha", value = 0.02)
-    updateSliderInput(session = session, inputId = "max_anomalies", value = 0.1)
-    updateSwitchInput(session = session, inputId = "clean", value = FALSE)
-  }
-)
-```
-
-```{r}
-data_cleaned <- reactive({
-  data_transformed() |> clean_data(params = input)
-})
-
-output$anomaly_plot <- renderPlotly({
-  data_transformed() |>
-    timetk::plot_anomaly_diagnostics(
-      .date_var = date, .value = value, 
-      .alpha = input$alpha, .max_anomalies = input$max_anomalies,
-      .interactive = TRUE, .title = "Anomaly Plot", .legend_show = FALSE
-    )
-})
-
-output$clean_plot <- renderPlotly({
-  data_cleaned() |>
-    timetk::plot_time_series(
-      .date_var = date, .value = value,
-      .smooth = FALSE, .interactive = TRUE, 
-      .title = "Cleaned Time Series"
-    )
-})
-```
-
-
-Row 1 {data-height=650}
----------------------------------------------------------------------------
-
-### {.no-padding}
-
-```{r}
-plotlyOutput(outputId = "anomaly_plot")
-```
-
-
-Row 2 {data-height=350}
----------------------------------------------------------------------------
-
-### {.no-padding}
-
-```{r}
-plotlyOutput(outputId = "clean_plot")
+plotlyOutput(outputId = "viz_season_plot")
 ```
 
 
@@ -412,14 +329,24 @@ br()
 br()
 br()
 materialSwitch(inputId = "test_log", label = "Test on log?", value = FALSE, status = "primary")
+materialSwitch(inputId = "test_boxcox", label = "Test on Box-Cox?", value = FALSE, status = "primary")
+materialSwitch(inputId = "test_norm", label = "Test on normalized?", value = FALSE, status = "primary")
+materialSwitch(inputId = "test_stand", label = "Test on standardized?", value = FALSE, status = "primary")
 materialSwitch(inputId = "test_diff", label = "Test on diff?", value = FALSE, status = "primary")
 materialSwitch(inputId = "test_sdiff", label = "Test on seasonal diff?", value = FALSE, status = "primary")
 ```
 
 ```{r}
 data_test <- reactive({
-  data_selected() |> 
-    transform_data(section = "test_hp", params = input, freq = ts_freq())
+  data_imputed() |> 
+    transform_data(
+    	transformations = list(
+    		"log" = input$test_log, "boxcox" = input$test_boxcox, 
+    		"norm" = input$test_norm, "stand" = input$test_stand, 
+    		"diff" = input$test_diff, "sdiff" = input$test_sdiff
+    	), 
+    	freq = ts_freq()
+    )
 })
 
 test_results <- reactive({
@@ -497,6 +424,236 @@ plotlyOutput(outputId = "test_ts_plot")
 
 ```{r}
 plotlyOutput(outputId = "test_autocorr_plot")
+```
+
+
+
+Anomaly Detection {data-navmenu="Analyze" data-orientation=rows}
+===========================================================================
+
+Input {.sidebar}
+---------------------------------------------------------------------------
+
+```{r}
+h3("Anomaly Detection")
+
+sliderInput(inputId = "alpha", label = h5("Confidence Level"), min = 0.01, max = 1, value = 0.02, step = 0.01)
+sliderInput(inputId = "max_anomalies", label = h5("Max Anomalies (%)"), min = 0.01, max = 1, value = 0.1, step = 0.01)
+
+hr()
+h3("Anomaly Cleaning")
+switchInput(inputId = "clean", value = FALSE, size = "mini")
+
+br()
+
+actionButton(inputId = "anomaly_reset", label = "Reset", icon = icon("sync"))
+observeEvent(
+  eventExpr = input$anomaly_reset, 
+  handlerExpr = {
+    updateSliderInput(session = session, inputId = "alpha", value = 0.02)
+    updateSliderInput(session = session, inputId = "max_anomalies", value = 0.1)
+    updateSwitchInput(session = session, inputId = "clean", value = FALSE)
+  }
+)
+```
+
+```{r}
+data_cleaned <- reactive({
+  data_imputed() |> 
+		clean_data(clean = input$clean)
+})
+
+output$anomaly_plot <- renderPlotly({
+  data_imputed() |>
+    timetk::plot_anomaly_diagnostics(
+      .date_var = date, .value = value, 
+      .alpha = input$alpha, .max_anomalies = input$max_anomalies,
+      .interactive = TRUE, .title = "Anomaly Plot", .legend_show = FALSE
+    )
+})
+
+output$clean_plot <- renderPlotly({
+  data_cleaned() |>
+    timetk::plot_time_series(
+      .date_var = date, .value = value,
+      .smooth = FALSE, .interactive = TRUE, 
+      .title = "Cleaned Time Series"
+    )
+})
+```
+
+
+Row 1 {data-height=650}
+---------------------------------------------------------------------------
+
+### {.no-padding}
+
+```{r}
+plotlyOutput(outputId = "anomaly_plot")
+```
+
+
+Row 2 {data-height=350}
+---------------------------------------------------------------------------
+
+### {.no-padding}
+
+```{r}
+plotlyOutput(outputId = "clean_plot")
+```
+
+
+
+Transform {data-navmenu="Analyze" data-orientation=rows}
+===========================================================================
+
+Input {.sidebar}
+---------------------------------------------------------------------------
+
+```{r}
+dateRangeInput(
+  inputId = "transf_date_range", label = h5("Date Period"),
+  start = as.Date("1940-01-01"), end = as.Date("2023-12-31")
+)
+observeEvent(
+  eventExpr = input$dataset,
+  handlerExpr = {
+    req(data_selected())
+    updateDateRangeInput(
+      session = session, inputId = "transf_date_range",
+      start = min(data_selected()$date), end = max(data_selected()$date)
+    )
+  }
+)
+
+materialSwitch(
+  inputId = "transf_smooth_line", label = h5("Smooth Line"), 
+  value = TRUE, status = "primary", inline = TRUE
+)
+
+numericInput(
+  inputId = "transf_acf_lag", label = h5("ACF Lag"),
+  value = 48, min = 1, max = 300, step = 1, width = "45%"
+)
+observeEvent(
+  eventExpr = input$dataset, 
+  handlerExpr = {
+    updateNumericInput(
+      session = session, inputId = "transf_acf_lag", 
+      value = ifelse(ts_freq() < 60, ts_freq() * 3, 150), 
+      min = 1, max = 300, step = 1
+    )
+  }
+)
+
+br()
+
+materialSwitch(inputId = "transf_log", label = "Log", value = FALSE, status = "primary")
+materialSwitch(inputId = "transf_boxcox", label = "Box-Cox", value = FALSE, status = "primary")
+materialSwitch(inputId = "transf_norm", label = "Normalize", value = FALSE, status = "primary")
+materialSwitch(inputId = "transf_stand", label = "Standardize", value = FALSE, status = "primary")
+materialSwitch(inputId = "transf_diff", label = "Diff", value = FALSE, status = "primary")
+materialSwitch(inputId = "transf_sdiff", label = "Seasonal Diff", value = FALSE, status = "primary")
+
+br()
+
+actionButton(inputId = "transf_reset", label = "Reset", icon = icon("sync"))
+observeEvent(
+  eventExpr = input$transf_reset, 
+  handlerExpr = {
+    updateMaterialSwitch(session = session, inputId = "transf_smooth_line", value = TRUE)
+    updateNumericInput(session = session, inputId = "transf_acf_lag", value = ifelse(ts_freq() < 60, ts_freq() * 3, ts_freq()))
+    updateMaterialSwitch(session = session, inputId = "transf_log", value = FALSE)
+    updateMaterialSwitch(session = session, inputId = "transf_boxcox", value = FALSE)
+    updateMaterialSwitch(session = session, inputId = "transf_norm", value = FALSE)
+    updateMaterialSwitch(session = session, inputId = "transf_stand", value = FALSE)
+    updateMaterialSwitch(session = session, inputId = "transf_diff", value = FALSE)
+    updateMaterialSwitch(session = session, inputId = "transf_sdiff", value = FALSE)
+  }
+)
+```
+
+```{r}
+data_transformed <- reactive({
+  data_cleaned() |> 
+    transform_data(
+    	transformations = list(
+    		"log" = input$transf_log, "boxcox" = input$transf_boxcox, 
+    		"norm" = input$transf_norm, "stand" = input$transf_stand, 
+    		"diff" = input$transf_diff, "sdiff" = input$transf_sdiff
+    	), 
+    	freq = ts_freq()
+    ) |> 
+    filter(between(date, input$transf_date_range[1], input$transf_date_range[2]))
+})
+
+output$transf_ts_plot_smooth <- renderPlotly({
+  data_transformed() |>
+    timetk::plot_time_series(
+      .date_var = date, .value = value,
+      .smooth = input$transf_smooth_line, # ifelse(ts_freq() > 60, FALSE, TRUE),
+      .interactive = TRUE
+    )
+})
+
+output$transf_autocorr_plot <- renderPlotly({
+  data_transformed() |>
+    timetk::plot_acf_diagnostics(
+      .date_var = date, .value = value, 
+      .lags = input$transf_acf_lag, # ifelse(ts_freq() < 60, ts_freq() * 3, 150)
+      .interactive = TRUE,
+      .title = "Autocorrelation", .y_lab = NULL,
+    )
+})
+
+output$transf_decomp_plot <- renderPlotly({
+    data_transformed() |>
+      timetk::plot_stl_diagnostics(
+    .date_var = date, .value = value, 
+    .feature_set = c("season", "trend", "remainder"), .interactive = TRUE,
+    .title = "Decomposition"
+  )
+})
+
+output$transf_season_plot <- renderPlotly({
+  data_transformed() |>
+    timetk::plot_seasonal_diagnostics(
+      .date_var = date, .value = value, 
+      .interactive = TRUE, .title = "Seasonality"
+    )
+})
+```
+
+
+Row 1 {data-height=400}
+---------------------------------------------------------------------------
+
+### {.no-padding}
+
+```{r}
+plotlyOutput(outputId = "transf_ts_plot_smooth")
+```
+
+### {.no-padding}
+
+```{r}
+plotlyOutput(outputId = "transf_autocorr_plot")
+```
+
+
+Row 2 {data-height=600}
+---------------------------------------------------------------------------
+
+### {.no-padding}
+
+```{r}
+plotlyOutput(outputId = "transf_decomp_plot")
+```
+
+### {.no-padding}
+
+```{r}
+plotlyOutput(outputId = "transf_season_plot")
 ```
 
 
@@ -826,12 +983,12 @@ forecast_results <- eventReactive(
     map(
       input$method, 
       ~ fit_model(
-        data = data_cleaned(), method = ., params = input, 
+        data = data_transformed(), method = ., params = input, 
         n_assess = input$n_assess, assess_type = input$assess_type, seed = 1992
       )
     ) |> 
       generate_forecast(
-        data = data_cleaned(), method = input$method, n_future = input$n_future,
+        data = data_transformed(), method = input$method, n_future = input$n_future,
         n_assess = input$n_assess, assess_type = input$assess_type
       )
   }
@@ -1007,12 +1164,12 @@ compare_results <- eventReactive(
     map(
       input$comp_method, 
       ~ fit_model(
-        data = data_cleaned(), method = ., params = input, 
+        data = data_transformed(), method = ., params = input, 
         n_assess = input$comp_n_assess, assess_type = input$comp_assess_type, seed = 1992
       )
     ) |> 
       generate_forecast(
-        data = data_cleaned(), method = input$comp_method, n_future = input$comp_n_future,
+        data = data_transformed(), method = input$comp_method, n_future = input$comp_n_future,
         n_assess = input$comp_n_assess, assess_type = input$comp_assess_type
       )
   }
@@ -1322,7 +1479,7 @@ tune_results <- eventReactive(
     map(
       input$tune_method, 
       ~ fit_model_tuning(
-        data = data_cleaned(), method = ., params = input, 
+        data = data_transformed(), method = ., params = input, 
         n_assess = input$tune_n_assess, assess_type = input$tune_assess_type, 
         validation_type = input$tune_valid_type, n_folds = input$tune_n_folds,
         validation_metric = input$tune_valid_metric, 
@@ -1331,7 +1488,7 @@ tune_results <- eventReactive(
       )
     ) |> 
       generate_forecast(
-        data = data_cleaned(), method = input$tune_method, n_future = input$tune_n_future,
+        data = data_transformed(), method = input$tune_method, n_future = input$tune_n_future,
         n_assess = input$tune_n_assess, assess_type = input$tune_assess_type
       )
   }
@@ -1517,12 +1674,12 @@ exp_forecast_results <- eventReactive(
     map(
       input$exp_method, 
       ~ fit_model(
-        data = data_cleaned(), method = ., params = input, 
+        data = data_transformed(), method = ., params = input, 
         n_assess = input$exp_n_assess, assess_type = input$exp_assess_type, seed = 1992
       )
     ) |> 
       generate_forecast(
-        data = data_cleaned(), method = input$exp_method, n_future = input$exp_n_future,
+        data = data_transformed(), method = input$exp_method, n_future = input$exp_n_future,
         n_assess = input$exp_n_assess, assess_type = input$exp_assess_type
       )
   }
@@ -1543,12 +1700,12 @@ observeEvent(
 observeEvent(
   eventExpr = input$exp_apply_forecast,
   handlerExpr = {
-    req(data_cleaned())
+    req(data_transformed())
     updateDateInput(
       session = session, inputId = "exp_date", 
-      value = dplyr::slice_tail(data_cleaned(), n = input$exp_n_assess)$date[1], 
-      min = dplyr::slice_tail(data_cleaned(), n = input$exp_n_assess)$date[1], 
-      max = dplyr::slice_tail(data_cleaned(), n = input$exp_n_assess)$date[input$exp_n_assess]
+      value = dplyr::slice_tail(data_transformed(), n = input$exp_n_assess)$date[1], 
+      min = dplyr::slice_tail(data_transformed(), n = input$exp_n_assess)$date[1], 
+      max = dplyr::slice_tail(data_transformed(), n = input$exp_n_assess)$date[input$exp_n_assess]
     )
   }
 )
@@ -1556,7 +1713,7 @@ observeEvent(
 explainer_results <- eventReactive(
   eventExpr = input$exp_apply_forecast,
   valueExpr = {
-   	data_cleaned() |>
+   	data_transformed() |>
 		generate_model_explainer(
 			method = input$exp_method, params = input,
 			n_assess = input$exp_n_assess, assess_type = input$exp_assess_type
@@ -1600,11 +1757,11 @@ output$plot_exp_varresp <- renderPlot({
 })
 
 output$plot_exp_bd <- renderPlot({
-	req(data_cleaned())
+	req(data_transformed())
 	req(explainer_results())
 	req(input$exp_date)
 	exp_obs <- get_observation(
-		data = data_cleaned(), date = input$exp_date, method = input$exp_method,
+		data = data_transformed(), date = input$exp_date, method = input$exp_method,
 		n_assess = input$exp_n_assess, assess_type = input$exp_assess_type
 	)
 	explainer_results() |> 
@@ -1613,12 +1770,12 @@ output$plot_exp_bd <- renderPlot({
 })
 
 output$plot_exp_locstab <- renderPlot({
-	req(data_cleaned())
+	req(data_transformed())
 	req(explainer_results())
 	req(input$exp_date)
 	req(input$exp_features)
 	exp_obs <- get_observation(
-		data = data_cleaned(), date = input$exp_date, method = input$exp_method,
+		data = data_transformed(), date = input$exp_date, method = input$exp_method,
 		n_assess = input$exp_n_assess, assess_type = input$exp_assess_type
 	)
 	explainer_results() |> 
@@ -1771,7 +1928,7 @@ observeEvent(
       map(
         input$ens_method,
         ~ fit_model(
-          data = data_cleaned(),
+          data = data_transformed(),
           method = .,
           params = input,
           n_assess = input$ens_n_assess,
@@ -1780,7 +1937,7 @@ observeEvent(
         )
       ) |>
       generate_forecast(
-        data = data_cleaned(),
+        data = data_transformed(),
         method = input$ens_method,
         n_future = input$ens_n_future,
         n_assess = input$ens_n_assess,
@@ -1798,7 +1955,7 @@ observeEvent(
       map(
         input$ens_method,
         ~ fit_model(
-          data = data_cleaned(),
+          data = data_transformed(),
           method = .,
           params = input,
           n_assess = input$ens_n_assess,
@@ -1807,7 +1964,7 @@ observeEvent(
         )
       ) |>
       generate_forecast(
-        data = data_cleaned(),
+        data = data_transformed(),
         method = input$ens_method,
         n_future = input$ens_n_future,
         n_assess = input$ens_n_assess,
@@ -1979,12 +2136,12 @@ scenario_results <- eventReactive(
     map(
       input$scn_method, 
       ~ fit_model(
-        data = data_cleaned(), method = ., params = input, 
+        data = data_transformed(), method = ., params = input, 
         n_assess = input$scn_n_assess, assess_type = input$scn_assess_type, seed = 1992
       )
     ) |> 
       generate_forecast(
-        data = data_cleaned(), method = input$scn_method, n_future = input$scn_n_future,
+        data = data_transformed(), method = input$scn_method, n_future = input$scn_n_future,
         n_assess = input$scn_n_assess, assess_type = input$scn_assess_type, 
         confidence_level = c(0.05, 0.99)
       )

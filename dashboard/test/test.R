@@ -503,6 +503,16 @@ explain_model(explainer, type)
 data_selected <- get_data(datasets[1])
 ts_freq <- data_selected$frequency |> unique() |> parse_frequency()
 
+input <- list(
+	log = TRUE,
+	boxcox = FALSE,
+	norm = FALSE,
+	stand = "FALSE",
+	diff = TRUE,
+	sdiff = FALSE
+)
+transformations = input
+
 # Vizualize
 data_selected |> 
 	plot_time_series(date, value, .color_var = lubridate::year(date), .smooth = FALSE)
