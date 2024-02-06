@@ -32,10 +32,10 @@ me.data.frame <- function(data, truth, estimate, na_rm = TRUE, case_weights = NU
     name = "me",
     fn = me_vec,
     data = data,
-    truth = !!enquo(truth),
-    estimate = !!enquo(estimate),
+    truth = !!rlang::enquo(truth),
+    estimate = !!rlang::enquo(estimate),
     na_rm = na_rm,
-    case_weights = !!enquo(case_weights)
+    case_weights = !!rlang::enquo(case_weights)
   )
 
 }
@@ -75,10 +75,10 @@ rmspe.data.frame <- function(data, truth, estimate, na_rm = TRUE, case_weights =
     name = "rmspe",
     fn = me_vec,
     data = data,
-    truth = !!enquo(truth),
-    estimate = !!enquo(estimate),
+    truth = !!rlang::enquo(truth),
+    estimate = !!rlang::enquo(estimate),
     na_rm = na_rm,
-    case_weights = !!enquo(case_weights)
+    case_weights = !!rlang::enquo(case_weights)
   )
 
 }

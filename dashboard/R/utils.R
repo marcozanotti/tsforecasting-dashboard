@@ -226,14 +226,12 @@ get_default <- function(parameter, return_value = TRUE) {
 
 # function to clean strings
 clean_chr <- function(x) {
-  stringr::str_replace_all(x, "_", " ") |>
-    stringr::str_to_title()
+  stringr::str_replace_all(x, "_", " ") |> stringr::str_to_title()
 }
 
 # function to clean back strings
 clean_chr_inv <- function(x) {
-  stringr::str_replace_all(x, " ", "_") |>
-    stringr::str_to_lower()
+  stringr::str_replace_all(x, " ", "_") |> stringr::str_to_lower()
 }
 
 # function to format accuracy table
@@ -241,22 +239,22 @@ format_accuracy <- function(accuracy_table, single_method = TRUE, digits = 2) {
 
   if (single_method == TRUE) {
     res <- accuracy_table |>
-      select(-1, -2) |>
-      rename("Type" = ".type") |>
-      rename_with(.fn = toupper, .cols = -c("Type")) |>
-      relocate("ME", .after = "Type") |>
-      relocate("RMSPE", .after = "RMSE") |>
-      mutate(across(where(is.numeric), ~round(., digits))) |>
-      pivot_longer(cols = -1, names_to = "Metric", values_to = "Value") |>
-      pivot_wider(names_from = "Type", values_from = "Value")
+      dplyr::select(-1, -2) |>
+    	dplyr::rename("Type" = ".type") |>
+    	dplyr::rename_with(.fn = toupper, .cols = -c("Type")) |>
+    	dplyr::relocate("ME", .after = "Type") |>
+    	dplyr::relocate("RMSPE", .after = "RMSE") |>
+    	dplyr::mutate(dplyr::across(where(is.numeric), ~round(., digits))) |>
+      tidyr::pivot_longer(cols = -1, names_to = "Metric", values_to = "Value") |>
+    	tidyr::pivot_wider(names_from = "Type", values_from = "Value")
   } else {
     res <- accuracy_table |>
-      select(-1) |>
-      rename("Algorithm" = ".model_desc", "Type" = ".type") |>
-      rename_with(.fn = toupper, .cols = -c("Algorithm", "Type")) |>
-      relocate("ME", .after = "Type") |>
-      relocate("RMSPE", .after = "RMSE") |>
-      mutate(across(where(is.numeric), ~round(., digits)))
+      dplyr::select(-1) |>
+    	dplyr::rename("Algorithm" = ".model_desc", "Type" = ".type") |>
+    	dplyr::rename_with(.fn = toupper, .cols = -c("Algorithm", "Type")) |>
+    	dplyr::relocate("ME", .after = "Type") |>
+    	dplyr::relocate("RMSPE", .after = "RMSE") |>
+    	dplyr::mutate(dplyr::across(where(is.numeric), ~round(., digits)))
   }
   return(res)
 

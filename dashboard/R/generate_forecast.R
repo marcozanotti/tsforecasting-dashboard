@@ -10,12 +10,12 @@ generate_forecast <- function(
   # initial split
   logging::loginfo("Initial Split")
   splits <- generate_initial_split(data, n_assess, assess_type)
-  train_tbl <- training(splits) |> select(-id, -frequency)
-  test_tbl <- testing(splits) |> select(-id, -frequency)
+  train_tbl <- rsample::training(splits) |> dplyr::select(-id, -frequency)
+  test_tbl <- rsample::testing(splits) |> dplyr::select(-id, -frequency)
 
   # future split
   logging::loginfo("Future Frame")
-  future_tbl <- future_frame(data, .date_var = date, .length_out = n_future)
+  future_tbl <- timetk::future_frame(data, .date_var = date, .length_out = n_future)
 
   # modeltime table
   logging::loginfo("Modeltime Table")
@@ -46,7 +46,7 @@ generate_forecast <- function(
     cv_splits <- generate_cv_split(train_tbl, n_assess, assess_type, "Time Series CV", 5)
     rsmpl <- modeltime.resample::modeltime_fit_resamples(
       modeltime_tbl, resamples = cv_splits,
-      control = control_resamples(verbose = TRUE, allow_par = TRUE)
+      control = tune::control_resamples(verbose = TRUE, allow_par = TRUE)
     )
     stacking_res <- fit_stack(modeltime_tbl, stacking_methods, rsmpl)
     modeltime_tbl <- modeltime::combine_modeltime_tables(modeltime_tbl, stacking_res$tbl)
@@ -124,7 +124,7 @@ generate_forecast <- function(
   # model summary
   # fitted_model_list
 
-  if (any(method %in% "H2O AutoML")) { h2o.shutdown(prompt = FALSE) }
+  if (any(method %in% "H2O AutoML")) { h2o::h2o.shutdown(prompt = FALSE) }
   res <- list(
     "splits" = splits,
     "fit" = fitted_model_list,
@@ -191,7 +191,7 @@ aggregate_forecast <- function(
 }
 
 # function to adjust oos forecasts
-adjust_forecast <- function(forecasts, adjustment) {
+adjust_forecast <- function(forecasts, adjustment = NA_real_) {
 
   if (is.na(adjustment)) { adjustment <- 0 }
   frc_tbl <- forecasts |>

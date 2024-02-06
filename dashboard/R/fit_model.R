@@ -40,25 +40,25 @@ generate_recipe_spec <- function(data, method) {
 
   if (method_type == "ts") {
 
-    rcp_spec <- recipe(value ~ ., data = data)
+    rcp_spec <- recipes::recipe(value ~ ., data = data)
 
   } else if (any(method_type %in% c("ml", "dl"))) {
 
-    rcp_spec <- recipe(value ~ ., data = data) |>
-      step_timeseries_signature(date) |>
-      step_mutate(date = as.numeric(date)) |>
-      step_zv(all_predictors()) |>
-      step_rm(matches("(iso)|(xts)|(index.num)")) |>
-      step_dummy(all_nominal(), one_hot = TRUE)
+    rcp_spec <- recipes::recipe(value ~ ., data = data) |>
+      timetk::step_timeseries_signature(date) |>
+    	recipes::step_mutate(date = as.numeric(date)) |>
+    	recipes::step_zv(recipes::all_predictors()) |>
+    	recipes::step_rm(dplyr::matches("(iso)|(xts)|(index.num)")) |>
+    	recipes::step_dummy(recipes::all_nominal(), one_hot = TRUE)
 
   } else if (any(method_type %in% c("mix", "aml"))) {
 
-    rcp_spec <- recipe(value ~ ., data = data) |>
-      step_timeseries_signature(date) |>
-      step_mutate(trend = as.numeric(date)) |>
-      step_zv(all_predictors()) |>
-      step_rm(matches("(iso)|(xts)|(index.num)")) |>
-      step_dummy(all_nominal(), one_hot = TRUE)
+    rcp_spec <- recipes::recipe(value ~ ., data = data) |>
+      timetk::step_timeseries_signature(date) |>
+    	recipes::step_mutate(trend = as.numeric(date)) |>
+    	recipes::step_zv(recipes::all_predictors()) |>
+    	recipes::step_rm(matches("(iso)|(xts)|(index.num)")) |>
+    	recipes::step_dummy(recipes::all_nominal(), one_hot = TRUE)
 
   } else {
     stop(paste("Unknown method type", method_type))
@@ -73,28 +73,28 @@ generate_model_spec <- function(method, params) {
 
   if (method == "Naive") {
 
-    model_spec <- naive_reg() |>
-      set_engine("naive")
+    model_spec <- modeltime::naive_reg() |>
+      parsnip::set_engine("naive")
 
   } else if (method == "Seasonal Naive") {
 
-    model_spec <- naive_reg() |>
-      set_engine("snaive")
+    model_spec <- modeltime::naive_reg() |>
+    	parsnip::set_engine("snaive")
 
   } else if (method == "Rolling Average") {
 
-    model_spec <- window_reg(
+    model_spec <- modeltime::window_reg(
       window_size = !!params$window_size
     ) |>
-      set_engine("window_function", window_function = mean, na.rm = TRUE)
+    	parsnip::set_engine("window_function", window_function = mean, na.rm = TRUE)
 
   } else if (method == "ETS") {
 
     if (params$auto_ets) {
-      model_spec <- exp_smoothing() |>
-        set_engine("ets")
+      model_spec <- modeltime::exp_smoothing() |>
+      	parsnip::set_engine("ets")
     } else {
-      model_spec <- exp_smoothing(
+      model_spec <- modeltime::exp_smoothing(
         error = !!params$error,
         trend = !!params$trend,
         season = !!params$season,
@@ -103,21 +103,21 @@ generate_model_spec <- function(method, params) {
         smooth_trend = !!params$smooth_trend,
         smooth_seasonal = !!params$smooth_seasonal
       ) |>
-        set_engine("ets")
+      	parsnip::set_engine("ets")
     }
 
   } else if (method == "Theta") {
 
-    model_spec <- exp_smoothing() |>
-      set_engine("theta")
+    model_spec <- modeltime::exp_smoothing() |>
+    	parsnip::set_engine("theta")
 
   } else if (method == "SARIMA") {
 
     if (params$auto_arima) {
-      model_spec <- arima_reg() |>
-        set_engine("auto_arima")
+      model_spec <- modeltime::arima_reg() |>
+      	parsnip::set_engine("auto_arima")
     } else {
-      model_spec <- arima_reg(
+      model_spec <- modeltime::arima_reg(
         non_seasonal_ar = !!params$non_seasonal_ar,
         non_seasonal_differences = !!params$non_seasonal_differences,
         non_seasonal_ma = !!params$non_seasonal_ma,
@@ -125,58 +125,58 @@ generate_model_spec <- function(method, params) {
         seasonal_differences = !!params$seasonal_differences,
         seasonal_ma = !!params$seasonal_ma
       ) |>
-        set_engine("arima")
+      	parsnip::set_engine("arima")
     }
 
   } else if (method == "TBATS") {
 
     if (params$auto_tbats) {
-      model_spec <- seasonal_reg() |>
-        set_engine("tbats")
+      model_spec <- modeltime::seasonal_reg() |>
+      	parsnip::set_engine("tbats")
     } else {
-      model_spec <- seasonal_reg(
+      model_spec <- modeltime::seasonal_reg(
         seasonal_period_1 = !!params$tbats_seasonal_period_1,
         seasonal_period_2 = !!params$tbats_seasonal_period_2,
         seasonal_period_3 = !!params$tbats_seasonal_period_3
       ) |>
-        set_engine("tbats")
+      	parsnip::set_engine("tbats")
     }
 
   } else if (method == "STLM") {
 
     if (params$trend_model == "ETS") {
       if (params$auto_stlm) {
-        model_spec <- seasonal_reg() |>
-          set_engine("stlm_ets")
+        model_spec <- modeltime::seasonal_reg() |>
+        	parsnip::set_engine("stlm_ets")
       } else {
-        model_spec <- seasonal_reg(
+        model_spec <- modeltime::seasonal_reg(
           seasonal_period_1 = !!params$stlm_seasonal_period_1,
           seasonal_period_2 = !!params$stlm_seasonal_period_2,
           seasonal_period_3 = !!params$stlm_seasonal_period_3
         ) |>
-          set_engine("stlm_ets")
+        	parsnip::set_engine("stlm_ets")
       }
     } else {
       if (params$auto_stlm) {
-        model_spec <- seasonal_reg() |>
-          set_engine("stlm_arima")
+        model_spec <- modeltime::seasonal_reg() |>
+        	parsnip::set_engine("stlm_arima")
       } else {
-        model_spec <- seasonal_reg(
+        model_spec <- modeltime::seasonal_reg(
           seasonal_period_1 = !!params$stlm_seasonal_period_1,
           seasonal_period_2 = !!params$stlm_seasonal_period_2,
           seasonal_period_3 = !!params$stlm_seasonal_period_3
         ) |>
-          set_engine("stlm_arima")
+        	parsnip::set_engine("stlm_arima")
       }
     }
 
   } else if (method == "Prophet") {
 
     if (params$auto_prophet) {
-      model_spec <- prophet_reg() |>
-        set_engine("prophet")
+      model_spec <- modeltime::prophet_reg() |>
+      	parsnip::set_engine("prophet")
     } else {
-      model_spec <- prophet_reg(
+      model_spec <- modeltime::prophet_reg(
         growth = !!params$growth,
         changepoint_num = !!params$changepoint_num,
         changepoint_range = !!params$changepoint_range,
@@ -190,74 +190,74 @@ generate_model_spec <- function(method, params) {
         logistic_cap = !!params$logistic_cap,
         logistic_floor = !!params$logistic_floor
       ) |>
-        set_engine("prophet")
+      	parsnip::set_engine("prophet")
     }
 
   } else if (method == "Linear Regression") {
 
-    model_spec <- linear_reg(mode = "regression") |>
-      set_engine(engine = "lm")
+    model_spec <- parsnip::linear_reg(mode = "regression") |>
+    	parsnip::set_engine(engine = "lm")
 
   } else if (method == "Elastic Net") {
 
-    model_spec <- linear_reg(
+    model_spec <- parsnip::linear_reg(
       mode = "regression",
       penalty = !!params$penalty,
       mixture = !!params$mixture
     ) |>
-      set_engine(engine = "glmnet")
+    	parsnip::set_engine(engine = "glmnet")
 
   } else if (method == "MARS") {
 
-    model_spec <- mars(
+    model_spec <- parsnip::mars(
       mode = "regression",
       num_terms = !!params$num_terms,
       prod_degree = !!params$prod_degree,
       prune_method = !!params$prune_method
     ) |>
-      set_engine("earth") # endspan = 100
+    	parsnip::set_engine("earth") # endspan = 100
 
   } else if (method == "KNN") {
 
-    model_spec <- nearest_neighbor(
+    model_spec <- parsnip::nearest_neighbor(
       mode = "regression",
       neighbors = !!params$neighbors
     ) |>
-      set_engine("kknn")
+    	parsnip::set_engine("kknn")
 
   } else if (method == "SVM") {
 
     if (params$boundary == "Linear") {
-      model_spec <- svm_linear(
+      model_spec <- parsnip::svm_linear(
         mode = "regression",
         cost = !!params$cost,
         margin = !!params$margin
       ) |>
-        set_engine("kernlab")
+      	parsnip::set_engine("kernlab")
     } else {
-      model_spec <- svm_rbf(
+      model_spec <- parsnip::svm_rbf(
         mode = "regression",
         cost = !!params$cost,
         margin = !!params$margin,
         rbf_sigma = !!params$rbf_sigma
       ) |>
-        set_engine("kernlab")
+      	parsnip::set_engine("kernlab")
     }
 
   } else if (method == "Random Forest") {
 
-    model_spec <- rand_forest(
+    model_spec <- parsnip::rand_forest(
       mode = "regression",
       mtry = !!params$rf_mtry,
       trees = !!params$rf_trees,
       min_n = !!params$rf_min_n
     ) |>
-      set_engine("ranger")
+    	parsnip::set_engine("ranger")
 
   } else if (method == "Boosted Trees") {
 
     if (params$boost_method == "XGBoost") {
-      model_spec <- boost_tree(
+      model_spec <- parsnip::boost_tree(
         mode = "regression",
         mtry = !!params$boost_mtry,
         trees = !!params$boost_trees,
@@ -267,9 +267,9 @@ generate_model_spec <- function(method, params) {
         loss_reduction = !!params$boost_loss_reduction,
         sample_size = !!params$boost_sample_size
       ) |>
-        set_engine("xgboost")
+      	parsnip::set_engine("xgboost")
     } else if (params$boost_method == "LightGBM") {
-      model_spec <- boost_tree(
+      model_spec <- parsnip::boost_tree(
         mode = "regression",
         mtry = !!params$boost_mtry,
         trees = !!params$boost_trees,
@@ -279,23 +279,23 @@ generate_model_spec <- function(method, params) {
         loss_reduction = !!params$boost_loss_reduction,
         sample_size = !!params$boost_sample_size
       ) |>
-        set_engine("lightgbm")
+      	parsnip::set_engine("lightgbm")
     } else {
       stop(paste("Unknown Boosting method", params$boost_method))
     }
 
   } else if (method == "Cubist") {
 
-    model_spec <- cubist_rules(
+    model_spec <- parsnip::cubist_rules(
       committees = !!params$committees,
       neighbors = !!params$cub_neighbors,
       max_rules = !!params$max_rules
     ) |>
-      set_engine("Cubist")
+    	parsnip::set_engine("Cubist")
 
   } else if (method == "Feed-Forward") {
 
-    model_spec <- mlp(
+    model_spec <- parsnip::mlp(
       mode = "regression",
       hidden_units = !!params$ff_hidden_units,
       penalty = !!params$ff_penalty,
@@ -303,11 +303,11 @@ generate_model_spec <- function(method, params) {
       dropout = !!params$ff_dropout,
       learn_rate = !!params$ff_learn_rate
     ) |>
-      set_engine("nnet")
+    	parsnip::set_engine("nnet")
 
   } else if (method == "Feed-Forward AR") {
 
-    model_spec <- nnetar_reg(
+    model_spec <- modeltime::nnetar_reg(
       mode = "regression",
       non_seasonal_ar = !!params$ffar_non_seasonal_ar,
       seasonal_ar = !!params$ffar_seasonal_ar,
@@ -316,11 +316,11 @@ generate_model_spec <- function(method, params) {
       epochs = !!params$ffar_epochs,
       num_networks = !!params$ffar_num_networks
     ) |>
-      set_engine("nnetar")
+    	parsnip::set_engine("nnetar")
 
   } else if (method == "ARIMA-Boost") {
 
-    model_spec <- arima_boost(
+    model_spec <- modeltime::arima_boost(
       mode = "regression",
       mtry = !!params$arima_boost_mtry,
       trees = !!params$arima_boost_trees,
@@ -330,11 +330,11 @@ generate_model_spec <- function(method, params) {
       loss_reduction = !!params$arima_boost_loss_reduction,
       sample_size = !!params$arima_boost_sample_size
     ) |>
-      set_engine("auto_arima_xgboost")
+    	parsnip::set_engine("auto_arima_xgboost")
 
   } else if (method == "Prophet-Boost") {
 
-    model_spec <- prophet_boost(
+    model_spec <- modeltime::prophet_boost(
       mode = "regression",
       mtry = !!params$prophet_boost_mtry,
       trees = !!params$prophet_boost_trees,
@@ -344,12 +344,12 @@ generate_model_spec <- function(method, params) {
       loss_reduction = !!params$prophet_boost_loss_reduction,
       sample_size = !!params$prophet_boost_sample_size
     ) |>
-      set_engine("prophet_xgboost")
+    	parsnip::set_engine("prophet_xgboost")
 
   } else if (method == "H2O AutoML") {
 
-    model_spec <- automl_reg(mode = "regression") |>
-      set_engine(
+    model_spec <- modeltime.h2o::automl_reg(mode = "regression") |>
+    	parsnip::set_engine(
         engine = "h2o",
         project_name = "h2o_tsf_dashboard",
         max_models = 50,
@@ -404,7 +404,7 @@ set_tune_parameters <- function(method, params) {
     if (value == FALSE) {
       get_default(parameter)
     } else {
-      tune()
+      tune::tune()
     }
   }
 
@@ -493,7 +493,7 @@ fit_model <- function(data, method, params, n_assess, assess_type, seed = 1992) 
   # initial split
   logging::loginfo("Initial Split")
   splits <- generate_initial_split(data, n_assess, assess_type)
-  train_tbl <- training(splits) |> select(-id, -frequency)
+  train_tbl <- rsample::training(splits) |> dplyr::select(-id, -frequency)
 
   # recipe specification
   logging::loginfo("Recipe Specification")
@@ -505,12 +505,14 @@ fit_model <- function(data, method, params, n_assess, assess_type, seed = 1992) 
 
   # workflow specification
   logging::loginfo("Workflow Specification")
-  wkfl_spec <- workflow() |> add_recipe(rcp_spec) |> add_model(model_spec)
+  wkfl_spec <- workflows::workflow() |> 
+  	workflows::add_recipe(rcp_spec) |> 
+  	workflows::add_model(model_spec)
 
   # fitting
   logging::loginfo("Fitting")
-  if (method == "H2O AutoML") { h2o.init() }
-  wkfl_fit <- wkfl_spec |> fit(data = train_tbl)
+  if (method == "H2O AutoML") { h2o::h2o.init() }
+  wkfl_fit <- wkfl_spec |> parsnip::fit(data = train_tbl)
 
   return(wkfl_fit)
 
@@ -561,8 +563,8 @@ fit_stack <- function(modeltime_table, stacking_methods, resamples, seed = 1992)
   if ("Linear Regression" %in% stacking_methods) {
     stk_model_spec <- modeltime.ensemble::ensemble_model_spec(
       resamples,
-      model_spec = linear_reg(mode = "regression") |> set_engine("lm"),
-      control = control_grid(verbose = FALSE)
+      model_spec = parsnip::linear_reg(mode = "regression") |> parsnip::set_engine("lm"),
+      control = tune::control_grid(verbose = FALSE)
     )
     stk_tmp <- stk_model_spec |>
       modeltime::modeltime_table() |>
@@ -574,12 +576,12 @@ fit_stack <- function(modeltime_table, stacking_methods, resamples, seed = 1992)
   if ("Elastic Net" %in% stacking_methods) {
     stk_model_spec <- modeltime.ensemble::ensemble_model_spec(
       resamples,
-      model_spec = linear_reg(
+      model_spec = parsnip::linear_reg(
         mode = "regression",
         penalty = get_default("penalty"),
         mixture = get_default("mixture")
-      ) |> set_engine("glmnet"),
-      control = control_grid(verbose = FALSE)
+      ) |> parsnip::set_engine("glmnet"),
+      control = tune::control_grid(verbose = FALSE)
     )
     stk_tmp <- stk_model_spec |>
       modeltime::modeltime_table() |>
@@ -591,7 +593,7 @@ fit_stack <- function(modeltime_table, stacking_methods, resamples, seed = 1992)
   if ("Boosted Trees" %in% stacking_methods) {
     stk_model_spec <- modeltime.ensemble::ensemble_model_spec(
       resamples,
-      model_spec = boost_tree(
+      model_spec = parsnip::boost_tree(
         mode = "regression",
         mtry = get_default("boost_mtry"),
         trees = get_default("boost_trees"),
@@ -601,8 +603,8 @@ fit_stack <- function(modeltime_table, stacking_methods, resamples, seed = 1992)
         loss_reduction = get_default("boost_loss_reduction"),
         sample_size = get_default("boost_sample_size")
       ) |>
-        set_engine("xgboost"),
-      control = control_grid(verbose = FALSE)
+      	parsnip::set_engine("xgboost"),
+      control = tune::control_grid(verbose = FALSE)
     )
     stk_tmp <- stk_model_spec |>
       modeltime::modeltime_table() |>
@@ -635,7 +637,7 @@ fit_model_tuning <- function(
   # initial split
   logging::loginfo("Initial Split")
   splits <- generate_initial_split(data, n_assess, assess_type)
-  train_tbl <- training(splits) |> select(-id, -frequency)
+  train_tbl <- rsamples::training(splits) |> dplyr::select(-id, -frequency)
 
   # validation split
   logging::loginfo("Validation Split")
@@ -653,7 +655,9 @@ fit_model_tuning <- function(
 
   # workflow specification
   logging::loginfo("Workflow Specification")
-  wkfl_spec <- workflow() |> add_recipe(rcp_spec) |> add_model(model_spec)
+  wkfl_spec <- workflows::workflow() |> 
+  	workflows::add_recipe(rcp_spec) |> 
+  	workflows::add_model(model_spec)
 
   # grid specification
   # logging::loginfo("Grid Specification")
@@ -665,7 +669,8 @@ fit_model_tuning <- function(
   future::plan(strategy = "multisession", workers = parallelly::availableCores() - 1)
   if (bayesian_optimization) {
     feat_set <- generate_feature_set(rcp_spec)
-    updated_param_set <- hardhat::extract_parameter_set_dials(model_spec) |>
+    updated_param_set <- model_spec |> 
+    	hardhat::extract_parameter_set_dials() |>
       dials::finalize(x = feat_set)
     set.seed(seed)
     tune_fit <- wkfl_spec |>
@@ -701,7 +706,9 @@ fit_model_tuning <- function(
 
   # fitting (fit to training with optimal values)
   logging::loginfo("Fitting")
-  wkfl_fit <- wkfl_spec |> tune::finalize_workflow(best_fit) |> fit(train_tbl)
+  wkfl_fit <- wkfl_spec |> 
+  	tune::finalize_workflow(best_fit) |> 
+  	parsnip::fit(train_tbl)
 
   return(wkfl_fit)
 

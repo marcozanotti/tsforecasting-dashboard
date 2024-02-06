@@ -28,12 +28,14 @@ generate_model_explainer <- function(data, method, params, n_assess, assess_type
 	
 	# workflow specification
 	logging::loginfo("Workflow Specification")
-	wkfl_spec <- workflow() |> add_recipe(rcp_spec) |> add_model(model_spec)
+	wkfl_spec <- workflows::workflow() |> 
+		workflows::add_recipe(rcp_spec) |> 
+		workflows::add_model(model_spec)
 	
 	# fitting
 	logging::loginfo("Fitting")
-	if (method == "H2O AutoML") { h2o.init() }
-	wkfl_fit <- wkfl_spec |> fit(data = exp_train_tbl)
+	if (method == "H2O AutoML") { h2o::h2o.init() }
+	wkfl_fit <- wkfl_spec |> parsnip::fit(data = exp_train_tbl)
 	
 	# explainer
 	logging::loginfo("Creating Explainer")
