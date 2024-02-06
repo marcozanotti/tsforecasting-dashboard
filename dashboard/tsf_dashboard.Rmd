@@ -1891,7 +1891,7 @@ verbatimTextOutput(outputId = "ens_model_summary")
 
 
 
-Scenario {data-navmenu="Forecast" data-orientation=rows}
+Scenario Analysis {data-navmenu="Forecast" data-orientation=rows}
 ===========================================================================
 
 Input {.sidebar}

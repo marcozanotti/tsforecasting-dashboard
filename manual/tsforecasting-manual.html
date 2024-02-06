@@ -8,7 +8,7 @@
 
 <meta name="author" content="Marco Zanotti">
 
-<title>Time Series Forecasting - Manual</title>
+<title>Forecasting Dashboard - Manual</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -38,15 +38,39 @@ ul.task-list li input[type="checkbox"] {
 
 </head>
 
-<body class="fullcontent">
+<body>
 
 <div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
-
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+  <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#section-1-data" id="toc-section-1-data" class="nav-link active" data-scroll-target="#section-1-data">Section 1: Data</a></li>
+  <li><a href="#section-2-analyze" id="toc-section-2-analyze" class="nav-link" data-scroll-target="#section-2-analyze">Section 2: Analyze</a>
+  <ul class="collapse">
+  <li><a href="#visualize-transform" id="toc-visualize-transform" class="nav-link" data-scroll-target="#visualize-transform">Visualize &amp; Transform</a></li>
+  <li><a href="#anomaly-detection-cleaning" id="toc-anomaly-detection-cleaning" class="nav-link" data-scroll-target="#anomaly-detection-cleaning">Anomaly Detection &amp; Cleaning</a></li>
+  <li><a href="#hypothesis-testing" id="toc-hypothesis-testing" class="nav-link" data-scroll-target="#hypothesis-testing">Hypothesis Testing</a></li>
+  </ul></li>
+  <li><a href="#section-3-feature-engineering" id="toc-section-3-feature-engineering" class="nav-link" data-scroll-target="#section-3-feature-engineering">Section 3: Feature Engineering</a></li>
+  <li><a href="#section-4-forecast" id="toc-section-4-forecast" class="nav-link" data-scroll-target="#section-4-forecast">Section 4: Forecast</a>
+  <ul class="collapse">
+  <li><a href="#test-evaluate" id="toc-test-evaluate" class="nav-link" data-scroll-target="#test-evaluate">Test &amp; Evaluate</a></li>
+  <li><a href="#compare" id="toc-compare" class="nav-link" data-scroll-target="#compare">Compare</a></li>
+  <li><a href="#optimize" id="toc-optimize" class="nav-link" data-scroll-target="#optimize">Optimize</a></li>
+  <li><a href="#explain" id="toc-explain" class="nav-link" data-scroll-target="#explain">Explain</a></li>
+  <li><a href="#combine" id="toc-combine" class="nav-link" data-scroll-target="#combine">Combine</a></li>
+  <li><a href="#scenario-analysis" id="toc-scenario-analysis" class="nav-link" data-scroll-target="#scenario-analysis">Scenario Analysis</a></li>
+  </ul></li>
+  </ul>
+</nav>
+</div>
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Time Series Forecasting - Manual</h1>
+<h1 class="title">Forecasting Dashboard - Manual</h1>
 </div>
 
 
@@ -69,8 +93,73 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<section id="cooming-soon" class="level2">
-<h2 class="anchored" data-anchor-id="cooming-soon">COOMING SOON!</h2>
+<p>The time series forecasting dashboard is a tool to help you forecast the future values of a time series. The dashboard is designed to be used by people who may not be familiar with time series forecasting techniques.</p>
+<p>The dashboard provides a simple interface to:</p>
+<ul>
+<li>upload the time series<br>
+</li>
+<li>visualize, impute missing values and transform data<br>
+</li>
+<li>detect and clean anomalies<br>
+</li>
+<li>perform hypothesis testing<br>
+</li>
+<li>create and select features<br>
+</li>
+<li>test and evaluate different forecasting models<br>
+</li>
+<li>compare the performance of different models<br>
+</li>
+<li>optimize the models<br>
+</li>
+<li>explain the models forecasts<br>
+</li>
+<li>combine the model forecasts<br>
+</li>
+<li>perform scenario analysis.</li>
+</ul>
+<section id="section-1-data" class="level2">
+<h2 class="anchored" data-anchor-id="section-1-data">Section 1: Data</h2>
+<p>The Data section is where you upload the time series data. The data should be in a CSV file containing columns ‘date’, ‘id’, ‘frequency’ and ‘value’.</p>
+</section>
+<section id="section-2-analyze" class="level2">
+<h2 class="anchored" data-anchor-id="section-2-analyze">Section 2: Analyze</h2>
+<p>The Analyze section is where you perform the initial analysis of the time series data. This includes visualizing the data, imputing missing values, transforming the data, detecting and cleaning anomalies, and performing hypothesis testing.</p>
+<section id="visualize-transform" class="level3">
+<h3 class="anchored" data-anchor-id="visualize-transform">Visualize &amp; Transform</h3>
+</section>
+<section id="anomaly-detection-cleaning" class="level3">
+<h3 class="anchored" data-anchor-id="anomaly-detection-cleaning">Anomaly Detection &amp; Cleaning</h3>
+</section>
+<section id="hypothesis-testing" class="level3">
+<h3 class="anchored" data-anchor-id="hypothesis-testing">Hypothesis Testing</h3>
+</section>
+</section>
+<section id="section-3-feature-engineering" class="level2">
+<h2 class="anchored" data-anchor-id="section-3-feature-engineering">Section 3: Feature Engineering</h2>
+<p>The Feature Engineering section is where you create and select features for the forecasting models.</p>
+</section>
+<section id="section-4-forecast" class="level2">
+<h2 class="anchored" data-anchor-id="section-4-forecast">Section 4: Forecast</h2>
+<p>The Forecast section is where you test and evaluate different forecasting models. You can compare the performance of different models, optimize the models, explain the models forecasts, combine the model forecasts, and perform scenario analysis.</p>
+<section id="test-evaluate" class="level3">
+<h3 class="anchored" data-anchor-id="test-evaluate">Test &amp; Evaluate</h3>
+</section>
+<section id="compare" class="level3">
+<h3 class="anchored" data-anchor-id="compare">Compare</h3>
+</section>
+<section id="optimize" class="level3">
+<h3 class="anchored" data-anchor-id="optimize">Optimize</h3>
+</section>
+<section id="explain" class="level3">
+<h3 class="anchored" data-anchor-id="explain">Explain</h3>
+</section>
+<section id="combine" class="level3">
+<h3 class="anchored" data-anchor-id="combine">Combine</h3>
+</section>
+<section id="scenario-analysis" class="level3">
+<h3 class="anchored" data-anchor-id="scenario-analysis">Scenario Analysis</h3>
+</section>
 </section>
 
 </main>
