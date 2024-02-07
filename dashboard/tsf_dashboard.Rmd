@@ -43,15 +43,17 @@ ml_methods <- methods$ml
 dl_methods <- methods$dl
 mix_methods <- methods$mix
 aml_methods <- methods$aml
+tune_methods <- methods$tune
 ens_methods <- methods$ens
 stk_methods <- methods$stk
-tune_methods <- methods$tune
-methods <- c(ts_methods, ml_methods, dl_methods, mix_methods)
+# methods <- c(ts_methods, ml_methods, dl_methods, mix_methods)
 
 mtd_prm <- getOption("tsf.dashboard.methods_params")
 mtd_prm_names <- purrr::map(mtd_prm, names)
 
 metrics <- toupper(getOption("tsf.dashboard.metrics"))
+
+transf <- getOption("tsf.dashboard.transformations")
 ```
 
 
@@ -328,25 +330,17 @@ h5("ADF, PP and KPSS")
 br()
 br()
 br()
-materialSwitch(inputId = "test_log", label = "Test on log?", value = FALSE, status = "primary")
-materialSwitch(inputId = "test_boxcox", label = "Test on Box-Cox?", value = FALSE, status = "primary")
-materialSwitch(inputId = "test_norm", label = "Test on normalized?", value = FALSE, status = "primary")
-materialSwitch(inputId = "test_stand", label = "Test on standardized?", value = FALSE, status = "primary")
-materialSwitch(inputId = "test_diff", label = "Test on diff?", value = FALSE, status = "primary")
-materialSwitch(inputId = "test_sdiff", label = "Test on seasonal diff?", value = FALSE, status = "primary")
+pickerInput(
+  inputId = "test_transf", label = h5("Test on transformed data?"), multiple = TRUE,
+  choices = transf, selected = NULL
+)
 ```
 
 ```{r}
 data_test <- reactive({
   data_imputed() |> 
-    transform_data(
-    	transformations = list(
-    		"log" = input$test_log, "boxcox" = input$test_boxcox, 
-    		"norm" = input$test_norm, "stand" = input$test_stand, 
-    		"diff" = input$test_diff, "sdiff" = input$test_sdiff
-    	), 
-    	freq = ts_freq()
-    )
+    transform_data(transformations = input$test_transf,	freq = ts_freq()) |> 
+		purrr::pluck("data_transformed")
 })
 
 test_results <- reactive({
@@ -548,12 +542,10 @@ observeEvent(
 
 br()
 
-materialSwitch(inputId = "transf_log", label = "Log", value = FALSE, status = "primary")
-materialSwitch(inputId = "transf_boxcox", label = "Box-Cox", value = FALSE, status = "primary")
-materialSwitch(inputId = "transf_norm", label = "Normalize", value = FALSE, status = "primary")
-materialSwitch(inputId = "transf_stand", label = "Standardize", value = FALSE, status = "primary")
-materialSwitch(inputId = "transf_diff", label = "Diff", value = FALSE, status = "primary")
-materialSwitch(inputId = "transf_sdiff", label = "Seasonal Diff", value = FALSE, status = "primary")
+pickerInput(
+  inputId = "transf", label = h5("Transformations"), multiple = TRUE,
+  choices = transf, selected = NULL
+)
 
 br()
 
@@ -563,27 +555,22 @@ observeEvent(
   handlerExpr = {
     updateMaterialSwitch(session = session, inputId = "transf_smooth_line", value = TRUE)
     updateNumericInput(session = session, inputId = "transf_acf_lag", value = ifelse(ts_freq() < 60, ts_freq() * 3, ts_freq()))
-    updateMaterialSwitch(session = session, inputId = "transf_log", value = FALSE)
-    updateMaterialSwitch(session = session, inputId = "transf_boxcox", value = FALSE)
-    updateMaterialSwitch(session = session, inputId = "transf_norm", value = FALSE)
-    updateMaterialSwitch(session = session, inputId = "transf_stand", value = FALSE)
-    updateMaterialSwitch(session = session, inputId = "transf_diff", value = FALSE)
-    updateMaterialSwitch(session = session, inputId = "transf_sdiff", value = FALSE)
+    updatePickerInput(session = session, inputId = "transf", selected = NULL)
   }
 )
 ```
 
 ```{r}
+transform_params <- reactive({
+	data_cleaned() |> 
+    transform_data(transformations = input$test_transf,	freq = ts_freq()) |> 
+		purrr::pluck("transform_params")
+})
+
 data_transformed <- reactive({
   data_cleaned() |> 
-    transform_data(
-    	transformations = list(
-    		"log" = input$transf_log, "boxcox" = input$transf_boxcox, 
-    		"norm" = input$transf_norm, "stand" = input$transf_stand, 
-    		"diff" = input$transf_diff, "sdiff" = input$transf_sdiff
-    	), 
-    	freq = ts_freq()
-    ) |> 
+    transform_data(transformations = input$transf,	freq = ts_freq()) |> 
+		purrr::pluck("data_transformed") |> 
     filter(between(date, input$transf_date_range[1], input$transf_date_range[2]))
 })
 

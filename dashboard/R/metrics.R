@@ -44,6 +44,7 @@ me.data.frame <- function(data, truth, estimate, na_rm = TRUE, case_weights = NU
 rmspe_impl <- function(truth, estimate, case_weights = NULL) {
   eps <- 1e-10
   sqrt(mean(((estimate - (truth + eps)) / (truth + eps)) ^ 2)) * 100 # pay attention to this formulation
+  # sqrt(mean(((estimate - truth) / truth) ^ 2)) * 100
 }
 
 rmspe_vec <- function(truth, estimate, na_rm = TRUE, case_weights = NULL, ...) {
@@ -73,7 +74,7 @@ rmspe.data.frame <- function(data, truth, estimate, na_rm = TRUE, case_weights =
 
   yardstick::numeric_metric_summarizer(
     name = "rmspe",
-    fn = me_vec,
+    fn = rmspe_vec,
     data = data,
     truth = !!rlang::enquo(truth),
     estimate = !!rlang::enquo(estimate),

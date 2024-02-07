@@ -504,14 +504,11 @@ data_selected <- get_data(datasets[1])
 ts_freq <- data_selected$frequency |> unique() |> parse_frequency()
 
 input <- list(
-	log = TRUE,
-	boxcox = FALSE,
-	norm = FALSE,
-	stand = "FALSE",
-	diff = TRUE,
-	sdiff = FALSE
+	"transf" = c(trf[-2])
 )
-transformations = input
+transformations = input$transf
+
+transform_data(data_selected, input$transf, ts_freq)
 
 # Vizualize
 data_selected |> 

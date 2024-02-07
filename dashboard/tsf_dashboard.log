@@ -251,3 +251,314 @@
 2024-02-06 22:13:45 INFO::Hypothesis testing...
 2024-02-06 22:13:46 INFO::Hypothesis testing...
 2024-02-06 22:13:47 INFO::Hypothesis testing...
+2024-02-07 09:16:23 INFO::Getting Air Passengers data...
+2024-02-07 09:16:30 INFO::Hypothesis testing...
+2024-02-07 09:16:30 INFO::Normality Tests
+2024-02-07 09:16:31 INFO::Autocorrelation Tests
+2024-02-07 09:16:31 INFO::Stationarity Tests
+2024-02-07 09:16:34 INFO::Hypothesis testing...
+2024-02-07 09:16:34 INFO::Transforming data...
+2024-02-07 09:16:34 INFO::Log
+2024-02-07 09:16:34 INFO::Normality Tests
+2024-02-07 09:16:34 INFO::Autocorrelation Tests
+2024-02-07 09:16:34 INFO::Stationarity Tests
+2024-02-07 09:16:38 INFO::Hypothesis testing...
+2024-02-07 09:16:38 INFO::Transforming data...
+2024-02-07 09:16:38 INFO::Log
+2024-02-07 09:16:38 INFO::Differencing
+2024-02-07 09:16:38 INFO::Normality Tests
+2024-02-07 09:16:38 INFO::Autocorrelation Tests
+2024-02-07 09:16:38 INFO::Stationarity Tests
+2024-02-07 09:16:53 INFO::Transforming data...
+2024-02-07 09:16:53 INFO::Log
+2024-02-07 09:16:56 INFO::Transforming data...
+2024-02-07 09:16:56 INFO::Log
+2024-02-07 09:16:56 INFO::Normalization
+2024-02-07 09:17:01 INFO::Transforming data...
+2024-02-07 09:17:01 INFO::Log
+2024-02-07 09:17:01 INFO::Normalization
+2024-02-07 09:17:01 INFO::Differencing
+2024-02-07 09:17:03 INFO::Transforming data...
+2024-02-07 09:17:03 INFO::Log
+2024-02-07 09:17:03 INFO::Normalization
+2024-02-07 09:17:03 INFO::Differencing
+2024-02-07 09:17:03 INFO::Seasonal Differencing
+2024-02-07 09:17:05 INFO::Transforming data...
+2024-02-07 09:17:05 INFO::Log
+2024-02-07 09:17:05 INFO::Normalization
+2024-02-07 09:17:05 INFO::Standardization
+2024-02-07 09:17:05 INFO::Differencing
+2024-02-07 09:17:05 INFO::Seasonal Differencing
+2024-02-07 09:17:08 INFO::Transforming data...
+2024-02-07 09:17:08 INFO::Log
+2024-02-07 09:17:08 INFO::Box-Cox
+2024-02-07 09:17:08 INFO::Normalization
+2024-02-07 09:17:08 INFO::Standardization
+2024-02-07 09:17:08 INFO::Differencing
+2024-02-07 09:17:08 INFO::Seasonal Differencing
+2024-02-07 09:17:23 INFO::*** Generating Forecasts ***
+2024-02-07 09:17:23 INFO::Method(s): ETS
+2024-02-07 09:17:23 INFO::Initial Split
+2024-02-07 09:17:23 INFO::Future Frame
+2024-02-07 09:17:23 INFO::Modeltime Table
+2024-02-07 09:17:23 INFO::*** Fitting Algorithm ***
+2024-02-07 09:17:23 INFO::Method(s): ETS
+2024-02-07 09:17:23 INFO::Initial Split
+2024-02-07 09:17:23 INFO::Recipe Specification
+2024-02-07 09:17:23 INFO::Model Specification
+2024-02-07 09:17:23 INFO::Workflow Specification
+2024-02-07 09:17:23 INFO::Fitting
+2024-02-07 09:17:24 INFO::Calibration
+2024-02-07 09:17:24 INFO::Residuals
+2024-02-07 09:17:24 INFO::Accuracy Evaluation
+2024-02-07 09:17:24 INFO::Test Forecasting
+2024-02-07 09:17:24 INFO::Refitting
+2024-02-07 09:17:24 INFO::Out-of-Sample Forecasting
+2024-02-07 10:29:46 INFO::Getting Air Passengers data...
+2024-02-07 10:29:50 INFO::Hypothesis testing...
+2024-02-07 10:30:58 INFO::Getting Air Passengers data...
+2024-02-07 10:30:58 INFO::Hypothesis testing...
+2024-02-07 10:32:07 INFO::Getting Air Passengers data...
+2024-02-07 10:32:11 INFO::Hypothesis testing...
+2024-02-07 10:32:11 INFO::Normality Tests
+2024-02-07 10:32:11 INFO::Autocorrelation Tests
+2024-02-07 10:32:11 INFO::Stationarity Tests
+2024-02-07 10:32:16 INFO::Hypothesis testing...
+2024-02-07 10:32:16 INFO::Transforming data...
+2024-02-07 10:32:16 INFO::Normalization
+2024-02-07 10:32:16 INFO::Normality Tests
+2024-02-07 10:32:16 INFO::Autocorrelation Tests
+2024-02-07 10:32:16 INFO::Stationarity Tests
+2024-02-07 10:32:21 INFO::Hypothesis testing...
+2024-02-07 10:32:21 INFO::Transforming data...
+2024-02-07 10:32:21 INFO::Normalization
+2024-02-07 10:32:21 INFO::Standardization
+2024-02-07 10:32:21 INFO::Normality Tests
+2024-02-07 10:32:21 INFO::Autocorrelation Tests
+2024-02-07 10:32:21 INFO::Stationarity Tests
+2024-02-07 10:32:30 INFO::Hypothesis testing...
+2024-02-07 10:32:30 INFO::Transforming data...
+2024-02-07 10:32:30 INFO::Normalization
+2024-02-07 10:32:30 INFO::Standardization
+2024-02-07 10:32:30 INFO::Differencing
+2024-02-07 10:32:30 INFO::Normality Tests
+2024-02-07 10:32:30 INFO::Autocorrelation Tests
+2024-02-07 10:32:30 INFO::Stationarity Tests
+2024-02-07 10:32:32 INFO::Hypothesis testing...
+2024-02-07 10:32:32 INFO::Transforming data...
+2024-02-07 10:32:32 INFO::Normalization
+2024-02-07 10:32:32 INFO::Standardization
+2024-02-07 10:32:32 INFO::Differencing
+2024-02-07 10:32:32 INFO::Seasonal Differencing
+2024-02-07 10:32:32 INFO::Normality Tests
+2024-02-07 10:32:32 INFO::Autocorrelation Tests
+2024-02-07 10:32:32 INFO::Stationarity Tests
+2024-02-07 10:32:34 INFO::Hypothesis testing...
+2024-02-07 10:32:34 INFO::Transforming data...
+2024-02-07 10:32:34 INFO::Box-Cox
+2024-02-07 10:32:34 INFO::Normalization
+2024-02-07 10:32:34 INFO::Standardization
+2024-02-07 10:32:34 INFO::Differencing
+2024-02-07 10:32:34 INFO::Seasonal Differencing
+2024-02-07 10:32:34 INFO::Normality Tests
+2024-02-07 10:32:34 INFO::Autocorrelation Tests
+2024-02-07 10:32:34 INFO::Stationarity Tests
+2024-02-07 10:32:36 INFO::Hypothesis testing...
+2024-02-07 10:32:36 INFO::Transforming data...
+2024-02-07 10:32:36 INFO::Log
+2024-02-07 10:32:36 INFO::Box-Cox
+2024-02-07 10:32:36 INFO::Normalization
+2024-02-07 10:32:36 INFO::Standardization
+2024-02-07 10:32:36 INFO::Differencing
+2024-02-07 10:32:36 INFO::Seasonal Differencing
+2024-02-07 10:32:36 INFO::Normality Tests
+2024-02-07 10:32:36 INFO::Autocorrelation Tests
+2024-02-07 10:32:36 INFO::Stationarity Tests
+2024-02-07 10:36:35 INFO::Getting Air Passengers data...
+2024-02-07 10:36:36 INFO::Hypothesis testing...
+2024-02-07 10:36:36 INFO::Normality Tests
+2024-02-07 10:36:42 INFO::Hypothesis testing...
+2024-02-07 10:36:42 INFO::Transforming data...
+2024-02-07 10:36:42 INFO::Box-Cox
+2024-02-07 10:36:42 INFO::Normality Tests
+2024-02-07 10:40:36 INFO::Getting Air Passengers data...
+2024-02-07 10:40:38 INFO::Hypothesis testing...
+2024-02-07 10:40:38 INFO::Normality Tests
+2024-02-07 10:40:38 INFO::Autocorrelation Tests
+2024-02-07 10:40:38 INFO::Stationarity Tests
+2024-02-07 10:40:41 INFO::Hypothesis testing...
+2024-02-07 10:40:41 INFO::Transforming data...
+2024-02-07 10:40:41 INFO::Box-Cox
+2024-02-07 10:40:41 INFO::Normality Tests
+2024-02-07 10:40:41 INFO::Autocorrelation Tests
+2024-02-07 10:40:41 INFO::Stationarity Tests
+2024-02-07 10:40:42 INFO::Hypothesis testing...
+2024-02-07 10:40:42 INFO::Transforming data...
+2024-02-07 10:40:42 INFO::Box-Cox
+2024-02-07 10:40:42 INFO::Normalization
+2024-02-07 10:40:42 INFO::Normality Tests
+2024-02-07 10:40:42 INFO::Autocorrelation Tests
+2024-02-07 10:40:42 INFO::Stationarity Tests
+2024-02-07 10:40:43 INFO::Hypothesis testing...
+2024-02-07 10:40:43 INFO::Transforming data...
+2024-02-07 10:40:43 INFO::Box-Cox
+2024-02-07 10:40:43 INFO::Normalization
+2024-02-07 10:40:43 INFO::Differencing
+2024-02-07 10:40:43 INFO::Normality Tests
+2024-02-07 10:40:43 INFO::Autocorrelation Tests
+2024-02-07 10:40:43 INFO::Stationarity Tests
+2024-02-07 10:40:44 INFO::Hypothesis testing...
+2024-02-07 10:40:44 INFO::Transforming data...
+2024-02-07 10:40:44 INFO::Log
+2024-02-07 10:40:44 INFO::Box-Cox
+2024-02-07 10:40:44 INFO::Normalization
+2024-02-07 10:40:44 INFO::Differencing
+2024-02-07 10:40:44 INFO::Normality Tests
+2024-02-07 10:40:44 INFO::Autocorrelation Tests
+2024-02-07 10:40:44 INFO::Stationarity Tests
+2024-02-07 10:40:45 INFO::Hypothesis testing...
+2024-02-07 10:40:45 INFO::Transforming data...
+2024-02-07 10:40:45 INFO::Log
+2024-02-07 10:40:45 INFO::Box-Cox
+2024-02-07 10:40:45 INFO::Normalization
+2024-02-07 10:40:45 INFO::Standardization
+2024-02-07 10:40:45 INFO::Differencing
+2024-02-07 10:40:45 INFO::Normality Tests
+2024-02-07 10:40:45 INFO::Autocorrelation Tests
+2024-02-07 10:40:45 INFO::Stationarity Tests
+2024-02-07 10:40:45 INFO::Hypothesis testing...
+2024-02-07 10:40:45 INFO::Transforming data...
+2024-02-07 10:40:45 INFO::Log
+2024-02-07 10:40:45 INFO::Box-Cox
+2024-02-07 10:40:45 INFO::Normalization
+2024-02-07 10:40:45 INFO::Standardization
+2024-02-07 10:40:45 INFO::Differencing
+2024-02-07 10:40:45 INFO::Seasonal Differencing
+2024-02-07 10:40:45 INFO::Normality Tests
+2024-02-07 10:40:45 INFO::Autocorrelation Tests
+2024-02-07 10:40:45 INFO::Stationarity Tests
+2024-02-07 10:40:54 INFO::Transforming data...
+2024-02-07 10:40:54 INFO::Log
+2024-02-07 10:40:58 INFO::Transforming data...
+2024-02-07 10:40:58 INFO::Log
+2024-02-07 10:40:59 INFO::Transforming data...
+2024-02-07 10:40:59 INFO::Log
+2024-02-07 10:40:59 INFO::Box-Cox
+2024-02-07 10:41:00 INFO::Transforming data...
+2024-02-07 10:41:00 INFO::Log
+2024-02-07 10:41:00 INFO::Box-Cox
+2024-02-07 10:41:00 INFO::Normalization
+2024-02-07 10:41:02 INFO::Transforming data...
+2024-02-07 10:41:02 INFO::Log
+2024-02-07 10:41:02 INFO::Box-Cox
+2024-02-07 10:41:02 INFO::Normalization
+2024-02-07 10:41:02 INFO::Standardization
+2024-02-07 10:41:03 INFO::Transforming data...
+2024-02-07 10:41:03 INFO::Log
+2024-02-07 10:41:03 INFO::Box-Cox
+2024-02-07 10:41:03 INFO::Normalization
+2024-02-07 10:41:03 INFO::Standardization
+2024-02-07 10:41:03 INFO::Differencing
+2024-02-07 10:41:05 INFO::Transforming data...
+2024-02-07 10:41:05 INFO::Log
+2024-02-07 10:41:05 INFO::Box-Cox
+2024-02-07 10:41:05 INFO::Normalization
+2024-02-07 10:41:05 INFO::Standardization
+2024-02-07 10:41:05 INFO::Differencing
+2024-02-07 10:41:05 INFO::Seasonal Differencing
+2024-02-07 10:41:08 INFO::Transforming data...
+2024-02-07 10:41:08 INFO::Log
+2024-02-07 10:41:08 INFO::Box-Cox
+2024-02-07 10:41:08 INFO::Normalization
+2024-02-07 10:41:08 INFO::Standardization
+2024-02-07 10:41:08 INFO::Differencing
+2024-02-07 10:41:11 INFO::Transforming data...
+2024-02-07 10:41:11 INFO::Log
+2024-02-07 10:41:11 INFO::Box-Cox
+2024-02-07 10:41:11 INFO::Normalization
+2024-02-07 10:41:11 INFO::Standardization
+2024-02-07 10:41:15 INFO::Transforming data...
+2024-02-07 10:41:15 INFO::Box-Cox
+2024-02-07 10:41:15 INFO::Normalization
+2024-02-07 10:41:15 INFO::Standardization
+2024-02-07 10:41:19 INFO::Transforming data...
+2024-02-07 10:41:19 INFO::Normalization
+2024-02-07 10:41:19 INFO::Standardization
+2024-02-07 10:41:21 INFO::Transforming data...
+2024-02-07 10:41:21 INFO::Standardization
+2024-02-07 10:51:43 INFO::Getting Air Passengers data...
+2024-02-07 10:51:54 INFO::Transforming data...
+2024-02-07 10:51:54 INFO::Log
+2024-02-07 10:52:00 INFO::*** Generating Forecasts ***
+2024-02-07 10:52:00 INFO::Method(s): ETS
+2024-02-07 10:52:00 INFO::Initial Split
+2024-02-07 10:52:00 INFO::Future Frame
+2024-02-07 10:52:00 INFO::Modeltime Table
+2024-02-07 10:52:00 INFO::*** Fitting Algorithm ***
+2024-02-07 10:52:00 INFO::Method(s): ETS
+2024-02-07 10:52:00 INFO::Initial Split
+2024-02-07 10:52:00 INFO::Recipe Specification
+2024-02-07 10:52:00 INFO::Model Specification
+2024-02-07 10:52:00 INFO::Workflow Specification
+2024-02-07 10:52:00 INFO::Fitting
+2024-02-07 10:52:00 INFO::Calibration
+2024-02-07 10:52:01 INFO::Residuals
+2024-02-07 10:52:01 INFO::Accuracy Evaluation
+2024-02-07 10:52:01 INFO::Test Forecasting
+2024-02-07 10:52:01 INFO::Refitting
+2024-02-07 10:52:01 INFO::Out-of-Sample Forecasting
+2024-02-07 10:52:36 INFO::*** Generating Forecasts ***
+2024-02-07 10:52:36 INFO::Method(s): SARIMA
+2024-02-07 10:52:36 INFO::Initial Split
+2024-02-07 10:52:37 INFO::Future Frame
+2024-02-07 10:52:37 INFO::Modeltime Table
+2024-02-07 10:52:37 INFO::*** Fitting Algorithm ***
+2024-02-07 10:52:37 INFO::Method(s): SARIMA
+2024-02-07 10:52:37 INFO::Initial Split
+2024-02-07 10:52:37 INFO::Recipe Specification
+2024-02-07 10:52:37 INFO::Model Specification
+2024-02-07 10:52:37 INFO::Workflow Specification
+2024-02-07 10:52:37 INFO::Fitting
+2024-02-07 10:52:38 INFO::Calibration
+2024-02-07 10:52:38 INFO::Residuals
+2024-02-07 10:52:38 INFO::Accuracy Evaluation
+2024-02-07 10:52:39 INFO::Test Forecasting
+2024-02-07 10:52:39 INFO::Refitting
+2024-02-07 10:52:40 INFO::Out-of-Sample Forecasting
+2024-02-07 10:53:14 INFO::*** Generating Forecasts ***
+2024-02-07 10:53:14 INFO::Method(s): ETS
+2024-02-07 10:53:14 INFO::Initial Split
+2024-02-07 10:53:14 INFO::Future Frame
+2024-02-07 10:53:14 INFO::Modeltime Table
+2024-02-07 10:53:14 INFO::*** Fitting Algorithm ***
+2024-02-07 10:53:14 INFO::Method(s): ETS
+2024-02-07 10:53:14 INFO::Initial Split
+2024-02-07 10:53:14 INFO::Recipe Specification
+2024-02-07 10:53:14 INFO::Model Specification
+2024-02-07 10:53:14 INFO::Workflow Specification
+2024-02-07 10:53:14 INFO::Fitting
+2024-02-07 10:53:14 INFO::Calibration
+2024-02-07 10:53:14 INFO::Residuals
+2024-02-07 10:53:14 INFO::Accuracy Evaluation
+2024-02-07 10:53:15 INFO::Test Forecasting
+2024-02-07 10:53:15 INFO::Refitting
+2024-02-07 10:53:15 INFO::Out-of-Sample Forecasting
+2024-02-07 10:55:19 INFO::Getting Air Passengers data...
+2024-02-07 10:55:37 INFO::*** Generating Forecasts ***
+2024-02-07 10:55:37 INFO::Method(s): ETS
+2024-02-07 10:55:37 INFO::Initial Split
+2024-02-07 10:55:37 INFO::Future Frame
+2024-02-07 10:55:37 INFO::Modeltime Table
+2024-02-07 10:55:37 INFO::*** Fitting Algorithm ***
+2024-02-07 10:55:37 INFO::Method(s): ETS
+2024-02-07 10:55:37 INFO::Initial Split
+2024-02-07 10:55:37 INFO::Recipe Specification
+2024-02-07 10:55:37 INFO::Model Specification
+2024-02-07 10:55:37 INFO::Workflow Specification
+2024-02-07 10:55:37 INFO::Fitting
+2024-02-07 10:55:38 INFO::Calibration
+2024-02-07 10:55:38 INFO::Residuals
+2024-02-07 10:55:38 INFO::Accuracy Evaluation
+2024-02-07 10:55:38 INFO::Test Forecasting
+2024-02-07 10:55:38 INFO::Refitting
+2024-02-07 10:55:38 INFO::Out-of-Sample Forecasting

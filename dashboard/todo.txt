@@ -7,10 +7,9 @@ Next steps:
 - deployment su github actions
 
 To Do:
-- correggere transform senza section!
-- aggiungere logica di transform_back i forecast - pensare bene a questo con feature eng
+- aggiungere back transform per forecast
+- add log_interval_transform
 - bug XAI su h2o
-- bug RMSPE negativo, replicare con log + ETS
 - pensare e aggiungere la sezione di feature engineering (con in mente il save)
 
 
