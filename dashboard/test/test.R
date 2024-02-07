@@ -503,13 +503,6 @@ explain_model(explainer, type)
 data_selected <- get_data(datasets[1])
 ts_freq <- data_selected$frequency |> unique() |> parse_frequency()
 
-input <- list(
-	"transf" = c(trf[-2])
-)
-transformations = input$transf
-
-transform_data(data_selected, input$transf, ts_freq)
-
 # Vizualize
 data_selected |> 
 	plot_time_series(date, value, .color_var = lubridate::year(date), .smooth = FALSE)
@@ -532,6 +525,105 @@ g <- data_selected |>
 plotly::ggplotly(g, dynamicTicks = TRUE)
 
 	
+
+# Transformations ---------------------------------------------------------
+
+data_selected <- get_data(datasets[1])
+ts_freq <- data_selected$frequency |> unique() |> parse_frequency()
+input <- list(
+	"transf" = c(transf) # NULL
+)
+res <- transform_data(data_selected, input$transf, ts_freq) 
+res |> purrr::pluck("data_transformed") |> 
+	back_transform_data(input$transf, res$transform_params, ts_freq)
+
+# test on forecasts 
+input <- list(
+	transf = transf[1:4],
+	n_future = 12,
+	n_assess = 24,
+	assess_type = "Rolling",
+	method = "ETS",
+	auto_ets = TRUE,
+	error = "auto",
+	trend = "auto",
+	season = "auto",
+	damping = "auto",
+	smooth_level = 0.1,
+	smooth_trend = 0.1,
+	smooth_season = 0.1
+)
+
+data_transformed <- transform_data(data_selected, input$transf, ts_freq)$data_transformed
+transform_params <- transform_data(data_selected, input$transf, ts_freq)$transform_params
+
+fitted_model_list <- map(
+	input$method,
+	~ fit_model(
+		data = data_transformed, method = ., params = input,
+		n_assess = input$n_assess, assess_type = input$assess_type, seed = 1992
+	)
+)
+
+forecast_results <- generate_forecast(
+	fitted_model_list = fitted_model_list, data = data_transformed,
+	method = input$method, n_future = input$n_future,
+	n_assess = input$n_assess, assess_type = input$assess_type
+)
+
+data = data_selected
+method = input$method
+params = input
+n_assess = input$n_assess
+assess_type = input$assess_type
+seed = 1992
+data_splits = fitted_model$splits
+fitted_model = fitted_model$fit
+n_future = input$n_future
+
+forecast_results$splits |>
+	tk_time_series_cv_plan() |>
+	plot_time_series_cv_plan(date, value)
+forecast_results$fit
+forecast_results$residuals
+forecast_results$accuracy
+
+forecast_results$test_forecast |> plot_modeltime_forecast()
+forecast_results$test_forecast |> 
+	back_transform_data(
+		cols_to_transform = c(".value", ".conf_lo", ".conf_hi"),
+		transform = TRUE,
+		transformations = input$transf, transform_params = transform_params, 
+		frequency = ts_freq
+	) |> 
+	plot_modeltime_forecast()
+
+forecast_results$oos_forecast |> plot_modeltime_forecast()
+forecast_results$oos_forecast |> 
+	back_transform_data(
+		cols_to_transform = c(".value", ".conf_lo", ".conf_hi"),
+		transform = TRUE,
+		transformations = input$transf, transform_params = transform_params, 
+		frequency = ts_freq
+	) |> 
+	plot_modeltime_forecast()
+
+forecast_results$accuracy
+back_transform_accuracy(
+	data = data_transformed, calibration_table = forecast_results$calibration, 
+	n_assess = input$n_assess, assess_type = input$assess_type,
+	transform = TRUE,
+	transformations = input$transf, transform_params = transform_params, 
+	frequency = ts_freq
+)
+
+
+
+
+
+
+
+
 
 
 

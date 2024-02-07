@@ -267,3 +267,19 @@ set_confidence_levels <- function(confidence_level, by = 0.05) {
   lvls <- unique(c(min_lvl, lvls, max_lvl))
   return(lvls)
 }
+
+# function to generate intitial values for back-transform differencing operations
+generate_initial_values <- function(initial_values) {
+	res <- tibble::tibble(
+		".model_id" = NA_integer_,
+		".model_desc" = "ACTUAL",
+		".key" = "actual",
+		".index" = initial_values$date,
+		".value" = initial_values$value,
+		".conf_lo" = NA_real_,
+		".conf_hi" = NA_real_,
+		".conf_lvl" = NA_real_
+	)
+	return(res)
+}
+

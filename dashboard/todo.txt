@@ -7,15 +7,13 @@ Next steps:
 - deployment su github actions
 
 To Do:
-- aggiungere back transform per forecast
 - add log_interval_transform
 - bug XAI su h2o
 - pensare e aggiungere la sezione di feature engineering (con in mente il save)
 
-
 - modificare output modello con parsing
-- pensare e aggiungere il save del modello ottimizzato + use optimize in altre sezioni
 - aggiungere metodi di dl (NeuralProphet + NBEATS + DeepAR)
 - option tune stack? per il tuning degli stack
+- pensare e aggiungere il save del modello ottimizzato + use optimize in altre sezioni
 - cambiare assegnazione nomi ai parametri in UI
-- creazione fanchart
+- creazione fanchart al posto del primo grafico in scenario

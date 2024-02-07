@@ -637,7 +637,7 @@ fit_model_tuning <- function(
   # initial split
   logging::loginfo("Initial Split")
   splits <- generate_initial_split(data, n_assess, assess_type)
-  train_tbl <- rsamples::training(splits) |> dplyr::select(-id, -frequency)
+  train_tbl <- rsample::training(splits) |> dplyr::select(-id, -frequency)
 
   # validation split
   logging::loginfo("Validation Split")

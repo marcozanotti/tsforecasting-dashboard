@@ -544,7 +544,7 @@ br()
 
 pickerInput(
   inputId = "transf", label = h5("Transformations"), multiple = TRUE,
-  choices = transf, selected = NULL
+  choices = transf[1:4], selected = NULL
 )
 
 br()
@@ -563,7 +563,7 @@ observeEvent(
 ```{r}
 transform_params <- reactive({
 	data_cleaned() |> 
-    transform_data(transformations = input$test_transf,	freq = ts_freq()) |> 
+    transform_data(transformations = input$transf,	freq = ts_freq()) |> 
 		purrr::pluck("transform_params")
 })
 
@@ -702,6 +702,8 @@ pickerInput(
   selected = "Naive"
 )
 
+awesomeCheckbox(inputId = "back_transf", label = "Back transform?", value = FALSE)
+
 actionButton(inputId = "apply_forecast", label = "Forecast!", icon = icon("play"))
 actionButton(inputId = "tsf_reset", label = "Reset", icon = icon("sync"))
 observeEvent(
@@ -711,6 +713,7 @@ observeEvent(
     updateNumericInput(session = session, inputId = "n_assess", value = 24)
     updatePrettyRadioButtons(session = session, inputId = "assess_type", selected = "Rolling")
     updatePickerInput(session = session, inputId = "method", selected = "Naive")
+    updateAwesomeCheckbox(session = session, inputId = "back_transf", value = FALSE)
     # shinyjs::delay(ms = 300, expr = {shinyjs::click(id = "apply_forecast")})
   }
 )
@@ -983,6 +986,13 @@ forecast_results <- eventReactive(
 
 output$plot_test_forecast <- renderPlotly({
   forecast_results()$test_forecast |> 
+		back_transform_data(
+			transform = input$back_transf, 
+			cols_to_transform = c(".value", ".conf_lo", ".conf_hi"), 
+			transformations = input$transf, 
+			transform_params = transform_params(), 
+			frequency = ts_freq()
+		) |> 
     plot_modeltime_forecast(.legend_show = FALSE, .title = FALSE, .conf_interval_fill = "lightblue")
 })
 
@@ -994,11 +1004,26 @@ output$plot_test_forecast <- renderPlotly({
 
 output$plot_oos_forecast <- renderPlotly({
   forecast_results()$oos_forecast |> 
+		back_transform_data(
+			transform = input$back_transf, 
+			cols_to_transform = c(".value", ".conf_lo", ".conf_hi"), 
+			transformations = input$transf, 
+			transform_params = transform_params(), 
+			frequency = ts_freq()
+		) |> 
     plot_modeltime_forecast(.legend_show = FALSE, .title = FALSE, .conf_interval_fill = "lightblue")
 })
 
 output$accuracy_table <- renderDT({
-  forecast_results()$accuracy |>
+		back_transform_accuracy(
+			data = data_transformed(), 
+			calibration_table = forecast_results()$calibration, 
+			n_assess = input$n_assess, assess_type = input$assess_type,
+			transform = input$back_transf,
+			transformations = input$transf, 
+			transform_params = transform_params(), 
+			frequency = ts_freq()
+		) |> 
     format_accuracy(single_method = TRUE) |>
     datatable(
       options = list(
@@ -1017,6 +1042,13 @@ output$plot_resid_ts <- renderPlotly({
   forecast_results()$residuals |> 
     select(.index, .residuals) |> 
     set_names(c("date", "value")) |> 
+		back_transform_data(
+			transform = input$back_transf, 
+			cols_to_transform = c("value"), 
+			transformations = input$transf, 
+			transform_params = transform_params(), 
+			frequency = ts_freq()
+		) |> 
     timetk::plot_time_series(
       .date_var = date, .value = value,
       .smooth = FALSE, .interactive = TRUE, .title = NULL
@@ -1027,6 +1059,13 @@ output$plot_resid_acf <- renderPlotly({
   forecast_results()$residuals |> 
     select(.index, .residuals) |> 
     set_names(c("date", "value")) |> 
+		back_transform_data(
+			transform = input$back_transf, 
+			cols_to_transform = c("value"), 
+			transformations = input$transf, 
+			transform_params = transform_params(), 
+			frequency = ts_freq()
+		) |>
     timetk::plot_acf_diagnostics(
       .date_var = date, .value = value, .lags = 60,
       .interactive = TRUE, .title = NULL, .y_lab = NULL,
@@ -1086,144 +1125,6 @@ plotlyOutput(outputId = "plot_resid_acf")
 
 
 
-Compare {data-navmenu="Forecast" data-orientation=rows}
-===========================================================================
-
-Input {.sidebar}
----------------------------------------------------------------------------
-
-*Forecast - Compare*
-```{r}
-useShinyjs(rmd = TRUE) # use Shiny JavaScript to allow delay on buttons
-dropdownButton(
-  numericInput(
-    inputId = "comp_n_future", label = "Forecast Horizon", 
-    value = 12, min = 1, max = Inf, step = 1, width = "100%"
-  ),
-  numericInput(
-    inputId = "comp_n_assess", label = "Assessment Period", 
-    value = 24, min = 1, max = Inf, step = 1, width = "100%"
-  ), 
-  prettyRadioButtons(
-    inputId = "comp_assess_type", label = "Assessment Type", 
-    choices = c("Expanding", "Rolling"), selected = "Rolling", 
-    inline = TRUE
-  ),
-  icon = icon("gear"), width = "200px", size = "sm", circle = TRUE,
-  tooltip = tooltipOptions(title = "Click to see inputs!")
-)
-
-pickerInput(
-  inputId = "comp_method", label = h3("Forecast Algorithm"), multiple = TRUE,
-  choices = list(
-    `Time Series` = ts_methods, 
-    `Machine Learning` = ml_methods,
-    `Deep Learning` = dl_methods,
-    `Mixed Algorithms` = mix_methods,
-    `Auto ML` = aml_methods
-  ), 
-  selected = c("ETS", "SARIMA"), options = list("actions-box" = TRUE)
-)
-
-br()
-awesomeCheckbox(inputId = "comp_tune", label = "Use optimized algorithms?", value = FALSE)
-br()
-
-actionButton(inputId = "comp_apply_forecast", label = "Forecast!", icon = icon("play"))
-actionButton(inputId = "comp_reset", label = "Reset", icon = icon("sync"))
-observeEvent(
-  eventExpr = input$comp_reset, 
-  handlerExpr = {
-    updateNumericInput(session = session, inputId = "comp_n_future", value = 12)
-    updateNumericInput(session = session, inputId = "comp_n_assess", value = 24)
-    updatePrettyRadioButtons(session = session, inputId = "comp_assess_type", selected = "Rolling")
-    updatePickerInput(session = session, inputId = "comp_method", selected = c("ETS", "SARIMA"))
-    updateMaterialSwitch(session = session, inputId = "comp_tune", value = FALSE)
-    # shinyjs::delay(ms = 300, expr = {shinyjs::click(id = "tune_apply_forecast")})
-  }
-)
-```
-
-```{r}
-compare_results <- eventReactive(
-  eventExpr = input$comp_apply_forecast,
-  valueExpr = {
-    map(
-      input$comp_method, 
-      ~ fit_model(
-        data = data_transformed(), method = ., params = input, 
-        n_assess = input$comp_n_assess, assess_type = input$comp_assess_type, seed = 1992
-      )
-    ) |> 
-      generate_forecast(
-        data = data_transformed(), method = input$comp_method, n_future = input$comp_n_future,
-        n_assess = input$comp_n_assess, assess_type = input$comp_assess_type
-      )
-  }
-)
-
-output$plot_comp_test_forecast <- renderPlotly({
-  compare_results()$test_forecast |> 
-    plot_modeltime_forecast(.legend_show = TRUE, .title = FALSE, .conf_interval_fill = "lightblue")
-})
-
-output$plot_comp_oos_forecast <- renderPlotly({
-  compare_results()$oos_forecast |> 
-    plot_modeltime_forecast(.legend_show = TRUE, .title = FALSE, .conf_interval_fill = "lightblue")
-})
-
-output$comp_accuracy_table <- renderDT({
-  compare_results()$accuracy |> 
-    format_accuracy(single_method = FALSE) |>
-    filter(Type == "Test") |> 
-    datatable(
-      options = list(
-        ordering = TRUE, pageLength = 6, lengthChange = FALSE, searching = FALSE, 
-        info = FALSE, paging = FALSE, scrollCollapse = TRUE, scrollY = 300
-      ), 
-      rownames = FALSE
-    )
-})
-
-output$comp_model_summary <- renderPrint({
-  compare_results()$fit
-})
-```
-
-
-Row {data-height=500}
----------------------------------------------------------------------------
-
-### Test Forecasts {.no-padding}
-
-```{r}
-plotlyOutput(outputId = "plot_comp_test_forecast")
-```
-
-### Out-of-Sample Forecasts {.no-padding}
-
-```{r}
-plotlyOutput(outputId = "plot_comp_oos_forecast")
-```
-
-
-Row {data-height=500} 
----------------------------------------------------------------------------
-
-### Evaluation Metrics {data-width=600 .no-padding}
-
-```{r}
-DTOutput(outputId = "comp_accuracy_table")
-```
-
-### Algorithm Summary {data-width=400 .no-padding}
-
-```{r}
-verbatimTextOutput(outputId = "comp_model_summary")
-```
-
-
-
 Optimize {data-navmenu="Forecast" data-orientation=rows}
 ===========================================================================
 
@@ -1279,6 +1180,8 @@ pickerInput(
   selected = "Elastic Net"
 )
 
+awesomeCheckbox(inputId = "tune_back_transf", label = "Back transform?", value = FALSE)
+
 actionButton(inputId = "tune_apply_forecast", label = "Forecast!", icon = icon("play"))
 actionButton(inputId = "tune_reset", label = "Reset", icon = icon("sync"))
 observeEvent(
@@ -1293,6 +1196,7 @@ observeEvent(
     updateAwesomeCheckbox(session = session, inputId = "tune_bayes", value = TRUE)
     updateSliderInput(session = session, inputId = "tune_grid_size", value = 10)
     updateSelectInput(session = session, inputId = "tune_method", selected = "Elastic Net")
+    updateAwesomeCheckbox(session = session, inputId = "tune_back_transf", value = FALSE)
     updatePickerInput(session = session, inputId = "tune_elanet", selected = mtd_prm_names[["Elastic Net"]])
     # shinyjs::delay(ms = 300, expr = {shinyjs::click(id = "tune_apply_forecast")})
   }
@@ -1483,6 +1387,13 @@ tune_results <- eventReactive(
 
 output$plot_tune_test_forecast <- renderPlotly({
   tune_results()$test_forecast |> 
+		back_transform_data(
+			transform = input$tune_back_transf, 
+			cols_to_transform = c(".value", ".conf_lo", ".conf_hi"), 
+			transformations = input$transf, 
+			transform_params = transform_params(), 
+			frequency = ts_freq()
+		) |>
     plot_modeltime_forecast(.legend_show = FALSE, .title = FALSE, .conf_interval_fill = "lightblue")
 })
 
@@ -1494,11 +1405,26 @@ output$plot_tune_test_forecast <- renderPlotly({
 
 output$plot_tune_oos_forecast <- renderPlotly({
   tune_results()$oos_forecast |> 
+		back_transform_data(
+			transform = input$tune_back_transf, 
+			cols_to_transform = c(".value", ".conf_lo", ".conf_hi"), 
+			transformations = input$transf, 
+			transform_params = transform_params(), 
+			frequency = ts_freq()
+		) |>
     plot_modeltime_forecast(.legend_show = FALSE, .title = FALSE, .conf_interval_fill = "lightblue")
 })
 
 output$tune_accuracy_table <- renderDT({
-  tune_results()$accuracy |>
+		back_transform_accuracy(
+			data = data_transformed(), 
+			calibration_table = tune_results()$calibration, 
+			n_assess = input$tune_n_assess, assess_type = input$tune_assess_type,
+			transform = input$tune_back_transf,
+			transformations = input$transf, 
+			transform_params = transform_params(), 
+			frequency = ts_freq()
+		) |> 
     format_accuracy(single_method = TRUE) |>
     datatable(
       options = list(
@@ -1517,6 +1443,13 @@ output$plot_tune_resid_ts <- renderPlotly({
   tune_results()$residuals |> 
     select(.index, .residuals) |> 
     set_names(c("date", "value")) |> 
+		back_transform_data(
+			transform = input$tune_back_transf, 
+			cols_to_transform = c("value"), 
+			transformations = input$transf, 
+			transform_params = transform_params(), 
+			frequency = ts_freq()
+		) |>
     timetk::plot_time_series(
       .date_var = date, .value = value,
       .smooth = FALSE, .interactive = TRUE, .title = NULL
@@ -1527,6 +1460,13 @@ output$plot_tune_resid_acf <- renderPlotly({
   tune_results()$residuals |> 
     select(.index, .residuals) |> 
     set_names(c("date", "value")) |> 
+		back_transform_data(
+			transform = input$tune_back_transf, 
+			cols_to_transform = c("value"), 
+			transformations = input$transf, 
+			transform_params = transform_params(), 
+			frequency = ts_freq()
+		) |>
     timetk::plot_acf_diagnostics(
       .date_var = date, .value = value, .lags = 60,
       .interactive = TRUE, .title = NULL, .y_lab = NULL,
@@ -1586,6 +1526,165 @@ plotlyOutput(outputId = "plot_tune_resid_acf")
 
 
 
+Compare {data-navmenu="Forecast" data-orientation=rows}
+===========================================================================
+
+Input {.sidebar}
+---------------------------------------------------------------------------
+
+*Forecast - Compare*
+```{r}
+useShinyjs(rmd = TRUE) # use Shiny JavaScript to allow delay on buttons
+dropdownButton(
+  numericInput(
+    inputId = "comp_n_future", label = "Forecast Horizon", 
+    value = 12, min = 1, max = Inf, step = 1, width = "100%"
+  ),
+  numericInput(
+    inputId = "comp_n_assess", label = "Assessment Period", 
+    value = 24, min = 1, max = Inf, step = 1, width = "100%"
+  ), 
+  prettyRadioButtons(
+    inputId = "comp_assess_type", label = "Assessment Type", 
+    choices = c("Expanding", "Rolling"), selected = "Rolling", 
+    inline = TRUE
+  ),
+  icon = icon("gear"), width = "200px", size = "sm", circle = TRUE,
+  tooltip = tooltipOptions(title = "Click to see inputs!")
+)
+
+pickerInput(
+  inputId = "comp_method", label = h3("Forecast Algorithm"), multiple = TRUE,
+  choices = list(
+    `Time Series` = ts_methods, 
+    `Machine Learning` = ml_methods,
+    `Deep Learning` = dl_methods,
+    `Mixed Algorithms` = mix_methods,
+    `Auto ML` = aml_methods
+  ), 
+  selected = c("ETS", "SARIMA"), options = list("actions-box" = TRUE)
+)
+
+awesomeCheckbox(inputId = "comp_tune", label = "Use optimized algorithms?", value = FALSE)
+awesomeCheckbox(inputId = "comp_back_transf", label = "Back transform?", value = FALSE)
+
+actionButton(inputId = "comp_apply_forecast", label = "Forecast!", icon = icon("play"))
+actionButton(inputId = "comp_reset", label = "Reset", icon = icon("sync"))
+observeEvent(
+  eventExpr = input$comp_reset, 
+  handlerExpr = {
+    updateNumericInput(session = session, inputId = "comp_n_future", value = 12)
+    updateNumericInput(session = session, inputId = "comp_n_assess", value = 24)
+    updatePrettyRadioButtons(session = session, inputId = "comp_assess_type", selected = "Rolling")
+    updatePickerInput(session = session, inputId = "comp_method", selected = c("ETS", "SARIMA"))
+    updateAwesomeCheckbox(session = session, inputId = "comp_tune", value = FALSE)
+    updateAwesomeCheckbox(session = session, inputId = "comp_back_transf", value = FALSE)
+    # shinyjs::delay(ms = 300, expr = {shinyjs::click(id = "tune_apply_forecast")})
+  }
+)
+```
+
+```{r}
+compare_results <- eventReactive(
+  eventExpr = input$comp_apply_forecast,
+  valueExpr = {
+    map(
+      input$comp_method, 
+      ~ fit_model(
+        data = data_transformed(), method = ., params = input, 
+        n_assess = input$comp_n_assess, assess_type = input$comp_assess_type, seed = 1992
+      )
+    ) |> 
+      generate_forecast(
+        data = data_transformed(), method = input$comp_method, n_future = input$comp_n_future,
+        n_assess = input$comp_n_assess, assess_type = input$comp_assess_type
+      )
+  }
+)
+
+output$plot_comp_test_forecast <- renderPlotly({
+  compare_results()$test_forecast |> 
+		back_transform_data(
+			transform = input$comp_back_transf, 
+			cols_to_transform = c(".value", ".conf_lo", ".conf_hi"), 
+			transformations = input$transf, 
+			transform_params = transform_params(), 
+			frequency = ts_freq()
+		) |>
+    plot_modeltime_forecast(.legend_show = TRUE, .title = FALSE, .conf_interval_fill = "lightblue")
+})
+
+output$plot_comp_oos_forecast <- renderPlotly({
+  compare_results()$oos_forecast |> 
+		back_transform_data(
+			transform = input$comp_back_transf, 
+			cols_to_transform = c(".value", ".conf_lo", ".conf_hi"), 
+			transformations = input$transf, 
+			transform_params = transform_params(), 
+			frequency = ts_freq()
+		) |>
+    plot_modeltime_forecast(.legend_show = TRUE, .title = FALSE, .conf_interval_fill = "lightblue")
+})
+
+output$comp_accuracy_table <- renderDT({
+	back_transform_accuracy(
+			data = data_transformed(), 
+			calibration_table = compare_results()$calibration, 
+			n_assess = input$comp_n_assess, assess_type = input$comp_assess_type,
+			transform = input$comp_back_transf,
+			transformations = input$transf, 
+			transform_params = transform_params(), 
+			frequency = ts_freq()
+		) |> 
+    format_accuracy(single_method = FALSE) |>
+    filter(Type == "Test") |> 
+    datatable(
+      options = list(
+        ordering = TRUE, pageLength = 6, lengthChange = FALSE, searching = FALSE, 
+        info = FALSE, paging = FALSE, scrollCollapse = TRUE, scrollY = 300
+      ), 
+      rownames = FALSE
+    )
+})
+
+output$comp_model_summary <- renderPrint({
+  compare_results()$fit
+})
+```
+
+
+Row {data-height=500}
+---------------------------------------------------------------------------
+
+### Test Forecasts {.no-padding}
+
+```{r}
+plotlyOutput(outputId = "plot_comp_test_forecast")
+```
+
+### Out-of-Sample Forecasts {.no-padding}
+
+```{r}
+plotlyOutput(outputId = "plot_comp_oos_forecast")
+```
+
+
+Row {data-height=500} 
+---------------------------------------------------------------------------
+
+### Evaluation Metrics {data-width=600 .no-padding}
+
+```{r}
+DTOutput(outputId = "comp_accuracy_table")
+```
+
+### Algorithm Summary {data-width=400 .no-padding}
+
+```{r}
+verbatimTextOutput(outputId = "comp_model_summary")
+```
+
+
 
 Explain {data-navmenu="Forecast" data-orientation=columns}
 ===========================================================================
@@ -1625,6 +1724,9 @@ pickerInput(
   selected = "Random Forest"
 )
 
+awesomeCheckbox(inputId = "exp_tune", label = "Use optimized algorithm?", value = FALSE)
+awesomeCheckbox(inputId = "exp_back_transf", label = "Back transform?", value = FALSE)
+
 actionButton(inputId = "exp_apply_forecast", label = "Explain!", icon = icon("play"))
 actionButton(inputId = "exp_reset", label = "Reset", icon = icon("sync"))
 observeEvent(
@@ -1634,6 +1736,8 @@ observeEvent(
     updateNumericInput(session = session, inputId = "exp_n_assess", value = 24)
     updatePrettyRadioButtons(session = session, inputId = "exp_assess_type", selected = "Rolling")
     updateSelectInput(session = session, inputId = "exp_method", selected = "Random Forest")
+    updateCheckboxInput(session = session, inputId = "exp_tune", value = FALSE)
+    updateCheckboxInput(session = session, inputId = "exp_back_transf", value = FALSE)
     updateTextInput(session = session, inputId = "exp_features", value = "")
     updateTextInput(session = session, inputId = "exp_date", value = "")
     # shinyjs::delay(ms = 300, expr = {shinyjs::click(id = "tune_apply_forecast")})
@@ -1725,6 +1829,13 @@ output$exp_features_table <- renderDT({
 output$plot_exp_test_forecast <- renderPlotly({
 	req(exp_forecast_results())
   exp_forecast_results()$test_forecast |>
+  	back_transform_data(
+			transform = input$exp_back_transf, 
+			cols_to_transform = c(".value", ".conf_lo", ".conf_hi"), 
+			transformations = input$transf, 
+			transform_params = transform_params(), 
+			frequency = ts_freq()
+		) |>
     plot_modeltime_forecast(.legend_show = FALSE, .title = FALSE, .conf_interval_fill = "lightblue")
 })
 
@@ -1865,8 +1976,8 @@ pickerInput(
   )
 )
 
-br()
 awesomeCheckbox(inputId = "ens_tune", label = "Use optimized algorithms?", value = FALSE)
+awesomeCheckbox(inputId = "ens_back_transf", label = "Back transform?", value = FALSE)
 br()
 
 pickerInput(
@@ -1884,6 +1995,8 @@ pickerInput(
   choices = stk_methods, selected = "Linear Regression", multiple = TRUE,
   options =  list("actions-box" = TRUE)
 )
+awesomeCheckbox(inputId = "stk_tune", label = "Optimize stack?", value = FALSE)
+
 actionButton(inputId = "stk_apply_forecast", label = "Forecast!", icon = icon("play"))
 
 br()
@@ -1897,9 +2010,11 @@ observeEvent(
     updateNumericInput(session = session, inputId = "ens_n_assess", value = 24)
     updatePrettyRadioButtons(session = session, inputId = "ens_assess_type", selected = "Rolling")
     updatePickerInput(session = session, inputId = "ens_method", selected = c("ETS", "SARIMA"))
-    updateMaterialSwitch(session = session, inputId = "ens_tune", value = FALSE)
+    updateAwesomeCheckbox(session = session, inputId = "ens_tune", value = FALSE)
+    updateAwesomeCheckbox(session = session, inputId = "ens_back_transf", value = FALSE)
     updatePickerInput(session = session, inputId = "ens_type", selected = "Average")
     updatePickerInput(session = session, inputId = "stk_type", selected = "Linear Regression")
+    updateAwesomeCheckbox(session = session, inputId = "stk_tune", value = FALSE)
     # shinyjs::delay(ms = 300, expr = {shinyjs::click(id = "tune_apply_forecast")})
   }
 )
@@ -1915,21 +2030,14 @@ observeEvent(
       map(
         input$ens_method,
         ~ fit_model(
-          data = data_transformed(),
-          method = .,
-          params = input,
-          n_assess = input$ens_n_assess,
-          assess_type = input$ens_assess_type,
-          seed = 1992
+          data = data_transformed(), method = ., params = input,
+          n_assess = input$ens_n_assess, assess_type = input$ens_assess_type, seed = 1992
         )
       ) |>
       generate_forecast(
-        data = data_transformed(),
-        method = input$ens_method,
-        n_future = input$ens_n_future,
-        n_assess = input$ens_n_assess,
-        assess_type = input$ens_assess_type,
-        ensemble_methods = input$ens_type,
+        data = data_transformed(), method = input$ens_method,
+        n_future = input$ens_n_future, n_assess = input$ens_n_assess,
+        assess_type = input$ens_assess_type, ensemble_methods = input$ens_type,
         stacking_methods = NULL
       )
   }
@@ -1942,21 +2050,14 @@ observeEvent(
       map(
         input$ens_method,
         ~ fit_model(
-          data = data_transformed(),
-          method = .,
-          params = input,
-          n_assess = input$ens_n_assess,
-          assess_type = input$ens_assess_type,
-          seed = 1992
+          data = data_transformed(), method = ., params = input,
+          n_assess = input$ens_n_assess, assess_type = input$ens_assess_type, seed = 1992
         )
       ) |>
       generate_forecast(
-        data = data_transformed(),
-        method = input$ens_method,
-        n_future = input$ens_n_future,
-        n_assess = input$ens_n_assess,
-        assess_type = input$ens_assess_type,
-        ensemble_methods = NULL,
+        data = data_transformed(), method = input$ens_method,
+        n_future = input$ens_n_future, n_assess = input$ens_n_assess,
+        assess_type = input$ens_assess_type, ensemble_methods = NULL,
         stacking_methods = input$stk_type
       )
   }
@@ -1965,6 +2066,13 @@ observeEvent(
 output$plot_ens_test_forecast <- renderPlotly({
   req(react_val$combine_results$test_forecast)
   react_val$combine_results$test_forecast |>
+  	back_transform_data(
+			transform = input$ens_back_transf, 
+			cols_to_transform = c(".value", ".conf_lo", ".conf_hi"), 
+			transformations = input$transf, 
+			transform_params = transform_params(), 
+			frequency = ts_freq()
+		) |>
     plot_modeltime_forecast(.legend_show = TRUE, .title = FALSE, .conf_interval_fill = "lightblue")
 })
 
@@ -1972,12 +2080,27 @@ output$plot_ens_test_forecast <- renderPlotly({
 output$plot_ens_oos_forecast <- renderPlotly({
   req(react_val$combine_results$oos_forecast)
   react_val$combine_results$oos_forecast |> 
+  	back_transform_data(
+			transform = input$ens_back_transf, 
+			cols_to_transform = c(".value", ".conf_lo", ".conf_hi"), 
+			transformations = input$transf, 
+			transform_params = transform_params(), 
+			frequency = ts_freq()
+		) |>
     plot_modeltime_forecast(.legend_show = TRUE, .title = FALSE, .conf_interval_fill = "lightblue")
 })
 
 output$ens_accuracy_table <- renderDT({
-  req(react_val$combine_results$accuracy)
-  react_val$combine_results$accuracy |>
+  req(react_val$combine_results$calibration)
+  back_transform_accuracy(
+  	data = data_transformed(),
+  	calibration_table = react_val$combine_results$calibration,
+  	n_assess = input$ens_n_assess, assess_type = input$ens_assess_type,
+  	transform = input$ens_back_transf,
+  	transformations = input$transf,
+  	transform_params = transform_params(),
+  	frequency = ts_freq()
+	) |> 
     format_accuracy(single_method = FALSE) |>
     filter(Type == "Test") |>
     datatable(
@@ -2074,6 +2197,9 @@ pickerInput(
   selected = "ETS"
 )
 
+awesomeCheckbox(inputId = "scn_tune", label = "Use optimized algorithm?", value = FALSE)
+awesomeCheckbox(inputId = "scn_back_transf", label = "Back transform?", value = FALSE)
+
 actionButton(inputId = "scn_apply_forecast", label = "Forecast!", icon = icon("play"))
 actionButton(inputId = "scn_reset", label = "Reset", icon = icon("sync"))
 observeEvent(
@@ -2083,6 +2209,8 @@ observeEvent(
     updateNumericInput(session = session, inputId = "scn_n_assess", value = 24)
     updatePrettyRadioButtons(session = session, inputId = "scn_assess_type", selected = "Rolling")
     updateSelectInput(session = session, inputId = "scn_method", selected = "ETS")
+    updateAwesomeCheckbox(session = session, inputId = "scn_tune", value = FALSE)
+    updateAwesomeCheckbox(session = session, inputId = "scn_back_transf", value = FALSE)
     updateSliderInput(session = session, inputId = "scn_conf_lvl", value = 0.9)
     updateSelectInput(session = session, inputId = "scn_aggreg_fun", selected = "sum")
     updateNumericInput(session = session, inputId = "scn_adjust", value = 0)
@@ -2135,18 +2263,31 @@ scenario_results <- eventReactive(
   }
 )
 
-
 output$plot_scn_oos_forecast_fan <- renderPlotly({
   scenario_results()$oos_forecast |> 
-    adjust_forecast(input$scn_adjust) |>
     filter(.key == "actual" | .conf_lvl == as.character(input$scn_conf_lvl)) |> 
+		back_transform_data(
+			transform = input$scn_back_transf, 
+			cols_to_transform = c(".value", ".conf_lo", ".conf_hi"), 
+			transformations = input$transf, 
+			transform_params = transform_params(), 
+			frequency = ts_freq()
+		) |>
+		adjust_forecast(input$scn_adjust) |>
     plot_modeltime_forecast(.legend_show = FALSE, .title = FALSE, .conf_interval_fill = "lightblue")
 })
 
 output$plot_scn_oos_forecast_wb <- renderPlotly({
   g <- scenario_results()$oos_forecast |> 
+  	filter(.key == "actual" | .conf_lvl == as.character(input$scn_conf_lvl)) |> 
     adjust_forecast(input$scn_adjust) |>
-    filter(.key == "actual" | .conf_lvl == as.character(input$scn_conf_lvl)) |> 
+    back_transform_data(
+			transform = input$scn_back_transf, 
+			cols_to_transform = c(".value", ".conf_lo", ".conf_hi"), 
+			transformations = input$transf, 
+			transform_params = transform_params(), 
+			frequency = ts_freq()
+		) |>
     modeltime::plot_modeltime_forecast(
       .interactive = FALSE, .conf_interval_show = FALSE, .legend_show = FALSE, .title = FALSE
     ) +
@@ -2163,7 +2304,15 @@ output$plot_scn_oos_forecast_wb <- renderPlotly({
 # })
 
 output$scn_accuracy_table <- renderDT({
-  scenario_results()$accuracy |>
+	back_transform_accuracy(
+		data = data_transformed(),
+		calibration_table = scenario_results()$calibration,
+		n_assess = input$scn_n_assess, assess_type = input$scn_assess_type,
+		transform = input$scn_back_transf,
+		transformations = input$transf,
+		transform_params = transform_params(),
+		frequency = ts_freq()
+	) |>
     format_accuracy(single_method = TRUE) |>
     select(-Train) |> 
     datatable(
@@ -2177,6 +2326,14 @@ output$scn_accuracy_table <- renderDT({
 
 output$scn_aggregate_table <- renderDT({
   scenario_results()$oos_forecast |>
+		filter(.key == "actual" | .conf_lvl == as.character(input$scn_conf_lvl)) |> 
+		back_transform_data(
+			transform = input$scn_back_transf, 
+			cols_to_transform = c(".value", ".conf_lo", ".conf_hi"), 
+			transformations = input$transf, 
+			transform_params = transform_params(), 
+			frequency = ts_freq()
+		) |>
     adjust_forecast(input$scn_adjust) |>
     aggregate_forecast(react_val$aggregate_n_future, input$scn_conf_lvl, input$scn_aggreg_fun) |> 
     mutate(across(.cols = where(is.numeric), .fns = ~ round(., 2))) |>
@@ -2191,8 +2348,15 @@ output$scn_aggregate_table <- renderDT({
 
 output$scn_wb_table <- renderDT({
   scenario_results()$oos_forecast |>
+		filter(.key == "prediction" & .conf_lvl == as.character(input$scn_conf_lvl)) |> 
+		back_transform_data(
+			transform = input$scn_back_transf, 
+			cols_to_transform = c(".value", ".conf_lo", ".conf_hi"), 
+			transformations = input$transf, 
+			transform_params = transform_params(), 
+			frequency = ts_freq()
+		) |>
     adjust_forecast(input$scn_adjust) |>
-    filter(.key == "prediction" & .conf_lvl == as.character(input$scn_conf_lvl)) |> 
     select(.index, .conf_lo, .value, .conf_hi) |> 
     mutate(across(.cols = where(is.numeric), .fns = ~ round(., 2))) |> 
     set_names(c("Date", "Worst Case", "Forecast", "Best Case")) |> 

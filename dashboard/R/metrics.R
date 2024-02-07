@@ -42,9 +42,7 @@ me.data.frame <- function(data, truth, estimate, na_rm = TRUE, case_weights = NU
 
 # function to compute the root mean squared percentage error
 rmspe_impl <- function(truth, estimate, case_weights = NULL) {
-  eps <- 1e-10
-  sqrt(mean(((estimate - (truth + eps)) / (truth + eps)) ^ 2)) * 100 # pay attention to this formulation
-  # sqrt(mean(((estimate - truth) / truth) ^ 2)) * 100
+  sqrt(mean(((truth - estimate) / truth) ^ 2)) * 100 # pay attention to this formulation
 }
 
 rmspe_vec <- function(truth, estimate, na_rm = TRUE, case_weights = NULL, ...) {

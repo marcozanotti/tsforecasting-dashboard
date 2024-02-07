@@ -7,6 +7,13 @@ generate_forecast <- function(
   logging::loginfo("*** Generating Forecasts ***")
   logging::loginfo(paste("Method(s):", paste0(method, collapse = ", ")))
 
+  if (length(confidence_level) > 1) {
+  	logging::loginfo("Setup Multiple Prediction Intervals")
+  	conf_lvls <- set_confidence_levels(confidence_level, by = 0.05)
+  } else {
+  	conf_lvls <- confidence_level
+  }
+  
   # initial split
   logging::loginfo("Initial Split")
   splits <- generate_initial_split(data, n_assess, assess_type)
@@ -75,14 +82,19 @@ generate_forecast <- function(
       modeltime::modeltime_accuracy(new_data = test_tbl, metric_set = new_mset) |>
       dplyr::mutate(.type = "Test")
   )
-
+  
   # test forecasting
   logging::loginfo("Test Forecasting")
-  test_forecast_tbl <- calibration_tbl |>
-    modeltime::modeltime_forecast(
-      actual_data = data, new_data = test_tbl,
-      conf_interval = confidence_level, conf_method = "conformal_split"
-    )
+  test_forecast_tbl <- purrr::map(
+  	conf_lvls,
+  	~ modeltime::modeltime_forecast(
+  		calibration_tbl, actual_data = data, new_data = test_tbl,
+  		conf_interval = ., conf_method = "conformal_split"
+  	)
+  ) |> purrr::map2(conf_lvls, ~ dplyr::mutate(.x, .conf_lvl = .y)) |>
+  	dplyr::bind_rows() |>
+  	dplyr::mutate(.conf_lvl = ifelse(.key == "actual", NA_real_, .conf_lvl)) |>
+  	dplyr::distinct(.keep_all = TRUE)
 
   # refitting
   logging::loginfo("Refitting")
@@ -98,27 +110,16 @@ generate_forecast <- function(
 
   # out-of-sample forecasting
   logging::loginfo("Out-of-Sample Forecasting")
-  if (length(confidence_level) > 1) {
-    logging::loginfo("Out-of-Sample Forecasting - Multiple Prediction Intervals")
-    conf_lvls <- set_confidence_levels(confidence_level, by = 0.05)
-    oos_forecast_tbl <- purrr::map(
-      conf_lvls,
-      ~ modeltime::modeltime_forecast(
-        refit_tbl, actual_data = data, new_data = future_tbl,
-        conf_interval = ., conf_method = "conformal_split"
-      )
-    ) |> purrr::map2(conf_lvls, ~ dplyr::mutate(.x, .conf_lvl = .y)) |>
-      dplyr::bind_rows() |>
-      dplyr::mutate(.conf_lvl = ifelse(.key == "actual", NA_real_, .conf_lvl)) |>
-      dplyr::distinct(.keep_all = TRUE)
-  } else {
-    oos_forecast_tbl <- refit_tbl |>
-      modeltime::modeltime_forecast(
-        actual_data = data, new_data = future_tbl,
-        conf_interval = confidence_level, conf_method = "conformal_split"
-      ) |>
-      dplyr::mutate(.conf_lvl = ifelse(.key == "actual", NA_real_, confidence_level))
-  }
+  oos_forecast_tbl <- purrr::map(
+  	conf_lvls,
+  	~ modeltime::modeltime_forecast(
+  		refit_tbl, actual_data = data, new_data = future_tbl,
+  		conf_interval = ., conf_method = "conformal_split"
+  	)
+  ) |> purrr::map2(conf_lvls, ~ dplyr::mutate(.x, .conf_lvl = .y)) |>
+  	dplyr::bind_rows() |>
+  	dplyr::mutate(.conf_lvl = ifelse(.key == "actual", NA_real_, .conf_lvl)) |>
+  	dplyr::distinct(.keep_all = TRUE)
   # oos_forecast_tbl <- oos_forecast_tbl |> adjust_prediction_interval(type = "exponential", beta = 1.05)
 
   # model summary
@@ -128,6 +129,7 @@ generate_forecast <- function(
   res <- list(
     "splits" = splits,
     "fit" = fitted_model_list,
+    "calibration" = calibration_tbl,
     "residuals" = residuals_tbl,
     "accuracy" = accuracy_tbl,
     "test_forecast" = test_forecast_tbl,
@@ -192,7 +194,7 @@ aggregate_forecast <- function(
 
 # function to adjust oos forecasts
 adjust_forecast <- function(forecasts, adjustment = NA_real_) {
-
+	# percentage adjustment
   if (is.na(adjustment)) { adjustment <- 0 }
   frc_tbl <- forecasts |>
     dplyr::mutate(
@@ -201,7 +203,6 @@ adjust_forecast <- function(forecasts, adjustment = NA_real_) {
       )
     )
   return(frc_tbl)
-
 }
 
 # function to adjust prediction intervals
