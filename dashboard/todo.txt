@@ -1,16 +1,12 @@
-UI:
-Link to [Forecast - Scenario](#page-4)
-data-icon="fa-list"
-
 Next steps:
 - rotellina o messaggio per operazioni in corso
 - deployment su github actions
 
 To Do:
-- test on scenario back transform problem with .conf_lvl
-- add log_interval_transform
-- bug XAI su h2o
 - pensare e aggiungere la sezione di feature engineering (con in mente il save)
+-- section to upload and visualize external regressors
+-- section to create new features with reactive glipse  
+(calendar + lags + fourier + splines + rolling averages + interactions)
 
 - pensare e aggiungere il save del modello ottimizzato + use optimize in altre sezioni
 - modificare output modello con parsing

@@ -465,10 +465,11 @@ input <- list(
 	n_future = 120,
 	n_assess = 24,
 	assess_type = "Rolling",
-	method = "Random Forest",
-	rf_mtry = 5,
-	rf_trees = 1000, 
-	rf_min_n = 5
+	method = "H2O AutoML",
+	h2o_max_time = 10,
+	h2o_max_time_model = 10, 
+	h2o_nfolds = 2,
+	h2o_metric = "RMSE"
 )
 
 data = data_selected
@@ -487,14 +488,27 @@ fitted_model_list <- map(
 	)
 )
 
+forecast_results <- generate_forecast(
+	fitted_model_list = fitted_model_list, data = data_selected,
+	method = input$method, n_future = input$n_future,
+	n_assess = input$n_assess, assess_type = input$assess_type
+)
+
+
+get_features(forecast_results$fit[[1]], names_only = TRUE)
+
 explainer <- generate_model_explainer(data, method, params, n_assess, assess_type)
 
 date = ymd("1959-02-01")
-observation <- get_observation(data, date, n_assess, assess_type)
+observation <- get_observation(data, date, method, n_assess, assess_type)
 features = "date_week4"
-type = "feature_importance"
 
-explain_model(explainer, type)
+res1 <- explain_model(explainer, type = "feature_importance")
+res2 <- explain_model(explainer, type = "variable_response", features = features)
+res3 <- explain_model(explainer, type = "break_down", observation = observation)
+res4 <- explain_model(explainer, type = "local_stability", features = features, observation = observation)
+
+plot(res4)
 
 
 
@@ -539,7 +553,7 @@ res |> purrr::pluck("data_transformed") |>
 
 # test on forecasts 
 input <- list(
-	transf = transf[1:4],
+	transf = transf[2:7],
 	n_future = 12,
 	n_assess = 24,
 	assess_type = "Rolling",
@@ -576,7 +590,8 @@ fitted_model_list <- map(
 forecast_results <- generate_forecast(
 	fitted_model_list = fitted_model_list, data = data_transformed,
 	method = input$method, n_future = input$n_future,
-	n_assess = input$n_assess, assess_type = input$assess_type
+	n_assess = input$n_assess, assess_type = input$assess_type, 
+	confidence_level = c(0.8, 0.95)
 )
 
 data = data_selected

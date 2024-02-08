@@ -528,7 +528,7 @@ br()
 
 pickerInput(
   inputId = "transf", label = h5("Transformations"), multiple = TRUE,
-  choices = transf[1:4], selected = NULL # not possible to do Diff and SDiff !!!!!
+  choices = transf[1:7], selected = NULL # not possible to do Diff and SDiff !!!!!
 )
 
 br()
@@ -1710,31 +1710,25 @@ observeEvent(
   }
 )
 
-exp_forecast_results <- eventReactive(
+explainer_results <- eventReactive(
   eventExpr = input$exp_apply_forecast,
   valueExpr = {
-    map(
-      input$exp_method, 
-      ~ fit_model(
-        data = data_transformed(), method = ., params = input, 
-        n_assess = input$exp_n_assess, assess_type = input$exp_assess_type, seed = 1992
-      )
-    ) |> 
-      generate_forecast(
-        data = data_transformed(), method = input$exp_method, n_future = input$exp_n_future,
-        n_assess = input$exp_n_assess, assess_type = input$exp_assess_type
-      )
+   	data_transformed() |>
+		generate_model_explainer(
+			method = input$exp_method, params = input,
+			n_assess = input$exp_n_assess, assess_type = input$exp_assess_type
+		)
   }
 )
 
 observeEvent(
   eventExpr = input$exp_apply_forecast,
   handlerExpr = {
-  	req(exp_forecast_results())
+  	req(explainer_results())
     updatePickerInput(
     	session = session, inputId = "exp_features",
-    	choices = get_features(exp_forecast_results()$fit[[1]], names_only = TRUE),
-    	selected = get_features(exp_forecast_results()$fit[[1]], names_only = TRUE)[2]
+    	choices = explainer_results()$features,
+    	selected = explainer_results()$features[2]
     )
   }
 )
@@ -1752,22 +1746,19 @@ observeEvent(
   }
 )
 
-explainer_results <- eventReactive(
-  eventExpr = input$exp_apply_forecast,
-  valueExpr = {
-   	data_transformed() |>
-		generate_model_explainer(
-			method = input$exp_method, params = input,
-			n_assess = input$exp_n_assess, assess_type = input$exp_assess_type
-		)
-  }
-)
-
+exp_observation <- reactive({
+  req(data_transformed())
+  req(explainer_results())
+  req(input$exp_date)
+  get_observation(
+  	data = data_transformed(), date = input$exp_date, method = input$exp_method,
+  	n_assess = input$exp_n_assess, assess_type = input$exp_assess_type
+  )
+})
+	
 output$exp_features_table <- renderDT({
-  req(exp_forecast_results()) 
-	tibble::tibble(
-   	get_features(exp_forecast_results()$fit[[1]], names_only = TRUE)
-   ) |>
+  req(explainer_results()) 
+	tibble::tibble(explainer_results()$features) |>
 		datatable(
       options = list(
         ordering = FALSE, pageLength = 50, lengthChange = FALSE, searching = FALSE,
@@ -1777,21 +1768,9 @@ output$exp_features_table <- renderDT({
     )
 })
 
-output$plot_exp_test_forecast <- renderPlotly({
-	req(exp_forecast_results())
-  exp_forecast_results()$test_forecast |>
-  	back_transform_data(
-			transform = input$exp_back_transf, 
-			cols_to_transform = c(".value", ".conf_lo", ".conf_hi"), 
-			transformations = input$transf, 
-			transform_params = transform_params()
-		) |>
-    plot_modeltime_forecast(.legend_show = FALSE, .title = FALSE, .conf_interval_fill = "lightblue")
-})
-
 output$plot_exp_featimp <- renderPlot({
 	req(explainer_results())
-	explainer_results() |> 
+	explainer_results()$explainer |> 
 		explain_model(type = "feature_importance") |>
 		plot() + labs(title = NULL, subtitle = NULL, caption = NULL)
 })
@@ -1799,35 +1778,29 @@ output$plot_exp_featimp <- renderPlot({
 output$plot_exp_varresp <- renderPlot({
 	req(explainer_results())
 	req(input$exp_features)
-	explainer_results() |> 
+	explainer_results()$explainer |> 
 		explain_model(type = "variable_response",	features = input$exp_features) |>
 		plot() + labs(title = NULL, subtitle = NULL, caption = NULL)	
 })
 
 output$plot_exp_bd <- renderPlot({
-	req(data_transformed())
 	req(explainer_results())
-	req(input$exp_date)
-	exp_obs <- get_observation(
-		data = data_transformed(), date = input$exp_date, method = input$exp_method,
-		n_assess = input$exp_n_assess, assess_type = input$exp_assess_type
-	)
-	explainer_results() |> 
-		explain_model(type = "break_down", observation = exp_obs) |>
+	req(exp_observation())
+	explainer_results()$explainer |> 
+		explain_model(type = "break_down", observation = exp_observation()) |>
 		plot() + labs(title = NULL, subtitle = NULL, caption = NULL)
 })
 
 output$plot_exp_locstab <- renderPlot({
 	req(data_transformed())
 	req(explainer_results())
-	req(input$exp_date)
+	req(exp_observation())
 	req(input$exp_features)
-	exp_obs <- get_observation(
-		data = data_transformed(), date = input$exp_date, method = input$exp_method,
-		n_assess = input$exp_n_assess, assess_type = input$exp_assess_type
-	)
-	explainer_results() |> 
-		explain_model(type = "local_stability",	observation = exp_obs, features = input$exp_features) |>
+	explainer_results()$explainer |> 
+		explain_model(
+			type = "local_stability",	observation = exp_observation(), 
+			features = input$exp_features
+		) |>
 		plot() + labs(title = NULL, subtitle = NULL, caption = NULL)
 })
 ```
@@ -1846,27 +1819,21 @@ DTOutput(outputId = "exp_features_table")
 Column {data-width=425}
 ---------------------------------------------------------------------------
 
-### Test Forecasts {data-height=320 .no-padding}
-
-```{r}
-plotlyOutput(outputId = "plot_exp_test_forecast")
-```
-
-### Feature Importance {data-height=680 .no-padding}
+### Feature Importance {data-height=700 .no-padding}
 
 ```{r}
 plotOutput(outputId = "plot_exp_featimp")
 ```
 
-
-Column {data-width=425}
----------------------------------------------------------------------------
-
-### Variable Response Analysis {.no-padding}
+### Variable Response Analysis {data-height=300, .no-padding}
 
 ```{r}
 plotOutput(outputId = "plot_exp_varresp")
 ```
+
+
+Column {data-width=425}
+---------------------------------------------------------------------------
 
 ### Break-Down Analysis {.no-padding}
 
@@ -2211,27 +2178,15 @@ back_scenario_results <- reactive({
 })
 
 output$plot_scn_oos_forecast_fan <- renderPlotly({
-  scenario_results()$oos_forecast |> 
+  back_scenario_results()$oos_forecast |> 
     filter(.key == "actual" | .conf_lvl == as.character(input$scn_conf_lvl)) |> 
-		back_transform_data(
-			transform = input$scn_back_transf, 
-			cols_to_transform = c(".value", ".conf_lo", ".conf_hi"), 
-			transformations = input$transf, 
-			transform_params = transform_params()
-		) |>
 		adjust_forecast(input$scn_adjust) |>
     plot_modeltime_forecast(.legend_show = FALSE, .title = FALSE, .conf_interval_fill = "lightblue")
 })
 
 output$plot_scn_oos_forecast_wb <- renderPlotly({
-  g <- scenario_results()$oos_forecast |> 
+  g <- back_scenario_results()$oos_forecast |> 
   	filter(.key == "actual" | .conf_lvl == as.character(input$scn_conf_lvl)) |> 
-    back_transform_data(
-			transform = input$scn_back_transf, 
-			cols_to_transform = c(".value", ".conf_lo", ".conf_hi"), 
-			transformations = input$transf, 
-			transform_params = transform_params()
-		) |>
   	adjust_forecast(input$scn_adjust) |>
     modeltime::plot_modeltime_forecast(
       .interactive = FALSE, .conf_interval_show = FALSE, .legend_show = FALSE, .title = FALSE
@@ -2241,21 +2196,8 @@ output$plot_scn_oos_forecast_wb <- renderPlotly({
   plotly::ggplotly(g, dynamicTicks = TRUE)
 })
 
-# output$plot_scn_oos_forecast_wb <- renderPlotly({
-#   scenario_results()$oos_forecast |> 
-#     adjust_forecast(input$scn_adjust) |>
-#     filter(.key == "actual" | .conf_lvl == as.character(input$scn_conf_lvl)) |> 
-#     plot_modeltime_forecast(.legend_show = FALSE, .title = FALSE, .conf_interval_fill = "lightblue")
-# })
-
 output$scn_accuracy_table <- renderDT({
-	back_transform_accuracy(
-		calibration_table = scenario_results()$calibration,
-		splits = scenario_results()$splits,
-		transform = input$scn_back_transf,
-		transformations = input$transf,
-		transform_params = transform_params()
-	) |>
+	back_scenario_results()$accuracy |> 
     format_accuracy(single_method = TRUE) |>
     select(-Train) |> 
     datatable(
@@ -2268,14 +2210,8 @@ output$scn_accuracy_table <- renderDT({
 })
 
 output$scn_aggregate_table <- renderDT({
-  scenario_results()$oos_forecast |>
+  back_scenario_results()$oos_forecast |>
 		filter(.key == "actual" | .conf_lvl == as.character(input$scn_conf_lvl)) |> 
-		back_transform_data(
-			transform = input$scn_back_transf, 
-			cols_to_transform = c(".value", ".conf_lo", ".conf_hi"), 
-			transformations = input$transf, 
-			transform_params = transform_params()
-		) |>
     adjust_forecast(input$scn_adjust) |>
     aggregate_forecast(react_val$aggregate_n_future, input$scn_conf_lvl, input$scn_aggreg_fun) |> 
     mutate(across(.cols = where(is.numeric), .fns = ~ round(., 2))) |>
@@ -2289,14 +2225,8 @@ output$scn_aggregate_table <- renderDT({
 })
 
 output$scn_wb_table <- renderDT({
-  scenario_results()$oos_forecast |>
+  back_scenario_results()$oos_forecast |>
 		filter(.key == "prediction" & .conf_lvl == as.character(input$scn_conf_lvl)) |> 
-		back_transform_data(
-			transform = input$scn_back_transf, 
-			cols_to_transform = c(".value", ".conf_lo", ".conf_hi"), 
-			transformations = input$transf, 
-			transform_params = transform_params()
-		) |>
     adjust_forecast(input$scn_adjust) |>
     select(.index, .conf_lo, .value, .conf_hi) |> 
     mutate(across(.cols = where(is.numeric), .fns = ~ round(., 2))) |> 

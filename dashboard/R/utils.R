@@ -94,7 +94,10 @@ set_options <- function() {
       "H2O AutoML" = c("h2o_max_time", "h2o_max_time_model", "h2o_nfolds", "h2o_metric") |>
         purrr::set_names(c("Max Time (secs)", "Max Time per Model (secs)", "Folds", "Metric"))
     ),
-    tsf.dashboard.transformations = c("Log", "Box-Cox", "Min-Max", "Standardization", "Differencing", "Seasonal Differencing"),
+    tsf.dashboard.transformations = c(
+    	"Multiply by -1", "Add 1", "Log", "Box-Cox", "Log-Interval", "Min-Max", 
+    	"Standardization", "Differencing", "Seasonal Differencing"
+    ),
     tsf.dashboard.metrics = c("mae", "mape", "mase", "smape", "rmse", "rmspe"),
     tsf.dashboard.aggreg_funs = c("sum", "mean", "median")
   )

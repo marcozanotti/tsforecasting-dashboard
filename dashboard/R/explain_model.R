@@ -59,7 +59,8 @@ generate_model_explainer <- function(data, method, params, n_assess, assess_type
 		)
 	}
 	
-	return(explainer)
+	exp_res <- list("explainer" = explainer, "features" = features)
+	return(exp_res)
 	
 }
 
@@ -106,14 +107,17 @@ get_observation <- function(data, date, method, n_assess, assess_type) {
 # function to explain model
 explain_model <- function(explainer, type, features = NULL, observation = NULL) {
 	
-	logging::loginfo("Explaining Algorithm...")
 	if (type == "feature_importance") {
+		logging::loginfo(paste("Explaining Algorithm:", type))
 		res_explain <- DALEX::model_parts(explainer)
 	} else if (type == "variable_response") {
+		logging::loginfo(paste("Explaining Algorithm:", type))
 		res_explain <- DALEX::model_profile(explainer, variable = features, type = "partial")
 	} else if (type == "break_down") {
+		logging::loginfo(paste("Explaining Algorithm:", type))
 		res_explain <- DALEX::predict_parts(explainer, new_observation = observation, type = "break_down")
 	} else if (type == "local_stability") {
+		logging::loginfo(paste("Explaining Algorithm:", type))
 		res_explain <- DALEX::predict_diagnostics(explainer, new_observation = observation,	variables = features)
 	} else {
 		stop(paste("Unknown type:", type))

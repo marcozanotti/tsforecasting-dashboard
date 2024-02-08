@@ -45,10 +45,18 @@ transform_data <- function(data, transformations, frequency) {
 		logging::loginfo("Transforming data...")
 		data_transf <- data
 		
-		# add 1 by default if any transformation is applied to avoid numerical problems
-		# funziona solo con tutto positivo !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-		data_transf <- data_transf |> dplyr::mutate(value = value + 1)
+		if ("Multiply by -1" %in% transformations) { # Multiply by -1
+			logging::loginfo("Multiply by -1")
+			data_transf <- data_transf |> dplyr::mutate(value = value * -1)
+		}
 		
+		if ("Add 1" %in% transformations) { # Add 1
+			# add 1 by default if any transformation is applied to avoid numerical problems
+			# funziona solo con tutto positivo !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+			logging::loginfo("Add 1")
+			data_transf <- data_transf |> dplyr::mutate(value = value + 1)
+		}
+
 		if ("Log" %in% transformations) { # Log
 			logging::loginfo("Log")
 			data_transf <- data_transf |> 
@@ -61,6 +69,20 @@ transform_data <- function(data, transformations, frequency) {
 			data_transf <- data_transf |> 
 				dplyr::mutate(value = timetk::box_cox_vec(value, lambda = lambda_val))
 			init_params[["Box-Cox"]] <- lambda_val
+		}
+		
+		if ("Log-Interval" %in% transformations) { # Log-Interval
+			logging::loginfo("Log-Interval")
+			limlow_val <- 0
+			limupp_val <- max(data_transf$value) * 1.2 # 20% more than max value 
+			data_transf <- data_transf |> 
+				dplyr::mutate(
+					value = timetk::log_interval_vec(
+						value, limit_lower = limlow_val, limit_upper = limupp_val, offset = 0,
+						silent = TRUE
+					)
+				)
+			init_params[["Log-Interval"]] <- c(limlow_val, limupp_val)
 		}
 		
 		if ("Min-Max" %in% transformations) { # Min-Max Scaling
@@ -123,7 +145,9 @@ back_transform_data <- function(
 	} else {
 		
 		logging::loginfo("Back transforming data...")
-		if (".model_id" %in% names(data)) {
+		if (all(c(".model_id", ".conf_lvl") %in% names(data))) {
+			data_back_transf <- data |> dplyr::group_by(.model_id, .conf_lvl)
+		} else if (".model_id" %in% names(data)) {
 			data_back_transf <- data |> dplyr::group_by(.model_id)
 		} else {
 			data_back_transf <- data
@@ -193,6 +217,21 @@ back_transform_data <- function(
 				)
 		}
 		
+		if ("Log-Interval" %in% transformations) { # Log-Interval
+			logging::loginfo("Log-Interval")
+			limlow_val <- transform_params[["Log-Interval"]][1]
+			limupp_val <- transform_params[["Log-Interval"]][2]
+			data_back_transf <- data_back_transf |> 
+				dplyr::mutate(
+					dplyr::across(
+						.cols = dplyr::all_of(cols_to_transform), 
+						.fns = ~ timetk::log_interval_inv_vec(
+							as.numeric(.), limit_lower = limlow_val, limit_upper = limupp_val, offset = 0
+						)
+					)
+				)
+		}
+		
 		if ("Box-Cox" %in% transformations) { # Box-Cox
 			logging::loginfo("Box-Cox")
 			lambda_val <- transform_params[["Box-Cox"]] 
@@ -216,14 +255,28 @@ back_transform_data <- function(
 				)
 		}
 		
-		# subtract 1 by default if any transformation is applied to avoid numerical problems
-		data_back_transf <- data_back_transf |> 
-			dplyr::mutate(
-				dplyr::across(
-					.cols = dplyr::all_of(cols_to_transform), 
-					.fns = ~ (as.numeric(.) - 1) # funziona solo con tutto positivo!!!!!!
+		if ("Add 1" %in% transformations) { # Add 1
+			# subtract 1 by default if any transformation is applied to avoid numerical problems
+			logging::loginfo("Add 1")
+			data_back_transf <- data_back_transf |> 
+				dplyr::mutate(
+					dplyr::across(
+						.cols = dplyr::all_of(cols_to_transform), 
+						.fns = ~ (as.numeric(.) - 1) # funziona solo con tutto positivo!!!!!!
+					)
 				)
-			)
+		}
+		
+		if ("Multiply by -1" %in% transformations) { # Multiply by -1
+			logging::loginfo("Multiply by -1")
+			data_back_transf <- data_back_transf |> 
+				dplyr::mutate(
+					dplyr::across(
+						.cols = dplyr::all_of(cols_to_transform), 
+						.fns = ~ (as.numeric(.) * -1)
+					)
+				)
+		}
 		
 		data_back_transf <- data_back_transf |> dplyr::ungroup()
 		
