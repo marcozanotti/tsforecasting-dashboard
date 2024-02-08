@@ -554,6 +554,14 @@ input <- list(
 	smooth_season = 0.1
 )
 
+input <- list(
+	transf = transf[1:4],
+	n_future = 12,
+	n_assess = 24,
+	assess_type = "Rolling",
+	method = "Naive"
+)
+
 data_transformed <- transform_data(data_selected, input$transf, ts_freq)$data_transformed
 transform_params <- transform_data(data_selected, input$transf, ts_freq)$transform_params
 
@@ -593,8 +601,7 @@ forecast_results$test_forecast |>
 	back_transform_data(
 		cols_to_transform = c(".value", ".conf_lo", ".conf_hi"),
 		transform = TRUE,
-		transformations = input$transf, transform_params = transform_params, 
-		frequency = ts_freq
+		transformations = input$transf, transform_params = transform_params
 	) |> 
 	plot_modeltime_forecast()
 
@@ -603,35 +610,29 @@ forecast_results$oos_forecast |>
 	back_transform_data(
 		cols_to_transform = c(".value", ".conf_lo", ".conf_hi"),
 		transform = TRUE,
-		transformations = input$transf, transform_params = transform_params, 
-		frequency = ts_freq
+		transformations = input$transf, transform_params = transform_params
 	) |> 
 	plot_modeltime_forecast()
 
 forecast_results$accuracy
 back_transform_accuracy(
-	data = data_transformed, calibration_table = forecast_results$calibration, 
-	n_assess = input$n_assess, assess_type = input$assess_type,
+	calibration_table = forecast_results$calibration, 
+	splits = forecast_results$splits,
 	transform = TRUE,
-	transformations = input$transf, transform_params = transform_params, 
-	frequency = ts_freq
+	transformations = input$transf, transform_params = transform_params
 )
 
+forecast_results$residuals
+forecast_results$residuals |> 
+	back_transform_data(
+		cols_to_transform = c(".actual", ".prediction"),
+		transform = TRUE,
+		transformations = input$transf, transform_params = transform_params
+	) |> 
+	dplyr::mutate(.residuals = .actual - .prediction)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+forecast_results |> 
+	back_transform_forecast(
+		transform = TRUE, transformations = input$transf,	transform_params = transform_params
+	)
 

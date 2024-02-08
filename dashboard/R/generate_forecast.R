@@ -127,6 +127,7 @@ generate_forecast <- function(
 
   if (any(method %in% "H2O AutoML")) { h2o::h2o.shutdown(prompt = FALSE) }
   res <- list(
+  	"data" = data,
     "splits" = splits,
     "fit" = fitted_model_list,
     "calibration" = calibration_tbl,

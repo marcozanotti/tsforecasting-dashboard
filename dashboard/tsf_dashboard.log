@@ -1469,3 +1469,1203 @@
 2024-02-07 19:28:50 INFO::Test Forecasting
 2024-02-07 19:28:51 INFO::Refitting
 2024-02-07 19:28:56 INFO::Out-of-Sample Forecasting
+2024-02-08 12:05:38 INFO::Getting Air Passengers data...
+2024-02-08 12:05:57 INFO::Transforming data...
+2024-02-08 12:05:58 INFO::Log
+2024-02-08 12:05:59 INFO::Transforming data...
+2024-02-08 12:05:59 INFO::Log
+2024-02-08 12:05:59 INFO::Normalization
+2024-02-08 12:07:52 INFO::Getting Air Passengers data...
+2024-02-08 12:08:32 INFO::Transforming data...
+2024-02-08 12:08:32 INFO::Log
+2024-02-08 12:08:33 INFO::Transforming data...
+2024-02-08 12:08:33 INFO::Log
+2024-02-08 12:08:33 INFO::Normalization
+2024-02-08 12:08:41 INFO::*** Generating Forecasts ***
+2024-02-08 12:08:41 INFO::Method(s): ETS
+2024-02-08 12:08:41 INFO::Initial Split
+2024-02-08 12:08:41 INFO::Future Frame
+2024-02-08 12:08:41 INFO::Modeltime Table
+2024-02-08 12:08:41 INFO::*** Fitting Algorithm ***
+2024-02-08 12:08:41 INFO::Method(s): ETS
+2024-02-08 12:08:41 INFO::Initial Split
+2024-02-08 12:08:41 INFO::Recipe Specification
+2024-02-08 12:08:41 INFO::Model Specification
+2024-02-08 12:08:41 INFO::Workflow Specification
+2024-02-08 12:08:41 INFO::Fitting
+2024-02-08 12:08:41 INFO::Calibration
+2024-02-08 12:08:41 INFO::Residuals
+2024-02-08 12:08:41 INFO::Accuracy Evaluation
+2024-02-08 12:08:42 INFO::Test Forecasting
+2024-02-08 12:08:42 INFO::Refitting
+2024-02-08 12:08:42 INFO::Out-of-Sample Forecasting
+2024-02-08 12:09:06 INFO::Getting Air Passengers data...
+2024-02-08 12:09:11 INFO::Transforming data...
+2024-02-08 12:09:11 INFO::Log
+2024-02-08 12:09:12 INFO::Transforming data...
+2024-02-08 12:09:12 INFO::Log
+2024-02-08 12:09:12 INFO::Normalization
+2024-02-08 12:09:17 INFO::*** Generating Forecasts ***
+2024-02-08 12:09:17 INFO::Method(s): ETS
+2024-02-08 12:09:17 INFO::Initial Split
+2024-02-08 12:09:17 INFO::Future Frame
+2024-02-08 12:09:17 INFO::Modeltime Table
+2024-02-08 12:09:17 INFO::*** Fitting Algorithm ***
+2024-02-08 12:09:17 INFO::Method(s): ETS
+2024-02-08 12:09:17 INFO::Initial Split
+2024-02-08 12:09:17 INFO::Recipe Specification
+2024-02-08 12:09:17 INFO::Model Specification
+2024-02-08 12:09:17 INFO::Workflow Specification
+2024-02-08 12:09:17 INFO::Fitting
+2024-02-08 12:09:17 INFO::Calibration
+2024-02-08 12:09:17 INFO::Residuals
+2024-02-08 12:09:17 INFO::Accuracy Evaluation
+2024-02-08 12:09:18 INFO::Test Forecasting
+2024-02-08 12:09:18 INFO::Refitting
+2024-02-08 12:09:18 INFO::Out-of-Sample Forecasting
+2024-02-08 12:09:22 INFO::Back-transforming residuals results..
+2024-02-08 12:09:22 INFO::Back transforming data...
+2024-02-08 12:09:22 INFO::Normalization
+2024-02-08 12:09:22 INFO::Transforming data...
+2024-02-08 12:09:22 INFO::Log
+2024-02-08 12:09:22 INFO::Normalization
+2024-02-08 12:09:22 INFO::Log
+2024-02-08 12:09:22 INFO::Back-transforming forecast test results..
+2024-02-08 12:09:22 INFO::Back transforming data...
+2024-02-08 12:09:22 INFO::Normalization
+2024-02-08 12:09:22 INFO::Log
+2024-02-08 12:09:22 INFO::Back-transforming forecast oos results..
+2024-02-08 12:09:22 INFO::Back transforming data...
+2024-02-08 12:09:22 INFO::Normalization
+2024-02-08 12:09:22 INFO::Log
+2024-02-08 12:09:22 INFO::Back-transforming forecast accuracy results..
+2024-02-08 12:11:04 INFO::Back-transforming residuals results..
+2024-02-08 12:11:04 INFO::Back transforming data...
+2024-02-08 12:11:04 INFO::Normalization
+2024-02-08 12:11:04 INFO::Log
+2024-02-08 12:11:04 INFO::Back-transforming forecast test results..
+2024-02-08 12:11:04 INFO::Back transforming data...
+2024-02-08 12:11:04 INFO::Normalization
+2024-02-08 12:11:04 INFO::Log
+2024-02-08 12:11:04 INFO::Back-transforming forecast oos results..
+2024-02-08 12:11:04 INFO::Back transforming data...
+2024-02-08 12:11:04 INFO::Normalization
+2024-02-08 12:11:04 INFO::Log
+2024-02-08 12:11:04 INFO::Back-transforming forecast accuracy results..
+2024-02-08 12:12:24 INFO::Getting Air Passengers data...
+2024-02-08 12:12:29 INFO::Transforming data...
+2024-02-08 12:12:29 INFO::Log
+2024-02-08 12:12:30 INFO::Transforming data...
+2024-02-08 12:12:30 INFO::Log
+2024-02-08 12:12:30 INFO::Normalization
+2024-02-08 12:12:33 INFO::*** Generating Forecasts ***
+2024-02-08 12:12:33 INFO::Method(s): ETS
+2024-02-08 12:12:33 INFO::Initial Split
+2024-02-08 12:12:33 INFO::Future Frame
+2024-02-08 12:12:33 INFO::Modeltime Table
+2024-02-08 12:12:33 INFO::*** Fitting Algorithm ***
+2024-02-08 12:12:33 INFO::Method(s): ETS
+2024-02-08 12:12:33 INFO::Initial Split
+2024-02-08 12:12:34 INFO::Recipe Specification
+2024-02-08 12:12:34 INFO::Model Specification
+2024-02-08 12:12:34 INFO::Workflow Specification
+2024-02-08 12:12:34 INFO::Fitting
+2024-02-08 12:12:34 INFO::Calibration
+2024-02-08 12:12:34 INFO::Residuals
+2024-02-08 12:12:34 INFO::Accuracy Evaluation
+2024-02-08 12:12:34 INFO::Test Forecasting
+2024-02-08 12:12:34 INFO::Refitting
+2024-02-08 12:12:34 INFO::Out-of-Sample Forecasting
+2024-02-08 12:12:36 INFO::Back-transforming residuals results..
+2024-02-08 12:12:36 INFO::Back transforming data...
+2024-02-08 12:12:36 INFO::Normalization
+2024-02-08 12:12:36 INFO::Transforming data...
+2024-02-08 12:12:36 INFO::Log
+2024-02-08 12:12:36 INFO::Normalization
+2024-02-08 12:12:36 INFO::Log
+2024-02-08 12:12:36 INFO::Back-transforming forecast test results..
+2024-02-08 12:12:36 INFO::Back transforming data...
+2024-02-08 12:12:36 INFO::Normalization
+2024-02-08 12:12:36 INFO::Log
+2024-02-08 12:12:36 INFO::Back-transforming forecast oos results..
+2024-02-08 12:12:36 INFO::Back transforming data...
+2024-02-08 12:12:36 INFO::Normalization
+2024-02-08 12:12:36 INFO::Log
+2024-02-08 12:12:36 INFO::Back-transforming forecast accuracy results..
+2024-02-08 12:12:36 INFO::Back transforming accuracy table...
+2024-02-08 12:12:36 INFO::Back transforming data...
+2024-02-08 12:12:36 INFO::Normalization
+2024-02-08 12:12:36 INFO::Log
+2024-02-08 12:12:48 INFO::Back-transforming residuals results..
+2024-02-08 12:12:48 INFO::Back transforming data...
+2024-02-08 12:12:48 INFO::Normalization
+2024-02-08 12:12:48 INFO::Log
+2024-02-08 12:12:48 INFO::Back-transforming forecast test results..
+2024-02-08 12:12:48 INFO::Back transforming data...
+2024-02-08 12:12:48 INFO::Normalization
+2024-02-08 12:12:48 INFO::Log
+2024-02-08 12:12:48 INFO::Back-transforming forecast oos results..
+2024-02-08 12:12:48 INFO::Back transforming data...
+2024-02-08 12:12:48 INFO::Normalization
+2024-02-08 12:12:48 INFO::Log
+2024-02-08 12:12:48 INFO::Back-transforming forecast accuracy results..
+2024-02-08 12:12:48 INFO::Back transforming accuracy table...
+2024-02-08 12:12:48 INFO::Back transforming data...
+2024-02-08 12:12:48 INFO::Normalization
+2024-02-08 12:12:48 INFO::Log
+2024-02-08 13:50:29 INFO::Getting Air Passengers data...
+2024-02-08 13:51:00 INFO::Transforming data...
+2024-02-08 13:51:00 INFO::Log
+2024-02-08 13:51:00 INFO::Transforming data...
+2024-02-08 13:51:00 INFO::Log
+2024-02-08 13:51:00 INFO::Normalization
+2024-02-08 13:51:08 INFO::*** Generating Forecasts ***
+2024-02-08 13:51:08 INFO::Method(s): Naive
+2024-02-08 13:51:08 INFO::Initial Split
+2024-02-08 13:51:08 INFO::Future Frame
+2024-02-08 13:51:08 INFO::Modeltime Table
+2024-02-08 13:51:08 INFO::*** Fitting Algorithm ***
+2024-02-08 13:51:08 INFO::Method(s): Naive
+2024-02-08 13:51:08 INFO::Initial Split
+2024-02-08 13:51:08 INFO::Recipe Specification
+2024-02-08 13:51:08 INFO::Model Specification
+2024-02-08 13:51:08 INFO::Workflow Specification
+2024-02-08 13:51:08 INFO::Fitting
+2024-02-08 13:51:08 INFO::Calibration
+2024-02-08 13:51:08 INFO::Residuals
+2024-02-08 13:51:08 INFO::Accuracy Evaluation
+2024-02-08 13:51:08 INFO::Test Forecasting
+2024-02-08 13:51:09 INFO::Refitting
+2024-02-08 13:51:09 INFO::Out-of-Sample Forecasting
+2024-02-08 13:51:11 INFO::Back-transforming residuals results..
+2024-02-08 13:51:11 INFO::Back transforming data...
+2024-02-08 13:51:11 INFO::Normalization
+2024-02-08 13:51:11 INFO::Transforming data...
+2024-02-08 13:51:11 INFO::Log
+2024-02-08 13:51:11 INFO::Normalization
+2024-02-08 13:51:26 INFO::*** Generating Forecasts ***
+2024-02-08 13:51:26 INFO::Method(s): ETS
+2024-02-08 13:51:26 INFO::Initial Split
+2024-02-08 13:51:26 INFO::Future Frame
+2024-02-08 13:51:26 INFO::Modeltime Table
+2024-02-08 13:51:26 INFO::*** Fitting Algorithm ***
+2024-02-08 13:51:26 INFO::Method(s): ETS
+2024-02-08 13:51:26 INFO::Initial Split
+2024-02-08 13:51:26 INFO::Recipe Specification
+2024-02-08 13:51:26 INFO::Model Specification
+2024-02-08 13:51:26 INFO::Workflow Specification
+2024-02-08 13:51:26 INFO::Fitting
+2024-02-08 13:51:27 INFO::Calibration
+2024-02-08 13:51:27 INFO::Residuals
+2024-02-08 13:51:27 INFO::Accuracy Evaluation
+2024-02-08 13:51:27 INFO::Test Forecasting
+2024-02-08 13:51:27 INFO::Refitting
+2024-02-08 13:51:27 INFO::Out-of-Sample Forecasting
+2024-02-08 13:51:30 INFO::Back-transforming residuals results..
+2024-02-08 13:51:30 INFO::Back transforming data...
+2024-02-08 13:51:30 INFO::Normalization
+2024-02-08 13:51:30 INFO::Log
+2024-02-08 13:51:30 INFO::Back-transforming forecast test results..
+2024-02-08 13:51:30 INFO::Back transforming data...
+2024-02-08 13:51:30 INFO::Normalization
+2024-02-08 13:51:30 INFO::Log
+2024-02-08 13:51:30 INFO::Back-transforming forecast oos results..
+2024-02-08 13:51:30 INFO::Back transforming data...
+2024-02-08 13:51:30 INFO::Normalization
+2024-02-08 13:51:30 INFO::Log
+2024-02-08 13:51:30 INFO::Back-transforming forecast accuracy results..
+2024-02-08 13:51:30 INFO::Back transforming accuracy table...
+2024-02-08 13:51:30 INFO::Back transforming data...
+2024-02-08 13:51:30 INFO::Normalization
+2024-02-08 13:51:30 INFO::Log
+2024-02-08 13:54:13 INFO::Getting Air Passengers data...
+2024-02-08 13:54:16 INFO::*** Generating Forecasts ***
+2024-02-08 13:54:16 INFO::Method(s): ETS
+2024-02-08 13:54:16 INFO::Initial Split
+2024-02-08 13:54:17 INFO::Future Frame
+2024-02-08 13:54:17 INFO::Modeltime Table
+2024-02-08 13:54:17 INFO::*** Fitting Algorithm ***
+2024-02-08 13:54:17 INFO::Method(s): ETS
+2024-02-08 13:54:17 INFO::Initial Split
+2024-02-08 13:54:17 INFO::Recipe Specification
+2024-02-08 13:54:17 INFO::Model Specification
+2024-02-08 13:54:17 INFO::Workflow Specification
+2024-02-08 13:54:17 INFO::Fitting
+2024-02-08 13:54:17 INFO::Calibration
+2024-02-08 13:54:17 INFO::Residuals
+2024-02-08 13:54:17 INFO::Accuracy Evaluation
+2024-02-08 13:54:18 INFO::Test Forecasting
+2024-02-08 13:54:18 INFO::Refitting
+2024-02-08 13:54:18 INFO::Out-of-Sample Forecasting
+2024-02-08 13:54:22 INFO::Back-transforming residuals results..
+2024-02-08 13:54:22 INFO::Back-transforming forecast test results..
+2024-02-08 13:54:22 INFO::Back-transforming forecast oos results..
+2024-02-08 13:54:22 INFO::Back-transforming forecast accuracy results..
+2024-02-08 13:54:22 INFO::Back transforming accuracy table...
+2024-02-08 13:54:28 INFO::Transforming data...
+2024-02-08 13:54:28 INFO::Log
+2024-02-08 13:54:29 INFO::Transforming data...
+2024-02-08 13:54:29 INFO::Log
+2024-02-08 13:54:29 INFO::Normalization
+2024-02-08 13:54:33 INFO::*** Generating Forecasts ***
+2024-02-08 13:54:33 INFO::Method(s): ETS
+2024-02-08 13:54:33 INFO::Initial Split
+2024-02-08 13:54:33 INFO::Future Frame
+2024-02-08 13:54:33 INFO::Modeltime Table
+2024-02-08 13:54:33 INFO::*** Fitting Algorithm ***
+2024-02-08 13:54:33 INFO::Method(s): ETS
+2024-02-08 13:54:33 INFO::Initial Split
+2024-02-08 13:54:33 INFO::Recipe Specification
+2024-02-08 13:54:33 INFO::Model Specification
+2024-02-08 13:54:33 INFO::Workflow Specification
+2024-02-08 13:54:33 INFO::Fitting
+2024-02-08 13:54:33 INFO::Calibration
+2024-02-08 13:54:33 INFO::Residuals
+2024-02-08 13:54:33 INFO::Accuracy Evaluation
+2024-02-08 13:54:34 INFO::Test Forecasting
+2024-02-08 13:54:34 INFO::Refitting
+2024-02-08 13:54:34 INFO::Out-of-Sample Forecasting
+2024-02-08 13:54:41 INFO::Back-transforming residuals results..
+2024-02-08 13:54:41 INFO::Back transforming data...
+2024-02-08 13:54:41 INFO::Normalization
+2024-02-08 13:54:41 INFO::Transforming data...
+2024-02-08 13:54:41 INFO::Log
+2024-02-08 13:54:41 INFO::Normalization
+2024-02-08 13:54:41 INFO::Log
+2024-02-08 13:54:41 INFO::Back-transforming forecast test results..
+2024-02-08 13:54:41 INFO::Back transforming data...
+2024-02-08 13:54:41 INFO::Normalization
+2024-02-08 13:54:41 INFO::Log
+2024-02-08 13:54:41 INFO::Back-transforming forecast oos results..
+2024-02-08 13:54:41 INFO::Back transforming data...
+2024-02-08 13:54:41 INFO::Normalization
+2024-02-08 13:54:41 INFO::Log
+2024-02-08 13:54:41 INFO::Back-transforming forecast accuracy results..
+2024-02-08 13:54:41 INFO::Back transforming accuracy table...
+2024-02-08 13:54:41 INFO::Back transforming data...
+2024-02-08 13:54:41 INFO::Normalization
+2024-02-08 13:54:41 INFO::Log
+2024-02-08 13:54:50 INFO::*** Generating Forecasts ***
+2024-02-08 13:54:50 INFO::Method(s): Elastic Net
+2024-02-08 13:54:50 INFO::Initial Split
+2024-02-08 13:54:51 INFO::Future Frame
+2024-02-08 13:54:51 INFO::Modeltime Table
+2024-02-08 13:54:51 INFO::*** Tuning Algorithm ***
+2024-02-08 13:54:51 INFO::Method(s): Elastic Net
+2024-02-08 13:54:51 INFO::Initial Split
+2024-02-08 13:54:51 INFO::Validation Split
+2024-02-08 13:54:51 INFO::Recipe Specification
+2024-02-08 13:54:51 INFO::Model Specification
+2024-02-08 13:54:51 INFO::Workflow Specification
+2024-02-08 13:54:51 INFO::Tuning
+2024-02-08 13:56:24 INFO::Extracting Best Model
+2024-02-08 13:56:25 INFO::Fitting
+2024-02-08 13:56:25 INFO::Calibration
+2024-02-08 13:56:25 INFO::Residuals
+2024-02-08 13:56:25 INFO::Accuracy Evaluation
+2024-02-08 13:56:26 INFO::Test Forecasting
+2024-02-08 13:56:26 INFO::Refitting
+2024-02-08 13:56:26 INFO::Out-of-Sample Forecasting
+2024-02-08 13:56:34 INFO::Back-transforming residuals results..
+2024-02-08 13:56:34 INFO::Back transforming data...
+2024-02-08 13:56:34 INFO::Normalization
+2024-02-08 13:56:34 INFO::Log
+2024-02-08 13:56:34 INFO::Back-transforming forecast test results..
+2024-02-08 13:56:34 INFO::Back transforming data...
+2024-02-08 13:56:34 INFO::Normalization
+2024-02-08 13:56:34 INFO::Log
+2024-02-08 13:56:34 INFO::Back-transforming forecast oos results..
+2024-02-08 13:56:34 INFO::Back transforming data...
+2024-02-08 13:56:34 INFO::Normalization
+2024-02-08 13:56:34 INFO::Log
+2024-02-08 13:56:34 INFO::Back-transforming forecast accuracy results..
+2024-02-08 13:56:34 INFO::Back transforming accuracy table...
+2024-02-08 13:56:34 INFO::Back transforming data...
+2024-02-08 13:56:34 INFO::Normalization
+2024-02-08 13:56:34 INFO::Log
+2024-02-08 13:56:40 INFO::Back-transforming residuals results..
+2024-02-08 13:56:40 INFO::Back transforming data...
+2024-02-08 13:56:40 INFO::Normalization
+2024-02-08 13:56:40 INFO::Log
+2024-02-08 13:56:40 INFO::Back-transforming forecast test results..
+2024-02-08 13:56:40 INFO::Back transforming data...
+2024-02-08 13:56:40 INFO::Normalization
+2024-02-08 13:56:40 INFO::Log
+2024-02-08 13:56:40 INFO::Back-transforming forecast oos results..
+2024-02-08 13:56:40 INFO::Back transforming data...
+2024-02-08 13:56:40 INFO::Normalization
+2024-02-08 13:56:40 INFO::Log
+2024-02-08 13:56:40 INFO::Back-transforming forecast accuracy results..
+2024-02-08 13:56:40 INFO::Back transforming accuracy table...
+2024-02-08 13:56:40 INFO::Back transforming data...
+2024-02-08 13:56:40 INFO::Normalization
+2024-02-08 13:56:40 INFO::Log
+2024-02-08 13:56:48 INFO::*** Generating Forecasts ***
+2024-02-08 13:56:48 INFO::Method(s): ETS, SARIMA
+2024-02-08 13:56:48 INFO::Initial Split
+2024-02-08 13:56:49 INFO::Future Frame
+2024-02-08 13:56:49 INFO::Modeltime Table
+2024-02-08 13:56:49 INFO::*** Fitting Algorithm ***
+2024-02-08 13:56:49 INFO::Method(s): ETS
+2024-02-08 13:56:49 INFO::Initial Split
+2024-02-08 13:56:49 INFO::Recipe Specification
+2024-02-08 13:56:49 INFO::Model Specification
+2024-02-08 13:56:49 INFO::Workflow Specification
+2024-02-08 13:56:49 INFO::Fitting
+2024-02-08 13:56:49 INFO::*** Fitting Algorithm ***
+2024-02-08 13:56:49 INFO::Method(s): SARIMA
+2024-02-08 13:56:49 INFO::Initial Split
+2024-02-08 13:56:49 INFO::Recipe Specification
+2024-02-08 13:56:49 INFO::Model Specification
+2024-02-08 13:56:49 INFO::Workflow Specification
+2024-02-08 13:56:49 INFO::Fitting
+2024-02-08 13:56:50 INFO::Calibration
+2024-02-08 13:56:50 INFO::Residuals
+2024-02-08 13:56:50 INFO::Accuracy Evaluation
+2024-02-08 13:56:51 INFO::Test Forecasting
+2024-02-08 13:56:51 INFO::Refitting
+2024-02-08 13:56:53 INFO::Out-of-Sample Forecasting
+2024-02-08 13:57:56 INFO::Back-transforming residuals results..
+2024-02-08 13:57:56 INFO::Back transforming data...
+2024-02-08 13:57:56 INFO::Normalization
+2024-02-08 13:57:56 INFO::Log
+2024-02-08 13:57:56 INFO::Back-transforming forecast test results..
+2024-02-08 13:57:56 INFO::Back transforming data...
+2024-02-08 13:57:56 INFO::Normalization
+2024-02-08 13:57:56 INFO::Log
+2024-02-08 13:57:56 INFO::Back-transforming forecast oos results..
+2024-02-08 13:57:56 INFO::Back transforming data...
+2024-02-08 13:57:56 INFO::Normalization
+2024-02-08 13:57:56 INFO::Log
+2024-02-08 13:57:56 INFO::Back-transforming forecast accuracy results..
+2024-02-08 13:57:56 INFO::Back transforming accuracy table...
+2024-02-08 13:57:56 INFO::Back transforming data...
+2024-02-08 13:57:56 INFO::Normalization
+2024-02-08 13:57:56 INFO::Log
+2024-02-08 13:57:56 INFO::Back transforming data...
+2024-02-08 13:57:56 INFO::Normalization
+2024-02-08 13:57:56 INFO::Log
+2024-02-08 13:58:09 INFO::*** Generating Forecasts ***
+2024-02-08 13:58:09 INFO::Method(s): Random Forest
+2024-02-08 13:58:09 INFO::Initial Split
+2024-02-08 13:58:09 INFO::Future Frame
+2024-02-08 13:58:09 INFO::Modeltime Table
+2024-02-08 13:58:09 INFO::*** Fitting Algorithm ***
+2024-02-08 13:58:09 INFO::Method(s): Random Forest
+2024-02-08 13:58:09 INFO::Initial Split
+2024-02-08 13:58:09 INFO::Recipe Specification
+2024-02-08 13:58:09 INFO::Model Specification
+2024-02-08 13:58:09 INFO::Workflow Specification
+2024-02-08 13:58:09 INFO::Fitting
+2024-02-08 13:58:10 INFO::Calibration
+2024-02-08 13:58:10 INFO::Residuals
+2024-02-08 13:58:10 INFO::Accuracy Evaluation
+2024-02-08 13:58:11 INFO::Test Forecasting
+2024-02-08 13:58:11 INFO::Refitting
+2024-02-08 13:58:11 INFO::Out-of-Sample Forecasting
+2024-02-08 13:58:11 INFO::Extracting Features...
+2024-02-08 13:58:12 INFO::Extracting Features...
+2024-02-08 13:58:12 INFO::Extracting Features...
+2024-02-08 13:58:12 INFO::*** Explaining Algorithm ***
+2024-02-08 13:58:12 INFO::Method(s): Random Forest
+2024-02-08 13:58:12 INFO::Initial Split
+2024-02-08 13:58:12 INFO::Recipe Specification
+2024-02-08 13:58:12 INFO::Model Specification
+2024-02-08 13:58:12 INFO::Workflow Specification
+2024-02-08 13:58:12 INFO::Fitting
+2024-02-08 13:58:12 INFO::Creating Explainer
+2024-02-08 13:58:12 INFO::Explaining Algorithm...
+2024-02-08 13:58:17 INFO::Explaining Algorithm...
+2024-02-08 13:58:17 INFO::Explaining Algorithm...
+2024-02-08 13:58:17 INFO::Explaining Algorithm...
+2024-02-08 13:58:18 INFO::Explaining Algorithm...
+2024-02-08 13:58:21 INFO::Back transforming data...
+2024-02-08 13:58:21 INFO::Normalization
+2024-02-08 13:58:21 INFO::Log
+2024-02-08 13:58:30 INFO::*** Generating Forecasts ***
+2024-02-08 13:58:30 INFO::Method(s): ETS, SARIMA
+2024-02-08 13:58:30 INFO::Initial Split
+2024-02-08 13:58:30 INFO::Future Frame
+2024-02-08 13:58:30 INFO::Modeltime Table
+2024-02-08 13:58:30 INFO::*** Fitting Algorithm ***
+2024-02-08 13:58:30 INFO::Method(s): ETS
+2024-02-08 13:58:30 INFO::Initial Split
+2024-02-08 13:58:30 INFO::Recipe Specification
+2024-02-08 13:58:30 INFO::Model Specification
+2024-02-08 13:58:30 INFO::Workflow Specification
+2024-02-08 13:58:30 INFO::Fitting
+2024-02-08 13:58:31 INFO::*** Fitting Algorithm ***
+2024-02-08 13:58:31 INFO::Method(s): SARIMA
+2024-02-08 13:58:31 INFO::Initial Split
+2024-02-08 13:58:31 INFO::Recipe Specification
+2024-02-08 13:58:31 INFO::Model Specification
+2024-02-08 13:58:31 INFO::Workflow Specification
+2024-02-08 13:58:31 INFO::Fitting
+2024-02-08 13:58:32 INFO::Ensembling
+2024-02-08 13:58:32 INFO::Calibration
+2024-02-08 13:58:33 INFO::Residuals
+2024-02-08 13:58:33 INFO::Accuracy Evaluation
+2024-02-08 13:58:34 INFO::Test Forecasting
+2024-02-08 13:58:34 INFO::Refitting
+2024-02-08 13:58:37 INFO::Out-of-Sample Forecasting
+2024-02-08 14:00:29 INFO::Back-transforming residuals results..
+2024-02-08 14:00:29 INFO::Back transforming data...
+2024-02-08 14:00:29 INFO::Normalization
+2024-02-08 14:00:29 INFO::Log
+2024-02-08 14:00:29 INFO::Back-transforming forecast test results..
+2024-02-08 14:00:29 INFO::Back transforming data...
+2024-02-08 14:00:29 INFO::Normalization
+2024-02-08 14:00:29 INFO::Log
+2024-02-08 14:00:29 INFO::Back-transforming forecast oos results..
+2024-02-08 14:00:29 INFO::Back transforming data...
+2024-02-08 14:00:29 INFO::Normalization
+2024-02-08 14:00:29 INFO::Log
+2024-02-08 14:00:29 INFO::Back-transforming forecast accuracy results..
+2024-02-08 14:00:29 INFO::Back transforming accuracy table...
+2024-02-08 14:00:29 INFO::Back transforming data...
+2024-02-08 14:00:29 INFO::Normalization
+2024-02-08 14:00:29 INFO::Log
+2024-02-08 14:00:29 INFO::Back transforming data...
+2024-02-08 14:00:29 INFO::Normalization
+2024-02-08 14:00:29 INFO::Log
+2024-02-08 14:00:29 INFO::Back transforming data...
+2024-02-08 14:00:29 INFO::Normalization
+2024-02-08 14:00:29 INFO::Log
+2024-02-08 14:00:29 INFO::Back transforming data...
+2024-02-08 14:00:29 INFO::Normalization
+2024-02-08 14:00:29 INFO::Log
+2024-02-08 14:00:29 INFO::Back transforming accuracy table...
+2024-02-08 14:00:29 INFO::Back transforming data...
+2024-02-08 14:00:29 INFO::Normalization
+2024-02-08 14:00:29 INFO::Log
+2024-02-08 14:00:29 INFO::Back transforming data...
+2024-02-08 14:00:29 INFO::Normalization
+2024-02-08 14:00:29 INFO::Log
+2024-02-08 14:00:29 INFO::Back transforming data...
+2024-02-08 14:00:29 INFO::Normalization
+2024-02-08 14:00:29 INFO::Log
+2024-02-08 14:01:18 INFO::Getting Air Passengers data...
+2024-02-08 14:01:22 INFO::Transforming data...
+2024-02-08 14:01:22 INFO::Log
+2024-02-08 14:01:23 INFO::Transforming data...
+2024-02-08 14:01:23 INFO::Log
+2024-02-08 14:01:23 INFO::Normalization
+2024-02-08 14:01:35 INFO::*** Generating Forecasts ***
+2024-02-08 14:01:35 INFO::Method(s): Elastic Net
+2024-02-08 14:01:35 INFO::Initial Split
+2024-02-08 14:01:35 INFO::Future Frame
+2024-02-08 14:01:35 INFO::Modeltime Table
+2024-02-08 14:01:35 INFO::*** Tuning Algorithm ***
+2024-02-08 14:01:35 INFO::Method(s): Elastic Net
+2024-02-08 14:01:35 INFO::Initial Split
+2024-02-08 14:01:35 INFO::Validation Split
+2024-02-08 14:01:35 INFO::Recipe Specification
+2024-02-08 14:01:35 INFO::Model Specification
+2024-02-08 14:01:35 INFO::Workflow Specification
+2024-02-08 14:01:35 INFO::Tuning
+2024-02-08 14:03:09 INFO::Extracting Best Model
+2024-02-08 14:03:09 INFO::Fitting
+2024-02-08 14:03:09 INFO::Calibration
+2024-02-08 14:03:09 INFO::Residuals
+2024-02-08 14:03:10 INFO::Accuracy Evaluation
+2024-02-08 14:03:10 INFO::Test Forecasting
+2024-02-08 14:03:11 INFO::Refitting
+2024-02-08 14:03:11 INFO::Out-of-Sample Forecasting
+2024-02-08 14:03:58 INFO::Back-transforming residuals results..
+2024-02-08 14:03:58 INFO::Back transforming data...
+2024-02-08 14:03:58 INFO::Normalization
+2024-02-08 14:03:58 INFO::Transforming data...
+2024-02-08 14:03:58 INFO::Log
+2024-02-08 14:03:58 INFO::Normalization
+2024-02-08 14:03:58 INFO::Log
+2024-02-08 14:03:58 INFO::Back-transforming forecast test results..
+2024-02-08 14:03:58 INFO::Back transforming data...
+2024-02-08 14:03:58 INFO::Normalization
+2024-02-08 14:03:58 INFO::Log
+2024-02-08 14:03:58 INFO::Back-transforming forecast oos results..
+2024-02-08 14:03:58 INFO::Back transforming data...
+2024-02-08 14:03:58 INFO::Normalization
+2024-02-08 14:03:58 INFO::Log
+2024-02-08 14:03:58 INFO::Back-transforming forecast accuracy results..
+2024-02-08 14:03:58 INFO::Back transforming accuracy table...
+2024-02-08 14:03:58 INFO::Back transforming data...
+2024-02-08 14:03:58 INFO::Normalization
+2024-02-08 14:03:58 INFO::Log
+2024-02-08 14:04:08 INFO::*** Generating Forecasts ***
+2024-02-08 14:04:08 INFO::Method(s): ETS, SARIMA
+2024-02-08 14:04:08 INFO::Initial Split
+2024-02-08 14:04:08 INFO::Future Frame
+2024-02-08 14:04:08 INFO::Modeltime Table
+2024-02-08 14:04:08 INFO::*** Fitting Algorithm ***
+2024-02-08 14:04:08 INFO::Method(s): ETS
+2024-02-08 14:04:08 INFO::Initial Split
+2024-02-08 14:04:08 INFO::Recipe Specification
+2024-02-08 14:04:08 INFO::Model Specification
+2024-02-08 14:04:08 INFO::Workflow Specification
+2024-02-08 14:04:08 INFO::Fitting
+2024-02-08 14:04:08 INFO::*** Fitting Algorithm ***
+2024-02-08 14:04:08 INFO::Method(s): SARIMA
+2024-02-08 14:04:08 INFO::Initial Split
+2024-02-08 14:04:08 INFO::Recipe Specification
+2024-02-08 14:04:08 INFO::Model Specification
+2024-02-08 14:04:08 INFO::Workflow Specification
+2024-02-08 14:04:08 INFO::Fitting
+2024-02-08 14:04:10 INFO::Calibration
+2024-02-08 14:04:10 INFO::Residuals
+2024-02-08 14:04:10 INFO::Accuracy Evaluation
+2024-02-08 14:04:11 INFO::Test Forecasting
+2024-02-08 14:04:11 INFO::Refitting
+2024-02-08 14:04:12 INFO::Out-of-Sample Forecasting
+2024-02-08 14:04:23 INFO::Back-transforming residuals results..
+2024-02-08 14:04:23 INFO::Back transforming data...
+2024-02-08 14:04:23 INFO::Normalization
+2024-02-08 14:04:23 INFO::Log
+2024-02-08 14:04:23 INFO::Back-transforming forecast test results..
+2024-02-08 14:04:23 INFO::Back transforming data...
+2024-02-08 14:04:23 INFO::Normalization
+2024-02-08 14:04:23 INFO::Log
+2024-02-08 14:04:23 INFO::Back-transforming forecast oos results..
+2024-02-08 14:04:23 INFO::Back transforming data...
+2024-02-08 14:04:23 INFO::Normalization
+2024-02-08 14:04:23 INFO::Log
+2024-02-08 14:04:23 INFO::Back-transforming forecast accuracy results..
+2024-02-08 14:04:23 INFO::Back transforming accuracy table...
+2024-02-08 14:04:23 INFO::Back transforming data...
+2024-02-08 14:04:23 INFO::Normalization
+2024-02-08 14:04:23 INFO::Log
+2024-02-08 14:04:23 INFO::Back transforming data...
+2024-02-08 14:04:23 INFO::Normalization
+2024-02-08 14:04:23 INFO::Log
+2024-02-08 14:05:01 INFO::*** Generating Forecasts ***
+2024-02-08 14:05:01 INFO::Method(s): ETS, SARIMA
+2024-02-08 14:05:01 INFO::Initial Split
+2024-02-08 14:05:01 INFO::Future Frame
+2024-02-08 14:05:01 INFO::Modeltime Table
+2024-02-08 14:05:01 INFO::*** Fitting Algorithm ***
+2024-02-08 14:05:01 INFO::Method(s): ETS
+2024-02-08 14:05:01 INFO::Initial Split
+2024-02-08 14:05:01 INFO::Recipe Specification
+2024-02-08 14:05:01 INFO::Model Specification
+2024-02-08 14:05:01 INFO::Workflow Specification
+2024-02-08 14:05:01 INFO::Fitting
+2024-02-08 14:05:01 INFO::*** Fitting Algorithm ***
+2024-02-08 14:05:01 INFO::Method(s): SARIMA
+2024-02-08 14:05:01 INFO::Initial Split
+2024-02-08 14:05:01 INFO::Recipe Specification
+2024-02-08 14:05:01 INFO::Model Specification
+2024-02-08 14:05:01 INFO::Workflow Specification
+2024-02-08 14:05:01 INFO::Fitting
+2024-02-08 14:05:02 INFO::Ensembling
+2024-02-08 14:05:03 INFO::Calibration
+2024-02-08 14:05:03 INFO::Residuals
+2024-02-08 14:05:03 INFO::Accuracy Evaluation
+2024-02-08 14:05:04 INFO::Test Forecasting
+2024-02-08 14:05:04 INFO::Refitting
+2024-02-08 14:05:07 INFO::Out-of-Sample Forecasting
+2024-02-08 14:05:18 INFO::Back-transforming residuals results..
+2024-02-08 14:05:18 INFO::Back transforming data...
+2024-02-08 14:05:18 INFO::Normalization
+2024-02-08 14:05:18 INFO::Log
+2024-02-08 14:05:19 INFO::Back-transforming forecast test results..
+2024-02-08 14:05:19 INFO::Back transforming data...
+2024-02-08 14:05:19 INFO::Normalization
+2024-02-08 14:05:19 INFO::Log
+2024-02-08 14:05:19 INFO::Back-transforming forecast oos results..
+2024-02-08 14:05:19 INFO::Back transforming data...
+2024-02-08 14:05:19 INFO::Normalization
+2024-02-08 14:05:19 INFO::Log
+2024-02-08 14:05:19 INFO::Back-transforming forecast accuracy results..
+2024-02-08 14:05:19 INFO::Back transforming accuracy table...
+2024-02-08 14:05:19 INFO::Back transforming data...
+2024-02-08 14:05:19 INFO::Normalization
+2024-02-08 14:05:19 INFO::Log
+2024-02-08 14:05:19 INFO::Back transforming data...
+2024-02-08 14:05:19 INFO::Normalization
+2024-02-08 14:05:19 INFO::Log
+2024-02-08 14:05:19 INFO::Back transforming data...
+2024-02-08 14:05:19 INFO::Normalization
+2024-02-08 14:05:19 INFO::Log
+2024-02-08 14:05:19 INFO::Back transforming data...
+2024-02-08 14:05:19 INFO::Normalization
+2024-02-08 14:05:19 INFO::Log
+2024-02-08 14:05:20 INFO::Back transforming accuracy table...
+2024-02-08 14:05:20 INFO::Back transforming data...
+2024-02-08 14:05:20 INFO::Normalization
+2024-02-08 14:05:20 INFO::Log
+2024-02-08 14:05:20 INFO::Back transforming data...
+2024-02-08 14:05:20 INFO::Normalization
+2024-02-08 14:05:20 INFO::Log
+2024-02-08 14:05:20 INFO::Back transforming data...
+2024-02-08 14:05:20 INFO::Normalization
+2024-02-08 14:05:20 INFO::Log
+2024-02-08 14:05:25 INFO::*** Generating Forecasts ***
+2024-02-08 14:05:25 INFO::Method(s): ETS, SARIMA
+2024-02-08 14:05:25 INFO::Initial Split
+2024-02-08 14:05:25 INFO::Future Frame
+2024-02-08 14:05:25 INFO::Modeltime Table
+2024-02-08 14:05:25 INFO::*** Fitting Algorithm ***
+2024-02-08 14:05:25 INFO::Method(s): ETS
+2024-02-08 14:05:25 INFO::Initial Split
+2024-02-08 14:05:25 INFO::Recipe Specification
+2024-02-08 14:05:25 INFO::Model Specification
+2024-02-08 14:05:25 INFO::Workflow Specification
+2024-02-08 14:05:25 INFO::Fitting
+2024-02-08 14:05:25 INFO::*** Fitting Algorithm ***
+2024-02-08 14:05:25 INFO::Method(s): SARIMA
+2024-02-08 14:05:25 INFO::Initial Split
+2024-02-08 14:05:26 INFO::Recipe Specification
+2024-02-08 14:05:26 INFO::Model Specification
+2024-02-08 14:05:26 INFO::Workflow Specification
+2024-02-08 14:05:26 INFO::Fitting
+2024-02-08 14:05:27 INFO::Stacking
+2024-02-08 14:05:48 INFO::Calibration
+2024-02-08 14:05:48 INFO::Residuals
+2024-02-08 14:05:48 INFO::Accuracy Evaluation
+2024-02-08 14:05:49 INFO::Test Forecasting
+2024-02-08 14:05:49 INFO::Refitting
+2024-02-08 14:06:13 INFO::Out-of-Sample Forecasting
+2024-02-08 14:06:20 INFO::Back-transforming residuals results..
+2024-02-08 14:06:20 INFO::Back transforming data...
+2024-02-08 14:06:20 INFO::Normalization
+2024-02-08 14:06:20 INFO::Log
+2024-02-08 14:06:20 INFO::Back-transforming forecast test results..
+2024-02-08 14:06:20 INFO::Back transforming data...
+2024-02-08 14:06:20 INFO::Normalization
+2024-02-08 14:06:20 INFO::Log
+2024-02-08 14:06:20 INFO::Back-transforming forecast oos results..
+2024-02-08 14:06:20 INFO::Back transforming data...
+2024-02-08 14:06:20 INFO::Normalization
+2024-02-08 14:06:20 INFO::Log
+2024-02-08 14:06:20 INFO::Back-transforming forecast accuracy results..
+2024-02-08 14:06:20 INFO::Back transforming accuracy table...
+2024-02-08 14:06:20 INFO::Back transforming data...
+2024-02-08 14:06:20 INFO::Normalization
+2024-02-08 14:06:20 INFO::Log
+2024-02-08 14:06:20 INFO::Back transforming data...
+2024-02-08 14:06:20 INFO::Normalization
+2024-02-08 14:06:20 INFO::Log
+2024-02-08 14:06:20 INFO::Back transforming data...
+2024-02-08 14:06:20 INFO::Normalization
+2024-02-08 14:06:20 INFO::Log
+2024-02-08 14:06:20 INFO::Back transforming data...
+2024-02-08 14:06:20 INFO::Normalization
+2024-02-08 14:06:20 INFO::Log
+2024-02-08 14:06:21 INFO::Back transforming accuracy table...
+2024-02-08 14:06:21 INFO::Back transforming data...
+2024-02-08 14:06:21 INFO::Normalization
+2024-02-08 14:06:21 INFO::Log
+2024-02-08 14:06:21 INFO::Back transforming data...
+2024-02-08 14:06:21 INFO::Normalization
+2024-02-08 14:06:21 INFO::Log
+2024-02-08 14:06:21 INFO::Back transforming data...
+2024-02-08 14:06:21 INFO::Normalization
+2024-02-08 14:06:21 INFO::Log
+2024-02-08 14:08:26 INFO::Getting Air Passengers data...
+2024-02-08 14:08:31 INFO::Transforming data...
+2024-02-08 14:08:31 INFO::Log
+2024-02-08 14:08:31 INFO::Transforming data...
+2024-02-08 14:08:31 INFO::Log
+2024-02-08 14:08:31 INFO::Normalization
+2024-02-08 14:08:39 INFO::*** Generating Forecasts ***
+2024-02-08 14:08:39 INFO::Method(s): ETS, SARIMA
+2024-02-08 14:08:39 INFO::Initial Split
+2024-02-08 14:08:39 INFO::Future Frame
+2024-02-08 14:08:39 INFO::Modeltime Table
+2024-02-08 14:08:39 INFO::*** Fitting Algorithm ***
+2024-02-08 14:08:39 INFO::Method(s): ETS
+2024-02-08 14:08:39 INFO::Initial Split
+2024-02-08 14:08:40 INFO::Recipe Specification
+2024-02-08 14:08:40 INFO::Model Specification
+2024-02-08 14:08:40 INFO::Workflow Specification
+2024-02-08 14:08:40 INFO::Fitting
+2024-02-08 14:08:40 INFO::*** Fitting Algorithm ***
+2024-02-08 14:08:40 INFO::Method(s): SARIMA
+2024-02-08 14:08:40 INFO::Initial Split
+2024-02-08 14:08:40 INFO::Recipe Specification
+2024-02-08 14:08:40 INFO::Model Specification
+2024-02-08 14:08:40 INFO::Workflow Specification
+2024-02-08 14:08:40 INFO::Fitting
+2024-02-08 14:08:41 INFO::Ensembling
+2024-02-08 14:08:42 INFO::Calibration
+2024-02-08 14:08:42 INFO::Residuals
+2024-02-08 14:08:42 INFO::Accuracy Evaluation
+2024-02-08 14:08:43 INFO::Test Forecasting
+2024-02-08 14:08:43 INFO::Refitting
+2024-02-08 14:08:46 INFO::Out-of-Sample Forecasting
+2024-02-08 14:08:49 INFO::Back-transforming residuals results..
+2024-02-08 14:08:49 INFO::Back transforming data...
+2024-02-08 14:08:49 INFO::Normalization
+2024-02-08 14:08:49 INFO::Transforming data...
+2024-02-08 14:08:49 INFO::Log
+2024-02-08 14:08:49 INFO::Normalization
+2024-02-08 14:08:49 INFO::Log
+2024-02-08 14:08:49 INFO::Back-transforming forecast test results..
+2024-02-08 14:08:49 INFO::Back transforming data...
+2024-02-08 14:08:49 INFO::Normalization
+2024-02-08 14:08:49 INFO::Log
+2024-02-08 14:08:49 INFO::Back-transforming forecast oos results..
+2024-02-08 14:08:49 INFO::Back transforming data...
+2024-02-08 14:08:49 INFO::Normalization
+2024-02-08 14:08:49 INFO::Log
+2024-02-08 14:08:49 INFO::Back-transforming forecast accuracy results..
+2024-02-08 14:08:49 INFO::Back transforming accuracy table...
+2024-02-08 14:08:49 INFO::Back transforming data...
+2024-02-08 14:08:49 INFO::Normalization
+2024-02-08 14:08:49 INFO::Log
+2024-02-08 14:08:49 INFO::Back transforming data...
+2024-02-08 14:08:49 INFO::Normalization
+2024-02-08 14:08:49 INFO::Log
+2024-02-08 14:08:49 INFO::Back transforming data...
+2024-02-08 14:08:49 INFO::Normalization
+2024-02-08 14:08:49 INFO::Log
+2024-02-08 14:08:59 INFO::*** Generating Forecasts ***
+2024-02-08 14:08:59 INFO::Method(s): ETS
+2024-02-08 14:08:59 INFO::Setup Multiple Prediction Intervals
+2024-02-08 14:08:59 INFO::Initial Split
+2024-02-08 14:08:59 INFO::Future Frame
+2024-02-08 14:08:59 INFO::Modeltime Table
+2024-02-08 14:08:59 INFO::*** Fitting Algorithm ***
+2024-02-08 14:08:59 INFO::Method(s): ETS
+2024-02-08 14:08:59 INFO::Initial Split
+2024-02-08 14:08:59 INFO::Recipe Specification
+2024-02-08 14:08:59 INFO::Model Specification
+2024-02-08 14:08:59 INFO::Workflow Specification
+2024-02-08 14:08:59 INFO::Fitting
+2024-02-08 14:08:59 INFO::Calibration
+2024-02-08 14:08:59 INFO::Residuals
+2024-02-08 14:08:59 INFO::Accuracy Evaluation
+2024-02-08 14:08:59 INFO::Test Forecasting
+2024-02-08 14:09:02 INFO::Refitting
+2024-02-08 14:09:02 INFO::Out-of-Sample Forecasting
+2024-02-08 14:09:10 INFO::Back transforming data...
+2024-02-08 14:09:10 INFO::Normalization
+2024-02-08 14:09:10 INFO::Log
+2024-02-08 14:09:10 INFO::Back transforming data...
+2024-02-08 14:09:10 INFO::Normalization
+2024-02-08 14:09:10 INFO::Log
+2024-02-08 14:09:10 INFO::Back transforming accuracy table...
+2024-02-08 14:09:10 INFO::Back transforming data...
+2024-02-08 14:09:10 INFO::Normalization
+2024-02-08 14:09:10 INFO::Log
+2024-02-08 14:09:10 INFO::Back transforming data...
+2024-02-08 14:09:10 INFO::Normalization
+2024-02-08 14:09:10 INFO::Log
+2024-02-08 14:09:10 INFO::Back transforming data...
+2024-02-08 14:09:10 INFO::Normalization
+2024-02-08 14:09:10 INFO::Log
+2024-02-08 14:09:16 INFO::Back transforming data...
+2024-02-08 14:09:16 INFO::Normalization
+2024-02-08 14:09:16 INFO::Log
+2024-02-08 14:09:16 INFO::Back transforming data...
+2024-02-08 14:09:16 INFO::Normalization
+2024-02-08 14:09:16 INFO::Log
+2024-02-08 14:09:16 INFO::Back transforming accuracy table...
+2024-02-08 14:09:16 INFO::Back transforming data...
+2024-02-08 14:09:16 INFO::Normalization
+2024-02-08 14:09:16 INFO::Log
+2024-02-08 14:09:16 INFO::Back transforming data...
+2024-02-08 14:09:16 INFO::Normalization
+2024-02-08 14:09:16 INFO::Log
+2024-02-08 14:09:16 INFO::Back transforming data...
+2024-02-08 14:09:16 INFO::Normalization
+2024-02-08 14:09:16 INFO::Log
+2024-02-08 14:10:44 INFO::Getting Air Passengers data...
+2024-02-08 14:10:48 INFO::Transforming data...
+2024-02-08 14:10:48 INFO::Log
+2024-02-08 14:10:49 INFO::Transforming data...
+2024-02-08 14:10:49 INFO::Log
+2024-02-08 14:10:49 INFO::Normalization
+2024-02-08 14:11:49 INFO::*** Generating Forecasts ***
+2024-02-08 14:11:49 INFO::Method(s): Naive
+2024-02-08 14:11:49 INFO::Initial Split
+2024-02-08 14:11:49 INFO::Future Frame
+2024-02-08 14:11:49 INFO::Modeltime Table
+2024-02-08 14:11:49 INFO::*** Fitting Algorithm ***
+2024-02-08 14:11:49 INFO::Method(s): Naive
+2024-02-08 14:11:49 INFO::Initial Split
+2024-02-08 14:11:49 INFO::Recipe Specification
+2024-02-08 14:11:49 INFO::Model Specification
+2024-02-08 14:11:49 INFO::Workflow Specification
+2024-02-08 14:11:49 INFO::Fitting
+2024-02-08 14:11:49 INFO::Calibration
+2024-02-08 14:11:49 INFO::Residuals
+2024-02-08 14:11:49 INFO::Accuracy Evaluation
+2024-02-08 14:11:49 INFO::Test Forecasting
+2024-02-08 14:11:49 INFO::Refitting
+2024-02-08 14:11:49 INFO::Out-of-Sample Forecasting
+2024-02-08 14:11:52 INFO::Back-transforming residuals results..
+2024-02-08 14:11:52 INFO::Back transforming data...
+2024-02-08 14:11:52 INFO::Normalization
+2024-02-08 14:11:52 INFO::Transforming data...
+2024-02-08 14:11:52 INFO::Log
+2024-02-08 14:11:52 INFO::Normalization
+2024-02-08 14:12:07 INFO::*** Generating Forecasts ***
+2024-02-08 14:12:07 INFO::Method(s): Seasonal Naive
+2024-02-08 14:12:07 INFO::Initial Split
+2024-02-08 14:12:08 INFO::Future Frame
+2024-02-08 14:12:08 INFO::Modeltime Table
+2024-02-08 14:12:08 INFO::*** Fitting Algorithm ***
+2024-02-08 14:12:08 INFO::Method(s): Seasonal Naive
+2024-02-08 14:12:08 INFO::Initial Split
+2024-02-08 14:12:08 INFO::Recipe Specification
+2024-02-08 14:12:08 INFO::Model Specification
+2024-02-08 14:12:08 INFO::Workflow Specification
+2024-02-08 14:12:08 INFO::Fitting
+2024-02-08 14:12:08 INFO::Calibration
+2024-02-08 14:12:08 INFO::Residuals
+2024-02-08 14:12:08 INFO::Accuracy Evaluation
+2024-02-08 14:12:08 INFO::Test Forecasting
+2024-02-08 14:12:08 INFO::Refitting
+2024-02-08 14:12:08 INFO::Out-of-Sample Forecasting
+2024-02-08 14:12:11 INFO::Back-transforming residuals results..
+2024-02-08 14:12:11 INFO::Back transforming data...
+2024-02-08 14:12:11 INFO::Normalization
+2024-02-08 14:12:17 INFO::*** Generating Forecasts ***
+2024-02-08 14:12:17 INFO::Method(s): Rolling Average
+2024-02-08 14:12:17 INFO::Initial Split
+2024-02-08 14:12:17 INFO::Future Frame
+2024-02-08 14:12:17 INFO::Modeltime Table
+2024-02-08 14:12:17 INFO::*** Fitting Algorithm ***
+2024-02-08 14:12:17 INFO::Method(s): Rolling Average
+2024-02-08 14:12:17 INFO::Initial Split
+2024-02-08 14:12:17 INFO::Recipe Specification
+2024-02-08 14:12:17 INFO::Model Specification
+2024-02-08 14:12:17 INFO::Workflow Specification
+2024-02-08 14:12:17 INFO::Fitting
+2024-02-08 14:12:17 INFO::Calibration
+2024-02-08 14:12:17 INFO::Residuals
+2024-02-08 14:12:17 INFO::Accuracy Evaluation
+2024-02-08 14:12:17 INFO::Test Forecasting
+2024-02-08 14:12:17 INFO::Refitting
+2024-02-08 14:12:18 INFO::Out-of-Sample Forecasting
+2024-02-08 14:12:21 INFO::Back-transforming residuals results..
+2024-02-08 14:12:21 INFO::Back transforming data...
+2024-02-08 14:12:21 INFO::Normalization
+2024-02-08 14:12:29 INFO::*** Generating Forecasts ***
+2024-02-08 14:12:29 INFO::Method(s): Theta
+2024-02-08 14:12:29 INFO::Initial Split
+2024-02-08 14:12:29 INFO::Future Frame
+2024-02-08 14:12:29 INFO::Modeltime Table
+2024-02-08 14:12:29 INFO::*** Fitting Algorithm ***
+2024-02-08 14:12:29 INFO::Method(s): Theta
+2024-02-08 14:12:29 INFO::Initial Split
+2024-02-08 14:12:29 INFO::Recipe Specification
+2024-02-08 14:12:29 INFO::Model Specification
+2024-02-08 14:12:29 INFO::Workflow Specification
+2024-02-08 14:12:29 INFO::Fitting
+2024-02-08 14:12:29 INFO::Calibration
+2024-02-08 14:12:29 INFO::Residuals
+2024-02-08 14:12:29 INFO::Accuracy Evaluation
+2024-02-08 14:12:30 INFO::Test Forecasting
+2024-02-08 14:12:30 INFO::Refitting
+2024-02-08 14:12:30 INFO::Out-of-Sample Forecasting
+2024-02-08 14:12:32 INFO::Back-transforming residuals results..
+2024-02-08 14:12:32 INFO::Back transforming data...
+2024-02-08 14:12:32 INFO::Normalization
+2024-02-08 14:12:32 INFO::Log
+2024-02-08 14:12:32 INFO::Back-transforming forecast test results..
+2024-02-08 14:12:32 INFO::Back transforming data...
+2024-02-08 14:12:32 INFO::Normalization
+2024-02-08 14:12:32 INFO::Log
+2024-02-08 14:12:32 INFO::Back-transforming forecast oos results..
+2024-02-08 14:12:32 INFO::Back transforming data...
+2024-02-08 14:12:32 INFO::Normalization
+2024-02-08 14:12:32 INFO::Log
+2024-02-08 14:12:32 INFO::Back-transforming forecast accuracy results..
+2024-02-08 14:12:32 INFO::Back transforming accuracy table...
+2024-02-08 14:12:32 INFO::Back transforming data...
+2024-02-08 14:12:32 INFO::Normalization
+2024-02-08 14:12:32 INFO::Log
+2024-02-08 14:12:41 INFO::*** Generating Forecasts ***
+2024-02-08 14:12:41 INFO::Method(s): SARIMA
+2024-02-08 14:12:41 INFO::Initial Split
+2024-02-08 14:12:41 INFO::Future Frame
+2024-02-08 14:12:41 INFO::Modeltime Table
+2024-02-08 14:12:41 INFO::*** Fitting Algorithm ***
+2024-02-08 14:12:41 INFO::Method(s): SARIMA
+2024-02-08 14:12:41 INFO::Initial Split
+2024-02-08 14:12:42 INFO::Recipe Specification
+2024-02-08 14:12:42 INFO::Model Specification
+2024-02-08 14:12:42 INFO::Workflow Specification
+2024-02-08 14:12:42 INFO::Fitting
+2024-02-08 14:12:43 INFO::Calibration
+2024-02-08 14:12:43 INFO::Residuals
+2024-02-08 14:12:43 INFO::Accuracy Evaluation
+2024-02-08 14:12:43 INFO::Test Forecasting
+2024-02-08 14:12:43 INFO::Refitting
+2024-02-08 14:12:44 INFO::Out-of-Sample Forecasting
+2024-02-08 14:12:48 INFO::Back-transforming residuals results..
+2024-02-08 14:12:48 INFO::Back transforming data...
+2024-02-08 14:12:48 INFO::Normalization
+2024-02-08 14:12:48 INFO::Log
+2024-02-08 14:12:48 INFO::Back-transforming forecast test results..
+2024-02-08 14:12:48 INFO::Back transforming data...
+2024-02-08 14:12:48 INFO::Normalization
+2024-02-08 14:12:48 INFO::Log
+2024-02-08 14:12:48 INFO::Back-transforming forecast oos results..
+2024-02-08 14:12:48 INFO::Back transforming data...
+2024-02-08 14:12:48 INFO::Normalization
+2024-02-08 14:12:48 INFO::Log
+2024-02-08 14:12:48 INFO::Back-transforming forecast accuracy results..
+2024-02-08 14:12:49 INFO::Back transforming accuracy table...
+2024-02-08 14:12:49 INFO::Back transforming data...
+2024-02-08 14:12:49 INFO::Normalization
+2024-02-08 14:12:49 INFO::Log
+2024-02-08 14:12:57 INFO::*** Generating Forecasts ***
+2024-02-08 14:12:57 INFO::Method(s): Cubist
+2024-02-08 14:12:57 INFO::Initial Split
+2024-02-08 14:12:57 INFO::Future Frame
+2024-02-08 14:12:57 INFO::Modeltime Table
+2024-02-08 14:12:57 INFO::*** Fitting Algorithm ***
+2024-02-08 14:12:57 INFO::Method(s): Cubist
+2024-02-08 14:12:57 INFO::Initial Split
+2024-02-08 14:12:57 INFO::Recipe Specification
+2024-02-08 14:12:57 INFO::Model Specification
+2024-02-08 14:12:57 INFO::Workflow Specification
+2024-02-08 14:12:57 INFO::Fitting
+2024-02-08 14:12:58 INFO::Calibration
+2024-02-08 14:12:58 INFO::Residuals
+2024-02-08 14:12:58 INFO::Accuracy Evaluation
+2024-02-08 14:12:59 INFO::Test Forecasting
+2024-02-08 14:12:59 INFO::Refitting
+2024-02-08 14:12:59 INFO::Out-of-Sample Forecasting
+2024-02-08 14:13:01 INFO::Back-transforming residuals results..
+2024-02-08 14:13:01 INFO::Back transforming data...
+2024-02-08 14:13:01 INFO::Normalization
+2024-02-08 14:13:01 INFO::Log
+2024-02-08 14:13:01 INFO::Back-transforming forecast test results..
+2024-02-08 14:13:01 INFO::Back transforming data...
+2024-02-08 14:13:01 INFO::Normalization
+2024-02-08 14:13:01 INFO::Log
+2024-02-08 14:13:01 INFO::Back-transforming forecast oos results..
+2024-02-08 14:13:01 INFO::Back transforming data...
+2024-02-08 14:13:01 INFO::Normalization
+2024-02-08 14:13:01 INFO::Log
+2024-02-08 14:13:01 INFO::Back-transforming forecast accuracy results..
+2024-02-08 14:13:01 INFO::Back transforming accuracy table...
+2024-02-08 14:13:01 INFO::Back transforming data...
+2024-02-08 14:13:01 INFO::Normalization
+2024-02-08 14:13:01 INFO::Log
+2024-02-08 14:13:11 INFO::*** Generating Forecasts ***
+2024-02-08 14:13:11 INFO::Method(s): SVM
+2024-02-08 14:13:11 INFO::Initial Split
+2024-02-08 14:13:11 INFO::Future Frame
+2024-02-08 14:13:11 INFO::Modeltime Table
+2024-02-08 14:13:11 INFO::*** Fitting Algorithm ***
+2024-02-08 14:13:11 INFO::Method(s): SVM
+2024-02-08 14:13:11 INFO::Initial Split
+2024-02-08 14:13:11 INFO::Recipe Specification
+2024-02-08 14:13:11 INFO::Model Specification
+2024-02-08 14:13:11 INFO::Workflow Specification
+2024-02-08 14:13:11 INFO::Fitting
+2024-02-08 14:13:11 INFO::Calibration
+2024-02-08 14:13:12 INFO::Residuals
+2024-02-08 14:13:12 INFO::Accuracy Evaluation
+2024-02-08 14:13:12 INFO::Test Forecasting
+2024-02-08 14:13:13 INFO::Refitting
+2024-02-08 14:13:13 INFO::Out-of-Sample Forecasting
+2024-02-08 14:13:15 INFO::Back-transforming residuals results..
+2024-02-08 14:13:15 INFO::Back transforming data...
+2024-02-08 14:13:15 INFO::Normalization
+2024-02-08 14:13:15 INFO::Log
+2024-02-08 14:13:15 INFO::Back-transforming forecast test results..
+2024-02-08 14:13:15 INFO::Back transforming data...
+2024-02-08 14:13:15 INFO::Normalization
+2024-02-08 14:13:16 INFO::Log
+2024-02-08 14:13:16 INFO::Back-transforming forecast oos results..
+2024-02-08 14:13:16 INFO::Back transforming data...
+2024-02-08 14:13:16 INFO::Normalization
+2024-02-08 14:13:16 INFO::Log
+2024-02-08 14:13:16 INFO::Back-transforming forecast accuracy results..
+2024-02-08 14:13:16 INFO::Back transforming accuracy table...
+2024-02-08 14:13:16 INFO::Back transforming data...
+2024-02-08 14:13:16 INFO::Normalization
+2024-02-08 14:13:16 INFO::Log
+2024-02-08 14:13:25 INFO::*** Generating Forecasts ***
+2024-02-08 14:13:25 INFO::Method(s): Prophet-Boost
+2024-02-08 14:13:25 INFO::Initial Split
+2024-02-08 14:13:25 INFO::Future Frame
+2024-02-08 14:13:25 INFO::Modeltime Table
+2024-02-08 14:13:25 INFO::*** Fitting Algorithm ***
+2024-02-08 14:13:25 INFO::Method(s): Prophet-Boost
+2024-02-08 14:13:25 INFO::Initial Split
+2024-02-08 14:13:25 INFO::Recipe Specification
+2024-02-08 14:13:25 INFO::Model Specification
+2024-02-08 14:13:25 INFO::Workflow Specification
+2024-02-08 14:13:25 INFO::Fitting
+2024-02-08 14:13:26 INFO::Calibration
+2024-02-08 14:13:27 INFO::Residuals
+2024-02-08 14:13:27 INFO::Accuracy Evaluation
+2024-02-08 14:13:27 INFO::Test Forecasting
+2024-02-08 14:13:27 INFO::Refitting
+2024-02-08 14:13:28 INFO::Out-of-Sample Forecasting
+2024-02-08 14:13:30 INFO::Back-transforming residuals results..
+2024-02-08 14:13:30 INFO::Back transforming data...
+2024-02-08 14:13:30 INFO::Normalization
+2024-02-08 14:13:30 INFO::Log
+2024-02-08 14:13:30 INFO::Back-transforming forecast test results..
+2024-02-08 14:13:30 INFO::Back transforming data...
+2024-02-08 14:13:30 INFO::Normalization
+2024-02-08 14:13:30 INFO::Log
+2024-02-08 14:13:30 INFO::Back-transforming forecast oos results..
+2024-02-08 14:13:30 INFO::Back transforming data...
+2024-02-08 14:13:30 INFO::Normalization
+2024-02-08 14:13:30 INFO::Log
+2024-02-08 14:13:30 INFO::Back-transforming forecast accuracy results..
+2024-02-08 14:13:30 INFO::Back transforming accuracy table...
+2024-02-08 14:13:30 INFO::Back transforming data...
+2024-02-08 14:13:30 INFO::Normalization
+2024-02-08 14:13:30 INFO::Log
+2024-02-08 14:14:56 INFO::Getting Air Passengers data...
+2024-02-08 14:15:22 INFO::Getting Air Passengers data...
+2024-02-08 14:15:58 INFO::Getting Air Passengers data...
+2024-02-08 14:16:24 INFO::Getting Air Passengers data...
+2024-02-08 14:23:03 INFO::Getting Air Passengers data...
+2024-02-08 14:23:12 INFO::Transforming data...
+2024-02-08 14:23:12 INFO::Log
+2024-02-08 14:23:12 INFO::Transforming data...
+2024-02-08 14:23:12 INFO::Log
+2024-02-08 14:23:12 INFO::Normalization
+2024-02-08 14:23:17 INFO::*** Generating Forecasts ***
+2024-02-08 14:23:17 INFO::Method(s): Naive
+2024-02-08 14:23:17 INFO::Initial Split
+2024-02-08 14:23:17 INFO::Future Frame
+2024-02-08 14:23:17 INFO::Modeltime Table
+2024-02-08 14:23:17 INFO::*** Fitting Algorithm ***
+2024-02-08 14:23:17 INFO::Method(s): Naive
+2024-02-08 14:23:17 INFO::Initial Split
+2024-02-08 14:23:17 INFO::Recipe Specification
+2024-02-08 14:23:17 INFO::Model Specification
+2024-02-08 14:23:17 INFO::Workflow Specification
+2024-02-08 14:23:17 INFO::Fitting
+2024-02-08 14:23:17 INFO::Calibration
+2024-02-08 14:23:17 INFO::Residuals
+2024-02-08 14:23:17 INFO::Accuracy Evaluation
+2024-02-08 14:23:17 INFO::Test Forecasting
+2024-02-08 14:23:17 INFO::Refitting
+2024-02-08 14:23:17 INFO::Out-of-Sample Forecasting
+2024-02-08 14:23:19 INFO::Back-transforming residuals results..
+2024-02-08 14:23:19 INFO::Back transforming data...
+2024-02-08 14:23:19 INFO::Normalization
+2024-02-08 14:23:19 INFO::Transforming data...
+2024-02-08 14:23:19 INFO::Log
+2024-02-08 14:23:19 INFO::Normalization
+2024-02-08 14:23:19 INFO::Log
+2024-02-08 14:23:19 INFO::Back-transforming forecast test results..
+2024-02-08 14:23:20 INFO::Back transforming data...
+2024-02-08 14:23:20 INFO::Normalization
+2024-02-08 14:23:20 INFO::Log
+2024-02-08 14:23:20 INFO::Back-transforming forecast oos results..
+2024-02-08 14:23:20 INFO::Back transforming data...
+2024-02-08 14:23:20 INFO::Normalization
+2024-02-08 14:23:20 INFO::Log
+2024-02-08 14:23:20 INFO::Back-transforming forecast accuracy results..
+2024-02-08 14:23:20 INFO::Back transforming accuracy table...
+2024-02-08 14:23:20 INFO::Back transforming data...
+2024-02-08 14:23:20 INFO::Normalization
+2024-02-08 14:23:20 INFO::Log
+2024-02-08 14:23:28 INFO::*** Generating Forecasts ***
+2024-02-08 14:23:28 INFO::Method(s): Seasonal Naive
+2024-02-08 14:23:28 INFO::Initial Split
+2024-02-08 14:23:28 INFO::Future Frame
+2024-02-08 14:23:28 INFO::Modeltime Table
+2024-02-08 14:23:28 INFO::*** Fitting Algorithm ***
+2024-02-08 14:23:28 INFO::Method(s): Seasonal Naive
+2024-02-08 14:23:28 INFO::Initial Split
+2024-02-08 14:23:28 INFO::Recipe Specification
+2024-02-08 14:23:28 INFO::Model Specification
+2024-02-08 14:23:28 INFO::Workflow Specification
+2024-02-08 14:23:28 INFO::Fitting
+2024-02-08 14:23:28 INFO::Calibration
+2024-02-08 14:23:28 INFO::Residuals
+2024-02-08 14:23:28 INFO::Accuracy Evaluation
+2024-02-08 14:23:29 INFO::Test Forecasting
+2024-02-08 14:23:29 INFO::Refitting
+2024-02-08 14:23:29 INFO::Out-of-Sample Forecasting
+2024-02-08 14:23:30 INFO::Back-transforming residuals results..
+2024-02-08 14:23:30 INFO::Back transforming data...
+2024-02-08 14:23:30 INFO::Normalization
+2024-02-08 14:23:30 INFO::Log
+2024-02-08 14:23:30 INFO::Back-transforming forecast test results..
+2024-02-08 14:23:30 INFO::Back transforming data...
+2024-02-08 14:23:30 INFO::Normalization
+2024-02-08 14:23:30 INFO::Log
+2024-02-08 14:23:30 INFO::Back-transforming forecast oos results..
+2024-02-08 14:23:30 INFO::Back transforming data...
+2024-02-08 14:23:30 INFO::Normalization
+2024-02-08 14:23:30 INFO::Log
+2024-02-08 14:23:30 INFO::Back-transforming forecast accuracy results..
+2024-02-08 14:23:30 INFO::Back transforming accuracy table...
+2024-02-08 14:23:30 INFO::Back transforming data...
+2024-02-08 14:23:30 INFO::Normalization
+2024-02-08 14:23:30 INFO::Log
+2024-02-08 14:23:34 INFO::*** Generating Forecasts ***
+2024-02-08 14:23:34 INFO::Method(s): Rolling Average
+2024-02-08 14:23:34 INFO::Initial Split
+2024-02-08 14:23:34 INFO::Future Frame
+2024-02-08 14:23:34 INFO::Modeltime Table
+2024-02-08 14:23:34 INFO::*** Fitting Algorithm ***
+2024-02-08 14:23:34 INFO::Method(s): Rolling Average
+2024-02-08 14:23:34 INFO::Initial Split
+2024-02-08 14:23:34 INFO::Recipe Specification
+2024-02-08 14:23:34 INFO::Model Specification
+2024-02-08 14:23:34 INFO::Workflow Specification
+2024-02-08 14:23:34 INFO::Fitting
+2024-02-08 14:23:35 INFO::Calibration
+2024-02-08 14:23:35 INFO::Residuals
+2024-02-08 14:23:35 INFO::Accuracy Evaluation
+2024-02-08 14:23:35 INFO::Test Forecasting
+2024-02-08 14:23:35 INFO::Refitting
+2024-02-08 14:23:35 INFO::Out-of-Sample Forecasting
+2024-02-08 14:23:37 INFO::Back-transforming residuals results..
+2024-02-08 14:23:37 INFO::Back transforming data...
+2024-02-08 14:23:37 INFO::Normalization
+2024-02-08 14:23:37 INFO::Log
+2024-02-08 14:23:37 INFO::Back-transforming forecast test results..
+2024-02-08 14:23:37 INFO::Back transforming data...
+2024-02-08 14:23:37 INFO::Normalization
+2024-02-08 14:23:37 INFO::Log
+2024-02-08 14:23:37 INFO::Back-transforming forecast oos results..
+2024-02-08 14:23:37 INFO::Back transforming data...
+2024-02-08 14:23:37 INFO::Normalization
+2024-02-08 14:23:37 INFO::Log
+2024-02-08 14:23:37 INFO::Back-transforming forecast accuracy results..
+2024-02-08 14:23:37 INFO::Back transforming accuracy table...
+2024-02-08 14:23:37 INFO::Back transforming data...
+2024-02-08 14:23:37 INFO::Normalization
+2024-02-08 14:23:37 INFO::Log
+2024-02-08 14:23:40 INFO::*** Generating Forecasts ***
+2024-02-08 14:23:40 INFO::Method(s): ETS
+2024-02-08 14:23:40 INFO::Initial Split
+2024-02-08 14:23:41 INFO::Future Frame
+2024-02-08 14:23:41 INFO::Modeltime Table
+2024-02-08 14:23:41 INFO::*** Fitting Algorithm ***
+2024-02-08 14:23:41 INFO::Method(s): ETS
+2024-02-08 14:23:41 INFO::Initial Split
+2024-02-08 14:23:41 INFO::Recipe Specification
+2024-02-08 14:23:41 INFO::Model Specification
+2024-02-08 14:23:41 INFO::Workflow Specification
+2024-02-08 14:23:41 INFO::Fitting
+2024-02-08 14:23:41 INFO::Calibration
+2024-02-08 14:23:41 INFO::Residuals
+2024-02-08 14:23:41 INFO::Accuracy Evaluation
+2024-02-08 14:23:41 INFO::Test Forecasting
+2024-02-08 14:23:41 INFO::Refitting
+2024-02-08 14:23:42 INFO::Out-of-Sample Forecasting
+2024-02-08 14:23:43 INFO::Back-transforming residuals results..
+2024-02-08 14:23:43 INFO::Back transforming data...
+2024-02-08 14:23:43 INFO::Normalization
+2024-02-08 14:23:43 INFO::Log
+2024-02-08 14:23:43 INFO::Back-transforming forecast test results..
+2024-02-08 14:23:43 INFO::Back transforming data...
+2024-02-08 14:23:43 INFO::Normalization
+2024-02-08 14:23:43 INFO::Log
+2024-02-08 14:23:43 INFO::Back-transforming forecast oos results..
+2024-02-08 14:23:43 INFO::Back transforming data...
+2024-02-08 14:23:43 INFO::Normalization
+2024-02-08 14:23:43 INFO::Log
+2024-02-08 14:23:43 INFO::Back-transforming forecast accuracy results..
+2024-02-08 14:23:43 INFO::Back transforming accuracy table...
+2024-02-08 14:23:43 INFO::Back transforming data...
+2024-02-08 14:23:43 INFO::Normalization
+2024-02-08 14:23:43 INFO::Log

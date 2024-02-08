@@ -14,6 +14,20 @@ impute_data <- function(data, impute = FALSE, freq) {
 
 }
 
+# function to clean data from anomalies
+clean_data <- function(data, clean = FALSE) {
+	
+	if (clean == FALSE) {
+		return(data)
+	} else {
+		logging::loginfo("Cleaning data from anomalies...")
+		data_clean <- data |> 
+			dplyr::mutate(value = timetk::ts_clean_vec(value))
+		return(data_clean)
+	}
+	
+}
+
 # function to transform data
 transform_data <- function(data, transformations, frequency) {
 
@@ -32,6 +46,7 @@ transform_data <- function(data, transformations, frequency) {
 		data_transf <- data
 		
 		# add 1 by default if any transformation is applied to avoid numerical problems
+		# funziona solo con tutto positivo !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 		data_transf <- data_transf |> dplyr::mutate(value = value + 1)
 		
 		if ("Log" %in% transformations) { # Log
@@ -94,7 +109,7 @@ transform_data <- function(data, transformations, frequency) {
 # function to transform data back
 back_transform_data <- function(
 	data, transform = FALSE, cols_to_transform, 
-	transformations, transform_params, frequency
+	transformations, transform_params#, frequency
 ) {
 	
 	trf_prm <- getOption("tsf.dashboard.transformations")
@@ -108,54 +123,49 @@ back_transform_data <- function(
 	} else {
 		
 		logging::loginfo("Back transforming data...")
-		is_frc_data <- all(
-			names(data) %in% c(
-				".model_id", ".model_desc", ".key", ".index", ".value", ".conf_lo", ".conf_hi", ".conf_lvl"
-			)
-		)
-		if (is_frc_data) {
+		if (".model_id" %in% names(data)) {
 			data_back_transf <- data |> dplyr::group_by(.model_id)
 		} else {
 			data_back_transf <- data
 		}
 		
-		if ("Seasonal Differencing" %in% transformations) { # Seasonal differencing
-			logging::loginfo("Seasonal Differencing")
-			if (is_frc_data) {
-				init_seas_val <- generate_initial_values(transform_params[["Seasonal Differencing"]])
-				init_seas_val_empty <- init_seas_val |> dplyr::mutate(.value = NA_real_)
-			} else {
-				init_seas_val <- transform_params[["Seasonal Differencing"]]
-				init_seas_val_empty <- init_seas_val |> dplyr::mutate(value = NA_real_)
-			}
-			data_back_transf <- data_back_transf |> 
-				tibble::add_row(init_seas_val_empty, .before = 1) |>
-				dplyr::mutate(
-					dplyr::across(
-						.cols = cols_to_transform, 
-						.fns = ~ timetk::diff_inv_vec(., difference = 1, lag = !!frequency, initial_values = init_seas_val$value)
-					)
-				)
-		}
-		
-		if ("Differencing" %in% transformations) { # Differencing
-			logging::loginfo("Differencing")
-			if (is_frc_data) {
-				init_val <- generate_initial_values(transform_params[["Differencing"]])
-				init_val_empty <- init_seas_val |> dplyr::mutate(.value = NA_real_)
-			} else {
-				init_val <- transform_params[["Differencing"]]
-				init_val_empty <- init_val |> dplyr::mutate(value = NA_real_)
-			}
-			data_back_transf <- data_back_transf |> 
-				tibble::add_row(init_val_empty, .before = 1) |> 
-				dplyr::mutate(
-					dplyr::across(
-						.cols = cols_to_transform, 
-						.fns = ~ timetk::diff_inv_vec(., difference = 1, initial_values = init_val$value)
-					)
-				)
-		}
+		# if ("Seasonal Differencing" %in% transformations) { # Seasonal differencing
+		# 	logging::loginfo("Seasonal Differencing")
+		# 	if (is_frc_data) {
+		# 		init_seas_val <- generate_initial_values(transform_params[["Seasonal Differencing"]])
+		# 		init_seas_val_empty <- init_seas_val |> dplyr::mutate(.value = NA_real_)
+		# 	} else {
+		# 		init_seas_val <- transform_params[["Seasonal Differencing"]]
+		# 		init_seas_val_empty <- init_seas_val |> dplyr::mutate(value = NA_real_)
+		# 	}
+		# 	data_back_transf <- data_back_transf |> 
+		# 		tibble::add_row(init_seas_val_empty, .before = 1) |>
+		# 		dplyr::mutate(
+		# 			dplyr::across(
+		# 				.cols = dplyr::all_of(cols_to_transform), 
+		# 				.fns = ~ timetk::diff_inv_vec(., difference = 1, lag = !!frequency, initial_values = init_seas_val$value)
+		# 			)
+		# 		)
+		# }
+		# 
+		# if ("Differencing" %in% transformations) { # Differencing
+		# 	logging::loginfo("Differencing")
+		# 	if (is_frc_data) {
+		# 		init_val <- generate_initial_values(transform_params[["Differencing"]])
+		# 		init_val_empty <- init_seas_val |> dplyr::mutate(.value = NA_real_)
+		# 	} else {
+		# 		init_val <- transform_params[["Differencing"]]
+		# 		init_val_empty <- init_val |> dplyr::mutate(value = NA_real_)
+		# 	}
+		# 	data_back_transf <- data_back_transf |> 
+		# 		tibble::add_row(init_val_empty, .before = 1) |> 
+		# 		dplyr::mutate(
+		# 			dplyr::across(
+		# 				.cols = dplyr::all_of(cols_to_transform), 
+		# 				.fns = ~ timetk::diff_inv_vec(., difference = 1, initial_values = init_val$value)
+		# 			)
+		# 		)
+		# }
 		
 		if ("Standardization" %in% transformations) { # Standardization
 			logging::loginfo("Standardization")
@@ -164,8 +174,8 @@ back_transform_data <- function(
 			data_back_transf <- data_back_transf |> 
 				dplyr::mutate(
 					dplyr::across(
-						.cols = cols_to_transform, 
-						.fns = ~ timetk::standardize_inv_vec(., mean = mean_val, sd = sd_val)
+						.cols = dplyr::all_of(cols_to_transform), 
+						.fns = ~ timetk::standardize_inv_vec(as.numeric(.), mean = mean_val, sd = sd_val)
 					)
 				)
 		}
@@ -177,8 +187,8 @@ back_transform_data <- function(
 			data_back_transf <- data_back_transf |> 
 				dplyr::mutate(
 					dplyr::across(
-						.cols = cols_to_transform, 
-						.fns = ~ timetk::normalize_inv_vec(., min = min_val, max = max_val)
+						.cols = dplyr::all_of(cols_to_transform), 
+						.fns = ~ timetk::normalize_inv_vec(as.numeric(.), min = min_val, max = max_val)
 					)
 				)
 		}
@@ -189,8 +199,8 @@ back_transform_data <- function(
 			data_back_transf <- data_back_transf |> 
 				dplyr::mutate(
 					dplyr::across(
-						.cols = cols_to_transform, 
-						.fns = ~ timetk::box_cox_inv_vec(., lambda = lambda_val)
+						.cols = dplyr::all_of(cols_to_transform), 
+						.fns = ~ timetk::box_cox_inv_vec(as.numeric(.), lambda = lambda_val)
 					)
 				)
 		}
@@ -200,8 +210,8 @@ back_transform_data <- function(
 			data_back_transf <- data_back_transf |> 
 				dplyr::mutate(
 					dplyr::across(
-						.cols = cols_to_transform, 
-						.fns = ~ exp(.)
+						.cols = dplyr::all_of(cols_to_transform), 
+						.fns = ~ exp(as.numeric(.))
 					)
 				)
 		}
@@ -210,8 +220,8 @@ back_transform_data <- function(
 		data_back_transf <- data_back_transf |> 
 			dplyr::mutate(
 				dplyr::across(
-					.cols = cols_to_transform, 
-					.fns = ~ (. - 1)
+					.cols = dplyr::all_of(cols_to_transform), 
+					.fns = ~ (as.numeric(.) - 1) # funziona solo con tutto positivo!!!!!!
 				)
 			)
 		
@@ -225,8 +235,9 @@ back_transform_data <- function(
 
 # function to back-transform the accuracy metrics
 back_transform_accuracy <- function(
-		data, calibration_table, n_assess, assess_type,
-		transform = FALSE, transformations, transform_params, frequency
+		# data, 
+		calibration_table, splits, # n_assess, assess_type,
+		transform = FALSE, transformations, transform_params
 ) {
 	
 	trf_prm <- getOption("tsf.dashboard.transformations")
@@ -235,7 +246,7 @@ back_transform_accuracy <- function(
 		stop(paste("Invalid transformation", invalid_trf))
 	}
 	
-	splits <- generate_initial_split(data, n_assess, assess_type)
+	# splits <- generate_initial_split(data, n_assess, assess_type)
 	train_tbl <- rsample::training(splits) |> dplyr::select(-id, -frequency)
 	test_tbl <- rsample::testing(splits) |> dplyr::select(-id, -frequency)
 	
@@ -248,10 +259,9 @@ back_transform_accuracy <- function(
 			calibration_table$.calibration_data[[i]] <-	back_transform_data(
 				data = calibration_table$.calibration_data[[i]],
 				transform = transform, 
-				cols_to_transform = c(".actual", ".prediction"), 
+				cols_to_transform = dplyr::all_of(c(".actual", ".prediction")), 
 				transformations = transformations, 
-				transform_params = transform_params, 
-				frequency = frequency
+				transform_params = transform_params
 			) |> 
 				dplyr::mutate(.residuals = .actual - .prediction)
 		}
@@ -270,18 +280,54 @@ back_transform_accuracy <- function(
 	
 }
 
-
-# function to clean data from anomalies
-clean_data <- function(data, clean = FALSE) {
-
-  if (clean == FALSE) {
-    return(data)
-  } else {
-    logging::loginfo("Cleaning data from anomalies...")
-    data_clean <- data |> 
-    	dplyr::mutate(value = timetk::ts_clean_vec(value))
-    return(data_clean)
-  }
-
+# function to back-transform the forecast results
+back_transform_forecast <- function(
+		forecast_results, transform = FALSE, transformations, transform_params
+) {
+	
+	back_frc_res <- forecast_results
+	
+	if (transform) {
+		
+		logging::loginfo("Back-transforming residuals results..")
+		back_frc_res$residuals <- back_frc_res$residuals |> 
+			back_transform_data(
+				cols_to_transform = c(".actual", ".prediction"),
+				transform = transform,
+				transformations = transformations, 
+				transform_params = transform_params
+			) |> 
+			dplyr::mutate(.residuals = .actual - .prediction)
+		
+		logging::loginfo("Back-transforming forecast test results..")
+		back_frc_res$test_forecast <- back_frc_res$test_forecast |> 
+			back_transform_data(
+				cols_to_transform = c(".value", ".conf_lo", ".conf_hi"),
+				transform = transform,
+				transformations = transformations, 
+				transform_params = transform_params
+			)
+		
+		logging::loginfo("Back-transforming forecast oos results..")
+		back_frc_res$oos_forecast <- back_frc_res$oos_forecast |> 
+			back_transform_data(
+				cols_to_transform = c(".value", ".conf_lo", ".conf_hi"),
+				transform = transform,
+				transformations = transformations, 
+				transform_params = transform_params
+			)
+		
+		logging::loginfo("Back-transforming forecast accuracy results..")
+		back_frc_res$accuracy <- back_frc_res$calibration |>
+			back_transform_accuracy(
+				splits = back_frc_res$splits,
+				transform = TRUE,
+				transformations = transformations, 
+				transform_params = transform_params
+			)
+		
+	}
+	
+	return(back_frc_res)
+	
 }
-
