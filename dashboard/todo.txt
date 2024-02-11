@@ -3,12 +3,15 @@ Next steps:
 - deployment su github actions
 
 To Do:
+- correggere UI (dimensioni + scroll)
+- use optimize in altre sezioni
+-- testare in XAI -> provare il flusso generando un explainer da modello ottimizzato
+
 - pensare e aggiungere la sezione di feature engineering (con in mente il save)
 -- section to upload and visualize external regressors
 -- section to create new features with reactive glipse  
-(calendar + lags + fourier + splines + rolling averages + interactions)
+-- calendar + lags + fourier + splines + rolling averages + interactions
 
-- pensare e aggiungere il save del modello ottimizzato + use optimize in altre sezioni
 - modificare output modello con parsing
 - aggiungere metodi di dl (NeuralProphet + NBEATS + DeepAR)
 - option tune stack? per il tuning degli stack

@@ -106,7 +106,7 @@ observeEvent(
     req(input$upload_custom)
     ext <- tools::file_ext(input$upload_custom$datapath)
     validate(need(ext == "csv", "Please upload a csv file"))
-    updateSelectInput(session = session, inputId = "dataset", selected = "") # important to activate date_range input
+    updateSelectInput(session = session, inputId = "dataset", selected = "") # to activate date_range input
     react_val$uploaded_data <- input$upload_custom
   }
 )
@@ -1351,6 +1351,8 @@ observeEvent(
   }
 )
 
+react_val <- reactiveValues(tune_fit = purrr::set_names(vector("list", length(tune_methods)), tune_methods))
+
 tune_results <- eventReactive(
   eventExpr = input$tune_apply_forecast,
   valueExpr = {
@@ -1370,6 +1372,14 @@ tune_results <- eventReactive(
         n_assess = input$tune_n_assess, assess_type = input$tune_assess_type
       )
   }
+)
+
+observeEvent(
+	eventExpr = input$tune_apply_forecast, 
+	handlerExpr = {
+		req(tune_results())
+		react_val$tune_fit[[input$tune_method]] <- tune_results()$fit[[1]]
+	}
 )
 
 back_tune_results <- reactive({
@@ -1713,13 +1723,30 @@ observeEvent(
 explainer_results <- eventReactive(
   eventExpr = input$exp_apply_forecast,
   valueExpr = {
-   	data_transformed() |>
-		generate_model_explainer(
-			method = input$exp_method, params = input,
-			n_assess = input$exp_n_assess, assess_type = input$exp_assess_type
-		)
+  	if (input$exp_tune) {
+  		generate_model_explainer(
+  			fitted_model = react_val$tune_fit[[input$exp_method]],
+  			data = data_transformed(), method = input$exp_method,	params = input,
+  			n_assess = input$exp_n_assess, assess_type = input$exp_assess_type
+  		)
+  	} else {
+  		generate_model_explainer(
+  			data = data_transformed(), method = input$exp_method,	params = input,
+  			n_assess = input$exp_n_assess, assess_type = input$exp_assess_type
+  		)
+  	}
   }
 )
+
+# explainer_results <- eventReactive(
+#   eventExpr = input$exp_apply_forecast,
+#   valueExpr = {
+# 		generate_model_explainer(
+# 			data = data_transformed(), method = input$exp_method, params = input,
+# 			n_assess = input$exp_n_assess, assess_type = input$exp_assess_type
+# 		)
+#   }
+# )
 
 observeEvent(
   eventExpr = input$exp_apply_forecast,
@@ -2152,18 +2179,37 @@ observeEvent(
 scenario_results <- eventReactive(
   eventExpr = input$scn_apply_forecast,
   valueExpr = {
-    map(
-      input$scn_method, 
-      ~ fit_model(
-        data = data_transformed(), method = ., params = input, 
-        n_assess = input$scn_n_assess, assess_type = input$scn_assess_type, seed = 1992
-      )
-    ) |> 
-      generate_forecast(
-        data = data_transformed(), method = input$scn_method, n_future = input$scn_n_future,
-        n_assess = input$scn_n_assess, assess_type = input$scn_assess_type, 
-        confidence_level = c(0.05, 0.99)
-      )
+  	if (input$scn_tune) {
+  		list(react_val$tune_fit[[input$scn_method]]) |> 
+  			generate_forecast(
+  				data = data_transformed(),
+  				method = input$scn_method,
+  				n_future = input$scn_n_future,
+  				n_assess = input$scn_n_assess,
+  				assess_type = input$scn_assess_type,
+  				confidence_level = c(0.05, 0.99)
+  			)
+  	} else {
+  		map(
+  			input$scn_method,
+  			~ fit_model(
+  				data = data_transformed(),
+  				method = .,
+  				params = input,
+  				n_assess = input$scn_n_assess,
+  				assess_type = input$scn_assess_type,
+  				seed = 1992
+  			)
+  		) |>
+  			generate_forecast(
+  				data = data_transformed(),
+  				method = input$scn_method,
+  				n_future = input$scn_n_future,
+  				n_assess = input$scn_n_assess,
+  				assess_type = input$scn_assess_type,
+  				confidence_level = c(0.05, 0.99)
+  			)
+  	}
   }
 )
 
