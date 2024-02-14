@@ -128,8 +128,8 @@ res$accuracy |> format_accuracy(single_method = FALSE) |> filter(Type == "Test")
 # COMBINE -----------------------------------------------------------------
 data_selected <- get_data(datasets[1])
 ts_freq <- data_selected$frequency |> unique() |> parse_frequency()
-ens_methods <- getOption("tsf.dashboard.methods")[["ens"]]
-ens_methods <- getOption("tsf.dashboard.methods")[["stk"]]
+ens_methods <- getOption("tsf.dashboard.methods")[["ens"]][1]
+stk_methods <- getOption("tsf.dashboard.methods")[["stk"]]
 input <- list(
   n_future = 12,
   n_assess = 24,
@@ -163,7 +163,7 @@ input <- list(
   n_assess = 24,
   assess_type = "Rolling",
   method = c("ETS", "SARIMA"),
-  stk_type = stk_methods,
+  ens_type = ens_methods,
   auto_ets = get_default("auto_ets"),
   error = get_default("error"),
   trend = get_default("trend"),
@@ -234,6 +234,26 @@ res <- map(
     assess_type = input$assess_type
   )
 res$accuracy |> format_accuracy(single_method = FALSE) |> filter(Type == "Test")
+
+
+forecast_results <- generate_forecast(
+	fitted_model_list = fitted_model_list, data = data_selected,
+	method = input$method, n_future = input$n_future,
+	n_assess = input$n_assess, assess_type = input$assess_type,
+	ensemble_methods = input$ens_type, stacking_methods = NULL, 
+	confidence_level = c(0.05, 0.99)
+)
+
+forecast_results |> 
+	back_transform_forecast(
+		transform = TRUE, 
+		transformations = c("Add 1"), 
+		transform_params = transform_params
+	)
+
+forecast_results |> extract_ensemble_results(input$ens_type)
+
+
 
 
 

@@ -1,5 +1,9 @@
 # function to generate model explainer
-generate_model_explainer <- function(data, method, params, n_assess, assess_type, features = NULL) {
+generate_model_explainer <- function(
+	fitted_model, 
+	data, method, params, n_assess, assess_type, 
+	features = NULL
+) {
 	
 	logging::loginfo("*** Explaining Algorithm ***")
 	logging::loginfo(paste("Method(s):", paste0(method, collapse = ", ")))
@@ -22,20 +26,27 @@ generate_model_explainer <- function(data, method, params, n_assess, assess_type
 	features <- exp_train_tbl |> dplyr::select(-value) |> names()
 	rcp_spec <- recipes::recipe(value ~ ., data = exp_train_tbl)
 	
-	# model specification
-	logging::loginfo("Model Specification")
-	model_spec <- generate_model_spec(method, params)
-	
-	# workflow specification
-	logging::loginfo("Workflow Specification")
-	wkfl_spec <- workflows::workflow() |> 
-		workflows::add_recipe(rcp_spec) |> 
-		workflows::add_model(model_spec)
-	
-	# fitting
-	logging::loginfo("Fitting")
-	if (method == "H2O AutoML") { h2o::h2o.init() }
-	wkfl_fit <- wkfl_spec |> parsnip::fit(data = exp_train_tbl)
+	if (rlang::is_missing(fitted_model)) {
+		
+		# model specification
+		logging::loginfo("Model Specification")
+		model_spec <- generate_model_spec(method, params)
+		
+		# workflow specification
+		logging::loginfo("Workflow Specification")
+		wkfl_spec <- workflows::workflow() |> 
+			workflows::add_recipe(rcp_spec) |> 
+			workflows::add_model(model_spec)
+		
+		# fitting
+		logging::loginfo("Fitting")
+		if (method == "H2O AutoML") { h2o::h2o.init() }
+		wkfl_fit <- wkfl_spec |> parsnip::fit(data = exp_train_tbl)
+		
+	} else {
+		if (method == "H2O AutoML") { h2o::h2o.init() }
+		wkfl_fit <- fitted_model
+	}
 	
 	# explainer
 	logging::loginfo("Creating Explainer")
@@ -48,6 +59,7 @@ generate_model_explainer <- function(data, method, params, n_assess, assess_type
 			type = "regression",
 			colorize = FALSE
 		)
+		h2o::h2o.shutdown(prompt = FALSE)
 	} else {
 		explainer <- DALEXtra::explain_tidymodels(
 			model = wkfl_fit,

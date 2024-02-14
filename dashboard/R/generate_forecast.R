@@ -237,3 +237,21 @@ adjust_prediction_interval <- function(forecast, type = "linear", beta = 0.5) {
   return(frc_res)
 
 }
+
+# function to keep only ensemble or stacking from forecast results
+extract_ensemble_results <- function(forecast_results) {
+	
+	logging::loginfo("Extracting ensemble or stacking results..")
+	ens_pat <- "(Ens - )|(Stk - )"
+	ens_frc_res <- forecast_results
+	ens_frc_res$residuals <- ens_frc_res$residuals |> 
+		dplyr::filter(grepl(ens_pat, .model_desc))
+	ens_frc_res$test_forecast <- ens_frc_res$test_forecast |> 
+		dplyr::filter(.model_desc == "ACTUAL" | grepl(ens_pat, .model_desc))
+	ens_frc_res$oos_forecast <- ens_frc_res$oos_forecast |> 
+		dplyr::filter(.model_desc == "ACTUAL" | grepl(ens_pat, .model_desc))
+	ens_frc_res$accuracy <- ens_frc_res$accuracy |>
+		dplyr::filter(grepl(ens_pat, .model_desc))
+	return(ens_frc_res)
+	
+}

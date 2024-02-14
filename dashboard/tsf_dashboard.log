@@ -3100,3 +3100,1846 @@
 2024-02-08 17:41:31 INFO::Explaining Algorithm: local_stability
 2024-02-08 17:41:45 INFO::Explaining Algorithm: break_down
 2024-02-08 17:42:05 INFO::Explaining Algorithm: local_stability
+2024-02-09 09:11:00 INFO::Getting Air Passengers data...
+2024-02-09 09:11:53 INFO::Hypothesis testing...
+2024-02-09 09:11:53 INFO::Normality Tests
+2024-02-09 09:11:53 INFO::Autocorrelation Tests
+2024-02-09 09:11:53 INFO::Stationarity Tests
+2024-02-09 09:12:30 INFO::*** Generating Forecasts ***
+2024-02-09 09:12:30 INFO::Method(s): ETS
+2024-02-09 09:12:30 INFO::Initial Split
+2024-02-09 09:12:30 INFO::Future Frame
+2024-02-09 09:12:30 INFO::Modeltime Table
+2024-02-09 09:12:30 INFO::*** Fitting Algorithm ***
+2024-02-09 09:12:30 INFO::Method(s): ETS
+2024-02-09 09:12:30 INFO::Initial Split
+2024-02-09 09:12:30 INFO::Recipe Specification
+2024-02-09 09:12:30 INFO::Model Specification
+2024-02-09 09:12:30 INFO::Workflow Specification
+2024-02-09 09:12:30 INFO::Fitting
+2024-02-09 09:12:30 INFO::Calibration
+2024-02-09 09:12:30 INFO::Residuals
+2024-02-09 09:12:30 INFO::Accuracy Evaluation
+2024-02-09 09:12:31 INFO::Test Forecasting
+2024-02-09 09:12:31 INFO::Refitting
+2024-02-09 09:12:31 INFO::Out-of-Sample Forecasting
+2024-02-09 09:12:34 INFO::Back-transforming residuals results..
+2024-02-09 09:12:34 INFO::Back-transforming forecast test results..
+2024-02-09 09:12:34 INFO::Back-transforming forecast oos results..
+2024-02-09 09:12:34 INFO::Back-transforming forecast accuracy results..
+2024-02-09 09:12:34 INFO::Back transforming accuracy table...
+2024-02-09 09:14:32 INFO::Getting Air Passengers data...
+2024-02-09 17:20:48 INFO::Getting Air Passengers data...
+2024-02-09 17:22:03 INFO::Hypothesis testing...
+2024-02-09 17:22:03 INFO::Normality Tests
+2024-02-09 17:22:03 INFO::Autocorrelation Tests
+2024-02-09 17:22:03 INFO::Stationarity Tests
+2024-02-09 17:23:48 INFO::*** Generating Forecasts ***
+2024-02-09 17:23:48 INFO::Method(s): ETS
+2024-02-09 17:23:48 INFO::Initial Split
+2024-02-09 17:23:48 INFO::Future Frame
+2024-02-09 17:23:48 INFO::Modeltime Table
+2024-02-09 17:23:48 INFO::*** Fitting Algorithm ***
+2024-02-09 17:23:48 INFO::Method(s): ETS
+2024-02-09 17:23:48 INFO::Initial Split
+2024-02-09 17:23:48 INFO::Recipe Specification
+2024-02-09 17:23:48 INFO::Model Specification
+2024-02-09 17:23:48 INFO::Workflow Specification
+2024-02-09 17:23:48 INFO::Fitting
+2024-02-09 17:23:48 INFO::Calibration
+2024-02-09 17:23:49 INFO::Residuals
+2024-02-09 17:23:49 INFO::Accuracy Evaluation
+2024-02-09 17:23:49 INFO::Test Forecasting
+2024-02-09 17:23:49 INFO::Refitting
+2024-02-09 17:23:49 INFO::Out-of-Sample Forecasting
+2024-02-09 17:24:16 INFO::*** Generating Forecasts ***
+2024-02-09 17:24:16 INFO::Method(s): ETS, SARIMA, STLM, Prophet, Linear Regression
+2024-02-09 17:24:16 INFO::Initial Split
+2024-02-09 17:24:16 INFO::Future Frame
+2024-02-09 17:24:16 INFO::Modeltime Table
+2024-02-09 17:24:16 INFO::*** Fitting Algorithm ***
+2024-02-09 17:24:16 INFO::Method(s): ETS
+2024-02-09 17:24:16 INFO::Initial Split
+2024-02-09 17:24:16 INFO::Recipe Specification
+2024-02-09 17:24:16 INFO::Model Specification
+2024-02-09 17:24:16 INFO::Workflow Specification
+2024-02-09 17:24:16 INFO::Fitting
+2024-02-09 17:24:17 INFO::*** Fitting Algorithm ***
+2024-02-09 17:24:17 INFO::Method(s): SARIMA
+2024-02-09 17:24:17 INFO::Initial Split
+2024-02-09 17:24:17 INFO::Recipe Specification
+2024-02-09 17:24:17 INFO::Model Specification
+2024-02-09 17:24:17 INFO::Workflow Specification
+2024-02-09 17:24:17 INFO::Fitting
+2024-02-09 17:24:17 INFO::*** Fitting Algorithm ***
+2024-02-09 17:24:17 INFO::Method(s): STLM
+2024-02-09 17:24:17 INFO::Initial Split
+2024-02-09 17:24:17 INFO::Recipe Specification
+2024-02-09 17:24:17 INFO::Model Specification
+2024-02-09 17:24:17 INFO::Workflow Specification
+2024-02-09 17:24:17 INFO::Fitting
+2024-02-09 17:24:17 INFO::*** Fitting Algorithm ***
+2024-02-09 17:24:17 INFO::Method(s): Prophet
+2024-02-09 17:24:17 INFO::Initial Split
+2024-02-09 17:24:18 INFO::Recipe Specification
+2024-02-09 17:24:18 INFO::Model Specification
+2024-02-09 17:24:18 INFO::Workflow Specification
+2024-02-09 17:24:18 INFO::Fitting
+2024-02-09 17:24:18 INFO::*** Fitting Algorithm ***
+2024-02-09 17:24:18 INFO::Method(s): Linear Regression
+2024-02-09 17:24:18 INFO::Initial Split
+2024-02-09 17:24:18 INFO::Recipe Specification
+2024-02-09 17:24:18 INFO::Model Specification
+2024-02-09 17:24:18 INFO::Workflow Specification
+2024-02-09 17:24:18 INFO::Fitting
+2024-02-09 17:24:18 INFO::Calibration
+2024-02-09 17:24:19 INFO::Residuals
+2024-02-09 17:24:19 INFO::Accuracy Evaluation
+2024-02-09 17:24:21 INFO::Test Forecasting
+2024-02-09 17:24:21 INFO::Refitting
+2024-02-09 17:24:23 INFO::Out-of-Sample Forecasting
+2024-02-09 17:24:39 INFO::*** Generating Forecasts ***
+2024-02-09 17:24:39 INFO::Method(s): ETS
+2024-02-09 17:24:39 INFO::Setup Multiple Prediction Intervals
+2024-02-09 17:24:39 INFO::Initial Split
+2024-02-09 17:24:40 INFO::Future Frame
+2024-02-09 17:24:40 INFO::Modeltime Table
+2024-02-09 17:24:40 INFO::*** Fitting Algorithm ***
+2024-02-09 17:24:40 INFO::Method(s): ETS
+2024-02-09 17:24:40 INFO::Initial Split
+2024-02-09 17:24:40 INFO::Recipe Specification
+2024-02-09 17:24:40 INFO::Model Specification
+2024-02-09 17:24:40 INFO::Workflow Specification
+2024-02-09 17:24:40 INFO::Fitting
+2024-02-09 17:24:40 INFO::Calibration
+2024-02-09 17:24:40 INFO::Residuals
+2024-02-09 17:24:40 INFO::Accuracy Evaluation
+2024-02-09 17:24:40 INFO::Test Forecasting
+2024-02-09 17:24:43 INFO::Refitting
+2024-02-09 17:24:44 INFO::Out-of-Sample Forecasting
+2024-02-09 17:26:56 INFO::Getting EU Population data...
+2024-02-09 17:27:09 INFO::Getting People Traffic data...
+2024-02-09 17:27:12 INFO::Getting Stock Price data...
+2024-02-09 17:27:18 INFO::Getting Tobacco Prod data...
+2024-02-09 17:27:44 INFO::Getting custom data...
+2024-02-09 17:31:57 INFO::*** Generating Forecasts ***
+2024-02-09 17:31:57 INFO::Method(s): Linear Regression
+2024-02-09 17:31:57 INFO::Initial Split
+2024-02-09 17:31:57 INFO::Future Frame
+2024-02-09 17:31:57 INFO::Modeltime Table
+2024-02-09 17:31:57 INFO::*** Fitting Algorithm ***
+2024-02-09 17:31:57 INFO::Method(s): Linear Regression
+2024-02-09 17:31:57 INFO::Initial Split
+2024-02-09 17:31:57 INFO::Recipe Specification
+2024-02-09 17:31:57 INFO::Model Specification
+2024-02-09 17:31:57 INFO::Workflow Specification
+2024-02-09 17:31:57 INFO::Fitting
+2024-02-09 17:31:58 INFO::Calibration
+2024-02-09 17:31:58 INFO::Residuals
+2024-02-09 17:31:58 INFO::Accuracy Evaluation
+2024-02-09 17:31:59 INFO::Test Forecasting
+2024-02-09 17:31:59 INFO::Refitting
+2024-02-09 17:32:00 INFO::Out-of-Sample Forecasting
+2024-02-09 18:05:39 INFO::*** Explaining Algorithm ***
+2024-02-09 18:05:39 INFO::Method(s): Random Forest
+2024-02-09 18:05:39 INFO::Initial Split
+2024-02-09 18:05:40 INFO::Recipe Specification
+2024-02-09 18:05:40 INFO::Model Specification
+2024-02-09 18:05:40 INFO::Workflow Specification
+2024-02-09 18:05:40 INFO::Fitting
+2024-02-09 18:05:40 INFO::Creating Explainer
+2024-02-09 18:05:40 INFO::Explaining Algorithm: feature_importance
+2024-02-09 18:05:47 INFO::Explaining Algorithm: break_down
+2024-02-09 18:05:48 INFO::Explaining Algorithm: break_down
+2024-02-09 18:05:48 INFO::Explaining Algorithm: local_stability
+2024-02-09 18:05:48 INFO::Explaining Algorithm: variable_response
+2024-02-09 18:06:03 INFO::Explaining Algorithm: local_stability
+2024-02-09 18:06:03 INFO::Explaining Algorithm: variable_response
+2024-02-09 18:06:06 INFO::Explaining Algorithm: local_stability
+2024-02-09 18:06:06 INFO::Explaining Algorithm: variable_response
+2024-02-11 17:36:22 INFO::Getting Air Passengers data...
+2024-02-11 17:37:08 INFO::*** Generating Forecasts ***
+2024-02-11 17:37:08 INFO::Method(s): Elastic Net
+2024-02-11 17:37:08 INFO::Initial Split
+2024-02-11 17:37:08 INFO::Future Frame
+2024-02-11 17:37:08 INFO::Modeltime Table
+2024-02-11 17:37:08 INFO::*** Tuning Algorithm ***
+2024-02-11 17:37:08 INFO::Method(s): Elastic Net
+2024-02-11 17:37:08 INFO::Initial Split
+2024-02-11 17:37:08 INFO::Validation Split
+2024-02-11 17:37:08 INFO::Recipe Specification
+2024-02-11 17:37:08 INFO::Model Specification
+2024-02-11 17:37:08 INFO::Workflow Specification
+2024-02-11 17:37:08 INFO::Tuning
+2024-02-11 17:37:48 INFO::Extracting Best Model
+2024-02-11 17:37:48 INFO::Fitting
+2024-02-11 17:37:48 INFO::Calibration
+2024-02-11 17:37:48 INFO::Residuals
+2024-02-11 17:37:48 INFO::Accuracy Evaluation
+2024-02-11 17:37:49 INFO::Test Forecasting
+2024-02-11 17:37:49 INFO::Refitting
+2024-02-11 17:37:49 INFO::Out-of-Sample Forecasting
+2024-02-11 17:38:26 INFO::*** Generating Forecasts ***
+2024-02-11 17:38:26 INFO::Method(s): Elastic Net
+2024-02-11 17:38:26 INFO::Initial Split
+2024-02-11 17:38:26 INFO::Future Frame
+2024-02-11 17:38:26 INFO::Modeltime Table
+2024-02-11 17:38:26 INFO::*** Tuning Algorithm ***
+2024-02-11 17:38:26 INFO::Method(s): Elastic Net
+2024-02-11 17:38:26 INFO::Initial Split
+2024-02-11 17:38:26 INFO::Validation Split
+2024-02-11 17:38:26 INFO::Recipe Specification
+2024-02-11 17:38:26 INFO::Model Specification
+2024-02-11 17:38:26 INFO::Workflow Specification
+2024-02-11 17:38:26 INFO::Tuning
+2024-02-11 17:39:05 INFO::Extracting Best Model
+2024-02-11 17:39:05 INFO::Fitting
+2024-02-11 17:39:05 INFO::Calibration
+2024-02-11 17:39:05 INFO::Residuals
+2024-02-11 17:39:06 INFO::Accuracy Evaluation
+2024-02-11 17:39:06 INFO::Test Forecasting
+2024-02-11 17:39:07 INFO::Refitting
+2024-02-11 17:39:07 INFO::Out-of-Sample Forecasting
+2024-02-11 17:43:24 INFO::Getting Air Passengers data...
+2024-02-11 17:44:04 INFO::*** Generating Forecasts ***
+2024-02-11 17:44:04 INFO::Method(s): Elastic Net
+2024-02-11 17:44:04 INFO::Initial Split
+2024-02-11 17:44:04 INFO::Future Frame
+2024-02-11 17:44:04 INFO::Modeltime Table
+2024-02-11 17:44:04 INFO::*** Tuning Algorithm ***
+2024-02-11 17:44:04 INFO::Method(s): Elastic Net
+2024-02-11 17:44:04 INFO::Initial Split
+2024-02-11 17:44:04 INFO::Validation Split
+2024-02-11 17:44:04 INFO::Recipe Specification
+2024-02-11 17:44:04 INFO::Model Specification
+2024-02-11 17:44:04 INFO::Workflow Specification
+2024-02-11 17:44:04 INFO::Tuning
+2024-02-11 17:44:10 INFO::Extracting Best Model
+2024-02-11 17:44:10 INFO::Fitting
+2024-02-11 17:44:10 INFO::Calibration
+2024-02-11 17:44:11 INFO::Residuals
+2024-02-11 17:44:11 INFO::Accuracy Evaluation
+2024-02-11 17:44:12 INFO::Test Forecasting
+2024-02-11 17:44:12 INFO::Refitting
+2024-02-11 17:44:12 INFO::Out-of-Sample Forecasting
+2024-02-11 17:45:45 INFO::Getting Air Passengers data...
+2024-02-11 17:45:59 INFO::*** Generating Forecasts ***
+2024-02-11 17:45:59 INFO::Method(s): Elastic Net
+2024-02-11 17:45:59 INFO::Initial Split
+2024-02-11 17:45:59 INFO::Future Frame
+2024-02-11 17:45:59 INFO::Modeltime Table
+2024-02-11 17:45:59 INFO::*** Tuning Algorithm ***
+2024-02-11 17:45:59 INFO::Method(s): Elastic Net
+2024-02-11 17:45:59 INFO::Initial Split
+2024-02-11 17:45:59 INFO::Validation Split
+2024-02-11 17:45:59 INFO::Recipe Specification
+2024-02-11 17:45:59 INFO::Model Specification
+2024-02-11 17:45:59 INFO::Workflow Specification
+2024-02-11 17:45:59 INFO::Tuning
+2024-02-11 17:46:04 INFO::Extracting Best Model
+2024-02-11 17:46:04 INFO::Fitting
+2024-02-11 17:46:04 INFO::Calibration
+2024-02-11 17:46:05 INFO::Residuals
+2024-02-11 17:46:05 INFO::Accuracy Evaluation
+2024-02-11 17:46:06 INFO::Test Forecasting
+2024-02-11 17:46:06 INFO::Refitting
+2024-02-11 17:46:06 INFO::Out-of-Sample Forecasting
+2024-02-11 17:47:03 INFO::Getting Air Passengers data...
+2024-02-11 17:47:31 INFO::*** Generating Forecasts ***
+2024-02-11 17:47:31 INFO::Method(s): Elastic Net
+2024-02-11 17:47:31 INFO::Initial Split
+2024-02-11 17:47:31 INFO::Future Frame
+2024-02-11 17:47:31 INFO::Modeltime Table
+2024-02-11 17:47:31 INFO::*** Tuning Algorithm ***
+2024-02-11 17:47:31 INFO::Method(s): Elastic Net
+2024-02-11 17:47:31 INFO::Initial Split
+2024-02-11 17:47:31 INFO::Validation Split
+2024-02-11 17:47:31 INFO::Recipe Specification
+2024-02-11 17:47:31 INFO::Model Specification
+2024-02-11 17:47:31 INFO::Workflow Specification
+2024-02-11 17:47:31 INFO::Tuning
+2024-02-11 17:47:36 INFO::Extracting Best Model
+2024-02-11 17:47:36 INFO::Fitting
+2024-02-11 17:47:37 INFO::Calibration
+2024-02-11 17:47:37 INFO::Residuals
+2024-02-11 17:47:37 INFO::Accuracy Evaluation
+2024-02-11 17:47:38 INFO::Test Forecasting
+2024-02-11 17:47:38 INFO::Refitting
+2024-02-11 17:47:38 INFO::Out-of-Sample Forecasting
+2024-02-11 17:48:46 INFO::*** Generating Forecasts ***
+2024-02-11 17:48:46 INFO::Method(s): MARS
+2024-02-11 17:48:46 INFO::Initial Split
+2024-02-11 17:48:46 INFO::Future Frame
+2024-02-11 17:48:46 INFO::Modeltime Table
+2024-02-11 17:48:46 INFO::*** Tuning Algorithm ***
+2024-02-11 17:48:46 INFO::Method(s): MARS
+2024-02-11 17:48:46 INFO::Initial Split
+2024-02-11 17:48:47 INFO::Validation Split
+2024-02-11 17:48:47 INFO::Recipe Specification
+2024-02-11 17:48:47 INFO::Model Specification
+2024-02-11 17:48:47 INFO::Workflow Specification
+2024-02-11 17:48:47 INFO::Tuning
+2024-02-11 17:48:52 INFO::Extracting Best Model
+2024-02-11 17:48:52 INFO::Fitting
+2024-02-11 17:48:52 INFO::Calibration
+2024-02-11 17:48:53 INFO::Residuals
+2024-02-11 17:48:53 INFO::Accuracy Evaluation
+2024-02-11 17:48:54 INFO::Test Forecasting
+2024-02-11 17:48:54 INFO::Refitting
+2024-02-11 17:48:54 INFO::Out-of-Sample Forecasting
+2024-02-11 17:50:07 INFO::Getting Air Passengers data...
+2024-02-11 17:51:25 INFO::*** Generating Forecasts ***
+2024-02-11 17:51:25 INFO::Method(s): Elastic Net
+2024-02-11 17:51:25 INFO::Initial Split
+2024-02-11 17:51:25 INFO::Future Frame
+2024-02-11 17:51:25 INFO::Modeltime Table
+2024-02-11 17:51:25 INFO::*** Tuning Algorithm ***
+2024-02-11 17:51:25 INFO::Method(s): Elastic Net
+2024-02-11 17:51:25 INFO::Initial Split
+2024-02-11 17:51:25 INFO::Validation Split
+2024-02-11 17:51:25 INFO::Recipe Specification
+2024-02-11 17:51:25 INFO::Model Specification
+2024-02-11 17:51:25 INFO::Workflow Specification
+2024-02-11 17:51:25 INFO::Tuning
+2024-02-11 17:51:31 INFO::Extracting Best Model
+2024-02-11 17:51:31 INFO::Fitting
+2024-02-11 17:51:31 INFO::Calibration
+2024-02-11 17:51:31 INFO::Residuals
+2024-02-11 17:51:31 INFO::Accuracy Evaluation
+2024-02-11 17:51:32 INFO::Test Forecasting
+2024-02-11 17:51:32 INFO::Refitting
+2024-02-11 17:51:32 INFO::Out-of-Sample Forecasting
+2024-02-11 17:54:31 INFO::Getting Air Passengers data...
+2024-02-11 17:54:42 INFO::*** Generating Forecasts ***
+2024-02-11 17:54:42 INFO::Method(s): Elastic Net
+2024-02-11 17:54:42 INFO::Initial Split
+2024-02-11 17:54:42 INFO::Future Frame
+2024-02-11 17:54:42 INFO::Modeltime Table
+2024-02-11 17:54:42 INFO::*** Tuning Algorithm ***
+2024-02-11 17:54:42 INFO::Method(s): Elastic Net
+2024-02-11 17:54:42 INFO::Initial Split
+2024-02-11 17:54:42 INFO::Validation Split
+2024-02-11 17:54:42 INFO::Recipe Specification
+2024-02-11 17:54:42 INFO::Model Specification
+2024-02-11 17:54:42 INFO::Workflow Specification
+2024-02-11 17:54:42 INFO::Tuning
+2024-02-11 17:54:48 INFO::Extracting Best Model
+2024-02-11 17:54:48 INFO::Fitting
+2024-02-11 17:54:48 INFO::Calibration
+2024-02-11 17:54:48 INFO::Residuals
+2024-02-11 17:54:48 INFO::Accuracy Evaluation
+2024-02-11 17:54:49 INFO::Test Forecasting
+2024-02-11 17:54:49 INFO::Refitting
+2024-02-11 17:54:49 INFO::Out-of-Sample Forecasting
+2024-02-11 17:55:23 INFO::*** Generating Forecasts ***
+2024-02-11 17:55:23 INFO::Method(s): MARS
+2024-02-11 17:55:23 INFO::Initial Split
+2024-02-11 17:55:23 INFO::Future Frame
+2024-02-11 17:55:23 INFO::Modeltime Table
+2024-02-11 17:55:23 INFO::*** Tuning Algorithm ***
+2024-02-11 17:55:23 INFO::Method(s): MARS
+2024-02-11 17:55:23 INFO::Initial Split
+2024-02-11 17:55:23 INFO::Validation Split
+2024-02-11 17:55:23 INFO::Recipe Specification
+2024-02-11 17:55:23 INFO::Model Specification
+2024-02-11 17:55:23 INFO::Workflow Specification
+2024-02-11 17:55:23 INFO::Tuning
+2024-02-11 17:55:29 INFO::Extracting Best Model
+2024-02-11 17:55:29 INFO::Fitting
+2024-02-11 17:55:29 INFO::Calibration
+2024-02-11 17:55:29 INFO::Residuals
+2024-02-11 17:55:29 INFO::Accuracy Evaluation
+2024-02-11 17:55:30 INFO::Test Forecasting
+2024-02-11 17:55:30 INFO::Refitting
+2024-02-11 17:55:30 INFO::Out-of-Sample Forecasting
+2024-02-11 17:56:06 INFO::*** Generating Forecasts ***
+2024-02-11 17:56:06 INFO::Method(s): Boosted Trees
+2024-02-11 17:56:06 INFO::Initial Split
+2024-02-11 17:56:06 INFO::Future Frame
+2024-02-11 17:56:06 INFO::Modeltime Table
+2024-02-11 17:56:06 INFO::*** Tuning Algorithm ***
+2024-02-11 17:56:06 INFO::Method(s): Boosted Trees
+2024-02-11 17:56:06 INFO::Initial Split
+2024-02-11 17:56:06 INFO::Validation Split
+2024-02-11 17:56:06 INFO::Recipe Specification
+2024-02-11 17:56:06 INFO::Model Specification
+2024-02-11 17:56:06 INFO::Workflow Specification
+2024-02-11 17:56:06 INFO::Tuning
+2024-02-11 17:56:11 INFO::Extracting Best Model
+2024-02-11 17:56:11 INFO::Fitting
+2024-02-11 17:56:12 INFO::Calibration
+2024-02-11 17:56:12 INFO::Residuals
+2024-02-11 17:56:12 INFO::Accuracy Evaluation
+2024-02-11 17:56:13 INFO::Test Forecasting
+2024-02-11 17:56:13 INFO::Refitting
+2024-02-11 17:56:13 INFO::Out-of-Sample Forecasting
+2024-02-11 18:02:06 INFO::Getting Air Passengers data...
+2024-02-11 18:02:22 INFO::*** Generating Forecasts ***
+2024-02-11 18:02:22 INFO::Method(s): Elastic Net
+2024-02-11 18:02:22 INFO::Initial Split
+2024-02-11 18:02:22 INFO::Future Frame
+2024-02-11 18:02:22 INFO::Modeltime Table
+2024-02-11 18:02:22 INFO::*** Tuning Algorithm ***
+2024-02-11 18:02:22 INFO::Method(s): Elastic Net
+2024-02-11 18:02:22 INFO::Initial Split
+2024-02-11 18:02:22 INFO::Validation Split
+2024-02-11 18:02:22 INFO::Recipe Specification
+2024-02-11 18:02:22 INFO::Model Specification
+2024-02-11 18:02:22 INFO::Workflow Specification
+2024-02-11 18:02:22 INFO::Tuning
+2024-02-11 18:02:28 INFO::Extracting Best Model
+2024-02-11 18:02:28 INFO::Fitting
+2024-02-11 18:02:28 INFO::Calibration
+2024-02-11 18:02:28 INFO::Residuals
+2024-02-11 18:02:29 INFO::Accuracy Evaluation
+2024-02-11 18:02:29 INFO::Test Forecasting
+2024-02-11 18:02:29 INFO::Refitting
+2024-02-11 18:02:30 INFO::Out-of-Sample Forecasting
+2024-02-11 18:02:47 INFO::*** Generating Forecasts ***
+2024-02-11 18:02:47 INFO::Method(s): Random Forest
+2024-02-11 18:02:47 INFO::Initial Split
+2024-02-11 18:02:47 INFO::Future Frame
+2024-02-11 18:02:47 INFO::Modeltime Table
+2024-02-11 18:02:47 INFO::*** Tuning Algorithm ***
+2024-02-11 18:02:47 INFO::Method(s): Random Forest
+2024-02-11 18:02:47 INFO::Initial Split
+2024-02-11 18:02:48 INFO::Validation Split
+2024-02-11 18:02:48 INFO::Recipe Specification
+2024-02-11 18:02:48 INFO::Model Specification
+2024-02-11 18:02:48 INFO::Workflow Specification
+2024-02-11 18:02:48 INFO::Tuning
+2024-02-11 18:02:53 INFO::Extracting Best Model
+2024-02-11 18:02:53 INFO::Fitting
+2024-02-11 18:02:53 INFO::Calibration
+2024-02-11 18:02:54 INFO::Residuals
+2024-02-11 18:02:54 INFO::Accuracy Evaluation
+2024-02-11 18:02:55 INFO::Test Forecasting
+2024-02-11 18:02:55 INFO::Refitting
+2024-02-11 18:02:55 INFO::Out-of-Sample Forecasting
+2024-02-11 18:17:13 INFO::Getting Air Passengers data...
+2024-02-11 18:17:29 INFO::*** Generating Forecasts ***
+2024-02-11 18:17:29 INFO::Method(s): ETS
+2024-02-11 18:17:29 INFO::Setup Multiple Prediction Intervals
+2024-02-11 18:17:29 INFO::Initial Split
+2024-02-11 18:17:29 INFO::Future Frame
+2024-02-11 18:17:29 INFO::Modeltime Table
+2024-02-11 18:17:29 INFO::*** Fitting Algorithm ***
+2024-02-11 18:17:29 INFO::Method(s): ETS
+2024-02-11 18:17:29 INFO::Initial Split
+2024-02-11 18:17:29 INFO::Recipe Specification
+2024-02-11 18:17:29 INFO::Model Specification
+2024-02-11 18:17:29 INFO::Workflow Specification
+2024-02-11 18:17:29 INFO::Fitting
+2024-02-11 18:17:30 INFO::Calibration
+2024-02-11 18:17:30 INFO::Residuals
+2024-02-11 18:17:30 INFO::Accuracy Evaluation
+2024-02-11 18:17:30 INFO::Test Forecasting
+2024-02-11 18:17:32 INFO::Refitting
+2024-02-11 18:17:33 INFO::Out-of-Sample Forecasting
+2024-02-11 18:17:40 INFO::*** Generating Forecasts ***
+2024-02-11 18:17:40 INFO::Method(s): ETS
+2024-02-11 18:17:40 INFO::Setup Multiple Prediction Intervals
+2024-02-11 18:17:40 INFO::Initial Split
+2024-02-11 18:17:40 INFO::Future Frame
+2024-02-11 18:17:40 INFO::Modeltime Table
+2024-02-11 18:17:54 INFO::*** Generating Forecasts ***
+2024-02-11 18:17:54 INFO::Method(s): Elastic Net
+2024-02-11 18:17:54 INFO::Setup Multiple Prediction Intervals
+2024-02-11 18:17:54 INFO::Initial Split
+2024-02-11 18:17:54 INFO::Future Frame
+2024-02-11 18:17:54 INFO::Modeltime Table
+2024-02-11 18:17:54 INFO::*** Fitting Algorithm ***
+2024-02-11 18:17:54 INFO::Method(s): Elastic Net
+2024-02-11 18:17:54 INFO::Initial Split
+2024-02-11 18:17:54 INFO::Recipe Specification
+2024-02-11 18:17:55 INFO::Model Specification
+2024-02-11 18:17:55 INFO::Workflow Specification
+2024-02-11 18:17:55 INFO::Fitting
+2024-02-11 18:17:55 INFO::Calibration
+2024-02-11 18:17:55 INFO::Residuals
+2024-02-11 18:17:55 INFO::Accuracy Evaluation
+2024-02-11 18:17:56 INFO::Test Forecasting
+2024-02-11 18:18:02 INFO::Refitting
+2024-02-11 18:18:02 INFO::Out-of-Sample Forecasting
+2024-02-11 18:18:13 INFO::*** Generating Forecasts ***
+2024-02-11 18:18:13 INFO::Method(s): Elastic Net
+2024-02-11 18:18:13 INFO::Setup Multiple Prediction Intervals
+2024-02-11 18:18:13 INFO::Initial Split
+2024-02-11 18:18:13 INFO::Future Frame
+2024-02-11 18:18:13 INFO::Modeltime Table
+2024-02-11 18:18:40 INFO::*** Generating Forecasts ***
+2024-02-11 18:18:40 INFO::Method(s): Elastic Net
+2024-02-11 18:18:40 INFO::Initial Split
+2024-02-11 18:18:40 INFO::Future Frame
+2024-02-11 18:18:40 INFO::Modeltime Table
+2024-02-11 18:18:40 INFO::*** Tuning Algorithm ***
+2024-02-11 18:18:40 INFO::Method(s): Elastic Net
+2024-02-11 18:18:40 INFO::Initial Split
+2024-02-11 18:18:41 INFO::Validation Split
+2024-02-11 18:18:41 INFO::Recipe Specification
+2024-02-11 18:18:41 INFO::Model Specification
+2024-02-11 18:18:41 INFO::Workflow Specification
+2024-02-11 18:18:41 INFO::Tuning
+2024-02-11 18:18:46 INFO::Extracting Best Model
+2024-02-11 18:18:46 INFO::Fitting
+2024-02-11 18:18:47 INFO::Calibration
+2024-02-11 18:18:47 INFO::Residuals
+2024-02-11 18:18:47 INFO::Accuracy Evaluation
+2024-02-11 18:18:48 INFO::Test Forecasting
+2024-02-11 18:18:48 INFO::Refitting
+2024-02-11 18:18:48 INFO::Out-of-Sample Forecasting
+2024-02-11 18:19:27 INFO::*** Generating Forecasts ***
+2024-02-11 18:19:27 INFO::Method(s): Elastic Net
+2024-02-11 18:19:27 INFO::Setup Multiple Prediction Intervals
+2024-02-11 18:19:27 INFO::Initial Split
+2024-02-11 18:19:27 INFO::Future Frame
+2024-02-11 18:19:27 INFO::Modeltime Table
+2024-02-11 18:19:27 INFO::*** Fitting Algorithm ***
+2024-02-11 18:19:27 INFO::Method(s): Elastic Net
+2024-02-11 18:19:27 INFO::Initial Split
+2024-02-11 18:19:27 INFO::Recipe Specification
+2024-02-11 18:19:27 INFO::Model Specification
+2024-02-11 18:19:27 INFO::Workflow Specification
+2024-02-11 18:19:27 INFO::Fitting
+2024-02-11 18:19:27 INFO::Calibration
+2024-02-11 18:19:27 INFO::Residuals
+2024-02-11 18:19:28 INFO::Accuracy Evaluation
+2024-02-11 18:19:28 INFO::Test Forecasting
+2024-02-11 18:19:34 INFO::Refitting
+2024-02-11 18:19:34 INFO::Out-of-Sample Forecasting
+2024-02-11 18:19:48 INFO::*** Generating Forecasts ***
+2024-02-11 18:19:48 INFO::Method(s): Elastic Net
+2024-02-11 18:19:48 INFO::Setup Multiple Prediction Intervals
+2024-02-11 18:19:48 INFO::Initial Split
+2024-02-11 18:19:48 INFO::Future Frame
+2024-02-11 18:19:48 INFO::Modeltime Table
+2024-02-11 18:19:48 INFO::Calibration
+2024-02-11 18:19:48 INFO::Residuals
+2024-02-11 18:19:48 INFO::Accuracy Evaluation
+2024-02-11 18:19:49 INFO::Test Forecasting
+2024-02-11 18:19:55 INFO::Refitting
+2024-02-11 18:19:55 INFO::Out-of-Sample Forecasting
+2024-02-11 18:20:53 INFO::*** Generating Forecasts ***
+2024-02-11 18:20:53 INFO::Method(s): Elastic Net
+2024-02-11 18:20:53 INFO::Setup Multiple Prediction Intervals
+2024-02-11 18:20:53 INFO::Initial Split
+2024-02-11 18:20:53 INFO::Future Frame
+2024-02-11 18:20:53 INFO::Modeltime Table
+2024-02-11 18:20:53 INFO::*** Fitting Algorithm ***
+2024-02-11 18:20:53 INFO::Method(s): Elastic Net
+2024-02-11 18:20:53 INFO::Initial Split
+2024-02-11 18:20:53 INFO::Recipe Specification
+2024-02-11 18:20:53 INFO::Model Specification
+2024-02-11 18:20:53 INFO::Workflow Specification
+2024-02-11 18:20:53 INFO::Fitting
+2024-02-11 18:20:53 INFO::Calibration
+2024-02-11 18:20:54 INFO::Residuals
+2024-02-11 18:20:54 INFO::Accuracy Evaluation
+2024-02-11 18:20:55 INFO::Test Forecasting
+2024-02-11 18:21:01 INFO::Refitting
+2024-02-11 18:21:01 INFO::Out-of-Sample Forecasting
+2024-02-11 18:33:42 INFO::Getting Air Passengers data...
+2024-02-11 18:33:48 INFO::*** Explaining Algorithm ***
+2024-02-11 18:33:48 INFO::Method(s): Random Forest
+2024-02-11 18:33:48 INFO::Initial Split
+2024-02-11 18:33:48 INFO::Recipe Specification
+2024-02-11 18:34:31 INFO::Getting Air Passengers data...
+2024-02-11 18:34:35 INFO::*** Explaining Algorithm ***
+2024-02-11 18:34:35 INFO::Method(s): Random Forest
+2024-02-11 18:34:35 INFO::Initial Split
+2024-02-11 18:34:35 INFO::Recipe Specification
+2024-02-11 18:34:36 INFO::Model Specification
+2024-02-11 18:34:36 INFO::Workflow Specification
+2024-02-11 18:34:36 INFO::Fitting
+2024-02-11 18:34:36 INFO::Creating Explainer
+2024-02-11 18:34:36 INFO::Explaining Algorithm: feature_importance
+2024-02-11 18:34:40 INFO::Explaining Algorithm: break_down
+2024-02-11 18:34:40 INFO::Explaining Algorithm: variable_response
+2024-02-11 18:34:41 INFO::Explaining Algorithm: local_stability
+2024-02-11 18:34:41 INFO::Explaining Algorithm: break_down
+2024-02-11 18:37:13 INFO::Getting Air Passengers data...
+2024-02-11 18:37:17 INFO::*** Explaining Algorithm ***
+2024-02-11 18:37:17 INFO::Method(s): Random Forest
+2024-02-11 18:37:17 INFO::Initial Split
+2024-02-11 18:37:17 INFO::Recipe Specification
+2024-02-11 18:37:18 INFO::Model Specification
+2024-02-11 18:37:18 INFO::Workflow Specification
+2024-02-11 18:37:18 INFO::Fitting
+2024-02-11 18:37:18 INFO::Creating Explainer
+2024-02-11 18:37:18 INFO::Explaining Algorithm: feature_importance
+2024-02-11 18:37:22 INFO::Explaining Algorithm: break_down
+2024-02-11 18:37:22 INFO::Explaining Algorithm: variable_response
+2024-02-11 18:37:22 INFO::Explaining Algorithm: local_stability
+2024-02-11 18:37:23 INFO::Explaining Algorithm: break_down
+2024-02-11 18:37:30 INFO::*** Explaining Algorithm ***
+2024-02-11 18:37:30 INFO::Method(s): Random Forest
+2024-02-11 18:37:30 INFO::Initial Split
+2024-02-11 18:37:30 INFO::Recipe Specification
+2024-02-11 18:37:31 INFO::Creating Explainer
+2024-02-11 18:37:31 INFO::Explaining Algorithm: feature_importance
+2024-02-11 18:37:31 INFO::Explaining Algorithm: variable_response
+2024-02-11 18:37:31 INFO::Explaining Algorithm: local_stability
+2024-02-11 18:37:31 INFO::Explaining Algorithm: break_down
+2024-02-11 18:37:53 INFO::*** Generating Forecasts ***
+2024-02-11 18:37:53 INFO::Method(s): Random Forest
+2024-02-11 18:37:53 INFO::Initial Split
+2024-02-11 18:37:53 INFO::Future Frame
+2024-02-11 18:37:53 INFO::Modeltime Table
+2024-02-11 18:37:53 INFO::*** Tuning Algorithm ***
+2024-02-11 18:37:53 INFO::Method(s): Random Forest
+2024-02-11 18:37:53 INFO::Initial Split
+2024-02-11 18:37:53 INFO::Validation Split
+2024-02-11 18:37:53 INFO::Recipe Specification
+2024-02-11 18:37:53 INFO::Model Specification
+2024-02-11 18:37:53 INFO::Workflow Specification
+2024-02-11 18:37:53 INFO::Tuning
+2024-02-11 18:37:59 INFO::Extracting Best Model
+2024-02-11 18:37:59 INFO::Fitting
+2024-02-11 18:37:59 INFO::Calibration
+2024-02-11 18:37:59 INFO::Residuals
+2024-02-11 18:38:00 INFO::Accuracy Evaluation
+2024-02-11 18:38:00 INFO::Test Forecasting
+2024-02-11 18:38:01 INFO::Refitting
+2024-02-11 18:38:01 INFO::Out-of-Sample Forecasting
+2024-02-11 18:38:10 INFO::*** Explaining Algorithm ***
+2024-02-11 18:38:10 INFO::Method(s): Random Forest
+2024-02-11 18:38:10 INFO::Initial Split
+2024-02-11 18:38:10 INFO::Recipe Specification
+2024-02-11 18:38:10 INFO::Creating Explainer
+2024-02-11 18:38:10 INFO::Explaining Algorithm: feature_importance
+2024-02-11 18:38:10 INFO::Explaining Algorithm: variable_response
+2024-02-11 18:38:10 INFO::Explaining Algorithm: local_stability
+2024-02-11 18:38:10 INFO::Explaining Algorithm: break_down
+2024-02-11 18:38:28 INFO::*** Explaining Algorithm ***
+2024-02-11 18:38:28 INFO::Method(s): Random Forest
+2024-02-11 18:38:28 INFO::Initial Split
+2024-02-11 18:38:28 INFO::Recipe Specification
+2024-02-11 18:38:28 INFO::Model Specification
+2024-02-11 18:38:28 INFO::Workflow Specification
+2024-02-11 18:38:28 INFO::Fitting
+2024-02-11 18:38:28 INFO::Creating Explainer
+2024-02-11 18:38:28 INFO::Explaining Algorithm: feature_importance
+2024-02-11 18:38:32 INFO::Explaining Algorithm: variable_response
+2024-02-11 18:38:32 INFO::Explaining Algorithm: local_stability
+2024-02-11 18:38:33 INFO::Explaining Algorithm: break_down
+2024-02-11 18:38:37 INFO::*** Explaining Algorithm ***
+2024-02-11 18:38:37 INFO::Method(s): Random Forest
+2024-02-11 18:38:37 INFO::Initial Split
+2024-02-11 18:38:37 INFO::Recipe Specification
+2024-02-11 18:38:37 INFO::Creating Explainer
+2024-02-11 18:38:37 INFO::Explaining Algorithm: feature_importance
+2024-02-11 18:38:37 INFO::Explaining Algorithm: variable_response
+2024-02-11 18:38:38 INFO::Explaining Algorithm: local_stability
+2024-02-11 18:38:38 INFO::Explaining Algorithm: break_down
+2024-02-14 11:21:46 INFO::Getting Air Passengers data...
+2024-02-14 11:21:55 INFO::*** Explaining Algorithm ***
+2024-02-14 11:21:55 INFO::Method(s): Random Forest
+2024-02-14 11:21:55 INFO::Initial Split
+2024-02-14 11:21:55 INFO::Recipe Specification
+2024-02-14 11:21:55 INFO::Model Specification
+2024-02-14 11:21:55 INFO::Workflow Specification
+2024-02-14 11:21:55 INFO::Fitting
+2024-02-14 11:21:55 INFO::Creating Explainer
+2024-02-14 11:21:55 INFO::Explaining Algorithm: feature_importance
+2024-02-14 11:22:00 INFO::Explaining Algorithm: break_down
+2024-02-14 11:22:00 INFO::Explaining Algorithm: variable_response
+2024-02-14 11:22:00 INFO::Explaining Algorithm: local_stability
+2024-02-14 11:22:00 INFO::Explaining Algorithm: break_down
+2024-02-14 11:22:07 INFO::*** Explaining Algorithm ***
+2024-02-14 11:22:07 INFO::Method(s): Random Forest
+2024-02-14 11:22:07 INFO::Initial Split
+2024-02-14 11:22:07 INFO::Recipe Specification
+2024-02-14 11:22:07 INFO::Creating Explainer
+2024-02-14 11:22:07 INFO::Explaining Algorithm: feature_importance
+2024-02-14 11:22:07 INFO::Explaining Algorithm: variable_response
+2024-02-14 11:22:07 INFO::Explaining Algorithm: local_stability
+2024-02-14 11:22:07 INFO::Explaining Algorithm: break_down
+2024-02-14 11:22:28 INFO::*** Generating Forecasts ***
+2024-02-14 11:22:28 INFO::Method(s): Random Forest
+2024-02-14 11:22:28 INFO::Initial Split
+2024-02-14 11:22:28 INFO::Future Frame
+2024-02-14 11:22:28 INFO::Modeltime Table
+2024-02-14 11:22:28 INFO::*** Tuning Algorithm ***
+2024-02-14 11:22:28 INFO::Method(s): Random Forest
+2024-02-14 11:22:28 INFO::Initial Split
+2024-02-14 11:22:28 INFO::Validation Split
+2024-02-14 11:22:29 INFO::Recipe Specification
+2024-02-14 11:22:29 INFO::Model Specification
+2024-02-14 11:22:29 INFO::Workflow Specification
+2024-02-14 11:22:29 INFO::Tuning
+2024-02-14 11:22:35 INFO::Extracting Best Model
+2024-02-14 11:22:35 INFO::Fitting
+2024-02-14 11:22:35 INFO::Calibration
+2024-02-14 11:22:36 INFO::Residuals
+2024-02-14 11:22:36 INFO::Accuracy Evaluation
+2024-02-14 11:22:37 INFO::Test Forecasting
+2024-02-14 11:22:37 INFO::Refitting
+2024-02-14 11:22:37 INFO::Out-of-Sample Forecasting
+2024-02-14 11:22:46 INFO::*** Explaining Algorithm ***
+2024-02-14 11:22:46 INFO::Method(s): Random Forest
+2024-02-14 11:22:46 INFO::Initial Split
+2024-02-14 11:22:46 INFO::Recipe Specification
+2024-02-14 11:22:46 INFO::Creating Explainer
+2024-02-14 11:22:46 INFO::Explaining Algorithm: feature_importance
+2024-02-14 11:22:46 INFO::Explaining Algorithm: variable_response
+2024-02-14 11:22:47 INFO::Explaining Algorithm: local_stability
+2024-02-14 11:22:47 INFO::Explaining Algorithm: break_down
+2024-02-14 12:03:53 INFO::Getting Air Passengers data...
+2024-02-14 12:04:04 INFO::*** Generating Forecasts ***
+2024-02-14 12:04:04 INFO::Method(s): ETS, SARIMA
+2024-02-14 12:04:04 INFO::Initial Split
+2024-02-14 12:04:04 INFO::Future Frame
+2024-02-14 12:04:04 INFO::Modeltime Table
+2024-02-14 12:04:04 INFO::*** Fitting Algorithm ***
+2024-02-14 12:04:04 INFO::Method(s): ETS
+2024-02-14 12:04:04 INFO::Initial Split
+2024-02-14 12:04:04 INFO::Recipe Specification
+2024-02-14 12:04:04 INFO::Model Specification
+2024-02-14 12:04:04 INFO::Workflow Specification
+2024-02-14 12:04:04 INFO::Fitting
+2024-02-14 12:04:05 INFO::*** Fitting Algorithm ***
+2024-02-14 12:04:05 INFO::Method(s): SARIMA
+2024-02-14 12:04:05 INFO::Initial Split
+2024-02-14 12:04:05 INFO::Recipe Specification
+2024-02-14 12:04:05 INFO::Model Specification
+2024-02-14 12:04:05 INFO::Workflow Specification
+2024-02-14 12:04:05 INFO::Fitting
+2024-02-14 12:04:06 INFO::Calibration
+2024-02-14 12:04:06 INFO::Residuals
+2024-02-14 12:04:06 INFO::Accuracy Evaluation
+2024-02-14 12:04:06 INFO::Test Forecasting
+2024-02-14 12:04:06 INFO::Refitting
+2024-02-14 12:04:08 INFO::Out-of-Sample Forecasting
+2024-02-14 12:04:20 INFO::*** Generating Forecasts ***
+2024-02-14 12:04:20 INFO::Method(s): ETS, SARIMA, Elastic Net
+2024-02-14 12:04:20 INFO::Initial Split
+2024-02-14 12:04:20 INFO::Future Frame
+2024-02-14 12:04:20 INFO::Modeltime Table
+2024-02-14 12:04:20 INFO::*** Fitting Algorithm ***
+2024-02-14 12:04:20 INFO::Method(s): ETS
+2024-02-14 12:04:20 INFO::Initial Split
+2024-02-14 12:04:20 INFO::Recipe Specification
+2024-02-14 12:04:20 INFO::Model Specification
+2024-02-14 12:04:20 INFO::Workflow Specification
+2024-02-14 12:04:20 INFO::Fitting
+2024-02-14 12:04:20 INFO::*** Fitting Algorithm ***
+2024-02-14 12:04:20 INFO::Method(s): SARIMA
+2024-02-14 12:04:20 INFO::Initial Split
+2024-02-14 12:04:20 INFO::Recipe Specification
+2024-02-14 12:04:20 INFO::Model Specification
+2024-02-14 12:04:20 INFO::Workflow Specification
+2024-02-14 12:04:20 INFO::Fitting
+2024-02-14 12:04:21 INFO::*** Fitting Algorithm ***
+2024-02-14 12:04:21 INFO::Method(s): Elastic Net
+2024-02-14 12:04:21 INFO::Initial Split
+2024-02-14 12:04:21 INFO::Recipe Specification
+2024-02-14 12:04:21 INFO::Model Specification
+2024-02-14 12:04:21 INFO::Workflow Specification
+2024-02-14 12:04:21 INFO::Fitting
+2024-02-14 12:04:21 INFO::Calibration
+2024-02-14 12:04:22 INFO::Residuals
+2024-02-14 12:04:22 INFO::Accuracy Evaluation
+2024-02-14 12:04:23 INFO::Test Forecasting
+2024-02-14 12:04:23 INFO::Refitting
+2024-02-14 12:04:25 INFO::Out-of-Sample Forecasting
+2024-02-14 12:04:38 INFO::*** Fitting Algorithm ***
+2024-02-14 12:04:38 INFO::Method(s): ETS
+2024-02-14 12:04:38 INFO::Initial Split
+2024-02-14 12:04:38 INFO::Recipe Specification
+2024-02-14 12:04:38 INFO::Model Specification
+2024-02-14 12:04:38 INFO::Workflow Specification
+2024-02-14 12:04:38 INFO::Fitting
+2024-02-14 12:04:39 INFO::*** Fitting Algorithm ***
+2024-02-14 12:04:39 INFO::Method(s): SARIMA
+2024-02-14 12:04:39 INFO::Initial Split
+2024-02-14 12:04:39 INFO::Recipe Specification
+2024-02-14 12:04:39 INFO::Model Specification
+2024-02-14 12:04:39 INFO::Workflow Specification
+2024-02-14 12:04:39 INFO::Fitting
+2024-02-14 12:04:39 INFO::*** Generating Forecasts ***
+2024-02-14 12:04:39 INFO::Method(s): ETS, SARIMA
+2024-02-14 12:04:39 INFO::Initial Split
+2024-02-14 12:04:39 INFO::Future Frame
+2024-02-14 12:04:39 INFO::Modeltime Table
+2024-02-14 12:04:39 INFO::Calibration
+2024-02-14 12:04:40 INFO::Residuals
+2024-02-14 12:04:40 INFO::Accuracy Evaluation
+2024-02-14 12:04:40 INFO::Test Forecasting
+2024-02-14 12:04:40 INFO::Refitting
+2024-02-14 12:04:42 INFO::Out-of-Sample Forecasting
+2024-02-14 12:04:54 INFO::*** Fitting Algorithm ***
+2024-02-14 12:04:54 INFO::Method(s): ETS
+2024-02-14 12:04:54 INFO::Initial Split
+2024-02-14 12:04:54 INFO::Recipe Specification
+2024-02-14 12:04:54 INFO::Model Specification
+2024-02-14 12:04:54 INFO::Workflow Specification
+2024-02-14 12:04:54 INFO::Fitting
+2024-02-14 12:04:55 INFO::*** Fitting Algorithm ***
+2024-02-14 12:04:55 INFO::Method(s): SARIMA
+2024-02-14 12:04:55 INFO::Initial Split
+2024-02-14 12:04:55 INFO::Recipe Specification
+2024-02-14 12:04:55 INFO::Model Specification
+2024-02-14 12:04:55 INFO::Workflow Specification
+2024-02-14 12:04:55 INFO::Fitting
+2024-02-14 12:04:55 INFO::*** Generating Forecasts ***
+2024-02-14 12:04:55 INFO::Method(s): ETS, SARIMA, Elastic Net
+2024-02-14 12:04:55 INFO::Initial Split
+2024-02-14 12:04:55 INFO::Future Frame
+2024-02-14 12:04:55 INFO::Modeltime Table
+2024-02-14 12:05:10 INFO::*** Generating Forecasts ***
+2024-02-14 12:05:10 INFO::Method(s): ETS, SARIMA, Elastic Net
+2024-02-14 12:05:10 INFO::Initial Split
+2024-02-14 12:05:10 INFO::Future Frame
+2024-02-14 12:05:10 INFO::Modeltime Table
+2024-02-14 12:05:10 INFO::*** Fitting Algorithm ***
+2024-02-14 12:05:10 INFO::Method(s): ETS
+2024-02-14 12:05:10 INFO::Initial Split
+2024-02-14 12:05:10 INFO::Recipe Specification
+2024-02-14 12:05:10 INFO::Model Specification
+2024-02-14 12:05:10 INFO::Workflow Specification
+2024-02-14 12:05:10 INFO::Fitting
+2024-02-14 12:05:10 INFO::*** Fitting Algorithm ***
+2024-02-14 12:05:10 INFO::Method(s): SARIMA
+2024-02-14 12:05:10 INFO::Initial Split
+2024-02-14 12:05:10 INFO::Recipe Specification
+2024-02-14 12:05:10 INFO::Model Specification
+2024-02-14 12:05:10 INFO::Workflow Specification
+2024-02-14 12:05:10 INFO::Fitting
+2024-02-14 12:05:11 INFO::*** Fitting Algorithm ***
+2024-02-14 12:05:11 INFO::Method(s): Elastic Net
+2024-02-14 12:05:11 INFO::Initial Split
+2024-02-14 12:05:11 INFO::Recipe Specification
+2024-02-14 12:05:11 INFO::Model Specification
+2024-02-14 12:05:11 INFO::Workflow Specification
+2024-02-14 12:05:11 INFO::Fitting
+2024-02-14 12:05:11 INFO::Calibration
+2024-02-14 12:05:11 INFO::Residuals
+2024-02-14 12:05:12 INFO::Accuracy Evaluation
+2024-02-14 12:05:13 INFO::Test Forecasting
+2024-02-14 12:05:13 INFO::Refitting
+2024-02-14 12:05:15 INFO::Out-of-Sample Forecasting
+2024-02-14 12:05:40 INFO::*** Generating Forecasts ***
+2024-02-14 12:05:40 INFO::Method(s): Elastic Net
+2024-02-14 12:05:40 INFO::Initial Split
+2024-02-14 12:05:40 INFO::Future Frame
+2024-02-14 12:05:40 INFO::Modeltime Table
+2024-02-14 12:05:40 INFO::*** Tuning Algorithm ***
+2024-02-14 12:05:40 INFO::Method(s): Elastic Net
+2024-02-14 12:05:40 INFO::Initial Split
+2024-02-14 12:05:40 INFO::Validation Split
+2024-02-14 12:05:40 INFO::Recipe Specification
+2024-02-14 12:05:40 INFO::Model Specification
+2024-02-14 12:05:40 INFO::Workflow Specification
+2024-02-14 12:05:40 INFO::Tuning
+2024-02-14 12:05:46 INFO::Extracting Best Model
+2024-02-14 12:05:46 INFO::Fitting
+2024-02-14 12:05:46 INFO::Calibration
+2024-02-14 12:05:47 INFO::Residuals
+2024-02-14 12:05:47 INFO::Accuracy Evaluation
+2024-02-14 12:05:47 INFO::Test Forecasting
+2024-02-14 12:05:48 INFO::Refitting
+2024-02-14 12:05:48 INFO::Out-of-Sample Forecasting
+2024-02-14 12:06:08 INFO::*** Generating Forecasts ***
+2024-02-14 12:06:08 INFO::Method(s): Random Forest
+2024-02-14 12:06:08 INFO::Initial Split
+2024-02-14 12:06:08 INFO::Future Frame
+2024-02-14 12:06:08 INFO::Modeltime Table
+2024-02-14 12:06:08 INFO::*** Tuning Algorithm ***
+2024-02-14 12:06:08 INFO::Method(s): Random Forest
+2024-02-14 12:06:08 INFO::Initial Split
+2024-02-14 12:06:08 INFO::Validation Split
+2024-02-14 12:06:08 INFO::Recipe Specification
+2024-02-14 12:06:08 INFO::Model Specification
+2024-02-14 12:06:08 INFO::Workflow Specification
+2024-02-14 12:06:08 INFO::Tuning
+2024-02-14 12:06:14 INFO::Extracting Best Model
+2024-02-14 12:06:14 INFO::Fitting
+2024-02-14 12:06:14 INFO::Calibration
+2024-02-14 12:06:14 INFO::Residuals
+2024-02-14 12:06:15 INFO::Accuracy Evaluation
+2024-02-14 12:06:15 INFO::Test Forecasting
+2024-02-14 12:06:16 INFO::Refitting
+2024-02-14 12:06:16 INFO::Out-of-Sample Forecasting
+2024-02-14 12:07:01 INFO::*** Fitting Algorithm ***
+2024-02-14 12:07:01 INFO::Method(s): ETS
+2024-02-14 12:07:01 INFO::Initial Split
+2024-02-14 12:07:01 INFO::Recipe Specification
+2024-02-14 12:07:01 INFO::Model Specification
+2024-02-14 12:07:01 INFO::Workflow Specification
+2024-02-14 12:07:01 INFO::Fitting
+2024-02-14 12:07:01 INFO::*** Fitting Algorithm ***
+2024-02-14 12:07:01 INFO::Method(s): SARIMA
+2024-02-14 12:07:01 INFO::Initial Split
+2024-02-14 12:07:01 INFO::Recipe Specification
+2024-02-14 12:07:01 INFO::Model Specification
+2024-02-14 12:07:01 INFO::Workflow Specification
+2024-02-14 12:07:01 INFO::Fitting
+2024-02-14 12:07:02 INFO::*** Generating Forecasts ***
+2024-02-14 12:07:02 INFO::Method(s): ETS, SARIMA
+2024-02-14 12:07:02 INFO::Initial Split
+2024-02-14 12:07:02 INFO::Future Frame
+2024-02-14 12:07:02 INFO::Modeltime Table
+2024-02-14 12:07:02 INFO::Calibration
+2024-02-14 12:07:02 INFO::Residuals
+2024-02-14 12:07:02 INFO::Accuracy Evaluation
+2024-02-14 12:07:03 INFO::Test Forecasting
+2024-02-14 12:07:03 INFO::Refitting
+2024-02-14 12:07:04 INFO::Out-of-Sample Forecasting
+2024-02-14 12:07:10 INFO::*** Fitting Algorithm ***
+2024-02-14 12:07:10 INFO::Method(s): ETS
+2024-02-14 12:07:10 INFO::Initial Split
+2024-02-14 12:07:10 INFO::Recipe Specification
+2024-02-14 12:07:10 INFO::Model Specification
+2024-02-14 12:07:10 INFO::Workflow Specification
+2024-02-14 12:07:10 INFO::Fitting
+2024-02-14 12:07:11 INFO::*** Fitting Algorithm ***
+2024-02-14 12:07:11 INFO::Method(s): SARIMA
+2024-02-14 12:07:11 INFO::Initial Split
+2024-02-14 12:07:11 INFO::Recipe Specification
+2024-02-14 12:07:11 INFO::Model Specification
+2024-02-14 12:07:11 INFO::Workflow Specification
+2024-02-14 12:07:11 INFO::Fitting
+2024-02-14 12:07:12 INFO::*** Generating Forecasts ***
+2024-02-14 12:07:12 INFO::Method(s): ETS, SARIMA, Elastic Net
+2024-02-14 12:07:12 INFO::Initial Split
+2024-02-14 12:07:12 INFO::Future Frame
+2024-02-14 12:07:12 INFO::Modeltime Table
+2024-02-14 12:07:12 INFO::Calibration
+2024-02-14 12:07:12 INFO::Residuals
+2024-02-14 12:07:12 INFO::Accuracy Evaluation
+2024-02-14 12:07:13 INFO::Test Forecasting
+2024-02-14 12:07:14 INFO::Refitting
+2024-02-14 12:07:15 INFO::Out-of-Sample Forecasting
+2024-02-14 12:07:31 INFO::*** Fitting Algorithm ***
+2024-02-14 12:07:31 INFO::Method(s): ETS
+2024-02-14 12:07:31 INFO::Initial Split
+2024-02-14 12:07:31 INFO::Recipe Specification
+2024-02-14 12:07:31 INFO::Model Specification
+2024-02-14 12:07:31 INFO::Workflow Specification
+2024-02-14 12:07:31 INFO::Fitting
+2024-02-14 12:07:32 INFO::*** Fitting Algorithm ***
+2024-02-14 12:07:32 INFO::Method(s): SARIMA
+2024-02-14 12:07:32 INFO::Initial Split
+2024-02-14 12:07:32 INFO::Recipe Specification
+2024-02-14 12:07:32 INFO::Model Specification
+2024-02-14 12:07:32 INFO::Workflow Specification
+2024-02-14 12:07:32 INFO::Fitting
+2024-02-14 12:07:32 INFO::*** Generating Forecasts ***
+2024-02-14 12:07:32 INFO::Method(s): ETS, SARIMA, Elastic Net, Random Forest
+2024-02-14 12:07:32 INFO::Initial Split
+2024-02-14 12:07:32 INFO::Future Frame
+2024-02-14 12:07:32 INFO::Modeltime Table
+2024-02-14 12:07:32 INFO::Calibration
+2024-02-14 12:07:33 INFO::Residuals
+2024-02-14 12:07:34 INFO::Accuracy Evaluation
+2024-02-14 12:07:35 INFO::Test Forecasting
+2024-02-14 12:07:36 INFO::Refitting
+2024-02-14 12:07:38 INFO::Out-of-Sample Forecasting
+2024-02-14 14:19:43 INFO::Getting Air Passengers data...
+2024-02-14 14:19:52 INFO::*** Generating Forecasts ***
+2024-02-14 14:19:52 INFO::Method(s): ETS, SARIMA
+2024-02-14 14:19:52 INFO::Initial Split
+2024-02-14 14:19:52 INFO::Future Frame
+2024-02-14 14:19:52 INFO::Modeltime Table
+2024-02-14 14:19:52 INFO::*** Fitting Algorithm ***
+2024-02-14 14:19:52 INFO::Method(s): ETS
+2024-02-14 14:19:52 INFO::Initial Split
+2024-02-14 14:19:52 INFO::Recipe Specification
+2024-02-14 14:19:52 INFO::Model Specification
+2024-02-14 14:19:52 INFO::Workflow Specification
+2024-02-14 14:19:52 INFO::Fitting
+2024-02-14 14:19:53 INFO::*** Fitting Algorithm ***
+2024-02-14 14:19:53 INFO::Method(s): SARIMA
+2024-02-14 14:19:53 INFO::Initial Split
+2024-02-14 14:19:53 INFO::Recipe Specification
+2024-02-14 14:19:53 INFO::Model Specification
+2024-02-14 14:19:53 INFO::Workflow Specification
+2024-02-14 14:19:53 INFO::Fitting
+2024-02-14 14:19:54 INFO::Ensembling
+2024-02-14 14:19:54 INFO::Calibration
+2024-02-14 14:19:54 INFO::Residuals
+2024-02-14 14:19:55 INFO::Accuracy Evaluation
+2024-02-14 14:19:55 INFO::Test Forecasting
+2024-02-14 14:19:56 INFO::Refitting
+2024-02-14 14:19:58 INFO::Out-of-Sample Forecasting
+2024-02-14 14:20:04 INFO::*** Generating Forecasts ***
+2024-02-14 14:20:04 INFO::Method(s): ETS, SARIMA, Elastic Net
+2024-02-14 14:20:04 INFO::Initial Split
+2024-02-14 14:20:04 INFO::Future Frame
+2024-02-14 14:20:04 INFO::Modeltime Table
+2024-02-14 14:20:04 INFO::*** Fitting Algorithm ***
+2024-02-14 14:20:04 INFO::Method(s): ETS
+2024-02-14 14:20:04 INFO::Initial Split
+2024-02-14 14:20:04 INFO::Recipe Specification
+2024-02-14 14:20:04 INFO::Model Specification
+2024-02-14 14:20:04 INFO::Workflow Specification
+2024-02-14 14:20:04 INFO::Fitting
+2024-02-14 14:20:05 INFO::*** Fitting Algorithm ***
+2024-02-14 14:20:05 INFO::Method(s): SARIMA
+2024-02-14 14:20:05 INFO::Initial Split
+2024-02-14 14:20:05 INFO::Recipe Specification
+2024-02-14 14:20:05 INFO::Model Specification
+2024-02-14 14:20:05 INFO::Workflow Specification
+2024-02-14 14:20:05 INFO::Fitting
+2024-02-14 14:20:05 INFO::*** Fitting Algorithm ***
+2024-02-14 14:20:05 INFO::Method(s): Elastic Net
+2024-02-14 14:20:05 INFO::Initial Split
+2024-02-14 14:20:05 INFO::Recipe Specification
+2024-02-14 14:20:05 INFO::Model Specification
+2024-02-14 14:20:05 INFO::Workflow Specification
+2024-02-14 14:20:05 INFO::Fitting
+2024-02-14 14:20:05 INFO::Ensembling
+2024-02-14 14:20:06 INFO::Calibration
+2024-02-14 14:20:07 INFO::Residuals
+2024-02-14 14:20:07 INFO::Accuracy Evaluation
+2024-02-14 14:20:09 INFO::Test Forecasting
+2024-02-14 14:20:10 INFO::Refitting
+2024-02-14 14:20:13 INFO::Out-of-Sample Forecasting
+2024-02-14 14:20:17 INFO::*** Fitting Algorithm ***
+2024-02-14 14:20:17 INFO::Method(s): ETS
+2024-02-14 14:20:17 INFO::Initial Split
+2024-02-14 14:20:17 INFO::Recipe Specification
+2024-02-14 14:20:17 INFO::Model Specification
+2024-02-14 14:20:17 INFO::Workflow Specification
+2024-02-14 14:20:17 INFO::Fitting
+2024-02-14 14:20:18 INFO::*** Fitting Algorithm ***
+2024-02-14 14:20:18 INFO::Method(s): SARIMA
+2024-02-14 14:20:18 INFO::Initial Split
+2024-02-14 14:20:18 INFO::Recipe Specification
+2024-02-14 14:20:18 INFO::Model Specification
+2024-02-14 14:20:18 INFO::Workflow Specification
+2024-02-14 14:20:18 INFO::Fitting
+2024-02-14 14:20:18 INFO::*** Generating Forecasts ***
+2024-02-14 14:20:18 INFO::Method(s): ETS, SARIMA, Elastic Net
+2024-02-14 14:20:18 INFO::Initial Split
+2024-02-14 14:20:19 INFO::Future Frame
+2024-02-14 14:20:19 INFO::Modeltime Table
+2024-02-14 14:21:29 INFO::Getting Air Passengers data...
+2024-02-14 14:21:36 INFO::*** Fitting Algorithm ***
+2024-02-14 14:21:36 INFO::Method(s): ETS
+2024-02-14 14:21:36 INFO::Initial Split
+2024-02-14 14:21:36 INFO::Recipe Specification
+2024-02-14 14:21:36 INFO::Model Specification
+2024-02-14 14:21:36 INFO::Workflow Specification
+2024-02-14 14:21:36 INFO::Fitting
+2024-02-14 14:21:37 INFO::*** Fitting Algorithm ***
+2024-02-14 14:21:37 INFO::Method(s): SARIMA
+2024-02-14 14:21:37 INFO::Initial Split
+2024-02-14 14:21:37 INFO::Recipe Specification
+2024-02-14 14:21:37 INFO::Model Specification
+2024-02-14 14:21:37 INFO::Workflow Specification
+2024-02-14 14:21:37 INFO::Fitting
+2024-02-14 14:21:38 INFO::*** Generating Forecasts ***
+2024-02-14 14:21:38 INFO::Method(s): ETS, SARIMA
+2024-02-14 14:21:38 INFO::Initial Split
+2024-02-14 14:21:38 INFO::Future Frame
+2024-02-14 14:21:38 INFO::Modeltime Table
+2024-02-14 14:21:38 INFO::Ensembling
+2024-02-14 14:21:38 INFO::Calibration
+2024-02-14 14:21:38 INFO::Residuals
+2024-02-14 14:21:39 INFO::Accuracy Evaluation
+2024-02-14 14:21:39 INFO::Test Forecasting
+2024-02-14 14:21:40 INFO::Refitting
+2024-02-14 14:21:43 INFO::Out-of-Sample Forecasting
+2024-02-14 14:21:51 INFO::*** Fitting Algorithm ***
+2024-02-14 14:21:51 INFO::Method(s): ETS
+2024-02-14 14:21:51 INFO::Initial Split
+2024-02-14 14:21:51 INFO::Recipe Specification
+2024-02-14 14:21:51 INFO::Model Specification
+2024-02-14 14:21:51 INFO::Workflow Specification
+2024-02-14 14:21:51 INFO::Fitting
+2024-02-14 14:21:52 INFO::*** Fitting Algorithm ***
+2024-02-14 14:21:52 INFO::Method(s): SARIMA
+2024-02-14 14:21:52 INFO::Initial Split
+2024-02-14 14:21:52 INFO::Recipe Specification
+2024-02-14 14:21:52 INFO::Model Specification
+2024-02-14 14:21:52 INFO::Workflow Specification
+2024-02-14 14:21:52 INFO::Fitting
+2024-02-14 14:21:53 INFO::*** Generating Forecasts ***
+2024-02-14 14:21:53 INFO::Method(s): ETS, SARIMA
+2024-02-14 14:21:53 INFO::Initial Split
+2024-02-14 14:21:53 INFO::Future Frame
+2024-02-14 14:21:53 INFO::Modeltime Table
+2024-02-14 14:21:53 INFO::Stacking
+2024-02-14 14:21:58 INFO::Calibration
+2024-02-14 14:21:58 INFO::Residuals
+2024-02-14 14:21:58 INFO::Accuracy Evaluation
+2024-02-14 14:21:59 INFO::Test Forecasting
+2024-02-14 14:21:59 INFO::Refitting
+2024-02-14 14:22:06 INFO::Out-of-Sample Forecasting
+2024-02-14 14:22:27 INFO::*** Generating Forecasts ***
+2024-02-14 14:22:27 INFO::Method(s): ETS, SARIMA, Elastic Net
+2024-02-14 14:22:27 INFO::Initial Split
+2024-02-14 14:22:27 INFO::Future Frame
+2024-02-14 14:22:27 INFO::Modeltime Table
+2024-02-14 14:22:27 INFO::*** Fitting Algorithm ***
+2024-02-14 14:22:27 INFO::Method(s): ETS
+2024-02-14 14:22:27 INFO::Initial Split
+2024-02-14 14:22:27 INFO::Recipe Specification
+2024-02-14 14:22:27 INFO::Model Specification
+2024-02-14 14:22:27 INFO::Workflow Specification
+2024-02-14 14:22:27 INFO::Fitting
+2024-02-14 14:22:28 INFO::*** Fitting Algorithm ***
+2024-02-14 14:22:28 INFO::Method(s): SARIMA
+2024-02-14 14:22:28 INFO::Initial Split
+2024-02-14 14:22:28 INFO::Recipe Specification
+2024-02-14 14:22:28 INFO::Model Specification
+2024-02-14 14:22:28 INFO::Workflow Specification
+2024-02-14 14:22:28 INFO::Fitting
+2024-02-14 14:22:28 INFO::*** Fitting Algorithm ***
+2024-02-14 14:22:28 INFO::Method(s): Elastic Net
+2024-02-14 14:22:28 INFO::Initial Split
+2024-02-14 14:22:28 INFO::Recipe Specification
+2024-02-14 14:22:28 INFO::Model Specification
+2024-02-14 14:22:28 INFO::Workflow Specification
+2024-02-14 14:22:28 INFO::Fitting
+2024-02-14 14:22:28 INFO::Stacking
+2024-02-14 14:22:34 INFO::Calibration
+2024-02-14 14:22:35 INFO::Residuals
+2024-02-14 14:22:35 INFO::Accuracy Evaluation
+2024-02-14 14:22:37 INFO::Test Forecasting
+2024-02-14 14:22:37 INFO::Refitting
+2024-02-14 14:22:46 INFO::Out-of-Sample Forecasting
+2024-02-14 14:22:51 INFO::*** Fitting Algorithm ***
+2024-02-14 14:22:51 INFO::Method(s): ETS
+2024-02-14 14:22:51 INFO::Initial Split
+2024-02-14 14:22:51 INFO::Recipe Specification
+2024-02-14 14:22:51 INFO::Model Specification
+2024-02-14 14:22:51 INFO::Workflow Specification
+2024-02-14 14:22:51 INFO::Fitting
+2024-02-14 14:22:52 INFO::*** Fitting Algorithm ***
+2024-02-14 14:22:52 INFO::Method(s): SARIMA
+2024-02-14 14:22:52 INFO::Initial Split
+2024-02-14 14:22:52 INFO::Recipe Specification
+2024-02-14 14:22:52 INFO::Model Specification
+2024-02-14 14:22:52 INFO::Workflow Specification
+2024-02-14 14:22:52 INFO::Fitting
+2024-02-14 14:22:52 INFO::*** Generating Forecasts ***
+2024-02-14 14:22:52 INFO::Method(s): ETS, SARIMA, Elastic Net
+2024-02-14 14:22:52 INFO::Initial Split
+2024-02-14 14:22:52 INFO::Future Frame
+2024-02-14 14:22:52 INFO::Modeltime Table
+2024-02-14 14:23:09 INFO::Getting Air Passengers data...
+2024-02-14 14:23:23 INFO::*** Generating Forecasts ***
+2024-02-14 14:23:23 INFO::Method(s): Elastic Net
+2024-02-14 14:23:23 INFO::Initial Split
+2024-02-14 14:23:23 INFO::Future Frame
+2024-02-14 14:23:23 INFO::Modeltime Table
+2024-02-14 14:23:23 INFO::*** Tuning Algorithm ***
+2024-02-14 14:23:23 INFO::Method(s): Elastic Net
+2024-02-14 14:23:24 INFO::Initial Split
+2024-02-14 14:23:24 INFO::Validation Split
+2024-02-14 14:23:24 INFO::Recipe Specification
+2024-02-14 14:23:24 INFO::Model Specification
+2024-02-14 14:23:24 INFO::Workflow Specification
+2024-02-14 14:23:24 INFO::Tuning
+2024-02-14 14:23:29 INFO::Extracting Best Model
+2024-02-14 14:23:29 INFO::Fitting
+2024-02-14 14:23:29 INFO::Calibration
+2024-02-14 14:23:30 INFO::Residuals
+2024-02-14 14:23:30 INFO::Accuracy Evaluation
+2024-02-14 14:23:31 INFO::Test Forecasting
+2024-02-14 14:23:31 INFO::Refitting
+2024-02-14 14:23:31 INFO::Out-of-Sample Forecasting
+2024-02-14 14:23:50 INFO::*** Generating Forecasts ***
+2024-02-14 14:23:50 INFO::Method(s): SVM
+2024-02-14 14:23:50 INFO::Initial Split
+2024-02-14 14:23:50 INFO::Future Frame
+2024-02-14 14:23:51 INFO::Modeltime Table
+2024-02-14 14:23:51 INFO::*** Tuning Algorithm ***
+2024-02-14 14:23:51 INFO::Method(s): SVM
+2024-02-14 14:23:51 INFO::Initial Split
+2024-02-14 14:23:51 INFO::Validation Split
+2024-02-14 14:23:51 INFO::Recipe Specification
+2024-02-14 14:23:51 INFO::Model Specification
+2024-02-14 14:23:51 INFO::Workflow Specification
+2024-02-14 14:23:51 INFO::Tuning
+2024-02-14 14:23:56 INFO::Extracting Best Model
+2024-02-14 14:23:56 INFO::Fitting
+2024-02-14 14:23:57 INFO::Calibration
+2024-02-14 14:23:57 INFO::Residuals
+2024-02-14 14:23:57 INFO::Accuracy Evaluation
+2024-02-14 14:23:58 INFO::Test Forecasting
+2024-02-14 14:23:58 INFO::Refitting
+2024-02-14 14:23:59 INFO::Out-of-Sample Forecasting
+2024-02-14 14:24:32 INFO::*** Fitting Algorithm ***
+2024-02-14 14:24:32 INFO::Method(s): ETS
+2024-02-14 14:24:32 INFO::Initial Split
+2024-02-14 14:24:32 INFO::Recipe Specification
+2024-02-14 14:24:32 INFO::Model Specification
+2024-02-14 14:24:32 INFO::Workflow Specification
+2024-02-14 14:24:32 INFO::Fitting
+2024-02-14 14:24:32 INFO::*** Generating Forecasts ***
+2024-02-14 14:24:32 INFO::Method(s): ETS, Elastic Net, SVM
+2024-02-14 14:24:32 INFO::Initial Split
+2024-02-14 14:24:32 INFO::Future Frame
+2024-02-14 14:24:33 INFO::Modeltime Table
+2024-02-14 14:24:33 INFO::Ensembling
+2024-02-14 14:24:34 INFO::Calibration
+2024-02-14 14:24:34 INFO::Residuals
+2024-02-14 14:24:35 INFO::Accuracy Evaluation
+2024-02-14 14:24:38 INFO::Test Forecasting
+2024-02-14 14:24:38 INFO::Refitting
+2024-02-14 14:24:40 INFO::Out-of-Sample Forecasting
+2024-02-14 14:25:05 INFO::*** Fitting Algorithm ***
+2024-02-14 14:25:05 INFO::Method(s): ETS
+2024-02-14 14:25:05 INFO::Initial Split
+2024-02-14 14:25:05 INFO::Recipe Specification
+2024-02-14 14:25:05 INFO::Model Specification
+2024-02-14 14:25:05 INFO::Workflow Specification
+2024-02-14 14:25:05 INFO::Fitting
+2024-02-14 14:25:06 INFO::*** Generating Forecasts ***
+2024-02-14 14:25:06 INFO::Method(s): ETS, Elastic Net, SVM
+2024-02-14 14:25:06 INFO::Initial Split
+2024-02-14 14:25:06 INFO::Future Frame
+2024-02-14 14:25:06 INFO::Modeltime Table
+2024-02-14 14:25:06 INFO::Stacking
+2024-02-14 14:25:10 INFO::Calibration
+2024-02-14 14:25:11 INFO::Residuals
+2024-02-14 14:25:12 INFO::Accuracy Evaluation
+2024-02-14 14:25:14 INFO::Test Forecasting
+2024-02-14 14:25:14 INFO::Refitting
+2024-02-14 14:25:20 INFO::Out-of-Sample Forecasting
+2024-02-14 14:27:53 INFO::Getting Air Passengers data...
+2024-02-14 15:20:01 INFO::Getting Air Passengers data...
+2024-02-14 15:20:15 INFO::*** Generating Forecasts ***
+2024-02-14 15:20:15 INFO::Method(s): ETS
+2024-02-14 15:20:15 INFO::Setup Multiple Prediction Intervals
+2024-02-14 15:20:15 INFO::Initial Split
+2024-02-14 15:20:15 INFO::Future Frame
+2024-02-14 15:20:15 INFO::Modeltime Table
+2024-02-14 15:20:15 INFO::*** Fitting Algorithm ***
+2024-02-14 15:20:15 INFO::Method(s): ETS
+2024-02-14 15:20:15 INFO::Initial Split
+2024-02-14 15:20:15 INFO::Recipe Specification
+2024-02-14 15:20:15 INFO::Model Specification
+2024-02-14 15:20:15 INFO::Workflow Specification
+2024-02-14 15:20:15 INFO::Fitting
+2024-02-14 15:20:15 INFO::Calibration
+2024-02-14 15:20:16 INFO::Residuals
+2024-02-14 15:20:16 INFO::Accuracy Evaluation
+2024-02-14 15:20:16 INFO::Test Forecasting
+2024-02-14 15:20:19 INFO::Refitting
+2024-02-14 15:20:19 INFO::Out-of-Sample Forecasting
+2024-02-14 15:20:29 INFO::*** Generating Forecasts ***
+2024-02-14 15:20:29 INFO::Method(s): ETS
+2024-02-14 15:20:29 INFO::Setup Multiple Prediction Intervals
+2024-02-14 15:20:29 INFO::Initial Split
+2024-02-14 15:20:29 INFO::Future Frame
+2024-02-14 15:20:29 INFO::Modeltime Table
+2024-02-14 15:20:36 INFO::*** Generating Forecasts ***
+2024-02-14 15:20:36 INFO::Method(s): Elastic Net
+2024-02-14 15:20:36 INFO::Setup Multiple Prediction Intervals
+2024-02-14 15:20:36 INFO::Initial Split
+2024-02-14 15:20:36 INFO::Future Frame
+2024-02-14 15:20:36 INFO::Modeltime Table
+2024-02-14 15:20:50 INFO::*** Generating Forecasts ***
+2024-02-14 15:20:50 INFO::Method(s): Elastic Net
+2024-02-14 15:20:50 INFO::Initial Split
+2024-02-14 15:20:50 INFO::Future Frame
+2024-02-14 15:20:50 INFO::Modeltime Table
+2024-02-14 15:20:50 INFO::*** Tuning Algorithm ***
+2024-02-14 15:20:50 INFO::Method(s): Elastic Net
+2024-02-14 15:20:50 INFO::Initial Split
+2024-02-14 15:20:50 INFO::Validation Split
+2024-02-14 15:20:50 INFO::Recipe Specification
+2024-02-14 15:20:50 INFO::Model Specification
+2024-02-14 15:20:51 INFO::Workflow Specification
+2024-02-14 15:20:51 INFO::Tuning
+2024-02-14 15:20:57 INFO::Extracting Best Model
+2024-02-14 15:20:57 INFO::Fitting
+2024-02-14 15:20:57 INFO::Calibration
+2024-02-14 15:20:57 INFO::Residuals
+2024-02-14 15:20:58 INFO::Accuracy Evaluation
+2024-02-14 15:20:58 INFO::Test Forecasting
+2024-02-14 15:20:59 INFO::Refitting
+2024-02-14 15:20:59 INFO::Out-of-Sample Forecasting
+2024-02-14 15:21:11 INFO::*** Generating Forecasts ***
+2024-02-14 15:21:11 INFO::Method(s): Elastic Net
+2024-02-14 15:21:11 INFO::Setup Multiple Prediction Intervals
+2024-02-14 15:21:11 INFO::Initial Split
+2024-02-14 15:21:11 INFO::Future Frame
+2024-02-14 15:21:11 INFO::Modeltime Table
+2024-02-14 15:21:11 INFO::Calibration
+2024-02-14 15:21:11 INFO::Residuals
+2024-02-14 15:21:12 INFO::Accuracy Evaluation
+2024-02-14 15:21:12 INFO::Test Forecasting
+2024-02-14 15:21:19 INFO::Refitting
+2024-02-14 15:21:19 INFO::Out-of-Sample Forecasting
+2024-02-14 15:21:44 INFO::*** Generating Forecasts ***
+2024-02-14 15:21:44 INFO::Method(s): ETS, SARIMA
+2024-02-14 15:21:44 INFO::Initial Split
+2024-02-14 15:21:44 INFO::Future Frame
+2024-02-14 15:21:44 INFO::Modeltime Table
+2024-02-14 15:21:44 INFO::*** Fitting Algorithm ***
+2024-02-14 15:21:44 INFO::Method(s): ETS
+2024-02-14 15:21:44 INFO::Initial Split
+2024-02-14 15:21:45 INFO::Recipe Specification
+2024-02-14 15:21:45 INFO::Model Specification
+2024-02-14 15:21:45 INFO::Workflow Specification
+2024-02-14 15:21:45 INFO::Fitting
+2024-02-14 15:21:45 INFO::*** Fitting Algorithm ***
+2024-02-14 15:21:45 INFO::Method(s): SARIMA
+2024-02-14 15:21:45 INFO::Initial Split
+2024-02-14 15:21:45 INFO::Recipe Specification
+2024-02-14 15:21:45 INFO::Model Specification
+2024-02-14 15:21:45 INFO::Workflow Specification
+2024-02-14 15:21:45 INFO::Fitting
+2024-02-14 15:21:46 INFO::Ensembling
+2024-02-14 15:21:46 INFO::Calibration
+2024-02-14 15:21:47 INFO::Residuals
+2024-02-14 15:21:47 INFO::Accuracy Evaluation
+2024-02-14 15:21:49 INFO::Test Forecasting
+2024-02-14 15:21:49 INFO::Refitting
+2024-02-14 15:21:52 INFO::Out-of-Sample Forecasting
+2024-02-14 15:22:34 INFO::*** Generating Forecasts ***
+2024-02-14 15:22:34 INFO::Method(s): ETS, SARIMA
+2024-02-14 15:22:34 INFO::Initial Split
+2024-02-14 15:22:34 INFO::Future Frame
+2024-02-14 15:22:34 INFO::Modeltime Table
+2024-02-14 15:22:34 INFO::*** Fitting Algorithm ***
+2024-02-14 15:22:34 INFO::Method(s): ETS
+2024-02-14 15:22:34 INFO::Initial Split
+2024-02-14 15:22:34 INFO::Recipe Specification
+2024-02-14 15:22:34 INFO::Model Specification
+2024-02-14 15:22:34 INFO::Workflow Specification
+2024-02-14 15:22:34 INFO::Fitting
+2024-02-14 15:22:34 INFO::*** Fitting Algorithm ***
+2024-02-14 15:22:34 INFO::Method(s): SARIMA
+2024-02-14 15:22:35 INFO::Initial Split
+2024-02-14 15:22:35 INFO::Recipe Specification
+2024-02-14 15:22:35 INFO::Model Specification
+2024-02-14 15:22:35 INFO::Workflow Specification
+2024-02-14 15:22:35 INFO::Fitting
+2024-02-14 15:22:35 INFO::Stacking
+2024-02-14 15:22:41 INFO::Calibration
+2024-02-14 15:22:41 INFO::Residuals
+2024-02-14 15:22:42 INFO::Accuracy Evaluation
+2024-02-14 15:22:43 INFO::Test Forecasting
+2024-02-14 15:22:43 INFO::Refitting
+2024-02-14 15:22:51 INFO::Out-of-Sample Forecasting
+2024-02-14 15:23:12 INFO::*** Generating Forecasts ***
+2024-02-14 15:23:12 INFO::Method(s): ETS, Elastic Net
+2024-02-14 15:23:12 INFO::Initial Split
+2024-02-14 15:23:13 INFO::Future Frame
+2024-02-14 15:23:13 INFO::Modeltime Table
+2024-02-14 15:23:13 INFO::*** Fitting Algorithm ***
+2024-02-14 15:23:13 INFO::Method(s): ETS
+2024-02-14 15:23:13 INFO::Initial Split
+2024-02-14 15:23:13 INFO::Recipe Specification
+2024-02-14 15:23:13 INFO::Model Specification
+2024-02-14 15:23:13 INFO::Workflow Specification
+2024-02-14 15:23:13 INFO::Fitting
+2024-02-14 15:23:13 INFO::*** Fitting Algorithm ***
+2024-02-14 15:23:13 INFO::Method(s): Elastic Net
+2024-02-14 15:23:13 INFO::Initial Split
+2024-02-14 15:23:13 INFO::Recipe Specification
+2024-02-14 15:23:13 INFO::Model Specification
+2024-02-14 15:23:13 INFO::Workflow Specification
+2024-02-14 15:23:13 INFO::Fitting
+2024-02-14 15:23:13 INFO::Ensembling
+2024-02-14 15:23:14 INFO::Calibration
+2024-02-14 15:23:14 INFO::Residuals
+2024-02-14 15:23:15 INFO::Accuracy Evaluation
+2024-02-14 15:23:17 INFO::Test Forecasting
+2024-02-14 15:23:17 INFO::Refitting
+2024-02-14 15:23:18 INFO::Out-of-Sample Forecasting
+2024-02-14 15:23:36 INFO::*** Fitting Algorithm ***
+2024-02-14 15:23:36 INFO::Method(s): ETS
+2024-02-14 15:23:36 INFO::Initial Split
+2024-02-14 15:23:36 INFO::Recipe Specification
+2024-02-14 15:23:36 INFO::Model Specification
+2024-02-14 15:23:36 INFO::Workflow Specification
+2024-02-14 15:23:36 INFO::Fitting
+2024-02-14 15:23:37 INFO::*** Generating Forecasts ***
+2024-02-14 15:23:37 INFO::Method(s): ETS, Elastic Net
+2024-02-14 15:23:37 INFO::Initial Split
+2024-02-14 15:23:37 INFO::Future Frame
+2024-02-14 15:23:37 INFO::Modeltime Table
+2024-02-14 15:23:37 INFO::Ensembling
+2024-02-14 15:23:38 INFO::Calibration
+2024-02-14 15:23:38 INFO::Residuals
+2024-02-14 15:23:39 INFO::Accuracy Evaluation
+2024-02-14 15:23:42 INFO::Test Forecasting
+2024-02-14 15:23:42 INFO::Refitting
+2024-02-14 15:23:44 INFO::Out-of-Sample Forecasting
+2024-02-14 15:26:53 INFO::Getting Air Passengers data...
+2024-02-14 15:27:01 INFO::*** Generating Forecasts ***
+2024-02-14 15:27:01 INFO::Method(s): ETS, SARIMA
+2024-02-14 15:27:01 INFO::Setup Multiple Prediction Intervals
+2024-02-14 15:27:01 INFO::Initial Split
+2024-02-14 15:27:01 INFO::Future Frame
+2024-02-14 15:27:01 INFO::Modeltime Table
+2024-02-14 15:27:01 INFO::*** Fitting Algorithm ***
+2024-02-14 15:27:01 INFO::Method(s): ETS
+2024-02-14 15:27:01 INFO::Initial Split
+2024-02-14 15:27:02 INFO::Recipe Specification
+2024-02-14 15:27:02 INFO::Model Specification
+2024-02-14 15:27:02 INFO::Workflow Specification
+2024-02-14 15:27:02 INFO::Fitting
+2024-02-14 15:27:02 INFO::*** Fitting Algorithm ***
+2024-02-14 15:27:02 INFO::Method(s): SARIMA
+2024-02-14 15:27:02 INFO::Initial Split
+2024-02-14 15:27:02 INFO::Recipe Specification
+2024-02-14 15:27:02 INFO::Model Specification
+2024-02-14 15:27:02 INFO::Workflow Specification
+2024-02-14 15:27:02 INFO::Fitting
+2024-02-14 15:27:03 INFO::Ensembling
+2024-02-14 15:27:03 INFO::Calibration
+2024-02-14 15:27:04 INFO::Residuals
+2024-02-14 15:27:04 INFO::Accuracy Evaluation
+2024-02-14 15:27:06 INFO::Test Forecasting
+2024-02-14 15:27:16 INFO::Refitting
+2024-02-14 15:27:19 INFO::Out-of-Sample Forecasting
+2024-02-14 16:05:08 INFO::Getting Air Passengers data...
+2024-02-14 16:25:13 INFO::Getting Air Passengers data...
+2024-02-14 16:28:19 INFO::Extracting ensemble or stacking results..
+2024-02-14 16:28:19 INFO::*** Generating Forecasts ***
+2024-02-14 16:28:19 INFO::Method(s): ETS, SARIMA
+2024-02-14 16:28:19 INFO::Setup Multiple Prediction Intervals
+2024-02-14 16:28:19 INFO::Initial Split
+2024-02-14 16:28:19 INFO::Future Frame
+2024-02-14 16:28:19 INFO::Modeltime Table
+2024-02-14 16:28:19 INFO::*** Fitting Algorithm ***
+2024-02-14 16:28:19 INFO::Method(s): ETS
+2024-02-14 16:28:19 INFO::Initial Split
+2024-02-14 16:28:19 INFO::Recipe Specification
+2024-02-14 16:28:19 INFO::Model Specification
+2024-02-14 16:28:19 INFO::Workflow Specification
+2024-02-14 16:28:19 INFO::Fitting
+2024-02-14 16:28:20 INFO::*** Fitting Algorithm ***
+2024-02-14 16:28:20 INFO::Method(s): SARIMA
+2024-02-14 16:28:20 INFO::Initial Split
+2024-02-14 16:28:20 INFO::Recipe Specification
+2024-02-14 16:28:20 INFO::Model Specification
+2024-02-14 16:28:20 INFO::Workflow Specification
+2024-02-14 16:28:20 INFO::Fitting
+2024-02-14 16:28:21 INFO::Ensembling
+2024-02-14 16:28:21 INFO::Calibration
+2024-02-14 16:28:22 INFO::Residuals
+2024-02-14 16:28:22 INFO::Accuracy Evaluation
+2024-02-14 16:28:24 INFO::Test Forecasting
+2024-02-14 16:28:34 INFO::Refitting
+2024-02-14 16:28:37 INFO::Out-of-Sample Forecasting
+2024-02-14 16:31:15 INFO::Getting Air Passengers data...
+2024-02-14 16:31:19 INFO::*** Generating Forecasts ***
+2024-02-14 16:31:19 INFO::Method(s): ETS
+2024-02-14 16:31:19 INFO::Setup Multiple Prediction Intervals
+2024-02-14 16:31:19 INFO::Initial Split
+2024-02-14 16:31:19 INFO::Future Frame
+2024-02-14 16:31:19 INFO::Modeltime Table
+2024-02-14 16:31:19 INFO::*** Fitting Algorithm ***
+2024-02-14 16:31:19 INFO::Method(s): ETS
+2024-02-14 16:31:19 INFO::Initial Split
+2024-02-14 16:31:19 INFO::Recipe Specification
+2024-02-14 16:31:19 INFO::Model Specification
+2024-02-14 16:31:19 INFO::Workflow Specification
+2024-02-14 16:31:19 INFO::Fitting
+2024-02-14 16:31:19 INFO::Calibration
+2024-02-14 16:31:19 INFO::Residuals
+2024-02-14 16:31:20 INFO::Accuracy Evaluation
+2024-02-14 16:31:20 INFO::Test Forecasting
+2024-02-14 16:31:23 INFO::Refitting
+2024-02-14 16:31:23 INFO::Out-of-Sample Forecasting
+2024-02-14 16:31:35 INFO::Extracting ensemble or stacking results..
+2024-02-14 16:31:35 INFO::*** Generating Forecasts ***
+2024-02-14 16:31:35 INFO::Method(s): ETS, SARIMA
+2024-02-14 16:31:35 INFO::Setup Multiple Prediction Intervals
+2024-02-14 16:31:35 INFO::Initial Split
+2024-02-14 16:31:35 INFO::Future Frame
+2024-02-14 16:31:35 INFO::Modeltime Table
+2024-02-14 16:31:35 INFO::*** Fitting Algorithm ***
+2024-02-14 16:31:35 INFO::Method(s): ETS
+2024-02-14 16:31:35 INFO::Initial Split
+2024-02-14 16:31:35 INFO::Recipe Specification
+2024-02-14 16:31:35 INFO::Model Specification
+2024-02-14 16:31:35 INFO::Workflow Specification
+2024-02-14 16:31:35 INFO::Fitting
+2024-02-14 16:31:36 INFO::*** Fitting Algorithm ***
+2024-02-14 16:31:36 INFO::Method(s): SARIMA
+2024-02-14 16:31:36 INFO::Initial Split
+2024-02-14 16:31:36 INFO::Recipe Specification
+2024-02-14 16:31:36 INFO::Model Specification
+2024-02-14 16:31:36 INFO::Workflow Specification
+2024-02-14 16:31:36 INFO::Fitting
+2024-02-14 16:31:36 INFO::Ensembling
+2024-02-14 16:31:37 INFO::Calibration
+2024-02-14 16:31:37 INFO::Residuals
+2024-02-14 16:31:38 INFO::Accuracy Evaluation
+2024-02-14 16:31:39 INFO::Test Forecasting
+2024-02-14 16:31:49 INFO::Refitting
+2024-02-14 16:31:52 INFO::Out-of-Sample Forecasting
+2024-02-14 16:32:26 INFO::Extracting ensemble or stacking results..
+2024-02-14 16:32:26 INFO::*** Generating Forecasts ***
+2024-02-14 16:32:26 INFO::Method(s): ETS, SARIMA
+2024-02-14 16:32:26 INFO::Setup Multiple Prediction Intervals
+2024-02-14 16:32:26 INFO::Initial Split
+2024-02-14 16:32:26 INFO::Future Frame
+2024-02-14 16:32:26 INFO::Modeltime Table
+2024-02-14 16:32:26 INFO::*** Fitting Algorithm ***
+2024-02-14 16:32:26 INFO::Method(s): ETS
+2024-02-14 16:32:26 INFO::Initial Split
+2024-02-14 16:32:27 INFO::Recipe Specification
+2024-02-14 16:32:27 INFO::Model Specification
+2024-02-14 16:32:27 INFO::Workflow Specification
+2024-02-14 16:32:27 INFO::Fitting
+2024-02-14 16:32:27 INFO::*** Fitting Algorithm ***
+2024-02-14 16:32:27 INFO::Method(s): SARIMA
+2024-02-14 16:32:27 INFO::Initial Split
+2024-02-14 16:32:27 INFO::Recipe Specification
+2024-02-14 16:32:27 INFO::Model Specification
+2024-02-14 16:32:27 INFO::Workflow Specification
+2024-02-14 16:32:27 INFO::Fitting
+2024-02-14 16:32:28 INFO::Ensembling
+2024-02-14 16:32:28 INFO::Calibration
+2024-02-14 16:32:29 INFO::Residuals
+2024-02-14 16:32:29 INFO::Accuracy Evaluation
+2024-02-14 16:32:31 INFO::Test Forecasting
+2024-02-14 16:32:41 INFO::Refitting
+2024-02-14 16:32:44 INFO::Out-of-Sample Forecasting
+2024-02-14 16:33:06 INFO::*** Generating Forecasts ***
+2024-02-14 16:33:06 INFO::Method(s): ETS, SARIMA
+2024-02-14 16:33:06 INFO::Initial Split
+2024-02-14 16:33:06 INFO::Future Frame
+2024-02-14 16:33:06 INFO::Modeltime Table
+2024-02-14 16:33:06 INFO::*** Fitting Algorithm ***
+2024-02-14 16:33:06 INFO::Method(s): ETS
+2024-02-14 16:33:06 INFO::Initial Split
+2024-02-14 16:33:06 INFO::Recipe Specification
+2024-02-14 16:33:06 INFO::Model Specification
+2024-02-14 16:33:06 INFO::Workflow Specification
+2024-02-14 16:33:06 INFO::Fitting
+2024-02-14 16:33:06 INFO::*** Fitting Algorithm ***
+2024-02-14 16:33:06 INFO::Method(s): SARIMA
+2024-02-14 16:33:06 INFO::Initial Split
+2024-02-14 16:33:06 INFO::Recipe Specification
+2024-02-14 16:33:06 INFO::Model Specification
+2024-02-14 16:33:06 INFO::Workflow Specification
+2024-02-14 16:33:06 INFO::Fitting
+2024-02-14 16:33:07 INFO::Ensembling
+2024-02-14 16:33:07 INFO::Calibration
+2024-02-14 16:33:08 INFO::Residuals
+2024-02-14 16:33:08 INFO::Accuracy Evaluation
+2024-02-14 16:33:09 INFO::Test Forecasting
+2024-02-14 16:33:09 INFO::Refitting
+2024-02-14 16:33:12 INFO::Out-of-Sample Forecasting
+2024-02-14 16:33:19 INFO::Extracting ensemble or stacking results..
+2024-02-14 16:33:19 INFO::*** Generating Forecasts ***
+2024-02-14 16:33:19 INFO::Method(s): ETS, SARIMA
+2024-02-14 16:33:19 INFO::Setup Multiple Prediction Intervals
+2024-02-14 16:33:19 INFO::Initial Split
+2024-02-14 16:33:20 INFO::Future Frame
+2024-02-14 16:33:20 INFO::Modeltime Table
+2024-02-14 16:33:20 INFO::*** Fitting Algorithm ***
+2024-02-14 16:33:20 INFO::Method(s): ETS
+2024-02-14 16:33:20 INFO::Initial Split
+2024-02-14 16:33:20 INFO::Recipe Specification
+2024-02-14 16:33:20 INFO::Model Specification
+2024-02-14 16:33:20 INFO::Workflow Specification
+2024-02-14 16:33:20 INFO::Fitting
+2024-02-14 16:33:20 INFO::*** Fitting Algorithm ***
+2024-02-14 16:33:20 INFO::Method(s): SARIMA
+2024-02-14 16:33:20 INFO::Initial Split
+2024-02-14 16:33:20 INFO::Recipe Specification
+2024-02-14 16:33:20 INFO::Model Specification
+2024-02-14 16:33:20 INFO::Workflow Specification
+2024-02-14 16:33:20 INFO::Fitting
+2024-02-14 16:33:21 INFO::Ensembling
+2024-02-14 16:33:21 INFO::Calibration
+2024-02-14 16:33:22 INFO::Residuals
+2024-02-14 16:33:22 INFO::Accuracy Evaluation
+2024-02-14 16:33:24 INFO::Test Forecasting
+2024-02-14 16:33:34 INFO::Refitting
+2024-02-14 16:33:37 INFO::Out-of-Sample Forecasting
+2024-02-14 16:34:40 INFO::*** Generating Forecasts ***
+2024-02-14 16:34:40 INFO::Method(s): ETS
+2024-02-14 16:34:40 INFO::Setup Multiple Prediction Intervals
+2024-02-14 16:34:40 INFO::Initial Split
+2024-02-14 16:34:40 INFO::Future Frame
+2024-02-14 16:34:40 INFO::Modeltime Table
+2024-02-14 16:34:40 INFO::*** Fitting Algorithm ***
+2024-02-14 16:34:40 INFO::Method(s): ETS
+2024-02-14 16:34:40 INFO::Initial Split
+2024-02-14 16:34:40 INFO::Recipe Specification
+2024-02-14 16:34:40 INFO::Model Specification
+2024-02-14 16:34:40 INFO::Workflow Specification
+2024-02-14 16:34:40 INFO::Fitting
+2024-02-14 16:34:41 INFO::Calibration
+2024-02-14 16:34:41 INFO::Residuals
+2024-02-14 16:34:41 INFO::Accuracy Evaluation
+2024-02-14 16:34:41 INFO::Test Forecasting
+2024-02-14 16:34:44 INFO::Refitting
+2024-02-14 16:34:44 INFO::Out-of-Sample Forecasting
+2024-02-14 16:34:54 INFO::Extracting ensemble or stacking results..
+2024-02-14 16:34:54 INFO::*** Generating Forecasts ***
+2024-02-14 16:34:54 INFO::Method(s): ETS, SARIMA
+2024-02-14 16:34:54 INFO::Setup Multiple Prediction Intervals
+2024-02-14 16:34:54 INFO::Initial Split
+2024-02-14 16:34:54 INFO::Future Frame
+2024-02-14 16:34:54 INFO::Modeltime Table
+2024-02-14 16:34:54 INFO::*** Fitting Algorithm ***
+2024-02-14 16:34:54 INFO::Method(s): ETS
+2024-02-14 16:34:54 INFO::Initial Split
+2024-02-14 16:34:54 INFO::Recipe Specification
+2024-02-14 16:34:54 INFO::Model Specification
+2024-02-14 16:34:54 INFO::Workflow Specification
+2024-02-14 16:34:54 INFO::Fitting
+2024-02-14 16:34:55 INFO::*** Fitting Algorithm ***
+2024-02-14 16:34:55 INFO::Method(s): SARIMA
+2024-02-14 16:34:55 INFO::Initial Split
+2024-02-14 16:34:55 INFO::Recipe Specification
+2024-02-14 16:34:55 INFO::Model Specification
+2024-02-14 16:34:55 INFO::Workflow Specification
+2024-02-14 16:34:55 INFO::Fitting
+2024-02-14 16:34:55 INFO::Ensembling
+2024-02-14 16:34:56 INFO::Calibration
+2024-02-14 16:34:56 INFO::Residuals
+2024-02-14 16:34:57 INFO::Accuracy Evaluation
+2024-02-14 16:34:58 INFO::Test Forecasting
+2024-02-14 16:35:08 INFO::Refitting
+2024-02-14 16:35:11 INFO::Out-of-Sample Forecasting
+2024-02-14 16:36:59 INFO::Extracting ensemble or stacking results..
+2024-02-14 16:36:59 INFO::*** Generating Forecasts ***
+2024-02-14 16:36:59 INFO::Method(s): ETS, SARIMA
+2024-02-14 16:36:59 INFO::Setup Multiple Prediction Intervals
+2024-02-14 16:36:59 INFO::Initial Split
+2024-02-14 16:37:00 INFO::Future Frame
+2024-02-14 16:37:00 INFO::Modeltime Table
+2024-02-14 16:37:00 INFO::*** Fitting Algorithm ***
+2024-02-14 16:37:00 INFO::Method(s): ETS
+2024-02-14 16:37:00 INFO::Initial Split
+2024-02-14 16:37:00 INFO::Recipe Specification
+2024-02-14 16:37:00 INFO::Model Specification
+2024-02-14 16:37:00 INFO::Workflow Specification
+2024-02-14 16:37:00 INFO::Fitting
+2024-02-14 16:37:00 INFO::*** Fitting Algorithm ***
+2024-02-14 16:37:00 INFO::Method(s): SARIMA
+2024-02-14 16:37:00 INFO::Initial Split
+2024-02-14 16:37:00 INFO::Recipe Specification
+2024-02-14 16:37:00 INFO::Model Specification
+2024-02-14 16:37:00 INFO::Workflow Specification
+2024-02-14 16:37:00 INFO::Fitting
+2024-02-14 16:37:01 INFO::Ensembling
+2024-02-14 16:37:01 INFO::Calibration
+2024-02-14 16:37:02 INFO::Residuals
+2024-02-14 16:37:02 INFO::Accuracy Evaluation
+2024-02-14 16:37:04 INFO::Test Forecasting
+2024-02-14 16:37:14 INFO::Refitting
+2024-02-14 16:37:17 INFO::Out-of-Sample Forecasting
+2024-02-14 16:44:00 INFO::*** Generating Forecasts ***
+2024-02-14 16:44:00 INFO::Method(s): Linear Regression
+2024-02-14 16:44:00 INFO::Initial Split
+2024-02-14 16:44:00 INFO::Future Frame
+2024-02-14 16:44:00 INFO::Modeltime Table
+2024-02-14 16:44:00 INFO::*** Fitting Algorithm ***
+2024-02-14 16:44:00 INFO::Method(s): Linear Regression
+2024-02-14 16:44:00 INFO::Initial Split
+2024-02-14 16:44:00 INFO::Recipe Specification
+2024-02-14 16:44:00 INFO::Model Specification
+2024-02-14 16:44:00 INFO::Workflow Specification
+2024-02-14 16:44:00 INFO::Fitting
+2024-02-14 16:44:00 INFO::Calibration
+2024-02-14 16:44:01 INFO::Residuals
+2024-02-14 16:44:01 INFO::Accuracy Evaluation
+2024-02-14 16:44:02 INFO::Test Forecasting
+2024-02-14 16:44:02 INFO::Refitting
+2024-02-14 16:44:03 INFO::Out-of-Sample Forecasting
+2024-02-14 16:52:41 INFO::Getting Air Passengers data...
+2024-02-14 16:55:20 INFO::*** Generating Forecasts ***
+2024-02-14 16:55:20 INFO::Method(s): ETS, SARIMA
+2024-02-14 16:55:20 INFO::Initial Split
+2024-02-14 16:55:20 INFO::Future Frame
+2024-02-14 16:55:20 INFO::Modeltime Table
+2024-02-14 16:55:20 INFO::*** Fitting Algorithm ***
+2024-02-14 16:55:20 INFO::Method(s): ETS
+2024-02-14 16:55:20 INFO::Initial Split
+2024-02-14 16:55:20 INFO::Recipe Specification
+2024-02-14 16:55:20 INFO::Model Specification
+2024-02-14 16:55:20 INFO::Workflow Specification
+2024-02-14 16:55:20 INFO::Fitting
+2024-02-14 16:55:21 INFO::*** Fitting Algorithm ***
+2024-02-14 16:55:21 INFO::Method(s): SARIMA
+2024-02-14 16:55:21 INFO::Initial Split
+2024-02-14 16:55:21 INFO::Recipe Specification
+2024-02-14 16:55:21 INFO::Model Specification
+2024-02-14 16:55:21 INFO::Workflow Specification
+2024-02-14 16:55:21 INFO::Fitting
+2024-02-14 16:55:22 INFO::Ensembling
+2024-02-14 16:55:22 INFO::Calibration
+2024-02-14 16:55:22 INFO::Residuals
+2024-02-14 16:55:23 INFO::Accuracy Evaluation
+2024-02-14 16:55:24 INFO::Test Forecasting
+2024-02-14 16:55:24 INFO::Refitting
+2024-02-14 16:55:27 INFO::Out-of-Sample Forecasting
+2024-02-14 16:55:47 INFO::*** Generating Forecasts ***
+2024-02-14 16:55:47 INFO::Method(s): ETS
+2024-02-14 16:55:47 INFO::Setup Multiple Prediction Intervals
+2024-02-14 16:55:47 INFO::Initial Split
+2024-02-14 16:55:47 INFO::Future Frame
+2024-02-14 16:55:47 INFO::Modeltime Table
+2024-02-14 16:55:47 INFO::*** Fitting Algorithm ***
+2024-02-14 16:55:47 INFO::Method(s): ETS
+2024-02-14 16:55:47 INFO::Initial Split
+2024-02-14 16:55:47 INFO::Recipe Specification
+2024-02-14 16:55:47 INFO::Model Specification
+2024-02-14 16:55:47 INFO::Workflow Specification
+2024-02-14 16:55:47 INFO::Fitting
+2024-02-14 16:55:48 INFO::Calibration
+2024-02-14 16:55:48 INFO::Residuals
+2024-02-14 16:55:48 INFO::Accuracy Evaluation
+2024-02-14 16:55:48 INFO::Test Forecasting
+2024-02-14 16:55:51 INFO::Refitting
+2024-02-14 16:55:51 INFO::Out-of-Sample Forecasting
+2024-02-14 16:56:42 INFO::Getting Air Passengers data...
+2024-02-14 16:56:45 INFO::Extracting ensemble or stacking results..
+2024-02-14 16:56:45 INFO::*** Generating Forecasts ***
+2024-02-14 16:56:45 INFO::Method(s): ETS, SARIMA
+2024-02-14 16:56:45 INFO::Setup Multiple Prediction Intervals
+2024-02-14 16:56:45 INFO::Initial Split
+2024-02-14 16:56:45 INFO::Future Frame
+2024-02-14 16:56:45 INFO::Modeltime Table
+2024-02-14 16:56:45 INFO::*** Fitting Algorithm ***
+2024-02-14 16:56:45 INFO::Method(s): ETS
+2024-02-14 16:56:45 INFO::Initial Split
+2024-02-14 16:56:45 INFO::Recipe Specification
+2024-02-14 16:56:45 INFO::Model Specification
+2024-02-14 16:56:45 INFO::Workflow Specification
+2024-02-14 16:56:45 INFO::Fitting
+2024-02-14 16:56:46 INFO::*** Fitting Algorithm ***
+2024-02-14 16:56:46 INFO::Method(s): SARIMA
+2024-02-14 16:56:46 INFO::Initial Split
+2024-02-14 16:56:46 INFO::Recipe Specification
+2024-02-14 16:56:46 INFO::Model Specification
+2024-02-14 16:56:46 INFO::Workflow Specification
+2024-02-14 16:56:46 INFO::Fitting
+2024-02-14 16:56:46 INFO::Ensembling
+2024-02-14 16:56:47 INFO::Calibration
+2024-02-14 16:56:47 INFO::Residuals
+2024-02-14 16:56:48 INFO::Accuracy Evaluation
+2024-02-14 16:56:49 INFO::Test Forecasting
+2024-02-14 16:56:59 INFO::Refitting
+2024-02-14 16:57:03 INFO::Out-of-Sample Forecasting
+2024-02-14 16:57:41 INFO::Extracting ensemble or stacking results..
+2024-02-14 16:57:41 INFO::*** Generating Forecasts ***
+2024-02-14 16:57:41 INFO::Method(s): ETS, SARIMA
+2024-02-14 16:57:41 INFO::Setup Multiple Prediction Intervals
+2024-02-14 16:57:41 INFO::Initial Split
+2024-02-14 16:57:41 INFO::Future Frame
+2024-02-14 16:57:41 INFO::Modeltime Table
+2024-02-14 16:57:41 INFO::*** Fitting Algorithm ***
+2024-02-14 16:57:41 INFO::Method(s): ETS
+2024-02-14 16:57:41 INFO::Initial Split
+2024-02-14 16:57:41 INFO::Recipe Specification
+2024-02-14 16:57:41 INFO::Model Specification
+2024-02-14 16:57:41 INFO::Workflow Specification
+2024-02-14 16:57:41 INFO::Fitting
+2024-02-14 16:57:42 INFO::*** Fitting Algorithm ***
+2024-02-14 16:57:42 INFO::Method(s): SARIMA
+2024-02-14 16:57:42 INFO::Initial Split
+2024-02-14 16:57:42 INFO::Recipe Specification
+2024-02-14 16:57:42 INFO::Model Specification
+2024-02-14 16:57:42 INFO::Workflow Specification
+2024-02-14 16:57:42 INFO::Fitting
+2024-02-14 16:57:42 INFO::Ensembling
+2024-02-14 16:57:43 INFO::Calibration
+2024-02-14 16:57:43 INFO::Residuals
+2024-02-14 16:57:44 INFO::Accuracy Evaluation
+2024-02-14 16:57:45 INFO::Test Forecasting
+2024-02-14 16:57:55 INFO::Refitting
+2024-02-14 16:57:58 INFO::Out-of-Sample Forecasting
+2024-02-14 16:58:19 INFO::Extracting ensemble or stacking results..
+2024-02-14 16:58:19 INFO::*** Generating Forecasts ***
+2024-02-14 16:58:19 INFO::Method(s): ETS, SARIMA
+2024-02-14 16:58:19 INFO::Setup Multiple Prediction Intervals
+2024-02-14 16:58:19 INFO::Initial Split
+2024-02-14 16:58:19 INFO::Future Frame
+2024-02-14 16:58:19 INFO::Modeltime Table
+2024-02-14 16:58:19 INFO::*** Fitting Algorithm ***
+2024-02-14 16:58:19 INFO::Method(s): ETS
+2024-02-14 16:58:19 INFO::Initial Split
+2024-02-14 16:58:19 INFO::Recipe Specification
+2024-02-14 16:58:19 INFO::Model Specification
+2024-02-14 16:58:19 INFO::Workflow Specification
+2024-02-14 16:58:19 INFO::Fitting
+2024-02-14 16:58:19 INFO::*** Fitting Algorithm ***
+2024-02-14 16:58:19 INFO::Method(s): SARIMA
+2024-02-14 16:58:19 INFO::Initial Split
+2024-02-14 16:58:19 INFO::Recipe Specification
+2024-02-14 16:58:19 INFO::Model Specification
+2024-02-14 16:58:19 INFO::Workflow Specification
+2024-02-14 16:58:19 INFO::Fitting
+2024-02-14 16:58:20 INFO::Stacking
+2024-02-14 16:58:26 INFO::Calibration
+2024-02-14 16:58:26 INFO::Residuals
+2024-02-14 16:58:27 INFO::Accuracy Evaluation
+2024-02-14 16:58:28 INFO::Test Forecasting
+2024-02-14 16:58:38 INFO::Refitting
+2024-02-14 16:58:46 INFO::Out-of-Sample Forecasting
+2024-02-14 17:00:27 INFO::*** Generating Forecasts ***
+2024-02-14 17:00:27 INFO::Method(s): ETS, SARIMA
+2024-02-14 17:00:27 INFO::Initial Split
+2024-02-14 17:00:27 INFO::Future Frame
+2024-02-14 17:00:27 INFO::Modeltime Table
+2024-02-14 17:00:27 INFO::*** Fitting Algorithm ***
+2024-02-14 17:00:27 INFO::Method(s): ETS
+2024-02-14 17:00:27 INFO::Initial Split
+2024-02-14 17:00:27 INFO::Recipe Specification
+2024-02-14 17:00:27 INFO::Model Specification
+2024-02-14 17:00:27 INFO::Workflow Specification
+2024-02-14 17:00:27 INFO::Fitting
+2024-02-14 17:00:27 INFO::*** Fitting Algorithm ***
+2024-02-14 17:00:27 INFO::Method(s): SARIMA
+2024-02-14 17:00:27 INFO::Initial Split
+2024-02-14 17:00:27 INFO::Recipe Specification
+2024-02-14 17:00:27 INFO::Model Specification
+2024-02-14 17:00:27 INFO::Workflow Specification
+2024-02-14 17:00:27 INFO::Fitting
+2024-02-14 17:00:28 INFO::Stacking
+2024-02-14 17:00:33 INFO::Calibration
+2024-02-14 17:00:34 INFO::Residuals
+2024-02-14 17:00:34 INFO::Accuracy Evaluation
+2024-02-14 17:00:35 INFO::Test Forecasting
+2024-02-14 17:00:35 INFO::Refitting
+2024-02-14 17:00:43 INFO::Out-of-Sample Forecasting
+2024-02-14 17:02:20 INFO::Getting Air Passengers data...
+2024-02-14 17:03:23 INFO::Extracting ensemble or stacking results..
+2024-02-14 17:03:23 INFO::*** Generating Forecasts ***
+2024-02-14 17:03:23 INFO::Method(s): ETS, SARIMA
+2024-02-14 17:03:23 INFO::Setup Multiple Prediction Intervals
+2024-02-14 17:03:23 INFO::Initial Split
+2024-02-14 17:03:23 INFO::Future Frame
+2024-02-14 17:03:23 INFO::Modeltime Table
+2024-02-14 17:03:23 INFO::*** Fitting Algorithm ***
+2024-02-14 17:03:23 INFO::Method(s): ETS
+2024-02-14 17:03:23 INFO::Initial Split
+2024-02-14 17:03:23 INFO::Recipe Specification
+2024-02-14 17:03:24 INFO::Model Specification
+2024-02-14 17:03:24 INFO::Workflow Specification
+2024-02-14 17:03:24 INFO::Fitting
+2024-02-14 17:03:24 INFO::*** Fitting Algorithm ***
+2024-02-14 17:03:24 INFO::Method(s): SARIMA
+2024-02-14 17:03:24 INFO::Initial Split
+2024-02-14 17:03:24 INFO::Recipe Specification
+2024-02-14 17:03:24 INFO::Model Specification
+2024-02-14 17:03:24 INFO::Workflow Specification
+2024-02-14 17:03:24 INFO::Fitting
+2024-02-14 17:03:25 INFO::Stacking
+2024-02-14 17:03:30 INFO::Calibration
+2024-02-14 17:03:31 INFO::Residuals
+2024-02-14 17:03:31 INFO::Accuracy Evaluation
+2024-02-14 17:03:32 INFO::Test Forecasting
+2024-02-14 17:03:42 INFO::Refitting
+2024-02-14 17:03:50 INFO::Out-of-Sample Forecasting
+2024-02-14 17:05:02 INFO::*** Explaining Algorithm ***
+2024-02-14 17:05:02 INFO::Method(s): Linear Regression
+2024-02-14 17:05:02 INFO::Initial Split
+2024-02-14 17:05:02 INFO::Recipe Specification
+2024-02-14 17:05:03 INFO::Model Specification
+2024-02-14 17:05:03 INFO::Workflow Specification
+2024-02-14 17:05:03 INFO::Fitting
+2024-02-14 17:05:03 INFO::Creating Explainer
+2024-02-14 17:05:03 INFO::Explaining Algorithm: feature_importance
+2024-02-14 17:05:06 INFO::Explaining Algorithm: break_down
+2024-02-14 17:05:07 INFO::Explaining Algorithm: variable_response
+2024-02-14 17:05:07 INFO::Explaining Algorithm: local_stability
+2024-02-14 17:05:07 INFO::Explaining Algorithm: break_down

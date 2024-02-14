@@ -529,7 +529,7 @@ fit_ensemble <- function(modeltime_table, ensemble_methods, weights, seed = 1992
   if ("Average" %in% ensemble_methods) {
     ens_tmp <- modeltime.ensemble::ensemble_average(modeltime_table, type = "mean") |>
       modeltime::modeltime_table() |>
-      modeltime::update_modeltime_description(.model_id = 1, .new_model_desc = "Average")
+      modeltime::update_modeltime_description(.model_id = 1, .new_model_desc = "Ens - Average")
     ensemble_tbl <- modeltime::combine_modeltime_tables(ensemble_tbl, ens_tmp)
   }
 
@@ -538,14 +538,14 @@ fit_ensemble <- function(modeltime_table, ensemble_methods, weights, seed = 1992
       modeltime_table, loadings = weights, scale_loadings = TRUE
     ) |>
       modeltime::modeltime_table() |>
-      modeltime::update_modeltime_description(.model_id = 1, .new_model_desc = "W-Average")
+      modeltime::update_modeltime_description(.model_id = 1, .new_model_desc = "Ens - Weighted Average")
     ensemble_tbl <- modeltime::combine_modeltime_tables(ensemble_tbl, ens_tmp)
   }
 
   if ("Median" %in% ensemble_methods) {
     ens_tmp <- modeltime.ensemble::ensemble_average(modeltime_table, type = "median") |>
       modeltime::modeltime_table() |>
-      modeltime::update_modeltime_description(.model_id = 1, .new_model_desc = "Median")
+      modeltime::update_modeltime_description(.model_id = 1, .new_model_desc = " Ens - Median")
     ensemble_tbl <- modeltime::combine_modeltime_tables(ensemble_tbl, ens_tmp)
   }
 
@@ -568,7 +568,7 @@ fit_stack <- function(modeltime_table, stacking_methods, resamples, seed = 1992)
     )
     stk_tmp <- stk_model_spec |>
       modeltime::modeltime_table() |>
-      modeltime::update_modeltime_description(.model_id = 1, .new_model_desc = "Stack - LM")
+      modeltime::update_modeltime_description(.model_id = 1, .new_model_desc = "Stk - Linear Regression")
     stack_tbl <- modeltime::combine_modeltime_tables(stack_tbl, stk_tmp)
     stack_fit_list$lm <- stk_model_spec$fit$fit
   }
@@ -585,7 +585,7 @@ fit_stack <- function(modeltime_table, stacking_methods, resamples, seed = 1992)
     )
     stk_tmp <- stk_model_spec |>
       modeltime::modeltime_table() |>
-      modeltime::update_modeltime_description(.model_id = 1, .new_model_desc = "Stack - Elastic Net")
+      modeltime::update_modeltime_description(.model_id = 1, .new_model_desc = "Stk - Elastic Net")
     stack_tbl <- modeltime::combine_modeltime_tables(stack_tbl, stk_tmp)
     stack_fit_list$elanet <- stk_model_spec$fit$fit
   }
@@ -608,7 +608,7 @@ fit_stack <- function(modeltime_table, stacking_methods, resamples, seed = 1992)
     )
     stk_tmp <- stk_model_spec |>
       modeltime::modeltime_table() |>
-      modeltime::update_modeltime_description(.model_id = 1, .new_model_desc = "Stack - XGBoost")
+      modeltime::update_modeltime_description(.model_id = 1, .new_model_desc = "Stk - Boosted Trees")
     stack_tbl <- modeltime::combine_modeltime_tables(stack_tbl, stk_tmp)
     stack_fit_list$xgboost <- stk_model_spec$fit$fit
   }

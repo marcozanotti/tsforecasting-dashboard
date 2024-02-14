@@ -46,7 +46,7 @@ aml_methods <- methods$aml
 tune_methods <- methods$tune
 ens_methods <- methods$ens
 stk_methods <- methods$stk
-# methods <- c(ts_methods, ml_methods, dl_methods, mix_methods)
+all_methods <- c(ts_methods, ml_methods, dl_methods, mix_methods, aml_methods)
 
 mtd_prm <- getOption("tsf.dashboard.methods_params")
 mtd_prm_names <- purrr::map(mtd_prm, names)
@@ -1351,7 +1351,12 @@ observeEvent(
   }
 )
 
-react_val <- reactiveValues(tune_fit = purrr::set_names(vector("list", length(tune_methods)), tune_methods))
+react_val <- reactiveValues(
+	tune_fit = purrr::set_names(
+		vector("list", length(tune_methods)), 
+		tune_methods
+	)
+)
 
 tune_results <- eventReactive(
   eventExpr = input$tune_apply_forecast,
@@ -1557,20 +1562,54 @@ observeEvent(
   }
 )
 
+react_val <- reactiveValues(
+	comp_fit = purrr::set_names(
+		vector("list", length(all_methods)), 
+		all_methods
+	)
+)
+
 compare_results <- eventReactive(
   eventExpr = input$comp_apply_forecast,
   valueExpr = {
-    map(
-      input$comp_method, 
-      ~ fit_model(
-        data = data_transformed(), method = ., params = input, 
-        n_assess = input$comp_n_assess, assess_type = input$comp_assess_type, seed = 1992
-      )
-    ) |> 
-      generate_forecast(
-        data = data_transformed(), method = input$comp_method, n_future = input$comp_n_future,
-        n_assess = input$comp_n_assess, assess_type = input$comp_assess_type
-      )
+  	if (input$comp_tune) {
+  		comp_no_tune_mtd <- input$comp_method[!input$comp_method %in% tune_methods]
+  		if (length(comp_no_tune_mtd) > 0) {
+  			for (mtd in comp_no_tune_mtd) {
+  				react_val$comp_fit[[mtd]] <- fit_model(
+  					data = data_transformed(), method = mtd, params = input,
+  					n_assess = input$comp_n_assess, assess_type = input$comp_assess_type,
+  					seed = 1992
+  				)
+  			}
+  		}
+  		comp_tune_mtd <- input$comp_method[input$comp_method %in% tune_methods]
+  		if (length(comp_tune_mtd) > 0) {
+  			for (mtd in comp_tune_mtd) {
+  				react_val$comp_fit[[mtd]] <- react_val$tune_fit[[mtd]]
+  			}
+  		}
+  		react_val$comp_fit |> 
+  			generate_forecast(
+  				data = data_transformed(), method = input$comp_method,
+  				n_future = input$comp_n_future,	n_assess = input$comp_n_assess,
+  				assess_type = input$comp_assess_type
+  			)
+  	} else {
+  		map(
+  			input$comp_method,
+  			~ fit_model(
+  				data = data_transformed(), method = ., params = input,
+  				n_assess = input$comp_n_assess, assess_type = input$comp_assess_type,
+  				seed = 1992
+  			)
+  		) |>
+  			generate_forecast(
+  				data = data_transformed(), method = input$comp_method,
+  				n_future = input$comp_n_future,	n_assess = input$comp_n_assess,
+  				assess_type = input$comp_assess_type
+  			)
+  	}
   }
 )
 
@@ -1681,7 +1720,7 @@ pickerInput(
     `Mixed Algorithms` = mix_methods,
     `Auto ML` = aml_methods
   ), 
-  selected = "Random Forest"
+  selected = "Linear Regression"
 )
 
 awesomeCheckbox(inputId = "exp_tune", label = "Use optimized algorithm?", value = FALSE)
@@ -1711,7 +1750,7 @@ observeEvent(
   	updateNumericInput(session = session, inputId = "exp_n_future", value = 12)
     updateNumericInput(session = session, inputId = "exp_n_assess", value = 24)
     updatePrettyRadioButtons(session = session, inputId = "exp_assess_type", selected = "Rolling")
-    updateSelectInput(session = session, inputId = "exp_method", selected = "Random Forest")
+    updateSelectInput(session = session, inputId = "exp_method", selected = "Linear Regression")
     updateCheckboxInput(session = session, inputId = "exp_tune", value = FALSE)
     updateCheckboxInput(session = session, inputId = "exp_back_transf", value = FALSE)
     updateTextInput(session = session, inputId = "exp_features", value = "")
@@ -1737,16 +1776,6 @@ explainer_results <- eventReactive(
   	}
   }
 )
-
-# explainer_results <- eventReactive(
-#   eventExpr = input$exp_apply_forecast,
-#   valueExpr = {
-# 		generate_model_explainer(
-# 			data = data_transformed(), method = input$exp_method, params = input,
-# 			n_assess = input$exp_n_assess, assess_type = input$exp_assess_type
-# 		)
-#   }
-# )
 
 observeEvent(
   eventExpr = input$exp_apply_forecast,
@@ -1967,44 +1996,98 @@ observeEvent(
 )
 
 react_val <- reactiveValues(combine_results = NULL)
+react_val <- reactiveValues(ens_fit = purrr::set_names(vector("list", length(all_methods)),	all_methods))
 
 observeEvent(
   eventExpr = input$ens_apply_forecast, 
   handlerExpr = {
-    react_val$combine_results <-
-      map(
-        input$ens_method,
-        ~ fit_model(
-          data = data_transformed(), method = ., params = input,
-          n_assess = input$ens_n_assess, assess_type = input$ens_assess_type, seed = 1992
-        )
-      ) |>
-      generate_forecast(
-        data = data_transformed(), method = input$ens_method,
-        n_future = input$ens_n_future, n_assess = input$ens_n_assess,
-        assess_type = input$ens_assess_type, ensemble_methods = input$ens_type,
-        stacking_methods = NULL
-      )
+  	if (input$ens_tune) {
+  		ens_no_tune_mtd <- input$ens_method[!input$ens_method %in% tune_methods]
+  		if (length(ens_no_tune_mtd) > 0) {
+  			for (mtd in ens_no_tune_mtd) {
+  				react_val$ens_fit[[mtd]] <- fit_model(
+  					data = data_transformed(), method = mtd, params = input,
+  					n_assess = input$ens_n_assess, assess_type = input$ens_assess_type,
+  					seed = 1992
+  				)
+  			}
+  		}
+  		ens_tune_mtd <- input$ens_method[input$ens_method %in% tune_methods]
+  		if (length(ens_tune_mtd) > 0) {
+  			for (mtd in ens_tune_mtd) {
+  				react_val$ens_fit[[mtd]] <- react_val$tune_fit[[mtd]]
+  			}
+  		}
+  		react_val$combine_results <- react_val$ens_fit |> 
+  			generate_forecast(
+  				data = data_transformed(), method = input$ens_method,
+  				n_future = input$ens_n_future,	n_assess = input$ens_n_assess,
+  				assess_type = input$ens_assess_type, ensemble_methods = input$ens_type,
+  				stacking_methods = NULL
+  			)
+  	} else {
+  		react_val$combine_results <-
+  			map(
+  				input$ens_method,
+  				~ fit_model(
+  					data = data_transformed(), method = ., params = input,
+            n_assess = input$ens_n_assess, assess_type = input$ens_assess_type, seed = 1992
+  				)
+  			) |>
+  			generate_forecast(
+  				data = data_transformed(), method = input$ens_method,
+  				n_future = input$ens_n_future, n_assess = input$ens_n_assess,
+  				assess_type = input$ens_assess_type, ensemble_methods = input$ens_type,
+  				stacking_methods = NULL
+  			)
+  	}
   }
 )
 
 observeEvent(
   eventExpr = input$stk_apply_forecast, 
   handlerExpr = {
-    react_val$combine_results <-
-      map(
-        input$ens_method,
-        ~ fit_model(
-          data = data_transformed(), method = ., params = input,
-          n_assess = input$ens_n_assess, assess_type = input$ens_assess_type, seed = 1992
-        )
-      ) |>
-      generate_forecast(
-        data = data_transformed(), method = input$ens_method,
-        n_future = input$ens_n_future, n_assess = input$ens_n_assess,
-        assess_type = input$ens_assess_type, ensemble_methods = NULL,
-        stacking_methods = input$stk_type
-      )
+  	if (input$ens_tune) {
+  		ens_no_tune_mtd <- input$ens_method[!input$ens_method %in% tune_methods]
+  		if (length(ens_no_tune_mtd) > 0) {
+  			for (mtd in ens_no_tune_mtd) {
+  				react_val$ens_fit[[mtd]] <- fit_model(
+  					data = data_transformed(), method = mtd, params = input,
+  					n_assess = input$ens_n_assess, assess_type = input$ens_assess_type,
+  					seed = 1992
+  				)
+  			}
+  		}
+  		ens_tune_mtd <- input$ens_method[input$ens_method %in% tune_methods]
+  		if (length(ens_tune_mtd) > 0) {
+  			for (mtd in ens_tune_mtd) {
+  				react_val$ens_fit[[mtd]] <- react_val$tune_fit[[mtd]]
+  			}
+  		}
+  		react_val$combine_results <- react_val$ens_fit |> 
+  			generate_forecast(
+  				data = data_transformed(), method = input$ens_method,
+  				n_future = input$ens_n_future,	n_assess = input$ens_n_assess,
+  				assess_type = input$ens_assess_type, ensemble_methods = NULL,
+  				stacking_methods = input$stk_type
+  			)
+  	} else {
+  		react_val$combine_results <-
+  			map(
+  				input$ens_method,
+  				~ fit_model(
+  					data = data_transformed(), method = ., params = input,
+  					n_assess = input$ens_n_assess, assess_type = input$ens_assess_type,
+  					seed = 1992
+  				)
+  			) |>
+  			generate_forecast(
+  				data = data_transformed(), method = input$ens_method,
+  				n_future = input$ens_n_future, n_assess = input$ens_n_assess,
+  				assess_type = input$ens_assess_type, ensemble_methods = NULL,
+  				stacking_methods = input$stk_type
+  			)
+  	}
   }
 )
 
@@ -2117,13 +2200,14 @@ dropdownButton(
 pickerInput(
   inputId = "scn_method", label = h3("Forecast Algorithm"), multiple = FALSE,
   choices = list(
+  	`Ensembling` = c("Ensemble", "Stacking"),
     `Time Series` = ts_methods, 
     `Machine Learning` = ml_methods,
     `Deep Learning` = dl_methods,
     `Mixed Algorithms` = mix_methods,
     `Auto ML` = aml_methods
   ), 
-  selected = "ETS"
+  selected = "Ensemble"
 )
 
 awesomeCheckbox(inputId = "scn_tune", label = "Use optimized algorithm?", value = FALSE)
@@ -2157,7 +2241,7 @@ observeEvent(
     updateNumericInput(session = session, inputId = "scn_n_future", value = 12)
     updateNumericInput(session = session, inputId = "scn_n_assess", value = 24)
     updatePrettyRadioButtons(session = session, inputId = "scn_assess_type", selected = "Rolling")
-    updateSelectInput(session = session, inputId = "scn_method", selected = "ETS")
+    updateSelectInput(session = session, inputId = "scn_method", selected = "Ensemble")
     updateAwesomeCheckbox(session = session, inputId = "scn_tune", value = FALSE)
     updateAwesomeCheckbox(session = session, inputId = "scn_back_transf", value = FALSE)
     updateSliderInput(session = session, inputId = "scn_conf_lvl", value = 0.9)
@@ -2179,36 +2263,117 @@ observeEvent(
 scenario_results <- eventReactive(
   eventExpr = input$scn_apply_forecast,
   valueExpr = {
-  	if (input$scn_tune) {
-  		list(react_val$tune_fit[[input$scn_method]]) |> 
-  			generate_forecast(
-  				data = data_transformed(),
-  				method = input$scn_method,
-  				n_future = input$scn_n_future,
-  				n_assess = input$scn_n_assess,
-  				assess_type = input$scn_assess_type,
-  				confidence_level = c(0.05, 0.99)
-  			)
+  	if (input$scn_method == "Ensemble") {
+  		
+  		if (input$scn_tune) {
+  			ens_no_tune_mtd <- input$ens_method[!input$ens_method %in% tune_methods]
+  			if (length(ens_no_tune_mtd) > 0) {
+  				for (mtd in ens_no_tune_mtd) {
+  					react_val$ens_fit[[mtd]] <- fit_model(
+  						data = data_transformed(), method = mtd, params = input, 
+  						n_assess = input$scn_n_assess, assess_type = input$scn_assess_type,	seed = 1992
+  					)
+  				}
+  			}
+  			ens_tune_mtd <-	input$ens_method[input$ens_method %in% tune_methods]
+  			if (length(ens_tune_mtd) > 0) {
+  				for (mtd in ens_tune_mtd) {
+  					react_val$ens_fit[[mtd]] <- react_val$tune_fit[[mtd]]
+  				}
+  			}
+  			react_val$ens_fit |>
+  				generate_forecast(
+  					data = data_transformed(), method = input$ens_method,
+  					n_future = input$scn_n_future, n_assess = input$scn_n_assess,
+  					assess_type = input$scn_assess_type, ensemble_methods = input$ens_type,
+  					stacking_methods = NULL, confidence_level = c(0.05, 0.99)
+  				) |> 
+  				extract_ensemble_results()
+  		} else {
+  				map(
+  					input$ens_method,
+  					~ fit_model(
+  						data = data_transformed(), method = ., params = input,
+  						n_assess = input$scn_n_assess, assess_type = input$scn_assess_type,
+  						seed = 1992
+  					)
+  				) |>
+  				generate_forecast(
+  					data = data_transformed(), method = input$ens_method,
+  					n_future = input$scn_n_future, n_assess = input$scn_n_assess,
+  					assess_type = input$scn_assess_type, ensemble_methods = input$ens_type,
+  					stacking_methods = NULL, confidence_level = c(0.05, 0.99)
+  				) |> 
+  				extract_ensemble_results()
+  		}
+  		
+  	} else if (input$scn_method == "Stacking") {
+  		
+  		if (input$scn_tune) {
+  			ens_no_tune_mtd <- input$ens_method[!input$ens_method %in% tune_methods]
+  			if (length(ens_no_tune_mtd) > 0) {
+  				for (mtd in ens_no_tune_mtd) {
+  					react_val$ens_fit[[mtd]] <- fit_model(
+  						data = data_transformed(), method = mtd, params = input,
+  						n_assess = input$scn_n_assess, assess_type = input$scn_assess_type,	seed = 1992
+  					)
+  				}
+  			}
+  			ens_tune_mtd <-	input$ens_method[input$ens_method %in% tune_methods]
+  			if (length(ens_tune_mtd) > 0) {
+  				for (mtd in ens_tune_mtd) {
+  					react_val$ens_fit[[mtd]] <- react_val$tune_fit[[mtd]]
+  				}
+  			}
+  			react_val$ens_fit |>
+  				generate_forecast(
+  					data = data_transformed(), method = input$ens_method,
+  					n_future = input$scn_n_future, n_assess = input$scn_n_assess,
+  					assess_type = input$scn_assess_type, ensemble_methods = NULL,
+  					stacking_methods = input$stk_type, confidence_level = c(0.05, 0.99)
+  				) |> 
+  				extract_ensemble_results()
+  		} else {
+  				map(
+  					input$ens_method,
+  					~ fit_model(
+  						data = data_transformed(), method = ., params = input,
+  						n_assess = input$scn_n_assess, assess_type = input$scn_assess_type,	seed = 1992
+  					)
+  				) |>
+  				generate_forecast(
+  					data = data_transformed(), method = input$ens_method,
+  					n_future = input$scn_n_future, n_assess = input$scn_n_assess,
+  					assess_type = input$scn_assess_type, ensemble_methods = NULL,
+  					stacking_methods = input$stk_type, confidence_level = c(0.05, 0.99)
+  				) |> 
+  				extract_ensemble_results()
+  		}
+  		
   	} else {
-  		map(
-  			input$scn_method,
-  			~ fit_model(
-  				data = data_transformed(),
-  				method = .,
-  				params = input,
-  				n_assess = input$scn_n_assess,
-  				assess_type = input$scn_assess_type,
-  				seed = 1992
-  			)
-  		) |>
-  			generate_forecast(
-  				data = data_transformed(),
-  				method = input$scn_method,
-  				n_future = input$scn_n_future,
-  				n_assess = input$scn_n_assess,
-  				assess_type = input$scn_assess_type,
-  				confidence_level = c(0.05, 0.99)
-  			)
+  		
+  		if (input$scn_tune) {
+  			list(react_val$tune_fit[[input$scn_method]]) |>
+  				generate_forecast(
+  					data = data_transformed(), method = input$scn_method,
+  					n_future = input$scn_n_future, n_assess = input$scn_n_assess,
+  					assess_type = input$scn_assess_type, confidence_level = c(0.05, 0.99)
+  				)
+  		} else {
+  			map(
+  				input$scn_method,
+  				~ fit_model(
+  					data = data_transformed(), method = ., params = input,
+  					n_assess = input$scn_n_assess, assess_type = input$scn_assess_type, seed = 1992
+  				)
+  			) |>
+  				generate_forecast(
+  					data = data_transformed(), method = input$scn_method,
+  					n_future = input$scn_n_future, n_assess = input$scn_n_assess,
+  					assess_type = input$scn_assess_type, confidence_level = c(0.05, 0.99)
+  				)
+  		}
+  		
   	}
   }
 )

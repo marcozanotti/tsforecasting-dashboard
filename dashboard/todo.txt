@@ -4,16 +4,42 @@ Next steps:
 
 To Do:
 - correggere UI (dimensioni + scroll)
-- use optimize in altre sezioni
--- testare in XAI -> provare il flusso generando un explainer da modello ottimizzato
 
 - pensare e aggiungere la sezione di feature engineering (con in mente il save)
 -- section to upload and visualize external regressors
 -- section to create new features with reactive glipse  
 -- calendar + lags + fourier + splines + rolling averages + interactions
 
+- creazione fanchart al posto del primo grafico in scenario
 - modificare output modello con parsing
+- add stacking models (Random Forest, ecc)
 - aggiungere metodi di dl (NeuralProphet + NBEATS + DeepAR)
 - option tune stack? per il tuning degli stack
 - cambiare assegnazione nomi ai parametri in UI
 - creazione fanchart al posto del primo grafico in scenario
+
+
+Extensions:
+- forecasting multiple time series (by id)
+- global forecasting models
+
+
+
+Bugs:
+- XAI con use optimize TRUE
+-- provare il flusso generando un explainer da modello ottimizzato
+-- bug details:
+Preparation of a new explainer is initiated
+  -> model label       :  Random Forest 
+  -> data              :  24  rows  31  cols 
+  -> data              :  tibble converted into a data.frame 
+  -> target variable   :  24  values 
+  -> predict function  :  yhat.workflow  will be used (  default  )
+  -> predicted values  :  No value for predict function target column. (  default  )
+  -> model_info        :  package tidymodels , ver. 1.1.0 , task regression (  default  ) 
+  -> model_info        :  type set to  regression 
+  -> predicted values  :  the predict_function returns an error when executed (  WARNING  ) 
+  -> residual function :  difference between y and yhat (  default  )
+  -> residuals         :  the residual_function returns an error when executed (  WARNING  ) 
+  A new explainer has been created! 
+
