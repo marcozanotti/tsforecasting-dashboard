@@ -128,11 +128,11 @@ output$data_table <- renderDT({
       datatable(
         options = list(
           ordering = TRUE, pageLength = 20, lengthChange = TRUE, searching = TRUE, 
-          info = FALSE, paging = TRUE, scrollCollapse = TRUE, scrollY = 700 # 250
+          info = FALSE, paging = TRUE, scrollCollapse = TRUE, scrollY = 575 # 250
         )
       )
 })
-output$data_str <- renderPrint({ str(data_selected()) })
+output$data_str <- renderPrint({ glimpse(data_selected()) })
 output$data_summ <- renderPrint({ skim(data_selected()) })
 ```
 
@@ -655,7 +655,7 @@ plotlyOutput(outputId = "transf_season_plot")
 
 
 
-Feature Engineering {data-orientation=rows}
+Internal Features {data-navmenu="Features" data-orientation=rows}
 ===========================================================================
 
 Input {.sidebar}
@@ -663,14 +663,200 @@ Input {.sidebar}
 
 ```{r}
 useShinyjs(rmd = TRUE) # use Shiny JavaScript to allow delay on buttons
+dropdownButton(
+  numericInput(
+    inputId = "feat_n_future", label = "Forecast Horizon", 
+    value = 12, min = 1, max = Inf, step = 1, width = "100%"
+  ),
+  icon = icon("gear"), width = "200px", size = "sm", circle = TRUE,
+  tooltip = tooltipOptions(title = "Click to see inputs!")
+)
+
+awesomeCheckbox(inputId = "feat_calendar", label = "Add calendar features?", value = FALSE)
+awesomeCheckbox(inputId = "feat_holiday", label = "Add holiday features?", value = FALSE)
 ```
+
+```{r}
+features <- reactive({
+	req(data_transformed())
+	data_transformed() |> generate_features(params = input, n_future = input$feat_n_future)
+})
+
+output$feat_table <- renderPrint({ glimpse(features()) })
+```
+
 
 Row 1 {data-height=500}
 ---------------------------------------------------------------------------
 
 ### Features {.no-padding}
 
-COMING SOON
+```{r}
+verbatimTextOutput(outputId = "feat_table")
+```
+
+
+
+External Features {data-navmenu="Features" data-orientation=rows}
+===========================================================================
+
+Input {.sidebar}
+---------------------------------------------------------------------------
+
+```{r}
+useShinyjs(rmd = TRUE) # use Shiny JavaScript to allow delay on buttons
+dropdownButton(
+  numericInput(
+    inputId = "xfeat_n_future", label = "Forecast Horizon", 
+    value = 12, min = 1, max = Inf, step = 1, width = "100%"
+  ),
+  icon = icon("gear"), width = "200px", size = "sm", circle = TRUE,
+  tooltip = tooltipOptions(title = "Click to see inputs!")
+)
+
+h4("Upload your dataset: ")
+h6("The dataset must be a .csv file containing columns 'date', 'id', 'frequency' and the desired external features.")
+fileInput(
+  inputId = "upload_xfeatures", label = NULL, accept = c(".csv"), multiple = FALSE,
+  buttonLabel = "Browse...", placeholder = "No file"
+)
+actionButton(inputId = "xfeat_import", label = "Import", icon = icon("upload"))
+actionButton(inputId = "xfeat_reset", label = "Reset", icon = icon("sync"))
+
+br()
+br()
+
+prettyRadioButtons(
+  inputId = "xfeat_table_type", label = h5("Show:"), 
+  choices = c("Preview", "Structure", "Summary")
+)
+```
+
+```{r}
+react_val <- reactiveValues(uploaded_xfeatures = NULL)
+
+observeEvent(
+  eventExpr = input$xfeat_reset, 
+  handlerExpr = {
+  	reset("upload_xfeatures")
+  	react_val$uploaded_xfeatures <- NULL
+  }
+)
+
+observeEvent(
+	eventExpr = input$xfeat_import, 
+  handlerExpr = {
+    req(input$upload_xfeatures)
+    ext <- tools::file_ext(input$upload_xfeatures$datapath)
+    validate(need(ext == "csv", "Please upload a csv file"))
+    react_val$uploaded_xfeatures <- input$upload_xfeatures
+  }
+)
+
+xfeatures <- reactive({
+	req(react_val$uploaded_xfeatures)
+  get_data("custom", path = react_val$uploaded_xfeatures$datapath)
+})
+
+output$xfeat_table <- renderDT({
+  xfeatures() |>
+      datatable(
+        options = list(
+          ordering = TRUE, pageLength = 20, lengthChange = TRUE, searching = TRUE, 
+          info = FALSE, paging = TRUE, scrollCollapse = TRUE, scrollY = 550 # 250
+        )
+      )
+})
+output$xfeat_str <- renderPrint({ glimpse(xfeatures()) })
+output$xfeat_summ <- renderPrint({ skim(xfeatures()) })
+
+output$xfeat_ts_plot <- renderPlotly({
+	req(xfeatures())
+  data_transformed() |>
+    add_future_frame(input$xfeat_n_future) |> 
+  	dplyr::left_join(xfeatures(), by = c("date", "id", "frequency")) |> 
+  	tidyr::pivot_longer(-c(date, id, frequency), names_to = "name", values_to = "value") |>
+  	timetk::plot_time_series(
+  		.date_var = date, .value = value, .color_var = name, 
+  		.smooth = FALSE, .interactive = TRUE, .title = NULL
+  	)
+})
+
+output$xfeat_crosscorr_plot <- renderPlotly({
+	req(xfeatures())
+  data_transformed() |>
+    add_future_frame(input$xfeat_n_future) |> 
+  	dplyr::left_join(xfeatures(), by = c("date", "id", "frequency")) |> 
+  	tidyr::drop_na() |> 
+    timetk::plot_acf_diagnostics(
+    	.date_var = date, .value = value, .ccf_vars = get_features(xfeatures(), names_only = TRUE)[-1],
+    	.lags = ifelse(ts_freq() < 60, ts_freq() * 3, 150),
+    	.show_white_noise_bars = TRUE, .show_ccf_vars_only = TRUE,
+    	.interactive = TRUE, .title = NULL, .y_lab = NULL,
+    	.facet_ncol = ifelse(length(get_features(xfeatures(), names_only = TRUE)[-1]) > 3, 2, 1)
+    )
+})
+```
+
+Row 1 {data-height=100 .tabset}
+---------------------------------------------------------------------------
+
+### Features
+
+```{r}
+conditionalPanel(
+  condition = "input.xfeat_table_type == 'Preview'",
+  DTOutput(outputId = "xfeat_table")
+)
+conditionalPanel(
+  condition = "input.xfeat_table_type == 'Structure'",
+  verbatimTextOutput(outputId = "xfeat_str")
+)
+conditionalPanel(
+  condition = "input.xfeat_table_type == 'Summary'",
+  verbatimTextOutput(outputId = "xfeat_summ")
+)
+```
+
+### Time Series
+
+```{r}
+plotlyOutput(outputId = "xfeat_ts_plot")
+```
+
+### Cross Correlation
+
+```{r}
+plotlyOutput(outputId = "xfeat_crosscorr_plot")
+```
+
+
+
+Feature Selection {data-navmenu="Features" data-orientation=rows}
+===========================================================================
+
+Input {.sidebar}
+---------------------------------------------------------------------------
+
+```{r}
+useShinyjs(rmd = TRUE) # use Shiny JavaScript to allow delay on buttons
+dropdownButton(
+  numericInput(
+    inputId = "selfeat_n_future", label = "Forecast Horizon", 
+    value = 12, min = 1, max = Inf, step = 1, width = "100%"
+  ),
+  icon = icon("gear"), width = "200px", size = "sm", circle = TRUE,
+  tooltip = tooltipOptions(title = "Click to see inputs!")
+)
+```
+
+Row 1 {data-height=100 .tabset}
+---------------------------------------------------------------------------
+
+### Correlation
+
+### Predictive Power Score
+
 
 
 Test & Evaluate {data-navmenu="Forecast" data-orientation=rows}

@@ -255,8 +255,6 @@ forecast_results |> extract_ensemble_results(input$ens_type)
 
 
 
-
-
 # OPTIMIZE ----------------------------------------------------------------
 
 data_selected <- get_data(datasets[1])
@@ -670,4 +668,47 @@ forecast_results |>
 	back_transform_forecast(
 		transform = TRUE, transformations = input$transf,	transform_params = transform_params
 	)
+
+
+
+# External Features -------------------------------------------------------
+
+data <- data_selected <- get_data(datasets[1])
+ts_freq <- data_selected$frequency |> unique() |> parse_frequency()
+n_future <- 12
+
+data_selected |> 
+	add_future_frame(n_future + 2) |> 
+	fill(value, .direction = "down") |>
+	rename("xfeat1" = "value") |> 
+	write_csv("dashboard/data/xfeatures.csv")
+
+xfeatures <- read_csv("dashboard/data/xfeatures.csv")
+
+data_selected |> 
+	add_future_frame(n_future) |> 
+	dplyr::left_join(xfeatures, by = c("date", "id", "frequency")) |> 
+	tidyr::pivot_longer(-c(date, id, frequency), names_to = "name", values_to = "value") |>
+	timetk::plot_time_series(
+		.date_var = date, .value = value, .color_var = name,
+		.smooth = FALSE, .interactive = TRUE
+	)
+
+
+xfeat_names <- get_features(xfeatures, names_only = TRUE)[-1]
+
+data_selected |> 
+	add_future_frame(n_future) |> 
+	dplyr::left_join(xfeatures, by = c("date", "id", "frequency")) |>
+	timetk::plot_acf_diagnostics(
+		.date_var = date, .value = value, .ccf_vars = xfeat1,
+		.lags = 50, 
+		.show_white_noise_bars = TRUE, .show_ccf_vars_only = TRUE,
+		.interactive = TRUE, .title = NULL, .y_lab = NULL,
+		.facet_ncol = ifelse(length(xfeat_names) > 3, 2, 1)
+	)
+
+
+
+
 

@@ -6,10 +6,14 @@ To Do:
 - correggere UI (dimensioni + scroll)
 
 - pensare e aggiungere la sezione di feature engineering (con in mente il save)
--- section to upload and visualize external regressors
+-- lavorare sulle features tramite global options (es. tutte le calendar features o le holidays disponibili)
 -- section to create new features with reactive glipse  
--- calendar + lags + fourier + splines + rolling averages + interactions
+-- calendar + holidays + lags + fourier + splines + rolling averages + interactions
+-- condizionali che setta tutti i future frame uguali a quello di internal features
+-- salvare data_features con reactive values
+-- use_feature_set option in forecasting
 
+- eliminare generate_feature_set e sostituirla con get_features
 - creazione fanchart al posto del primo grafico in scenario
 - modificare output modello con parsing
 - add stacking models (Random Forest, ecc)
@@ -26,6 +30,10 @@ Extensions:
 
 
 Bugs:
+- tune_bayes, from GPfit::GP_fit()
+The optimization routine assumes that the inputs are scaled to the unit hypercube 
+[0,1]^d.
+
 - XAI con use optimize TRUE
 -- provare il flusso generando un explainer da modello ottimizzato
 -- bug details:

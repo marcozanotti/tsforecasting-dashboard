@@ -76,31 +76,6 @@ generate_model_explainer <- function(
 	
 }
 
-# function to get the features from a recipe or workflow
-get_features <- function(object, names_only = FALSE) {
-	
-	logging::loginfo("Extracting Features...")
-	if (inherits(object, "workflow")) {
-		feats <- object |> 
-			workflows::extract_preprocessor() |> 
-			recipes::prep() |> 
-			recipes::bake(new_data = NULL) |> 
-			dplyr::select(-value)
-	} else if (inherits(object, "recipe")) {
-		feats <- object |> 
-			recipes::prep() |> 
-			recipes::bake(new_data = NULL) |> 
-			dplyr::select(-value)
-	} else {
-		stop("object must be a workflow or recipe")
-	}
-	
-	if (names_only) { feats <- names(feats)	}
-	
-	return(feats)
-	
-}
-
 # function to get observation with features from data
 get_observation <- function(data, date, method, n_assess, assess_type) {
 	
