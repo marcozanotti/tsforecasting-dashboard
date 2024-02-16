@@ -748,6 +748,71 @@ data_feat |>
 
 
 
+# Feature Selection -------------------------------------------------------
+data <- data_selected <- get_data(datasets[1])
+ts_freq <- data_selected$frequency |> unique() |> parse_frequency()
+input <- list(
+	feat_n_future = 12,
+	feat_calendar = TRUE,
+	feat_holiday = FALSE,
+	feat_fourier_p = "6, 12",
+	feat_fourier_k = 1,
+	feat_spline_deg = "3, 6",
+	feat_lag = "12",
+	feat_roll = "3, 6",
+	feat_inter = "week2 * wday.lbl,week3 * wday.lbl",
+	featsel_reg_formula = "value ~ ."
+)
+data_feat <- data |> 
+	generate_features(params = input, n_future = input$feat_n_future)
+
+# correlation
+cor_mat <- data_feat |> 
+	dplyr::mutate(dplyr::across(5:ncol(data_feat), as.numeric)) |> 
+	dplyr::select(where(is.numeric)) |> 
+	tidyr::drop_na() |> 
+	stats::cor()
+
+ggcorrplot::ggcorrplot(
+	cor_mat, type = "upper", lab = FALSE, 
+	colors = c( "darkred", "white", "darkgreen")
+) |> 
+	plotly::ggplotly()
+
+reg_f <- input$featsel_reg_formula |> 
+	parse_textinput(format_to = "character") |> 
+	rlang::parse_expr()
+data_feat |>
+	dplyr::select(-id, -frequency) |>
+	timetk::plot_time_series_regression(
+		.date_var = date, .formula = reg_f, .show_summary = FALSE
+	)
+
+library(ppsr)
+feat_names <- get_features(data_feat, names_only = TRUE)[-1]
+
+ppsr_res <- data_feat |> 
+	dplyr::select(-id, -frequency, -date) |>
+	ppsr::score_predictors(
+		y = "value", algorithm = "tree", cv_folds = 5, do_parallel = TRUE
+	)
+
+data_feat |> 
+	dplyr::select(-id, -frequency, -date) |>
+	ppsr::visualize_pps(y = "value") |> 
+	plotly::ggplotly()
+
+score_df(iris)
+
+available_algorithms()
+available_evaluation_metrics()
+
+
+
+
+
+
+
 
 
 

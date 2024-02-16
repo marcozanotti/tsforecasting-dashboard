@@ -25,7 +25,7 @@ pkgs <- c(
   "Cubist", "rules",
   "tidymodels", 
   "modeltime", "modeltime.ensemble", "modeltime.resample", "modeltime.h2o",
-  "plotly", "DT", "timetk",
+  "plotly", "DT", "timetk", "ggcorrplot", "ppsr",
   "DALEX", "DALEXtra",
   "rmarkdown", "flexdashboard",
   "shiny", "shinyWidgets", "shinyjs", "shinymanager"
@@ -923,32 +923,103 @@ dropdownButton(
   icon = icon("gear"), width = "200px", size = "sm", circle = TRUE,
   tooltip = tooltipOptions(title = "Click to see inputs!")
 )
+
+br()
+textInput(
+	inputId = "featsel_reg_formula", label = "Regression Formula", 
+	value = "value ~ .", placeholder = "value ~ x1 + x2 + x3"
+)
+
+br()
+br()
+h4("Feature Selection")
+h6(
+	"Activating feature selection removes the features that are least significant based on:"
+)
+switchInput(inputId = "featsel_filter", value = FALSE, size = "mini")
 ```
 
 ```{r}
-# output$featsel_reg_plot <- renderPlotly({
-#   data_features() |> 
-#   	dplyr::select(-id, -frequency) |> 
-#   	timetk::plot_time_series_regression(
-#   		.date_var = date, .formula = value ~ ., .show_summary = FALSE
-#   	)
-# })
+ppsr_values <- reactive({
+	req(data_features()) 
+	if (ncol(data_features()) > 4) {
+		data_features() |> 
+			dplyr::select(-id, -frequency, -date) |>
+			ppsr::score_predictors(
+				y = "value", algorithm = "tree", cv_folds = 5, do_parallel = TRUE
+			)
+	}
+})
+
+output$featsel_reg_plot <- renderPlotly({
+	req(data_features())
+	reg_f <- input$featsel_reg_formula |> 
+		parse_textinput(format_to = "character") |> 
+		rlang::parse_expr()
+  data_features() |>
+  	dplyr::select(-id, -frequency) |>
+  	timetk::plot_time_series_regression(
+  		.date_var = date, .formula = reg_f, .show_summary = FALSE
+  	)
+})
+
+output$featsel_corr_plot <- renderPlotly({
+	req(data_features())
+	if (ncol(data_features()) > 4) {
+		cor_mat <- data_features() |>
+			dplyr::mutate(dplyr::across(4:ncol(data_features()), as.numeric)) |> 
+			dplyr::select(where(is.numeric)) |> 
+			tidyr::drop_na() |> 
+			stats::cor()
+		cor_mat |> 
+			ggcorrplot::ggcorrplot(
+				type = "upper", lab = FALSE, colors = c( "darkred", "white", "darkgreen")
+			) |> 
+			plotly::ggplotly()
+	}
+})
+
+output$featsel_ppsr_plot <- renderPlotly({
+	req(data_features())
+	if (ncol(data_features()) > 4) {
+		data_features() |>
+			dplyr::select(-id, -frequency, -date) |>
+			ppsr::visualize_pps(y = "value") |> 
+			plotly::ggplotly()
+	}
+})
 ```
 
 Row 1 {.tabset}
 ---------------------------------------------------------------------------
 
-### Correlation {.no-padding}
-
-### Predictive Power Score {.no-padding}
-
 ### Regression Analysis {.no-padding}
 
 ```{r}
-# plotlyOutput(outputId = "featsel_reg_plot")
+plotlyOutput(outputId = "featsel_reg_plot")
 ```
 
+### Correlation {.no-padding}
+
+```{r}
+plotlyOutput(outputId = "featsel_corr_plot")
+```
+
+### Predictive Power Score {.no-padding}
+
+```{r}
+plotlyOutput(outputId = "featsel_ppsr_plot")
+```
+
+### Stepwise Selection {.no-padding}
+
+
 ### LASSO {.no-padding}
+
+
+### Random Forest {.no-padding}
+
+
 
 
 
