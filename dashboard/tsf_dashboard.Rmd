@@ -137,10 +137,10 @@ output$data_summ <- renderPrint({ skim(data_selected()) })
 ```
 
 
-Row 1 {data-height=100}
+Row 1
 ---------------------------------------------------------------------------
 
-### 
+### {.no-padding}
 
 ```{r}
 conditionalPanel(
@@ -672,27 +672,102 @@ dropdownButton(
   tooltip = tooltipOptions(title = "Click to see inputs!")
 )
 
+h5("Calendar & Holidays")
 awesomeCheckbox(inputId = "feat_calendar", label = "Add calendar features?", value = FALSE)
 awesomeCheckbox(inputId = "feat_holiday", label = "Add holiday features?", value = FALSE)
+hr()
+textInput(
+	inputId = "feat_fourier_p", label = "Fourier Periods", value = "", placeholder = "Values separated by a comma..."
+)
+sliderInput(
+	inputId = "feat_fourier_k", label = "Fourier Orders",
+	min = 1, max = 10, value = 1, step = 1
+)
+hr()
+textInput(
+	inputId = "feat_spline_deg", label = "Spline Degrees", value = "", placeholder = "Values separated by a comma..."
+)
+hr()
+textInput(
+	inputId = "feat_lag", label = "Lag Orders", value = "", placeholder = "Values separated by a comma..."
+)
+textInput(
+	inputId = "feat_roll", label = "Lag Rolling Periods", value = "", placeholder = "Values separated by a comma..."
+)
+hr()
+textInput(
+	inputId = "feat_inter", label = "Interactions", value = "", placeholder = "Expressions separated by a comma..."
+)
+
+br()
+prettyRadioButtons(
+  inputId = "feat_table_type", label = h5("Show:"), 
+  choices = c("Preview", "Structure", "Summary"), selected = "Structure"
+)
 ```
 
 ```{r}
-features <- reactive({
+data_features <- reactive({
 	req(data_transformed())
 	data_transformed() |> generate_features(params = input, n_future = input$feat_n_future)
 })
 
-output$feat_table <- renderPrint({ glimpse(features()) })
+output$feat_table <- renderDT({
+  data_features() |>
+      datatable(
+        options = list(
+          ordering = TRUE, pageLength = 20, lengthChange = TRUE, searching = TRUE, 
+          info = FALSE, paging = TRUE, scrollCollapse = TRUE, scrollY = 550 # 250
+        )
+      )
+})
+output$feat_str <- renderPrint({ glimpse(data_features()) })
+output$feat_summ <- renderPrint({ skim(data_features()) })
+
+output$feat_ts_plot <- renderPlotly({
+  req(data_features())
+	if (ncol(data_features()) <= 4) {
+		data_features() |> 
+			timetk::plot_time_series(
+				.date_var = date, .value = value,
+				.smooth = FALSE, .interactive = TRUE,	.title = NULL
+			)
+	} else {
+		data_features() |> 
+			dplyr::mutate(dplyr::across(5:ncol(data_features()), as.numeric)) |>
+			tidyr::pivot_longer(-c(date, id, frequency), names_to = "name", values_to = "value") |>
+			timetk::plot_time_series(
+				.date_var = date, .value = value, .color_var = name,
+				.smooth = FALSE, .interactive = TRUE,	.title = NULL
+			)
+	}
+})
 ```
 
-
-Row 1 {data-height=500}
+Row 1 {.tabset}
 ---------------------------------------------------------------------------
 
 ### Features {.no-padding}
 
 ```{r}
-verbatimTextOutput(outputId = "feat_table")
+conditionalPanel(
+  condition = "input.feat_table_type == 'Preview'",
+  DTOutput(outputId = "feat_table")
+)
+conditionalPanel(
+  condition = "input.feat_table_type == 'Structure'",
+  verbatimTextOutput(outputId = "feat_str")
+)
+conditionalPanel(
+  condition = "input.feat_table_type == 'Summary'",
+  verbatimTextOutput(outputId = "feat_summ")
+)
+```
+
+### Time Series {.no-padding}
+
+```{r}
+plotlyOutput(outputId = "feat_ts_plot")
 ```
 
 
@@ -753,13 +828,13 @@ observeEvent(
   }
 )
 
-xfeatures <- reactive({
+data_xfeatures <- reactive({
 	req(react_val$uploaded_xfeatures)
   get_data("custom", path = react_val$uploaded_xfeatures$datapath)
 })
 
 output$xfeat_table <- renderDT({
-  xfeatures() |>
+  data_xfeatures() |>
       datatable(
         options = list(
           ordering = TRUE, pageLength = 20, lengthChange = TRUE, searching = TRUE, 
@@ -767,14 +842,14 @@ output$xfeat_table <- renderDT({
         )
       )
 })
-output$xfeat_str <- renderPrint({ glimpse(xfeatures()) })
-output$xfeat_summ <- renderPrint({ skim(xfeatures()) })
+output$xfeat_str <- renderPrint({ glimpse(data_xfeatures()) })
+output$xfeat_summ <- renderPrint({ skim(data_xfeatures()) })
 
 output$xfeat_ts_plot <- renderPlotly({
-	req(xfeatures())
+	req(data_xfeatures())
   data_transformed() |>
     add_future_frame(input$xfeat_n_future) |> 
-  	dplyr::left_join(xfeatures(), by = c("date", "id", "frequency")) |> 
+  	dplyr::left_join(data_xfeatures(), by = c("date", "id", "frequency")) |> 
   	tidyr::pivot_longer(-c(date, id, frequency), names_to = "name", values_to = "value") |>
   	timetk::plot_time_series(
   		.date_var = date, .value = value, .color_var = name, 
@@ -783,25 +858,25 @@ output$xfeat_ts_plot <- renderPlotly({
 })
 
 output$xfeat_crosscorr_plot <- renderPlotly({
-	req(xfeatures())
+	req(data_xfeatures())
   data_transformed() |>
     add_future_frame(input$xfeat_n_future) |> 
-  	dplyr::left_join(xfeatures(), by = c("date", "id", "frequency")) |> 
+  	dplyr::left_join(data_xfeatures(), by = c("date", "id", "frequency")) |> 
   	tidyr::drop_na() |> 
     timetk::plot_acf_diagnostics(
-    	.date_var = date, .value = value, .ccf_vars = get_features(xfeatures(), names_only = TRUE)[-1],
+    	.date_var = date, .value = value, .ccf_vars = get_features(data_xfeatures(), names_only = TRUE)[-1],
     	.lags = ifelse(ts_freq() < 60, ts_freq() * 3, 150),
     	.show_white_noise_bars = TRUE, .show_ccf_vars_only = TRUE,
     	.interactive = TRUE, .title = NULL, .y_lab = NULL,
-    	.facet_ncol = ifelse(length(get_features(xfeatures(), names_only = TRUE)[-1]) > 3, 2, 1)
+    	.facet_ncol = ifelse(length(get_features(data_xfeatures(), names_only = TRUE)[-1]) > 3, 2, 1)
     )
 })
 ```
 
-Row 1 {data-height=100 .tabset}
+Row 1 {.tabset}
 ---------------------------------------------------------------------------
 
-### Features
+### Features {.no-padding}
 
 ```{r}
 conditionalPanel(
@@ -818,13 +893,13 @@ conditionalPanel(
 )
 ```
 
-### Time Series
+### Time Series {.no-padding}
 
 ```{r}
 plotlyOutput(outputId = "xfeat_ts_plot")
 ```
 
-### Cross Correlation
+### Cross Correlation {.no-padding}
 
 ```{r}
 plotlyOutput(outputId = "xfeat_crosscorr_plot")
@@ -842,7 +917,7 @@ Input {.sidebar}
 useShinyjs(rmd = TRUE) # use Shiny JavaScript to allow delay on buttons
 dropdownButton(
   numericInput(
-    inputId = "selfeat_n_future", label = "Forecast Horizon", 
+    inputId = "featsel_n_future", label = "Forecast Horizon", 
     value = 12, min = 1, max = Inf, step = 1, width = "100%"
   ),
   icon = icon("gear"), width = "200px", size = "sm", circle = TRUE,
@@ -850,12 +925,30 @@ dropdownButton(
 )
 ```
 
-Row 1 {data-height=100 .tabset}
+```{r}
+# output$featsel_reg_plot <- renderPlotly({
+#   data_features() |> 
+#   	dplyr::select(-id, -frequency) |> 
+#   	timetk::plot_time_series_regression(
+#   		.date_var = date, .formula = value ~ ., .show_summary = FALSE
+#   	)
+# })
+```
+
+Row 1 {.tabset}
 ---------------------------------------------------------------------------
 
-### Correlation
+### Correlation {.no-padding}
 
-### Predictive Power Score
+### Predictive Power Score {.no-padding}
+
+### Regression Analysis {.no-padding}
+
+```{r}
+# plotlyOutput(outputId = "featsel_reg_plot")
+```
+
+### LASSO {.no-padding}
 
 
 

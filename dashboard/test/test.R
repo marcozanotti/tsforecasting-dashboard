@@ -710,5 +710,47 @@ data_selected |>
 
 
 
+# Internal Features -------------------------------------------------------
+data <- data_selected <- get_data(datasets[1])
+ts_freq <- data_selected$frequency |> unique() |> parse_frequency()
+
+input <- list(
+	feat_n_future = 12,
+	feat_calendar = TRUE,
+	feat_holiday = FALSE,
+	feat_fourier_p = "6, 12",
+	feat_fourier_k = 1,
+	feat_spline_deg = "3, 6",
+	feat_lag = "12, 24",
+	feat_roll = "3, 6",
+	feat_inter = "week2 * wday.lbl,week3 * wday.lbl"
+)
+params = input
+
+data_feat <- data |> 
+	generate_features(params = input, n_future = input$feat_n_future)
+
+data_feat |> 
+	dplyr::select(-id, -frequency) |> 
+	plot_time_series_regression(
+		.date_var = date,
+		value ~ .,
+		.show_summary = FALSE
+	)
+
+data_feat |> 
+	dplyr::mutate(dplyr::across(5:ncol(data_feat), as.numeric)) |> 
+	tidyr::pivot_longer(-c(date, id, frequency), names_to = "name", values_to = "value") |>
+	timetk::plot_time_series(
+		.date_var = date, .value = value, .color_var = name, 
+		.smooth = FALSE, .interactive = TRUE, .title = NULL
+	)
+
+
+
+
+
+
+
 
 

@@ -286,3 +286,18 @@ generate_initial_values <- function(initial_values) {
 	return(res)
 }
 
+# function to pare text input to numeric
+parse_textinput <- function(x, format_to = "numeric") {
+	x_res <- x |> 
+		stringr::str_remove_all(" ") |> 
+		stringr::str_split(",") |> 
+		unlist()
+	if (format_to == "numeric") {
+		x_res <- as.numeric(x_res)
+	} else if (format_to == "character") {
+		x_res <- as.character(x_res)
+	} else {
+		stop("Unknown format_to argument.")
+	}
+	return(x_res)
+}

@@ -6,9 +6,7 @@ To Do:
 - correggere UI (dimensioni + scroll)
 
 - pensare e aggiungere la sezione di feature engineering (con in mente il save)
--- lavorare sulle features tramite global options (es. tutte le calendar features o le holidays disponibili)
--- section to create new features with reactive glipse  
--- calendar + holidays + lags + fourier + splines + rolling averages + interactions
+-- sezione di feature selection con use_selected_features come combinazione dei vari metodi (regressione è solo grafica)
 -- condizionali che setta tutti i future frame uguali a quello di internal features
 -- salvare data_features con reactive values
 -- use_feature_set option in forecasting
