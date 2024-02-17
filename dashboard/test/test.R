@@ -766,7 +766,7 @@ input <- list(
 data_feat <- data |> 
 	generate_features(params = input, n_future = input$feat_n_future)
 
-# correlation
+# CORR
 cor_mat <- data_feat |> 
 	dplyr::mutate(dplyr::across(5:ncol(data_feat), as.numeric)) |> 
 	dplyr::select(where(is.numeric)) |> 
@@ -788,6 +788,18 @@ data_feat |>
 		.date_var = date, .formula = reg_f, .show_summary = FALSE
 	)
 
+
+data_feat |> c
+generate_correlations() |> 
+	ggcorrplot::ggcorrplot(
+		type = "upper", lab = FALSE, 
+		colors = c( "darkred", "white", "darkgreen")
+	) |> 
+	plotly::ggplotly()
+
+
+
+# PPS
 library(ppsr)
 feat_names <- get_features(data_feat, names_only = TRUE)[-1]
 
@@ -808,9 +820,22 @@ available_algorithms()
 available_evaluation_metrics()
 
 
+# LASSO & Random Forest
+res <- purrr::map(
+	c("LASSO", "Random Forest"), 
+	~ fit_feature_model(data = data_feat, method = .x)
+) |> 
+	purrr::set_names(c("LASSO", "Random Forest"))
 
+res$LASSO |> 
+	extract_feature_importance("LASSO", relative = "relative") |> 
+	plot_feature_importance() |> 
+	plotly::ggplotly()
 
-
+res$`Random Forest` |> 
+	extract_feature_importance("Random Forest", relative = "relative") |> 
+	plot_feature_importance() |> 
+	plotly::ggplotly()
 
 
 

@@ -929,6 +929,14 @@ textInput(
 	inputId = "featsel_reg_formula", label = "Regression Formula", 
 	value = "value ~ .", placeholder = "value ~ x1 + x2 + x3"
 )
+prettyRadioButtons(
+  inputId = "featsel_cormethod", label = "Correlation Type", 
+  choices = c("pearson", "spearman"), selected = "spearman"
+)
+prettyRadioButtons(
+  inputId = "featsel_relimp", label = "Importance Type", 
+  choices = c("absolute", "relative"), selected = "relative"
+)
 
 br()
 br()
@@ -940,6 +948,13 @@ switchInput(inputId = "featsel_filter", value = FALSE, size = "mini")
 ```
 
 ```{r}
+corr_values <- reactive({
+	req(data_features()) 
+	if (ncol(data_features()) > 4) {
+		data_features() |> generate_correlations(cor_method = input$featsel_cormethod)
+	}
+})
+
 ppsr_values <- reactive({
 	req(data_features()) 
 	if (ncol(data_features()) > 4) {
@@ -951,42 +966,72 @@ ppsr_values <- reactive({
 	}
 })
 
+imp_values <- reactive({
+	req(data_features()) 
+	if (ncol(data_features()) > 4) {
+		purrr::map(
+			c("LASSO", "Random Forest"), 
+			~ fit_feature_model(data = data_features(), method = .x)
+		) |>  
+		purrr::set_names(c("LASSO", "Random Forest")) 
+	}
+})
+
+data_features_final <- eventReactive(
+	eventExpr = input$featsel_filter, 
+	valueExpr = {
+		req(ppsr_values())
+		req(imp_values())
+		# !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+})
+
 output$featsel_reg_plot <- renderPlotly({
 	req(data_features())
-	reg_f <- input$featsel_reg_formula |> 
-		parse_textinput(format_to = "character") |> 
-		rlang::parse_expr()
-  data_features() |>
-  	dplyr::select(-id, -frequency) |>
-  	timetk::plot_time_series_regression(
-  		.date_var = date, .formula = reg_f, .show_summary = FALSE
-  	)
+	if (ncol(data_features()) > 4) {
+		reg_f <- input$featsel_reg_formula |> 
+			parse_textinput(format_to = "character") |>
+			rlang::parse_expr()
+		data_features() |>
+			dplyr::select(-id, -frequency) |>
+			timetk::plot_time_series_regression(
+				.date_var = date, .formula = reg_f, .show_summary = FALSE
+			)
+	}
 })
 
 output$featsel_corr_plot <- renderPlotly({
-	req(data_features())
-	if (ncol(data_features()) > 4) {
-		cor_mat <- data_features() |>
-			dplyr::mutate(dplyr::across(4:ncol(data_features()), as.numeric)) |> 
-			dplyr::select(where(is.numeric)) |> 
-			tidyr::drop_na() |> 
-			stats::cor()
-		cor_mat |> 
-			ggcorrplot::ggcorrplot(
-				type = "upper", lab = FALSE, colors = c( "darkred", "white", "darkgreen")
-			) |> 
-			plotly::ggplotly()
-	}
+	req(corr_values())
+	g <- corr_values() |> 
+		ggcorrplot::ggcorrplot(
+			type = "upper", lab = FALSE, colors = c( "darkred", "white", "darkgreen")
+		) + 
+		timetk:::theme_tq() 
+	plotly::ggplotly(g)
 })
 
 output$featsel_ppsr_plot <- renderPlotly({
-	req(data_features())
-	if (ncol(data_features()) > 4) {
-		data_features() |>
-			dplyr::select(-id, -frequency, -date) |>
-			ppsr::visualize_pps(y = "value") |> 
-			plotly::ggplotly()
-	}
+	req(imp_values())
+	g <- data_features() |>
+		dplyr::select(-id, -frequency, -date) |>
+		ppsr::visualize_pps(y = "value") +
+		timetk:::theme_tq()
+	plotly::ggplotly(g)
+})
+
+output$featsel_lasso_plot <- renderPlotly({
+	req(imp_values())
+	imp_values()$LASSO |> 
+		extract_feature_importance(method = "LASSO", relative = input$featsel_relimp) |> 
+		plot_feature_importance() |> 
+		plotly::ggplotly()
+})
+
+output$featsel_rf_plot <- renderPlotly({
+	req(imp_values())
+	imp_values()$`Random Forest` |> 
+		extract_feature_importance(method = "Random Forest", relative = input$featsel_relimp) |> 
+		plot_feature_importance() |> 
+		plotly::ggplotly()
 })
 ```
 
@@ -1011,14 +1056,23 @@ plotlyOutput(outputId = "featsel_corr_plot")
 plotlyOutput(outputId = "featsel_ppsr_plot")
 ```
 
-### Stepwise Selection {.no-padding}
-
-
 ### LASSO {.no-padding}
 
+```{r}
+plotlyOutput(outputId = "featsel_lasso_plot")
+```
 
 ### Random Forest {.no-padding}
 
+```{r}
+plotlyOutput(outputId = "featsel_rf_plot")
+```
+
+### Selected Feature Set
+
+```{r}
+# mettere il glimpse del feature set filtrato
+```
 
 
 

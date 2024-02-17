@@ -1,15 +1,20 @@
 Next steps:
 - rotellina o messaggio per operazioni in corso
+- gestione di tutti gli errori con un singolo messaggio "Ops a problem occured! Please contact the support."
 - deployment su github actions
 
 To Do:
 - correggere UI (dimensioni + scroll)
 
 - pensare e aggiungere la sezione di feature engineering (con in mente il save)
+-- impostare le global options dei parametri
+-- aggiungere parametri di soglia per filtrare
+-- cambiare grafico ppsr con uno mio
 -- sezione di feature selection con use_selected_features come combinazione dei vari metodi (regressione è solo grafica)
 -- condizionali che setta tutti i future frame uguali a quello di internal features
 -- salvare data_features con reactive values
 -- use_feature_set option in forecasting
+
 
 - eliminare generate_feature_set e sostituirla con get_features
 - creazione fanchart al posto del primo grafico in scenario
@@ -24,7 +29,6 @@ To Do:
 Extensions:
 - forecasting multiple time series (by id)
 - global forecasting models
-
 
 
 Bugs:

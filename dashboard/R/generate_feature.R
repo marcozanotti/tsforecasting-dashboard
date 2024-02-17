@@ -241,3 +241,116 @@ generate_recipe_spec <- function(data, method) {
 	return(rcp_spec)
 	
 }
+
+# function to fit a feature selection model
+fit_feature_model <- function(data, method, seed = 1992) {
+	
+	logging::loginfo("*** Fitting Feature Algorithm ***")
+	logging::loginfo(paste("Method(s):", paste0(method, collapse = ", ")))
+	
+	set.seed(seed)
+	
+	if (method == "LASSO") {
+		model_spec <- parsnip::linear_reg(
+			mode = "regression", penalty = 1, mixture = 1
+		) |>
+			parsnip::set_engine(engine = "glmnet")
+	} else if (method == "Random Forest") {
+		model_spec <- parsnip::rand_forest(mode = "regression") |>
+			parsnip::set_engine(engine = "ranger", importance = "permutation")
+	} else {
+		stop(paste("Unknown method:", method))
+	}
+	
+	data_featsel <- data |> 
+		dplyr::select(-id, -frequency, -date) |> 
+		tidyr::drop_na()
+	
+	rcp_spec <- recipes::recipe(value ~ ., data = data_featsel) |> 
+		recipes::step_dummy(recipes::all_nominal(), one_hot = TRUE)
+	
+	wkfl_spec <- workflows::workflow() |> 
+		workflows::add_model(model_spec) |> 
+		workflows::add_recipe(rcp_spec)
+	
+	wkfl_fit <- wkfl_spec |> parsnip::fit(data = data_featsel)
+	
+	return(wkfl_fit)
+	
+}
+
+# function to extract feature importance
+extract_feature_importance <- function(
+		feature_fit, method, relative = "relative", threshold = 0.005
+) {
+	
+	logging::loginfo("*** Extracting Feature Importance ***")
+	if (method == "LASSO") {
+		res_imp <- feature_fit |> 
+			workflows::extract_fit_parsnip() |> 
+			broom::tidy() |> 
+			dplyr::select(term, estimate) |> 
+			purrr::set_names(c("variable", "importance"))
+	} else if (method == "Random Forest") {
+		res_imp <- feature_fit |> 
+			workflows::extract_fit_parsnip() |> 
+			vip::vip(num_features = 1000) |> 
+			purrr::pluck("data") |> 
+			purrr::set_names(c("variable", "importance"))
+	} else {
+		stop(paste("Unknown method:", method))
+	}
+	
+	res_imp <- res_imp |> dplyr::filter(importance > 0) 
+	
+	if (relative == "relative") {
+		res_imp <- res_imp |> 
+			dplyr::mutate(importance = timetk::normalize_vec(importance, silent = TRUE)) |> 
+			dplyr::filter(importance > threshold)
+	}
+	
+	return(res_imp)
+	
+}
+
+# function to plot feature importance
+plot_feature_importance <- function(importance_data) {
+
+	g <- importance_data |> 
+		ggplot2::ggplot(
+			ggplot2::aes(
+				y = reorder(variable, importance), 
+				x = importance, 
+				fill = importance
+			)
+		) +
+		ggplot2::geom_col() + 
+		ggplot2::scale_fill_gradient(low = "lightblue", high = "darkblue") +
+		timetk:::theme_tq() +
+		ggplot2::theme(legend.position = "right") +
+		ggplot2::labs(y = "", x = "")
+	return(g)
+	
+}
+
+# function to generate correlation matrix
+generate_correlations <- function(data, cor_method = "spearman") {
+	
+	logging::loginfo("*** Generating Correlation Matrix ***")
+	data_cor <- data |> 
+		dplyr::select(-id, -frequency, -date) |> 
+		tidyr::drop_na()
+	
+	rcp_spec <- recipes::recipe(value ~ ., data = data_cor) |> 
+		recipes::step_dummy(recipes::all_nominal(), one_hot = TRUE)
+	
+	cor_mat <- rcp_spec |> 
+		recipes::prep() |> 
+		recipes::bake(new_data = NULL) |> 
+		dplyr::relocate(value, .before = 1) |> 
+		stats::cor(method = cor_method)
+
+	return(cor_mat)
+	
+}
+
