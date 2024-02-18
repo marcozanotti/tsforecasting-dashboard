@@ -800,19 +800,15 @@ generate_correlations() |>
 
 
 # PPS
-library(ppsr)
-feat_names <- get_features(data_feat, names_only = TRUE)[-1]
-
 ppsr_res <- data_feat |> 
 	dplyr::select(-id, -frequency, -date) |>
 	ppsr::score_predictors(
 		y = "value", algorithm = "tree", cv_folds = 5, do_parallel = TRUE
 	)
 
-data_feat |> 
-	dplyr::select(-id, -frequency, -date) |>
-	ppsr::visualize_pps(y = "value") |> 
-	plotly::ggplotly()
+res <- data_feat |> 
+	generate_pps()
+res |> plot_feature_importance()
 
 score_df(iris)
 
@@ -837,6 +833,24 @@ res$`Random Forest` |>
 	plot_feature_importance() |> 
 	plotly::ggplotly()
 
+
+# ALL
+feat_names <- get_features(data_feat, names_only = TRUE)[-1]
+
+corr_values <- data_feat |>	generate_correlations() 
+pps_values <- data_feat |> generate_pps()
+imp_values <- data_feat |> 
+	generate_model_importance(
+		method = c("LASSO", "Random Forest"), importance_type = "relative"
+	)
+
+input <- list(
+	featsel_cor_thresh = 0.2,
+	featsel_imp_thresh = 0.05
+)
+params = input
+data_importance <- c(list("Correlation" = corr_values, "PPS" = pps_values), imp_values) |> 
+	dplyr::bind_rows()
 
 
 

@@ -939,50 +939,39 @@ prettyRadioButtons(
 )
 
 br()
-br()
 h4("Feature Selection")
 h6(
 	"Activating feature selection removes the features that are least significant based on:"
 )
-switchInput(inputId = "featsel_filter", value = FALSE, size = "mini")
+sliderInput(
+	inputId = "featsel_cor_thresh", label = "Absolute Correlation Threshold",
+	min = 0.05, max = 1, value = 0.2, step = 0.05
+)
+sliderInput(
+	inputId = "featsel_imp_thresh", label = "Relative Importance Threshold",
+	min = 0.01, max = 1, value = 0.05, step = 0.01
+)
 ```
 
 ```{r}
-corr_values <- reactive({
+data_importance <- reactive({
 	req(data_features()) 
 	if (ncol(data_features()) > 4) {
-		data_features() |> generate_correlations(cor_method = input$featsel_cormethod)
-	}
-})
-
-ppsr_values <- reactive({
-	req(data_features()) 
-	if (ncol(data_features()) > 4) {
-		data_features() |> 
-			dplyr::select(-id, -frequency, -date) |>
-			ppsr::score_predictors(
-				y = "value", algorithm = "tree", cv_folds = 5, do_parallel = TRUE
+		corr_values <- data_features() |> 
+			generate_correlations(cor_method = input$featsel_cormethod, full_matrix = FALSE)
+		pps_values <- data_features() |> generate_pps()
+		imp_values <- data_features() |> 
+			generate_model_importance(
+				method = c("LASSO", "Random Forest"), importance_type = input$featsel_relimp
 			)
+		c(list("Correlation" = corr_values, "PPS" = pps_values), imp_values) |> 
+			dplyr::bind_rows()
 	}
 })
 
-imp_values <- reactive({
-	req(data_features()) 
-	if (ncol(data_features()) > 4) {
-		purrr::map(
-			c("LASSO", "Random Forest"), 
-			~ fit_feature_model(data = data_features(), method = .x)
-		) |>  
-		purrr::set_names(c("LASSO", "Random Forest")) 
-	}
-})
-
-data_features_final <- eventReactive(
-	eventExpr = input$featsel_filter, 
-	valueExpr = {
-		req(ppsr_values())
-		req(imp_values())
-		# !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+data_feat_selected <- reactive({
+	req(data_importance())
+	data_importance() |> select_features(params = input, data_features = data_features())
 })
 
 output$featsel_reg_plot <- renderPlotly({
@@ -1000,38 +989,58 @@ output$featsel_reg_plot <- renderPlotly({
 })
 
 output$featsel_corr_plot <- renderPlotly({
-	req(corr_values())
-	g <- corr_values() |> 
-		ggcorrplot::ggcorrplot(
-			type = "upper", lab = FALSE, colors = c( "darkred", "white", "darkgreen")
-		) + 
-		timetk:::theme_tq() 
+	req(data_importance())
+	g <- data_importance() |> 
+		dplyr::filter(type == "Correlation") |> 
+		plot_feature_importance() + ggplot2::expand_limits(x = c(-1, 1))
 	plotly::ggplotly(g)
 })
 
+# output$featsel_corr_plot <- renderPlotly({
+# 	req(data_importance())
+# 	g <- data_features() |> 
+#			generate_correlations(cor_method = input$featsel_cormethod, full_matrix = TRUE) |> 
+# 		ggcorrplot::ggcorrplot(
+# 			type = "upper", lab = FALSE, colors = c( "darkred", "white", "darkgreen")
+# 		) + 
+# 		timetk:::theme_tq() +
+# 		ggplot2::labs(x = "", y = "") + 
+# 		ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45))
+# 	plotly::ggplotly(g)
+# })
+
 output$featsel_ppsr_plot <- renderPlotly({
-	req(imp_values())
-	g <- data_features() |>
-		dplyr::select(-id, -frequency, -date) |>
-		ppsr::visualize_pps(y = "value") +
-		timetk:::theme_tq()
+	req(data_importance())
+	g <- data_importance() |> 
+		dplyr::filter(type == "PPS") |> 
+		plot_feature_importance() + ggplot2::expand_limits(x = c(0, 1))
 	plotly::ggplotly(g)
 })
 
 output$featsel_lasso_plot <- renderPlotly({
-	req(imp_values())
-	imp_values()$LASSO |> 
-		extract_feature_importance(method = "LASSO", relative = input$featsel_relimp) |> 
-		plot_feature_importance() |> 
-		plotly::ggplotly()
+	req(data_importance())
+	g <- data_importance() |> 
+		dplyr::filter(type == "LASSO") |>
+		plot_feature_importance() + ggplot2::expand_limits(x = c(0, 1)) 
+	plotly::ggplotly(g)
 })
 
 output$featsel_rf_plot <- renderPlotly({
-	req(imp_values())
-	imp_values()$`Random Forest` |> 
-		extract_feature_importance(method = "Random Forest", relative = input$featsel_relimp) |> 
-		plot_feature_importance() |> 
-		plotly::ggplotly()
+	req(data_importance())
+	g <- data_importance() |> 
+		dplyr::filter(type == "Random Forest") |> 
+		plot_feature_importance() + ggplot2::expand_limits(x = c(0, 1))  
+	plotly::ggplotly(g)
+})
+
+output$featsel_table <- renderDT({
+  data_feat_selected()$summary_table |>
+    datatable(
+      options = list(
+        ordering = TRUE, pageLength = 20, lengthChange = TRUE, searching = TRUE, 
+        info = FALSE, paging = TRUE, scrollCollapse = TRUE, scrollY = 575 # 250
+      )
+    )
 })
 ```
 
@@ -1071,9 +1080,8 @@ plotlyOutput(outputId = "featsel_rf_plot")
 ### Selected Feature Set
 
 ```{r}
-# mettere il glimpse del feature set filtrato
+DTOutput(outputId = "featsel_table")
 ```
-
 
 
 

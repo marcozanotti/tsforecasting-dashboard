@@ -7,10 +7,9 @@ To Do:
 - correggere UI (dimensioni + scroll)
 
 - pensare e aggiungere la sezione di feature engineering (con in mente il save)
+-- switch nella view dell'ultima tab con glimpse e features come al solito
+-- combinare internal e external features
 -- impostare le global options dei parametri
--- aggiungere parametri di soglia per filtrare
--- cambiare grafico ppsr con uno mio
--- sezione di feature selection con use_selected_features come combinazione dei vari metodi (regressione è solo grafica)
 -- condizionali che setta tutti i future frame uguali a quello di internal features
 -- salvare data_features con reactive values
 -- use_feature_set option in forecasting

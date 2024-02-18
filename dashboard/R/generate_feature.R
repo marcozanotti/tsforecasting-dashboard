@@ -242,6 +242,69 @@ generate_recipe_spec <- function(data, method) {
 	
 }
 
+# function to generate correlation matrix
+generate_correlations <- function(data, cor_method = "spearman", full_matrix = FALSE) {
+	
+	logging::loginfo("*** Generating Correlation Matrix ***")
+	data_cor <- data |> 
+		dplyr::select(-id, -frequency, -date) |> 
+		tidyr::drop_na()
+	
+	rcp_spec <- recipes::recipe(value ~ ., data = data_cor) |> 
+		recipes::step_dummy(recipes::all_nominal(), one_hot = TRUE)
+	
+	cor_mat <- rcp_spec |> 
+		recipes::prep() |> 
+		recipes::bake(new_data = NULL) |> 
+		dplyr::relocate(value, .before = 1) |> 
+		stats::cor(method = cor_method)
+	
+	if (full_matrix == FALSE) {
+		cor_mat <- cor_mat |> 
+			as.data.frame() |> 
+			tibble::rownames_to_column() |> 
+			dplyr::select(1:2) |> 
+			dplyr::slice(-1) |>
+			purrr::set_names(c("variable", "importance")) |> 
+			dplyr::arrange(desc(importance)) |> 
+			dplyr::mutate("type" = "Correlation") |> 
+			dplyr::filter(abs(importance) > 0.01)
+	}
+
+	return(cor_mat)
+	
+}
+
+# function to generate predictive power score
+generate_pps <- function(data) {
+	
+	logging::loginfo("*** Generating Predictive Power Score ***")
+	data_pps <- data |> 
+		dplyr::select(-id, -frequency, -date) |> 
+		tidyr::drop_na()
+	
+	rcp_spec <- recipes::recipe(value ~ ., data = data_pps) |> 
+		recipes::step_dummy(recipes::all_nominal(), one_hot = TRUE)
+	
+	pps_df <- rcp_spec |> 
+		recipes::prep() |> 
+		recipes::bake(new_data = NULL) |> 
+		dplyr::relocate(value, .before = 1) |> 
+		ppsr::score_predictors(
+			y = "value", algorithm = "tree", cv_folds = 5, do_parallel = TRUE
+		) |> 
+		dplyr::select("x", "pps") |>
+		dplyr::slice(-1) |>
+		purrr::set_names(c("variable", "importance")) |> 
+		dplyr::filter(importance > 0) |>
+		dplyr::arrange(desc(importance)) |> 
+		dplyr::mutate("type" = "PPS") |> 
+		dplyr::filter(importance > 0.001)
+
+	return(pps_df)
+	
+}
+
 # function to fit a feature selection model
 fit_feature_model <- function(data, method, seed = 1992) {
 	
@@ -281,7 +344,7 @@ fit_feature_model <- function(data, method, seed = 1992) {
 
 # function to extract feature importance
 extract_feature_importance <- function(
-		feature_fit, method, relative = "relative", threshold = 0.005
+		feature_fit, method, importance_type = "relative"
 ) {
 	
 	logging::loginfo("*** Extracting Feature Importance ***")
@@ -290,32 +353,51 @@ extract_feature_importance <- function(
 			workflows::extract_fit_parsnip() |> 
 			broom::tidy() |> 
 			dplyr::select(term, estimate) |> 
-			purrr::set_names(c("variable", "importance"))
+			purrr::set_names(c("variable", "importance")) |> 
+			dplyr::mutate("type" = "LASSO")
 	} else if (method == "Random Forest") {
 		res_imp <- feature_fit |> 
 			workflows::extract_fit_parsnip() |> 
 			vip::vip(num_features = 1000) |> 
 			purrr::pluck("data") |> 
-			purrr::set_names(c("variable", "importance"))
+			purrr::set_names(c("variable", "importance")) |> 
+			dplyr::mutate("type" = "Random Forest")
 	} else {
 		stop(paste("Unknown method:", method))
 	}
 	
-	res_imp <- res_imp |> dplyr::filter(importance > 0) 
+	res_imp <- res_imp |> 
+		dplyr::filter(variable != "(Intercept)") |> 
+		dplyr::filter(importance > 0) |> 
+		dplyr::arrange(desc(importance))
 	
-	if (relative == "relative") {
+	if (importance_type == "relative") {
 		res_imp <- res_imp |> 
 			dplyr::mutate(importance = timetk::normalize_vec(importance, silent = TRUE)) |> 
-			dplyr::filter(importance > threshold)
+			dplyr::filter(importance > 0.001)
 	}
 	
 	return(res_imp)
 	
 }
 
+# wrapper to generate model importance
+generate_model_importance <- function(data, method, importance_type = "relative") {
+	res <- purrr::map(
+		method, 
+		~ fit_feature_model(data = data, method = .x)
+	) |>  
+		purrr::set_names(method) |> 
+		purrr::map2(
+			method,
+			~ extract_feature_importance(.x, method = .y, importance_type = importance_type)
+		)
+	return(res)
+}
+
 # function to plot feature importance
 plot_feature_importance <- function(importance_data) {
-
+	
 	g <- importance_data |> 
 		ggplot2::ggplot(
 			ggplot2::aes(
@@ -325,7 +407,7 @@ plot_feature_importance <- function(importance_data) {
 			)
 		) +
 		ggplot2::geom_col() + 
-		ggplot2::scale_fill_gradient(low = "lightblue", high = "darkblue") +
+		ggplot2::scale_fill_gradient(low = "#FFFFFF", high = "#08306B") +
 		timetk:::theme_tq() +
 		ggplot2::theme(legend.position = "right") +
 		ggplot2::labs(y = "", x = "")
@@ -333,24 +415,72 @@ plot_feature_importance <- function(importance_data) {
 	
 }
 
-# function to generate correlation matrix
-generate_correlations <- function(data, cor_method = "spearman") {
+# function to select features based on importance thresholds
+select_features <- function(data_importance, params, data_features) {
 	
-	logging::loginfo("*** Generating Correlation Matrix ***")
-	data_cor <- data |> 
-		dplyr::select(-id, -frequency, -date) |> 
-		tidyr::drop_na()
+	feat_names <- get_features(data_features, names_only = TRUE)[-1]
+	cat_feats <- grep(pattern = "\\.lbl", feat_names, value = TRUE)
+	cat_feats_regex <- paste0("(", paste0(cat_feats, collapse = ")|("), ")")
 	
-	rcp_spec <- recipes::recipe(value ~ ., data = data_cor) |> 
-		recipes::step_dummy(recipes::all_nominal(), one_hot = TRUE)
+	sel_feat <- data_importance |>
+		dplyr::filter(
+			(type == "Correlation" & abs(importance) > params$featsel_cor_thresh) |
+				(type != "Correlation" & importance > params$featsel_imp_thresh)
+		)
+	sel_num_feat <- sel_feat |> dplyr::filter(!grepl(cat_feats_regex, variable))
+	sel_cat_feat <- sel_feat |> dplyr::filter(grepl(cat_feats_regex, variable))
 	
-	cor_mat <- rcp_spec |> 
-		recipes::prep() |> 
-		recipes::bake(new_data = NULL) |> 
-		dplyr::relocate(value, .before = 1) |> 
-		stats::cor(method = cor_method)
-
-	return(cor_mat)
+	# numeric features
+	f_num_sel <- unique(sel_num_feat$variable)
+	ave_num_imp <- vector("numeric", length(f_num_sel))
+	mtd_num_n <- vector("numeric", length(f_num_sel))
+	mtd_num_type <- vector("character", length(f_num_sel))
+	for (i in seq_along(f_num_sel)) {
+		data_num_tmp <- sel_num_feat |> dplyr::filter(variable == f_num_sel[i])
+		ave_num_imp[i] <- data_num_tmp |> dplyr::pull("importance") |> abs() |> mean()
+		mtd_num_n[i] <- nrow(data_num_tmp)
+		mtd_num_type[i] <- data_num_tmp |> dplyr::pull("type") |>	unique() |> stringr::str_flatten(", ")
+	}
+	sum_num_tbl <- tibble::tibble(
+		"Variable" = f_num_sel, 
+		"Average Importance" = ave_num_imp, 
+		"N. Methods" = mtd_num_n,
+		"Methods" = mtd_num_type
+	) 
+	
+	# categorical features
+	cat_feats_in_selection <- sel_cat_feat$variable |> 
+		stringr::str_extract_all(cat_feats_regex) |> 
+		unlist() |> unique()
+	f_cat_sel <- cat_feats[cat_feats %in% cat_feats_in_selection]
+	ave_cat_imp <- vector("numeric", length(f_cat_sel))
+	mtd_cat_n <- vector("numeric", length(f_cat_sel))
+	mtd_cat_type <- vector("character", length(f_cat_sel))
+	for (i in seq_along(f_cat_sel)) {
+		data_cat_tmp <- sel_cat_feat |> dplyr::filter(grepl(f_cat_sel[i], variable))
+		ave_cat_imp[i] <- data_cat_tmp |> dplyr::pull("importance") |> abs() |> mean()
+		mtd_cat_n[i] <- nrow(data_cat_tmp)
+		mtd_cat_type[i] <- data_cat_tmp |> dplyr::pull("type") |>	unique() |> stringr::str_flatten(", ")
+	}
+	sum_cat_tbl <- tibble::tibble(
+		"Variable" = f_cat_sel, 
+		"Average Importance" = ave_cat_imp, 
+		"N. Methods" = mtd_cat_n,
+		"Methods" = mtd_cat_type
+	) 
+	
+	# summary table
+	sum_tbl <- dplyr::bind_rows(sum_num_tbl, sum_cat_tbl) |> 
+		dplyr::arrange(factor(Variable, levels = feat_names))
+	
+	# data + selected features
+	f_sel <- unique(sum_tbl$Variable)
+	data_selected <- data_features |> dplyr::select(all_of(c("id", "date", "value", f_sel)))
+	
+	res <- list(
+		"data" = data_selected,
+		"summary_table" = sum_tbl
+	)
+	return(res)
 	
 }
-
