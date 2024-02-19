@@ -929,23 +929,22 @@ textInput(
 	inputId = "featsel_reg_formula", label = "Regression Formula", 
 	value = "value ~ .", placeholder = "value ~ x1 + x2 + x3"
 )
-prettyRadioButtons(
-  inputId = "featsel_cormethod", label = "Correlation Type", 
-  choices = c("pearson", "spearman"), selected = "spearman"
-)
-prettyRadioButtons(
-  inputId = "featsel_relimp", label = "Importance Type", 
-  choices = c("absolute", "relative"), selected = "relative"
-)
 
 br()
-h4("Feature Selection")
 h6(
-	"Activating feature selection removes the features that are least significant based on:"
+	"Feature selection removes the features that are least significant based on:"
+)
+prettyRadioButtons(
+  inputId = "featsel_cormethod", label = "Correlation Type", 
+  choices = c("pearson", "spearman"), selected = "spearman", inline = TRUE
 )
 sliderInput(
 	inputId = "featsel_cor_thresh", label = "Absolute Correlation Threshold",
 	min = 0.05, max = 1, value = 0.2, step = 0.05
+)
+prettyRadioButtons(
+  inputId = "featsel_relimp", label = "Importance Type", 
+  choices = c("absolute", "relative"), selected = "relative", inline = TRUE
 )
 sliderInput(
 	inputId = "featsel_imp_thresh", label = "Relative Importance Threshold",
@@ -954,13 +953,23 @@ sliderInput(
 ```
 
 ```{r}
+data_features_full <- reactive({
+	req(data_features())
+	if (!is.null(react_val$uploaded_xfeatures)) {
+		req(data_xfeatures())
+		data_features() |> dplyr::left_join(data_xfeatures(), by = c("date", "id", "frequency"))
+	} else {
+		data_features()
+	}
+})
+
 data_importance <- reactive({
-	req(data_features()) 
-	if (ncol(data_features()) > 4) {
-		corr_values <- data_features() |> 
+	req(data_features_full()) 
+	if (ncol(data_features_full()) > 4) {
+		corr_values <- data_features_full() |> 
 			generate_correlations(cor_method = input$featsel_cormethod, full_matrix = FALSE)
-		pps_values <- data_features() |> generate_pps()
-		imp_values <- data_features() |> 
+		pps_values <- data_features_full() |> generate_pps()
+		imp_values <- data_features_full() |> 
 			generate_model_importance(
 				method = c("LASSO", "Random Forest"), importance_type = input$featsel_relimp
 			)
@@ -971,16 +980,16 @@ data_importance <- reactive({
 
 data_feat_selected <- reactive({
 	req(data_importance())
-	data_importance() |> select_features(params = input, data_features = data_features())
+	data_importance() |> select_features(params = input, data_features = data_features_full())
 })
 
 output$featsel_reg_plot <- renderPlotly({
-	req(data_features())
-	if (ncol(data_features()) > 4) {
+	req(data_features_full())
+	if (ncol(data_features_full()) > 4) {
 		reg_f <- input$featsel_reg_formula |> 
 			parse_textinput(format_to = "character") |>
 			rlang::parse_expr()
-		data_features() |>
+		data_features_full() |>
 			dplyr::select(-id, -frequency) |>
 			timetk::plot_time_series_regression(
 				.date_var = date, .formula = reg_f, .show_summary = FALSE
@@ -1038,7 +1047,7 @@ output$featsel_table <- renderDT({
     datatable(
       options = list(
         ordering = TRUE, pageLength = 20, lengthChange = TRUE, searching = TRUE, 
-        info = FALSE, paging = TRUE, scrollCollapse = TRUE, scrollY = 575 # 250
+        info = FALSE, paging = TRUE, scrollCollapse = TRUE, scrollY = 550 # 250
       )
     )
 })
@@ -1108,6 +1117,7 @@ dropdownButton(
     choices = c("Expanding", "Rolling"), selected = "Rolling", 
     inline = TRUE
   ),
+  awesomeCheckbox(inputId = "use_feat_set", label = "Use selected fetures?", value = TRUE),
   icon = icon("gear"), width = "200px", size = "sm", circle = TRUE,
   tooltip = tooltipOptions(title = "Click to see inputs!")
 )

@@ -33,6 +33,41 @@ generate_cv_split <- function(
 
 }
 
+#function to generate the recipe specification
+generate_recipe_spec <- function(data, method) {
+	
+	method_type <- parse_method(method)
+	
+	if (method_type == "ts") {
+		
+		rcp_spec <- recipes::recipe(value ~ ., data = data)
+		
+	} else if (any(method_type %in% c("ml", "dl"))) {
+		
+		rcp_spec <- recipes::recipe(value ~ ., data = data) |>
+			timetk::step_timeseries_signature(date) |>
+			recipes::step_mutate(date = as.numeric(date)) |>
+			recipes::step_zv(recipes::all_predictors()) |>
+			recipes::step_rm(dplyr::matches("(iso)|(xts)|(index.num)")) |>
+			recipes::step_dummy(recipes::all_nominal(), one_hot = TRUE)
+		
+	} else if (any(method_type %in% c("mix", "aml"))) {
+		
+		rcp_spec <- recipes::recipe(value ~ ., data = data) |>
+			timetk::step_timeseries_signature(date) |>
+			recipes::step_mutate(trend = as.numeric(date)) |>
+			recipes::step_zv(recipes::all_predictors()) |>
+			recipes::step_rm(matches("(iso)|(xts)|(index.num)")) |>
+			recipes::step_dummy(recipes::all_nominal(), one_hot = TRUE)
+		
+	} else {
+		stop(paste("Unknown method type", method_type))
+	}
+	
+	return(rcp_spec)
+	
+}
+
 # function to generate the model specification
 generate_model_spec <- function(method, params) {
 

@@ -7,13 +7,9 @@ To Do:
 - correggere UI (dimensioni + scroll)
 
 - pensare e aggiungere la sezione di feature engineering (con in mente il save)
--- switch nella view dell'ultima tab con glimpse e features come al solito
--- combinare internal e external features
 -- impostare le global options dei parametri
 -- condizionali che setta tutti i future frame uguali a quello di internal features
--- salvare data_features con reactive values
 -- use_feature_set option in forecasting
-
 
 - eliminare generate_feature_set e sostituirla con get_features
 - creazione fanchart al posto del primo grafico in scenario
@@ -22,7 +18,6 @@ To Do:
 - aggiungere metodi di dl (NeuralProphet + NBEATS + DeepAR)
 - option tune stack? per il tuning degli stack
 - cambiare assegnazione nomi ai parametri in UI
-- creazione fanchart al posto del primo grafico in scenario
 
 
 Extensions:
@@ -31,6 +26,8 @@ Extensions:
 
 
 Bugs:
+- bug scroll orizzontale tablelle
+
 - tune_bayes, from GPfit::GP_fit()
 The optimization routine assumes that the inputs are scaled to the unit hypercube 
 [0,1]^d.

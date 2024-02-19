@@ -852,6 +852,103 @@ params = input
 data_importance <- c(list("Correlation" = corr_values, "PPS" = pps_values), imp_values) |> 
 	dplyr::bind_rows()
 
+data_feat |> dplyr::left_join(xfeatures, by = c("date", "id", "frequency"))
+
+
+
+# Forecast con Features ---------------------------------------------------
+data_selected <- get_data(datasets[1])
+ts_freq <- data_selected$frequency |> unique() |> parse_frequency()
+
+input <- list(
+	feat_n_future = 12,
+	feat_calendar = TRUE,
+	feat_holiday = FALSE,
+	feat_fourier_p = "6, 12",
+	feat_fourier_k = 1,
+	feat_spline_deg = "3, 6",
+	feat_lag = "12, 24",
+	feat_roll = "3, 6",
+	feat_inter = "week2 * wday.lbl,week3 * wday.lbl"
+)
+data_feat <- data_selected |> 
+	generate_features(params = input, n_future = input$feat_n_future)
+xfeatures <- read_csv("dashboard/data/xfeatures.csv")
+data_feature_selected <- data_feat |> 
+	dplyr::left_join(xfeatures, by = c("date", "id", "frequency"))
+str(data_feature_selected)
+
+input <- list(
+	n_future = 12,
+	n_assess = 24,
+	assess_type = "Rolling",
+	use_feat_set = TRUE,
+	method = "ETS",
+	error = "auto",
+	trend = "auto",
+	season = "auto",
+	damping = "auto",
+	smooth_level = 0.1,
+	smooth_trend = 0.1,
+	smooth_season = 0.1
+)
+input <- list(
+	n_future = 12,
+	n_assess = 24,
+	assess_type = "Rolling",
+	use_feat_set = TRUE,
+	method = "Elastic Net",
+	penalty = 1,
+	mixture = 0.5
+)
+
+# SOLUTION:
+# - togliere future frame da data_feature_selected e metterlo in un oggetto a parte
+# se use_feat_set = TRUE
+# - passare a fit_model il dataset senza future frame come sempre
+# - modificare il generate_recipe_spec() che imposta tutto in automatico leggendo le 
+# feature con get_features()
+# - modificare generate_forecast per accettare future frame come parametro opzionale
+# quindi o lo crea come sempre o lo usa se già presente (FATTO!!!!!!!!!!!)
+
+data_fit <- data_feature_selected |> 
+	dplyr::slice_head(n = nrow(data_feature_selected) - input$n_future)
+future_tbl <- data_feature_selected |> dplyr::slice_tail(n = input$n_future)
+
+fitted_model <- fit_model(
+	data = data_fit, method = input$method, params = input,
+	n_assess = input$n_assess, assess_type = input$assess_type, seed = 1992
+)
+
+forecast_results <- generate_forecast(
+	fitted_model_list = fitted_model, data = data_selected,
+	method = input$method, n_future = input$n_future,
+	n_assess = input$n_assess, assess_type = input$assess_type
+)
+
+data = data_selected
+method = input$method
+params = input
+n_assess = input$n_assess
+assess_type = input$assess_type
+seed = 1992
+data_splits = fitted_model$splits
+fitted_model = fitted_model$fit
+n_future = input$n_future
+
+forecast_results$splits |>
+	tk_time_series_cv_plan() |>
+	plot_time_series_cv_plan(date, value)
+forecast_results$fit
+forecast_results$residuals
+forecast_results$accuracy
+forecast_results$test_forecast |> plot_modeltime_forecast()
+forecast_results$oos_forecast |> plot_modeltime_forecast()
+
+
+
+
+
 
 
 

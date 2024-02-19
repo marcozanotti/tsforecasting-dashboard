@@ -207,41 +207,6 @@ generate_features <- function(data, params, n_future) {
 
 }
 
-#function to generate the recipe specification
-generate_recipe_spec <- function(data, method) {
-	
-	method_type <- parse_method(method)
-	
-	if (method_type == "ts") {
-		
-		rcp_spec <- recipes::recipe(value ~ ., data = data)
-		
-	} else if (any(method_type %in% c("ml", "dl"))) {
-		
-		rcp_spec <- recipes::recipe(value ~ ., data = data) |>
-			timetk::step_timeseries_signature(date) |>
-			recipes::step_mutate(date = as.numeric(date)) |>
-			recipes::step_zv(recipes::all_predictors()) |>
-			recipes::step_rm(dplyr::matches("(iso)|(xts)|(index.num)")) |>
-			recipes::step_dummy(recipes::all_nominal(), one_hot = TRUE)
-		
-	} else if (any(method_type %in% c("mix", "aml"))) {
-		
-		rcp_spec <- recipes::recipe(value ~ ., data = data) |>
-			timetk::step_timeseries_signature(date) |>
-			recipes::step_mutate(trend = as.numeric(date)) |>
-			recipes::step_zv(recipes::all_predictors()) |>
-			recipes::step_rm(matches("(iso)|(xts)|(index.num)")) |>
-			recipes::step_dummy(recipes::all_nominal(), one_hot = TRUE)
-		
-	} else {
-		stop(paste("Unknown method type", method_type))
-	}
-	
-	return(rcp_spec)
-	
-}
-
 # function to generate correlation matrix
 generate_correlations <- function(data, cor_method = "spearman", full_matrix = FALSE) {
 	
@@ -291,7 +256,7 @@ generate_pps <- function(data) {
 		recipes::bake(new_data = NULL) |> 
 		dplyr::relocate(value, .before = 1) |> 
 		ppsr::score_predictors(
-			y = "value", algorithm = "tree", cv_folds = 5, do_parallel = TRUE
+			y = "value", algorithm = "tree", cv_folds = 1, do_parallel = FALSE
 		) |> 
 		dplyr::select("x", "pps") |>
 		dplyr::slice(-1) |>
@@ -416,7 +381,7 @@ plot_feature_importance <- function(importance_data) {
 }
 
 # function to select features based on importance thresholds
-select_features <- function(data_importance, params, data_features) {
+select_features <- function(data_importance, params, data_features, n_future) {
 	
 	feat_names <- get_features(data_features, names_only = TRUE)[-1]
 	cat_feats <- grep(pattern = "\\.lbl", feat_names, value = TRUE)
@@ -477,8 +442,12 @@ select_features <- function(data_importance, params, data_features) {
 	f_sel <- unique(sum_tbl$Variable)
 	data_selected <- data_features |> dplyr::select(all_of(c("id", "date", "value", f_sel)))
 	
+	data_final <- data_selected |> dplyr::slice_head(n = nrow(data_selected) - n_future)
+	data_future <- data_selected |> dplyr::slice_tail(n = n_future)
+	
 	res <- list(
-		"data" = data_selected,
+		"data" = data_final,
+		"future_data" = data_future,
 		"summary_table" = sum_tbl
 	)
 	return(res)

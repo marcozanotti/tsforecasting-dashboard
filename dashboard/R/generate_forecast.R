@@ -1,6 +1,6 @@
 # function to forecast using time series methods
 generate_forecast <- function(
-    fitted_model_list, data, method, n_future, n_assess, assess_type,
+    fitted_model_list, data, method, n_future, n_assess, assess_type, future_data = NULL, 
     ensemble_methods = NULL, stacking_methods = NULL, confidence_level = 0.9
   ) {
 
@@ -22,7 +22,11 @@ generate_forecast <- function(
 
   # future split
   logging::loginfo("Future Frame")
-  future_tbl <- timetk::future_frame(data, .date_var = date, .length_out = n_future)
+  if (is.null(future_data)) {
+  	future_tbl <- timetk::future_frame(data, .date_var = date, .length_out = n_future)
+  } else {
+  	future_tbl <- future_data
+  }
 
   # modeltime table
   logging::loginfo("Modeltime Table")
