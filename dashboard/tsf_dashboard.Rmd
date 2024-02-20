@@ -668,7 +668,7 @@ dropdownButton(
     inputId = "feat_n_future", label = "Forecast Horizon", 
     value = 12, min = 1, max = Inf, step = 1, width = "100%"
   ),
-  icon = icon("gear"), width = "200px", size = "sm", circle = TRUE,
+  icon = icon("gear"), width = "225px", size = "sm", circle = TRUE,
   tooltip = tooltipOptions(title = "Click to see inputs!")
 )
 
@@ -709,38 +709,51 @@ prettyRadioButtons(
 ```{r}
 data_features <- reactive({
 	req(data_transformed())
-	data_transformed() |> generate_features(params = input, n_future = input$feat_n_future)
+	data_transformed() |> 
+		generate_features(params = input, n_future = input$feat_n_future, verbose = 0)
 })
 
 output$feat_table <- renderDT({
-  data_features() |>
+  if (get_features(data_features(), number_only = TRUE) > 1) {
+  	data_features() |>
       datatable(
         options = list(
           ordering = TRUE, pageLength = 20, lengthChange = TRUE, searching = TRUE, 
           info = FALSE, paging = TRUE, scrollCollapse = TRUE, scrollY = 550 # 250
         )
       )
+  }
 })
-output$feat_str <- renderPrint({ glimpse(data_features()) })
-output$feat_summ <- renderPrint({ skim(data_features()) })
+
+output$feat_str <- renderPrint({ 
+	if (get_features(data_features(), number_only = TRUE) > 1) {
+  	glimpse(data_features()) 
+  }
+})
+
+output$feat_summ <- renderPrint({ 
+	if (get_features(data_features(), number_only = TRUE) > 1) {
+  	skim(data_features()) 
+  }
+})
 
 output$feat_ts_plot <- renderPlotly({
-  req(data_features())
-	if (ncol(data_features()) <= 4) {
+	if (get_features(data_features(), number_only = TRUE) > 1) {
+  	feat_nms <- get_features(data_features(), names_only = TRUE, remove_date = TRUE)
 		data_features() |> 
-			timetk::plot_time_series(
-				.date_var = date, .value = value,
-				.smooth = FALSE, .interactive = TRUE,	.title = NULL
-			)
-	} else {
-		data_features() |> 
-			dplyr::mutate(dplyr::across(5:ncol(data_features()), as.numeric)) |>
-			tidyr::pivot_longer(-c(date, id, frequency), names_to = "name", values_to = "value") |>
+			dplyr::mutate(dplyr::across(feat_nms, as.numeric)) |>
+			tidyr::pivot_longer(cols = c("value", feat_nms), names_to = "name", values_to = "value") |>
 			timetk::plot_time_series(
 				.date_var = date, .value = value, .color_var = name,
 				.smooth = FALSE, .interactive = TRUE,	.title = NULL
 			)
-	}
+	} else {
+  	data_features() |> 
+			timetk::plot_time_series(
+				.date_var = date, .value = value,
+				.smooth = FALSE, .interactive = TRUE,	.title = NULL
+			)
+  }
 })
 ```
 
@@ -785,7 +798,7 @@ dropdownButton(
     inputId = "xfeat_n_future", label = "Forecast Horizon", 
     value = 12, min = 1, max = Inf, step = 1, width = "100%"
   ),
-  icon = icon("gear"), width = "200px", size = "sm", circle = TRUE,
+  icon = icon("gear"), width = "225px", size = "sm", circle = TRUE,
   tooltip = tooltipOptions(title = "Click to see inputs!")
 )
 
@@ -920,35 +933,22 @@ dropdownButton(
     inputId = "featsel_n_future", label = "Forecast Horizon", 
     value = 12, min = 1, max = Inf, step = 1, width = "100%"
   ),
-  icon = icon("gear"), width = "200px", size = "sm", circle = TRUE,
+  icon = icon("gear"), width = "225px", size = "sm", circle = TRUE,
   tooltip = tooltipOptions(title = "Click to see inputs!")
 )
-
+br()
+sliderInput(
+	inputId = "featsel_cor_thresh", label = "Absolute Correlation Threshold",
+	min = 0, max = 1, value = 0, step = 0.05
+)
+sliderInput(
+	inputId = "featsel_pps_thresh", label = "PPS Threshold",
+	min = 0, max = 1, value = 0, step = 0.01
+)
 br()
 textInput(
 	inputId = "featsel_reg_formula", label = "Regression Formula", 
 	value = "value ~ .", placeholder = "value ~ x1 + x2 + x3"
-)
-
-br()
-h6(
-	"Feature selection removes the features that are least significant based on:"
-)
-prettyRadioButtons(
-  inputId = "featsel_cormethod", label = "Correlation Type", 
-  choices = c("pearson", "spearman"), selected = "spearman", inline = TRUE
-)
-sliderInput(
-	inputId = "featsel_cor_thresh", label = "Absolute Correlation Threshold",
-	min = 0.05, max = 1, value = 0.2, step = 0.05
-)
-prettyRadioButtons(
-  inputId = "featsel_relimp", label = "Importance Type", 
-  choices = c("absolute", "relative"), selected = "relative", inline = TRUE
-)
-sliderInput(
-	inputId = "featsel_imp_thresh", label = "Relative Importance Threshold",
-	min = 0.01, max = 1, value = 0.05, step = 0.01
 )
 ```
 
@@ -957,7 +957,7 @@ data_features_full <- reactive({
 	req(data_features())
 	if (!is.null(react_val$uploaded_xfeatures)) {
 		req(data_xfeatures())
-		data_features() |> dplyr::left_join(data_xfeatures(), by = c("date", "id", "frequency"))
+		data_features() |> dplyr::left_join(data_xfeatures(), by = "date") # c("date", "id", "frequency")
 	} else {
 		data_features()
 	}
@@ -965,14 +965,13 @@ data_features_full <- reactive({
 
 data_importance <- reactive({
 	req(data_features_full()) 
-	if (ncol(data_features_full()) > 4) {
+	n_feat <- length(get_features(data_features_full(), names_only = TRUE))
+	if (n_feat > 1) {
 		corr_values <- data_features_full() |> 
-			generate_correlations(cor_method = input$featsel_cormethod, full_matrix = FALSE)
+			generate_correlations(cor_method = "spearman", full_matrix = FALSE)
 		pps_values <- data_features_full() |> generate_pps()
 		imp_values <- data_features_full() |> 
-			generate_model_importance(
-				method = c("LASSO", "Random Forest"), importance_type = input$featsel_relimp
-			)
+			generate_model_importance(method = c("LASSO", "Random Forest"))
 		c(list("Correlation" = corr_values, "PPS" = pps_values), imp_values) |> 
 			dplyr::bind_rows()
 	}
@@ -980,21 +979,13 @@ data_importance <- reactive({
 
 data_feat_selected <- reactive({
 	req(data_importance())
-	data_importance() |> select_features(params = input, data_features = data_features_full())
-})
-
-output$featsel_reg_plot <- renderPlotly({
 	req(data_features_full())
-	if (ncol(data_features_full()) > 4) {
-		reg_f <- input$featsel_reg_formula |> 
-			parse_textinput(format_to = "character") |>
-			rlang::parse_expr()
-		data_features_full() |>
-			dplyr::select(-id, -frequency) |>
-			timetk::plot_time_series_regression(
-				.date_var = date, .formula = reg_f, .show_summary = FALSE
-			)
-	}
+	data_importance() |> 
+		select_features(
+			params = input, 
+			data_features = data_features_full(), 
+			n_future = input$featsel_n_future
+		)
 })
 
 output$featsel_corr_plot <- renderPlotly({
@@ -1051,16 +1042,21 @@ output$featsel_table <- renderDT({
       )
     )
 })
+
+output$featsel_reg_plot <- renderPlotly({
+	reg_f <- input$featsel_reg_formula |> 
+		parse_textinput(format_to = "character") |>
+		rlang::parse_expr()
+	data_feat_selected()$data |>
+		dplyr::select(-dplyr::any_of(c("id", "frequency"))) |>
+		timetk::plot_time_series_regression(
+			.date_var = date, .formula = reg_f, .show_summary = FALSE
+		)
+})
 ```
 
 Row 1 {.tabset}
 ---------------------------------------------------------------------------
-
-### Regression Analysis {.no-padding}
-
-```{r}
-plotlyOutput(outputId = "featsel_reg_plot")
-```
 
 ### Correlation {.no-padding}
 
@@ -1092,6 +1088,12 @@ plotlyOutput(outputId = "featsel_rf_plot")
 DTOutput(outputId = "featsel_table")
 ```
 
+### Regression Analysis {.no-padding}
+
+```{r}
+plotlyOutput(outputId = "featsel_reg_plot")
+```
+
 
 
 Test & Evaluate {data-navmenu="Forecast" data-orientation=rows}
@@ -1117,8 +1119,8 @@ dropdownButton(
     choices = c("Expanding", "Rolling"), selected = "Rolling", 
     inline = TRUE
   ),
-  awesomeCheckbox(inputId = "use_feat_set", label = "Use selected fetures?", value = TRUE),
-  icon = icon("gear"), width = "200px", size = "sm", circle = TRUE,
+  awesomeCheckbox(inputId = "use_feat_set", label = "Use selected fetures?", value = FALSE),
+  icon = icon("gear"), width = "225px", size = "sm", circle = TRUE,
   tooltip = tooltipOptions(title = "Click to see inputs!")
 )
 
@@ -1394,6 +1396,7 @@ observeEvent(
     updateNumericInput(session = session, inputId = "n_future", value = 12)
     updateNumericInput(session = session, inputId = "n_assess", value = 24)
     updatePrettyRadioButtons(session = session, inputId = "assess_type", selected = "Rolling")
+    updateAwesomeCheckbox(session = session, inputId = "use_feat_set", value = FALSE)
     updatePickerInput(session = session, inputId = "method", selected = "Naive")
     updateAwesomeCheckbox(session = session, inputId = "back_transf", value = FALSE)
     # shinyjs::delay(ms = 300, expr = {shinyjs::click(id = "apply_forecast")})
@@ -1403,19 +1406,57 @@ observeEvent(
 forecast_results <- eventReactive(
   eventExpr = input$apply_forecast,
   valueExpr = {
-    map(
-      input$method, 
-      ~ fit_model(
-        data = data_transformed(), method = ., params = input, 
-        n_assess = input$n_assess, assess_type = input$assess_type, seed = 1992
-      )
-    ) |> 
-      generate_forecast(
-        data = data_transformed(), method = input$method, n_future = input$n_future,
-        n_assess = input$n_assess, assess_type = input$assess_type
-      )
+    if (input$use_feat_set) {
+    	
+    	map(
+    		input$method, 
+        ~ fit_model(
+          data = data_feat_selected()$data, method = ., params = input, 
+          n_assess = input$n_assess, assess_type = input$assess_type, seed = 1992
+        )
+      ) |> 
+        generate_forecast(
+          data = data_feat_selected()$data, method = input$method, 
+          n_future = input$n_future, n_assess = input$n_assess, 
+          assess_type = input$assess_type, 
+          future_data = data_feat_selected()$future_data
+        )
+    	
+    } else {
+    	
+    	map(
+    		input$method, 
+        ~ fit_model(
+          data = data_transformed(), method = ., params = input, 
+          n_assess = input$n_assess, assess_type = input$assess_type, seed = 1992
+        )
+      ) |> 
+        generate_forecast(
+          data = data_transformed(), method = input$method, n_future = input$n_future,
+          n_assess = input$n_assess, assess_type = input$assess_type
+        )
+    	
+    }
+  	
   }
 )
+
+# forecast_results <- eventReactive(
+#   eventExpr = input$apply_forecast,
+#   valueExpr = {
+#     map(
+#       input$method, 
+#       ~ fit_model(
+#         data = data_transformed(), method = ., params = input, 
+#         n_assess = input$n_assess, assess_type = input$assess_type, seed = 1992
+#       )
+#     ) |> 
+#       generate_forecast(
+#         data = data_transformed(), method = input$method, n_future = input$n_future,
+#         n_assess = input$n_assess, assess_type = input$assess_type
+#       )
+#   }
+# )
 
 back_forecast_results <- reactive({
 	req(forecast_results())
@@ -1558,7 +1599,7 @@ dropdownButton(
   ),
   prettyRadioButtons(
     inputId = "tune_valid_type", label = "Validation Type", 
-    choices = c("Time Series CV", "K-Fold CV"), selected = "Time Series CV", 
+    choices = c("TS CV", "K-Fold CV"), selected = "Time Series CV", 
     inline = TRUE
   ),
   sliderInput(
@@ -1574,7 +1615,7 @@ dropdownButton(
     inputId = "tune_grid_size", label = "Grid Size", 
     value = 10, min = 1, max = 200, step = 10
   ),
-  icon = icon("gear"), width = "200px", size = "sm", circle = TRUE,
+  icon = icon("gear"), width = "225px", size = "sm", circle = TRUE,
   tooltip = tooltipOptions(title = "Click to see inputs!")
 )
 
@@ -1947,7 +1988,7 @@ dropdownButton(
     choices = c("Expanding", "Rolling"), selected = "Rolling", 
     inline = TRUE
   ),
-  icon = icon("gear"), width = "200px", size = "sm", circle = TRUE,
+  icon = icon("gear"), width = "225px", size = "sm", circle = TRUE,
   tooltip = tooltipOptions(title = "Click to see inputs!")
 )
 
@@ -2130,7 +2171,7 @@ dropdownButton(
     choices = c("Expanding", "Rolling"), selected = "Rolling", 
     inline = TRUE
   ),
-  icon = icon("gear"), width = "200px", size = "sm", circle = TRUE,
+  icon = icon("gear"), width = "225px", size = "sm", circle = TRUE,
   tooltip = tooltipOptions(title = "Click to see inputs!")
 )
 
@@ -2350,7 +2391,7 @@ dropdownButton(
     choices = c("Expanding", "Rolling"), selected = "Rolling", 
     inline = TRUE
   ),
-  icon = icon("gear"), width = "200px", size = "sm", circle = TRUE,
+  icon = icon("gear"), width = "225px", size = "sm", circle = TRUE,
   tooltip = tooltipOptions(title = "Click to see inputs!")
 )
 
@@ -2615,7 +2656,7 @@ dropdownButton(
     choices = c("Expanding", "Rolling"), selected = "Rolling", 
     inline = TRUE
   ),
-  icon = icon("gear"), width = "200px", size = "sm", circle = TRUE,
+  icon = icon("gear"), width = "225px", size = "sm", circle = TRUE,
   tooltip = tooltipOptions(title = "Click to see inputs!")
 )
 

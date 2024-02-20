@@ -731,7 +731,7 @@ data_feat <- data |>
 	generate_features(params = input, n_future = input$feat_n_future)
 
 data_feat |> 
-	dplyr::select(-id, -frequency) |> 
+	dplyr::select(-dplyr::any_of(c("id", "frequency"))) |> 
 	plot_time_series_regression(
 		.date_var = date,
 		value ~ .,
@@ -763,6 +763,18 @@ input <- list(
 	feat_inter = "week2 * wday.lbl,week3 * wday.lbl",
 	featsel_reg_formula = "value ~ ."
 )
+input <- list(
+	feat_n_future = 12,
+	feat_calendar = FALSE,
+	feat_holiday = FALSE,
+	feat_fourier_p = "3",
+	feat_fourier_k = 1,
+	feat_spline_deg = "",
+	feat_lag = "",
+	feat_roll = "",
+	feat_inter = "",
+	featsel_reg_formula = "value ~ ."
+)
 data_feat <- data |> 
 	generate_features(params = input, n_future = input$feat_n_future)
 
@@ -783,7 +795,7 @@ reg_f <- input$featsel_reg_formula |>
 	parse_textinput(format_to = "character") |> 
 	rlang::parse_expr()
 data_feat |>
-	dplyr::select(-id, -frequency) |>
+	dplyr::select(-dplyr::any_of(c("id", "frequency"))) |>
 	timetk::plot_time_series_regression(
 		.date_var = date, .formula = reg_f, .show_summary = FALSE
 	)
@@ -810,10 +822,6 @@ res <- data_feat |>
 	generate_pps()
 res |> plot_feature_importance()
 
-score_df(iris)
-
-available_algorithms()
-available_evaluation_metrics()
 
 
 # LASSO & Random Forest
@@ -835,24 +843,27 @@ res$`Random Forest` |>
 
 
 # ALL
-feat_names <- get_features(data_feat, names_only = TRUE)[-1]
+feat_names <- get_features(data_feat, names_only = TRUE)
 
 corr_values <- data_feat |>	generate_correlations() 
 pps_values <- data_feat |> generate_pps()
 imp_values <- data_feat |> 
 	generate_model_importance(
-		method = c("LASSO", "Random Forest"), importance_type = "relative"
+		method = c("LASSO", "Random Forest")
 	)
 
 input <- list(
-	featsel_cor_thresh = 0.2,
-	featsel_imp_thresh = 0.05
+	featsel_cor_thresh = 0,
+	featsel_pps_thresh = 0
 )
-params = input
+
 data_importance <- c(list("Correlation" = corr_values, "PPS" = pps_values), imp_values) |> 
 	dplyr::bind_rows()
 
-data_feat |> dplyr::left_join(xfeatures, by = c("date", "id", "frequency"))
+data_importance |> 
+	select_features(params = input, data_features = data_feat, n_future = 12)
+
+
 
 
 
@@ -902,18 +913,17 @@ input <- list(
 	mixture = 0.5
 )
 
-# SOLUTION:
-# - togliere future frame da data_feature_selected e metterlo in un oggetto a parte
-# se use_feat_set = TRUE
-# - passare a fit_model il dataset senza future frame come sempre
-# - modificare il generate_recipe_spec() che imposta tutto in automatico leggendo le 
-# feature con get_features()
-# - modificare generate_forecast per accettare future frame come parametro opzionale
-# quindi o lo crea come sempre o lo usa se già presente (FATTO!!!!!!!!!!!)
-
 data_fit <- data_feature_selected |> 
-	dplyr::slice_head(n = nrow(data_feature_selected) - input$n_future)
+	dplyr::slice_head(n = nrow(data_feature_selected) - input$n_future) |> 
+	tidyr::drop_na()
 future_tbl <- data_feature_selected |> dplyr::slice_tail(n = input$n_future)
+
+data = data_fit
+method = input$method
+params = input
+n_assess = input$n_assess
+assess_type = input$assess_type
+seed = 1992
 
 fitted_model <- fit_model(
 	data = data_fit, method = input$method, params = input,
@@ -921,20 +931,11 @@ fitted_model <- fit_model(
 )
 
 forecast_results <- generate_forecast(
-	fitted_model_list = fitted_model, data = data_selected,
+	fitted_model_list = list(fitted_model), data = data_fit,
 	method = input$method, n_future = input$n_future,
-	n_assess = input$n_assess, assess_type = input$assess_type
+	n_assess = input$n_assess, assess_type = input$assess_type, 
+	future_data = future_tbl
 )
-
-data = data_selected
-method = input$method
-params = input
-n_assess = input$n_assess
-assess_type = input$assess_type
-seed = 1992
-data_splits = fitted_model$splits
-fitted_model = fitted_model$fit
-n_future = input$n_future
 
 forecast_results$splits |>
 	tk_time_series_cv_plan() |>
@@ -944,14 +945,4 @@ forecast_results$residuals
 forecast_results$accuracy
 forecast_results$test_forecast |> plot_modeltime_forecast()
 forecast_results$oos_forecast |> plot_modeltime_forecast()
-
-
-
-
-
-
-
-
-
-
 

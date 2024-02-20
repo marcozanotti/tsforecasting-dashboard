@@ -6,10 +6,12 @@ Next steps:
 To Do:
 - correggere UI (dimensioni + scroll)
 
-- pensare e aggiungere la sezione di feature engineering (con in mente il save)
--- impostare le global options dei parametri
--- condizionali che setta tutti i future frame uguali a quello di internal features
+- pensare e aggiungere la sezione di feature engineering
 -- use_feature_set option in forecasting
+--- attenzione! lag non in arima e spline non in mars
+-- condizionale che setta tutti i future frame uguali a quello di internal features
+-- condizionale che setta tutti i use_feat_set a TRUE se get_features ha più di 1 colonna
+
 
 - eliminare generate_feature_set e sostituirla con get_features
 - creazione fanchart al posto del primo grafico in scenario
@@ -26,6 +28,8 @@ Extensions:
 
 
 Bugs:
+- ARIMA not working with XREGS
+
 - bug scroll orizzontale tablelle
 
 - tune_bayes, from GPfit::GP_fit()

@@ -300,8 +300,8 @@ back_transform_accuracy <- function(
 	}
 	
 	# splits <- generate_initial_split(data, n_assess, assess_type)
-	train_tbl <- rsample::training(splits) |> dplyr::select(-id, -frequency)
-	test_tbl <- rsample::testing(splits) |> dplyr::select(-id, -frequency)
+	train_tbl <- rsample::training(splits) |> dplyr::select(-dplyr::any_of(c("id", "frequency")))
+	test_tbl <- rsample::testing(splits) |> dplyr::select(-dplyr::any_of(c("id", "frequency")))
 	
 	# add to the default metric set
 	new_mset <- modeltime::default_forecast_accuracy_metric_set(me, rmspe) 

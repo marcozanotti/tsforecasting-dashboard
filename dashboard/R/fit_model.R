@@ -37,31 +37,52 @@ generate_cv_split <- function(
 generate_recipe_spec <- function(data, method) {
 	
 	method_type <- parse_method(method)
+	n_feats <- get_features(data, number_only = TRUE)
 	
-	if (method_type == "ts") {
+	if (n_feats == 0) {
 		
-		rcp_spec <- recipes::recipe(value ~ ., data = data)
+		stop("At least the 'date' feature must be provided.")
 		
-	} else if (any(method_type %in% c("ml", "dl"))) {
+	} else if (n_feats == 1) {
 		
-		rcp_spec <- recipes::recipe(value ~ ., data = data) |>
-			timetk::step_timeseries_signature(date) |>
-			recipes::step_mutate(date = as.numeric(date)) |>
-			recipes::step_zv(recipes::all_predictors()) |>
-			recipes::step_rm(dplyr::matches("(iso)|(xts)|(index.num)")) |>
-			recipes::step_dummy(recipes::all_nominal(), one_hot = TRUE)
-		
-	} else if (any(method_type %in% c("mix", "aml"))) {
-		
-		rcp_spec <- recipes::recipe(value ~ ., data = data) |>
-			timetk::step_timeseries_signature(date) |>
-			recipes::step_mutate(trend = as.numeric(date)) |>
-			recipes::step_zv(recipes::all_predictors()) |>
-			recipes::step_rm(matches("(iso)|(xts)|(index.num)")) |>
-			recipes::step_dummy(recipes::all_nominal(), one_hot = TRUE)
+		logging::loginfo("Using default recipe specification")
+		if (method_type == "ts") {
+			rcp_spec <- recipes::recipe(value ~ ., data = data)
+		} else if (any(method_type %in% c("ml", "dl"))) {
+			rcp_spec <- recipes::recipe(value ~ ., data = data) |>
+				timetk::step_timeseries_signature(date) |>
+				recipes::step_mutate(date = as.numeric(date)) |>
+				recipes::step_rm(dplyr::matches("(iso)|(xts)|(index.num)")) |>
+				recipes::step_zv(recipes::all_predictors()) |>
+				recipes::step_dummy(recipes::all_nominal(), one_hot = TRUE)
+		} else if (any(method_type %in% c("mix", "aml"))) {
+			rcp_spec <- recipes::recipe(value ~ ., data = data) |>
+				timetk::step_timeseries_signature(date) |>
+				recipes::step_mutate(trend = as.numeric(date)) |>
+				recipes::step_rm(dplyr::matches("(iso)|(xts)|(index.num)")) |>
+				recipes::step_zv(recipes::all_predictors()) |>
+				recipes::step_dummy(recipes::all_nominal(), one_hot = TRUE)
+		} else {
+			stop(paste("Unknown method type", method_type))
+		}
 		
 	} else {
-		stop(paste("Unknown method type", method_type))
+		
+		logging::loginfo("Using pre-defined features recipe specification")
+		if (method_type == "ts") {
+			rcp_spec <- recipes::recipe(value ~ ., data = data) |> 
+				recipes::step_dummy(recipes::all_nominal(), one_hot = TRUE)
+		} else if (any(method_type %in% c("ml", "dl"))) {
+			rcp_spec <- recipes::recipe(value ~ ., data = data) |>
+				recipes::step_dummy(recipes::all_nominal(), one_hot = TRUE) |> 
+				recipes::step_rm(date)
+		} else if (any(method_type %in% c("mix", "aml"))) {
+			rcp_spec <- recipes::recipe(value ~ ., data = data) |>
+				recipes::step_dummy(recipes::all_nominal(), one_hot = TRUE)
+		} else {
+			stop(paste("Unknown method type", method_type))
+		}
+		
 	}
 	
 	return(rcp_spec)
@@ -484,7 +505,7 @@ fit_model <- function(data, method, params, n_assess, assess_type, seed = 1992) 
   # initial split
   logging::loginfo("Initial Split")
   splits <- generate_initial_split(data, n_assess, assess_type)
-  train_tbl <- rsample::training(splits) |> dplyr::select(-id, -frequency)
+  train_tbl <- rsample::training(splits) |> dplyr::select(-dplyr::any_of(c("id", "frequency")))
 
   # recipe specification
   logging::loginfo("Recipe Specification")
@@ -628,7 +649,7 @@ fit_model_tuning <- function(
   # initial split
   logging::loginfo("Initial Split")
   splits <- generate_initial_split(data, n_assess, assess_type)
-  train_tbl <- rsample::training(splits) |> dplyr::select(-id, -frequency)
+  train_tbl <- rsample::training(splits) |> dplyr::select(-dplyr::any_of(c("id", "frequency")))
 
   # validation split
   logging::loginfo("Validation Split")

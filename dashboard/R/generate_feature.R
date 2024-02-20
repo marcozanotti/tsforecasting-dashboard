@@ -11,9 +11,8 @@ add_future_frame <- function(data, n_future) {
 }
 
 # function to get the features from a recipe or workflow
-get_features <- function(object, names_only = FALSE) {
+get_features <- function(object, remove_date = FALSE, names_only = FALSE, number_only = FALSE) {
 	
-	logging::loginfo("Extracting Features...")
 	if (inherits(object, "workflow")) {
 		feats <- object |> 
 			workflows::extract_preprocessor() |> 
@@ -32,7 +31,9 @@ get_features <- function(object, names_only = FALSE) {
 		stop("object must be a workflow, recipe or data.frame")
 	}
 	
+	if (remove_date) { feats <- dplyr::select(feats, -date) }
 	if (names_only) { feats <- names(feats)	}
+	if (number_only) { feats <- ncol(feats) }
 	
 	return(feats)
 	
@@ -115,33 +116,32 @@ augment_interaction <- function(.data, .expr) {
 }
 
 # function to generate new features
-generate_features <- function(data, params, n_future) {
+generate_features <- function(data, params, n_future, verbose = 1) {
 	
-	logging::loginfo("Generating new features...")
+	if (verbose > 0) logging::loginfo("*** Generating New Features ***")
 	
 	# add future frame
 	data_full <- data |> 
-		add_future_frame(n_future) |> 
-		dplyr::group_by(id, frequency)
+		add_future_frame(n_future) # |> dplyr::group_by(id, frequency)
 	data_feat <- data_full  
 	
 	if (params$feat_calendar) {
-		logging::loginfo("Generating calendar features...")
+		if (verbose > 0) logging::loginfo("Generating calendar features...")
 		data_feat <- data_feat |> 
-			dplyr::mutate("trend" = timetk::normalize_vec(as.numeric(date), silent = TRUE)) |> 
+			dplyr::mutate("time_trend" = timetk::normalize_vec(as.numeric(date), silent = TRUE)) |> 
 			timetk::tk_augment_timeseries_signature(.date_var = date) |> 
 			dplyr::mutate(year = timetk::normalize_vec(year, silent = TRUE)) |> 
 			dplyr::select(-dplyr::matches("(diff)|(iso)|(xts)|(index.num)"))
 	}
 	
 	if (params$feat_holiday) {
-		logging::loginfo("Generating holiday features...")
+		if (verbose > 0) logging::loginfo("Generating holiday features...")
 		data_feat <- data_feat |>
 			timetk::tk_augment_holiday_signature(.date_var = date)
 	}
 	
 	if (!params$feat_fourier_p == "") {
-		logging::loginfo("Generating Fourier features...")
+		if (verbose > 0) logging::loginfo("Generating Fourier features...")
 		f_p <- params$feat_fourier_p |> parse_textinput()
 		data_feat <- data_feat |>
 			timetk::tk_augment_fourier(
@@ -151,20 +151,20 @@ generate_features <- function(data, params, n_future) {
 	}
 	
 	if (!params$feat_spline_deg == "") {
-		logging::loginfo("Generating splines features...")
+		if (verbose > 0) logging::loginfo("Generating splines features...")
 		s_deg <- params$feat_spline_deg |> parse_textinput()
 		data_feat <- data_feat |>	augment_spline(.degree = s_deg)
 	}
 	
 	if (!params$feat_lag == "") {
-		logging::loginfo("Generating lag features...")
+		if (verbose > 0) logging::loginfo("Generating lag features...")
 		lag_order <- params$feat_lag |> parse_textinput()
 		data_feat <- data_feat |>	
 			timetk::tk_augment_lags(.value = value, .lags = lag_order) |> 
 			dplyr::rename_with(~ stringr::str_remove_all(., "value_"))
 		
 		if (!params$feat_roll == "") {
-			logging::loginfo("Generating rolling features...")
+			if (verbose > 0) logging::loginfo("Generating rolling features...")
 			max_lag_order <- max(lag_order) # roll average features are computed only on the max lag order
 			roll_period <- params$feat_roll |> parse_textinput()
 			# rolling averages
@@ -192,7 +192,7 @@ generate_features <- function(data, params, n_future) {
 	}
 	
 	if (!params$feat_inter == "") {
-		logging::loginfo("Generating interaction features...")
+		if (verbose > 0) logging::loginfo("Generating interaction features...")
 		inter_expr <- params$feat_inter |> 
 			parse_textinput(format_to = "character") |> 
 			stringr::str_split("\\*") |> 
@@ -212,7 +212,7 @@ generate_correlations <- function(data, cor_method = "spearman", full_matrix = F
 	
 	logging::loginfo("*** Generating Correlation Matrix ***")
 	data_cor <- data |> 
-		dplyr::select(-id, -frequency, -date) |> 
+		dplyr::select(-dplyr::any_of(c("id", "frequency", "date"))) |> 
 		tidyr::drop_na()
 	
 	rcp_spec <- recipes::recipe(value ~ ., data = data_cor) |> 
@@ -233,7 +233,7 @@ generate_correlations <- function(data, cor_method = "spearman", full_matrix = F
 			purrr::set_names(c("variable", "importance")) |> 
 			dplyr::arrange(desc(importance)) |> 
 			dplyr::mutate("type" = "Correlation") |> 
-			dplyr::filter(abs(importance) > 0.01)
+			dplyr::filter(abs(importance) > 0)
 	}
 
 	return(cor_mat)
@@ -245,7 +245,7 @@ generate_pps <- function(data) {
 	
 	logging::loginfo("*** Generating Predictive Power Score ***")
 	data_pps <- data |> 
-		dplyr::select(-id, -frequency, -date) |> 
+		dplyr::select(-dplyr::any_of(c("id", "frequency", "date"))) |> 
 		tidyr::drop_na()
 	
 	rcp_spec <- recipes::recipe(value ~ ., data = data_pps) |> 
@@ -256,15 +256,14 @@ generate_pps <- function(data) {
 		recipes::bake(new_data = NULL) |> 
 		dplyr::relocate(value, .before = 1) |> 
 		ppsr::score_predictors(
-			y = "value", algorithm = "tree", cv_folds = 1, do_parallel = FALSE
+			y = "value", algorithm = "tree", cv_folds = 1, do_parallel = FALSE # on train because cv_folds = 1
 		) |> 
 		dplyr::select("x", "pps") |>
 		dplyr::slice(-1) |>
 		purrr::set_names(c("variable", "importance")) |> 
 		dplyr::filter(importance > 0) |>
 		dplyr::arrange(desc(importance)) |> 
-		dplyr::mutate("type" = "PPS") |> 
-		dplyr::filter(importance > 0.001)
+		dplyr::mutate("type" = "PPS")
 
 	return(pps_df)
 	
@@ -291,7 +290,7 @@ fit_feature_model <- function(data, method, seed = 1992) {
 	}
 	
 	data_featsel <- data |> 
-		dplyr::select(-id, -frequency, -date) |> 
+		dplyr::select(-dplyr::any_of(c("id", "frequency", "date"))) |> 
 		tidyr::drop_na()
 	
 	rcp_spec <- recipes::recipe(value ~ ., data = data_featsel) |> 
@@ -309,7 +308,7 @@ fit_feature_model <- function(data, method, seed = 1992) {
 
 # function to extract feature importance
 extract_feature_importance <- function(
-		feature_fit, method, importance_type = "relative"
+		feature_fit, method#, importance_type = "absolute"
 ) {
 	
 	logging::loginfo("*** Extracting Feature Importance ***")
@@ -319,35 +318,35 @@ extract_feature_importance <- function(
 			broom::tidy() |> 
 			dplyr::select(term, estimate) |> 
 			purrr::set_names(c("variable", "importance")) |> 
-			dplyr::mutate("type" = "LASSO")
+			dplyr::mutate("type" = "LASSO") |> 
+			dplyr::filter(abs(importance) > 0)
 	} else if (method == "Random Forest") {
 		res_imp <- feature_fit |> 
 			workflows::extract_fit_parsnip() |> 
 			vip::vip(num_features = 1000) |> 
 			purrr::pluck("data") |> 
 			purrr::set_names(c("variable", "importance")) |> 
-			dplyr::mutate("type" = "Random Forest")
+			dplyr::mutate("type" = "Random Forest") |> 
+			dplyr::filter(importance > 0)
 	} else {
 		stop(paste("Unknown method:", method))
 	}
 	
 	res_imp <- res_imp |> 
 		dplyr::filter(variable != "(Intercept)") |> 
-		dplyr::filter(importance > 0) |> 
 		dplyr::arrange(desc(importance))
 	
-	if (importance_type == "relative") {
-		res_imp <- res_imp |> 
-			dplyr::mutate(importance = timetk::normalize_vec(importance, silent = TRUE)) |> 
-			dplyr::filter(importance > 0.001)
-	}
+	# if (importance_type == "relative") {
+	# 	res_imp <- res_imp |> 
+	# 		dplyr::mutate(importance = timetk::normalize_vec(importance, silent = TRUE))
+	# }
 	
 	return(res_imp)
 	
 }
 
 # wrapper to generate model importance
-generate_model_importance <- function(data, method, importance_type = "relative") {
+generate_model_importance <- function(data, method) {
 	res <- purrr::map(
 		method, 
 		~ fit_feature_model(data = data, method = .x)
@@ -355,7 +354,7 @@ generate_model_importance <- function(data, method, importance_type = "relative"
 		purrr::set_names(method) |> 
 		purrr::map2(
 			method,
-			~ extract_feature_importance(.x, method = .y, importance_type = importance_type)
+			~ extract_feature_importance(.x, method = .y)
 		)
 	return(res)
 }
@@ -383,67 +382,87 @@ plot_feature_importance <- function(importance_data) {
 # function to select features based on importance thresholds
 select_features <- function(data_importance, params, data_features, n_future) {
 	
-	feat_names <- get_features(data_features, names_only = TRUE)[-1]
-	cat_feats <- grep(pattern = "\\.lbl", feat_names, value = TRUE)
-	cat_feats_regex <- paste0("(", paste0(cat_feats, collapse = ")|("), ")")
+	n_feats <- get_features(data_features, number_only = TRUE, remove_date = TRUE)
+	feat_names <- get_features(data_features, names_only = TRUE, remove_date = TRUE)
 	
-	sel_feat <- data_importance |>
-		dplyr::filter(
-			(type == "Correlation" & abs(importance) > params$featsel_cor_thresh) |
-				(type != "Correlation" & importance > params$featsel_imp_thresh)
+	if (n_feats == 0) {
+		
+		sum_tbl <- tibble::tibble(
+			"Variable" = NA_character_, "N. Methods" = NA_real_, "Methods" = NA_character_
 		)
-	sel_num_feat <- sel_feat |> dplyr::filter(!grepl(cat_feats_regex, variable))
-	sel_cat_feat <- sel_feat |> dplyr::filter(grepl(cat_feats_regex, variable))
+		data_final <- data_features |> 
+			dplyr::slice_head(n = nrow(data_features) - n_future) |> 
+			tidyr::drop_na()
+		data_future <- data_features |> dplyr::slice_tail(n = n_future)
+		
+	} else {
+		
+		logging::loginfo("Selecting features...")
+		imp_types <- unique(data_importance$type)
+		sel_feat <- data_importance |>
+			dplyr::filter(
+				(type == "Correlation" & abs(importance) > params$featsel_cor_thresh) |
+					(type == "PPS" & importance > params$featsel_pps_thresh) |
+					(type %in% imp_types)
+			)
+		
+		cat_feats <- grep(pattern = "\\.lbl", feat_names, value = TRUE)
+		num_feats <- feat_names[!feat_names %in% cat_feats]
+		sum_tbl <- tibble::tibble(
+			"Variable" = NA_character_, "N. Methods" = NA_real_, "Methods" = NA_character_
+		)
+		
+		if (length(num_feats) > 0) {
+			sel_num_feat <- sel_feat |> dplyr::filter(variable %in% num_feats)
+			f_num_sel <- unique(sel_num_feat$variable)
+			mtd_num_n <- vector("numeric", length(f_num_sel))
+			mtd_num_type <- vector("character", length(f_num_sel))
+			for (i in seq_along(f_num_sel)) {
+				data_num_tmp <- sel_num_feat |> dplyr::filter(variable == f_num_sel[i])
+				mtd_num_n[i] <- nrow(data_num_tmp)
+				mtd_num_type[i] <- data_num_tmp |> dplyr::pull("type") |>	unique() |> stringr::str_flatten(", ")
+			}
+			sum_num_tbl <- tibble::tibble(
+				"Variable" = f_num_sel, "N. Methods" = mtd_num_n, "Methods" = mtd_num_type
+			) 
+			sum_tbl <- sum_tbl |> dplyr::bind_rows(sum_num_tbl)
+		}
+		
+		if (length(cat_feats) > 0) {
+			cat_feats_regex <- paste0("(", paste0(cat_feats, collapse = ")|("), ")")
+			sel_cat_feat <- sel_feat |> dplyr::filter(grepl(cat_feats_regex, variable))
+			cat_feats_in_selection <- sel_cat_feat$variable |> 
+				stringr::str_extract_all(cat_feats_regex) |> 
+				unlist() |> unique()
+			f_cat_sel <- cat_feats[cat_feats %in% cat_feats_in_selection]
+			mtd_cat_n <- vector("numeric", length(f_cat_sel))
+			mtd_cat_type <- vector("character", length(f_cat_sel))
+			for (i in seq_along(f_cat_sel)) {
+				data_cat_tmp <- sel_cat_feat |> dplyr::filter(grepl(f_cat_sel[i], variable))
+				mtd_cat_n[i] <- nrow(data_cat_tmp)
+				mtd_cat_type[i] <- data_cat_tmp |> dplyr::pull("type") |>	unique() |> stringr::str_flatten(", ")
+			}
+			sum_cat_tbl <- tibble::tibble(
+				"Variable" = f_cat_sel, "N. Methods" = mtd_cat_n,	"Methods" = mtd_cat_type
+			) 
+			sum_tbl <- sum_tbl |> dplyr::bind_rows(sum_cat_tbl)
+		}
+
+		sum_tbl <- sum_tbl |> 
+			dplyr::slice(-1) |> 
+			dplyr::arrange(factor(Variable, levels = feat_names))
+		f_sel <- unique(sum_tbl$Variable)
+		data_selected <- data_features |> 
+			dplyr::select(
+				dplyr::any_of(c("id", "date", "value")), 
+				dplyr::all_of(f_sel)
+			)
+		data_final <- data_selected |> 
+			dplyr::slice_head(n = nrow(data_selected) - n_future) |> 
+			tidyr::drop_na()
+		data_future <- data_selected |> dplyr::slice_tail(n = n_future)
 	
-	# numeric features
-	f_num_sel <- unique(sel_num_feat$variable)
-	ave_num_imp <- vector("numeric", length(f_num_sel))
-	mtd_num_n <- vector("numeric", length(f_num_sel))
-	mtd_num_type <- vector("character", length(f_num_sel))
-	for (i in seq_along(f_num_sel)) {
-		data_num_tmp <- sel_num_feat |> dplyr::filter(variable == f_num_sel[i])
-		ave_num_imp[i] <- data_num_tmp |> dplyr::pull("importance") |> abs() |> mean()
-		mtd_num_n[i] <- nrow(data_num_tmp)
-		mtd_num_type[i] <- data_num_tmp |> dplyr::pull("type") |>	unique() |> stringr::str_flatten(", ")
 	}
-	sum_num_tbl <- tibble::tibble(
-		"Variable" = f_num_sel, 
-		"Average Importance" = ave_num_imp, 
-		"N. Methods" = mtd_num_n,
-		"Methods" = mtd_num_type
-	) 
-	
-	# categorical features
-	cat_feats_in_selection <- sel_cat_feat$variable |> 
-		stringr::str_extract_all(cat_feats_regex) |> 
-		unlist() |> unique()
-	f_cat_sel <- cat_feats[cat_feats %in% cat_feats_in_selection]
-	ave_cat_imp <- vector("numeric", length(f_cat_sel))
-	mtd_cat_n <- vector("numeric", length(f_cat_sel))
-	mtd_cat_type <- vector("character", length(f_cat_sel))
-	for (i in seq_along(f_cat_sel)) {
-		data_cat_tmp <- sel_cat_feat |> dplyr::filter(grepl(f_cat_sel[i], variable))
-		ave_cat_imp[i] <- data_cat_tmp |> dplyr::pull("importance") |> abs() |> mean()
-		mtd_cat_n[i] <- nrow(data_cat_tmp)
-		mtd_cat_type[i] <- data_cat_tmp |> dplyr::pull("type") |>	unique() |> stringr::str_flatten(", ")
-	}
-	sum_cat_tbl <- tibble::tibble(
-		"Variable" = f_cat_sel, 
-		"Average Importance" = ave_cat_imp, 
-		"N. Methods" = mtd_cat_n,
-		"Methods" = mtd_cat_type
-	) 
-	
-	# summary table
-	sum_tbl <- dplyr::bind_rows(sum_num_tbl, sum_cat_tbl) |> 
-		dplyr::arrange(factor(Variable, levels = feat_names))
-	
-	# data + selected features
-	f_sel <- unique(sum_tbl$Variable)
-	data_selected <- data_features |> dplyr::select(all_of(c("id", "date", "value", f_sel)))
-	
-	data_final <- data_selected |> dplyr::slice_head(n = nrow(data_selected) - n_future)
-	data_future <- data_selected |> dplyr::slice_tail(n = n_future)
 	
 	res <- list(
 		"data" = data_final,

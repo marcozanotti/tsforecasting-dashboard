@@ -17,8 +17,8 @@ generate_forecast <- function(
   # initial split
   logging::loginfo("Initial Split")
   splits <- generate_initial_split(data, n_assess, assess_type)
-  train_tbl <- rsample::training(splits) |> dplyr::select(-id, -frequency)
-  test_tbl <- rsample::testing(splits) |> dplyr::select(-id, -frequency)
+  train_tbl <- rsample::training(splits) |> dplyr::select(-dplyr::any_of(c("id", "frequency")))
+  test_tbl <- rsample::testing(splits) |> dplyr::select(-dplyr::any_of(c("id", "frequency")))
 
   # future split
   logging::loginfo("Future Frame")
