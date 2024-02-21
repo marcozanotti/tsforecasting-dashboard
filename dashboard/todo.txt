@@ -1,37 +1,25 @@
-Next steps:
-- rotellina o messaggio per operazioni in corso
-- gestione di tutti gli errori con un singolo messaggio "Ops a problem occured! Please contact the support."
-- deployment su github actions
-
-To Do:
-- correggere UI (dimensioni + scroll)
-
-- pensare e aggiungere la sezione di feature engineering
--- use_feature_set option in forecasting
---- attenzione! lag non in arima e spline non in mars
--- condizionale che setta tutti i future frame uguali a quello di internal features
--- condizionale che setta tutti i use_feat_set a TRUE se get_features ha più di 1 colonna
-
-
-- eliminare generate_feature_set e sostituirla con get_features
-- creazione fanchart al posto del primo grafico in scenario
-- modificare output modello con parsing
-- add stacking models (Random Forest, ecc)
-- aggiungere metodi di dl (NeuralProphet + NBEATS + DeepAR)
-- option tune stack? per il tuning degli stack
-- cambiare assegnazione nomi ai parametri in UI
-
-
 Extensions:
 - forecasting multiple time series (by id)
 - global forecasting models
 
 
+Next steps:
+- rotellina o messaggio per operazioni in corso
+- deployment su github actions
+
+
+To Do:
+-- condizionale che setta tutti i future frame uguali a quello di internal features
+-- condizionale che setta tutti i use_feat_set a TRUE se get_features ha più di 1 colonna
+-- use_feature_set option in forecasting
+
+- creazione fanchart al posto del primo grafico in scenario
+- add stacking models (Random Forest, ecc)
+- aggiungere metodi di dl (NeuralProphet + NBEATS + DeepAR)
+- option tune stack? per il tuning degli stack
+
+
 Bugs:
-- ARIMA not working with XREGS
-
-- bug scroll orizzontale tablelle
-
 - tune_bayes, from GPfit::GP_fit()
 The optimization routine assumes that the inputs are scaled to the unit hypercube 
 [0,1]^d.

@@ -13,12 +13,12 @@ generate_initial_split <- function(data, n_assess, assess_type) {
 
 # function to generato cross validation split
 generate_cv_split <- function(
-    data, n_assess, assess_type, validation_type = "Time Series CV", n_folds = 5,
+    data, n_assess, assess_type, validation_type = "TS CV", n_folds = 5,
     seed = 1992
 ) {
 
   set.seed(seed)
-  if (validation_type == "Time Series CV") {
+  if (validation_type == "TS CV") {
     cv_splits <- modeltime.resample::time_series_cv(
       data, date_var = date,
       initial = nrow(data) - n_assess,
@@ -36,55 +36,86 @@ generate_cv_split <- function(
 #function to generate the recipe specification
 generate_recipe_spec <- function(data, method) {
 	
-	method_type <- parse_method(method)
-	n_feats <- get_features(data, number_only = TRUE)
-	
-	if (n_feats == 0) {
+	if (method == "default") {
 		
-		stop("At least the 'date' feature must be provided.")
-		
-	} else if (n_feats == 1) {
-		
-		logging::loginfo("Using default recipe specification")
-		if (method_type == "ts") {
-			rcp_spec <- recipes::recipe(value ~ ., data = data)
-		} else if (any(method_type %in% c("ml", "dl"))) {
-			rcp_spec <- recipes::recipe(value ~ ., data = data) |>
-				timetk::step_timeseries_signature(date) |>
-				recipes::step_mutate(date = as.numeric(date)) |>
-				recipes::step_rm(dplyr::matches("(iso)|(xts)|(index.num)")) |>
-				recipes::step_zv(recipes::all_predictors()) |>
-				recipes::step_dummy(recipes::all_nominal(), one_hot = TRUE)
-		} else if (any(method_type %in% c("mix", "aml"))) {
-			rcp_spec <- recipes::recipe(value ~ ., data = data) |>
-				timetk::step_timeseries_signature(date) |>
-				recipes::step_mutate(trend = as.numeric(date)) |>
-				recipes::step_rm(dplyr::matches("(iso)|(xts)|(index.num)")) |>
-				recipes::step_zv(recipes::all_predictors()) |>
-				recipes::step_dummy(recipes::all_nominal(), one_hot = TRUE)
-		} else {
-			stop(paste("Unknown method type", method_type))
-		}
-		
+		rcp_spec <- recipes::recipe(value ~ ., data = data) |> 
+			recipes::step_zv(recipes::all_predictors()) |>
+			recipes::step_dummy(recipes::all_nominal(), one_hot = TRUE)
+
 	} else {
 		
-		logging::loginfo("Using pre-defined features recipe specification")
-		if (method_type == "ts") {
-			rcp_spec <- recipes::recipe(value ~ ., data = data) |> 
-				recipes::step_dummy(recipes::all_nominal(), one_hot = TRUE)
-		} else if (any(method_type %in% c("ml", "dl"))) {
-			rcp_spec <- recipes::recipe(value ~ ., data = data) |>
-				recipes::step_dummy(recipes::all_nominal(), one_hot = TRUE) |> 
-				recipes::step_rm(date)
-		} else if (any(method_type %in% c("mix", "aml"))) {
-			rcp_spec <- recipes::recipe(value ~ ., data = data) |>
-				recipes::step_dummy(recipes::all_nominal(), one_hot = TRUE)
-		} else {
-			stop(paste("Unknown method type", method_type))
-		}
+		method_type <- parse_method(method)
+		n_feats <- get_features(data, number_only = TRUE, remove_date = TRUE)
 		
+		if (n_feats == 0) {
+			
+			logging::loginfo("Using default recipe specification")
+			if (method_type == "ts") {
+				
+				rcp_spec <- recipes::recipe(value ~ date, data = data) # regress on date only
+				
+			} else if (any(method_type %in% c("ml", "dl"))) {
+				
+				rcp_spec <- recipes::recipe(value ~ ., data = data) |>
+					timetk::step_timeseries_signature(date) |>
+					recipes::step_mutate(time_trend = timetk::normalize_vec(as.numeric(date), silent = TRUE)) |>
+					recipes::step_rm(dplyr::matches("(iso)|(xts)|(index.num)")) |>
+					recipes::step_zv(recipes::all_predictors()) |>
+					recipes::step_dummy(recipes::all_nominal(), one_hot = TRUE) |> 
+					recipes::step_rm(dplyr::ends_with(".lbl_01")) |>
+					recipes::step_rm(date)
+				
+			} else if (any(method_type %in% c("mix", "aml"))) {
+				
+				rcp_spec <- recipes::recipe(value ~ ., data = data) |>
+					timetk::step_timeseries_signature(date) |>
+					recipes::step_mutate(time_trend = timetk::normalize_vec(as.numeric(date), silent = TRUE)) |>
+					recipes::step_rm(dplyr::matches("(iso)|(xts)|(index.num)")) |>
+					recipes::step_zv(recipes::all_predictors()) |>
+					recipes::step_dummy(recipes::all_nominal(), one_hot = TRUE) |> 
+					recipes::step_rm(dplyr::ends_with(".lbl_01"))
+				
+			} else {
+				stop(paste("Unknown method type", method_type))
+			}
+			
+		} else { # at least one feature
+			
+			logging::loginfo("Using pre-defined features specification")
+			if (method_type == "ts") {
+				
+				if (method == "SARIMA") {
+					rcp_spec <- recipes::recipe(value ~ ., data = data) |>
+						recipes::step_rm(dplyr::contains("lag"))
+				} else if (method == "Prophet") {
+					rcp_spec <- recipes::recipe(value ~ ., data = data)
+				} else {
+					rcp_spec <- recipes::recipe(value ~ date, data = data) # regress on date only
+				}
+				
+			} else if (any(method_type %in% c("ml", "dl"))) {
+				
+				if (method == "MARS") {
+					rcp_spec <- recipes::recipe(value ~ ., data = data) |>
+						recipes::step_rm(dplyr::contains("spline")) |> 
+						recipes::step_rm(date)
+				} else {
+					rcp_spec <- recipes::recipe(value ~ ., data = data) |>
+						recipes::step_rm(date)
+				}
+				
+			} else if (any(method_type %in% c("mix", "aml"))) {
+				
+				rcp_spec <- recipes::recipe(value ~ ., data = data)
+				
+			} else {
+				stop(paste("Unknown method type", method_type))
+			}
+			
+		}
+
 	}
-	
+
 	return(rcp_spec)
 	
 }
@@ -113,7 +144,7 @@ generate_model_spec <- function(method, params) {
 
     if (params$auto_ets) {
       model_spec <- modeltime::exp_smoothing() |>
-      	parsnip::set_engine("ets")
+      	parsnip::set_engine("ets") # smooth_es
     } else {
       model_spec <- modeltime::exp_smoothing(
         error = !!params$error,
@@ -124,7 +155,7 @@ generate_model_spec <- function(method, params) {
         smooth_trend = !!params$smooth_trend,
         smooth_seasonal = !!params$smooth_seasonal
       ) |>
-      	parsnip::set_engine("ets")
+      	parsnip::set_engine("ets") # smooth_es
     }
 
   } else if (method == "Theta") {
@@ -479,7 +510,7 @@ set_tune_parameters <- function(method, params) {
 generate_grid_spec <- function(method, model_spec, recipe_spec, grid_size, seed = 1992) {
 
   set.seed(seed)
-  feature_set <- generate_feature_set(recipe_spec)
+  feature_set <- get_features(recipe_spec, remove_date = TRUE)
   updated_parameter_set <- model_spec |>
     hardhat::extract_parameter_set_dials() |>
     dials::finalize(x = feature_set)
@@ -633,7 +664,7 @@ fit_stack <- function(modeltime_table, stacking_methods, resamples, seed = 1992)
 # function to perform model optimization
 fit_model_tuning <- function(
     data, method, params, n_assess, assess_type,
-    validation_type = "Time Series CV",
+    validation_type = "TS CV",
     n_folds = 5, validation_metric = "rmse", grid_size = 10,
     bayesian_optimization = TRUE, seed = 1992
 ) {
@@ -680,7 +711,7 @@ fit_model_tuning <- function(
   doFuture::registerDoFuture()
   future::plan(strategy = "multisession", workers = parallelly::availableCores() - 1)
   if (bayesian_optimization) {
-    feat_set <- generate_feature_set(rcp_spec)
+    feat_set <- get_features(rcp_spec, remove_date = TRUE)
     updated_param_set <- model_spec |> 
     	hardhat::extract_parameter_set_dials() |>
       dials::finalize(x = feat_set)
@@ -724,4 +755,10 @@ fit_model_tuning <- function(
 
   return(wkfl_fit)
 
+}
+
+# function to extract model fit
+parse_model_fit <- function(fitted_model_list) {
+	res <- purrr::map(fitted_model_list, parsnip::extract_fit_engine)
+	return(res)
 }

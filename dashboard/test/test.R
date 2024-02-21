@@ -6,6 +6,7 @@ input <- list(
   n_assess = 24,
   assess_type = "Rolling",
   method = "ETS",
+  auto_ets = TRUE,
   error = "auto",
   trend = "auto",
   season = "auto",
@@ -35,20 +36,10 @@ fitted_model <- fit_model(
   n_assess = input$n_assess, assess_type = input$assess_type, seed = 1992
 )
 forecast_results <- generate_forecast(
-  fitted_model = fitted_model, data = data_selected,
+  fitted_model_list = list(fitted_model), data = data_selected,
   method = input$method, n_future = input$n_future,
   n_assess = input$n_assess, assess_type = input$assess_type
 )
-
-data = data_selected
-method = input$method
-params = input
-n_assess = input$n_assess
-assess_type = input$assess_type
-seed = 1992
-data_splits = fitted_model$splits
-fitted_model = fitted_model$fit
-n_future = input$n_future
 
 forecast_results$splits |>
   tk_time_series_cv_plan() |>
@@ -58,6 +49,8 @@ forecast_results$residuals
 forecast_results$accuracy
 forecast_results$test_forecast |> plot_modeltime_forecast()
 forecast_results$oos_forecast |> plot_modeltime_forecast()
+
+forecast_results$fit |> parse_model_fit()
 
 
 
@@ -882,12 +875,19 @@ input <- list(
 	feat_roll = "3, 6",
 	feat_inter = "week2 * wday.lbl,week3 * wday.lbl"
 )
+
+data = data_selected
+params = input
+n_future = input$feat_n_future
+
 data_feat <- data_selected |> 
 	generate_features(params = input, n_future = input$feat_n_future)
 xfeatures <- read_csv("dashboard/data/xfeatures.csv")
 data_feature_selected <- data_feat |> 
 	dplyr::left_join(xfeatures, by = c("date", "id", "frequency"))
 str(data_feature_selected)
+
+generate_recipe_spec(data_feat, "SARIMA") |> get_features() |> View()
 
 input <- list(
 	n_future = 12,

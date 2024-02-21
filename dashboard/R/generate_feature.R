@@ -121,8 +121,7 @@ generate_features <- function(data, params, n_future, verbose = 1) {
 	if (verbose > 0) logging::loginfo("*** Generating New Features ***")
 	
 	# add future frame
-	data_full <- data |> 
-		add_future_frame(n_future) # |> dplyr::group_by(id, frequency)
+	data_full <- data |> add_future_frame(n_future) # |> dplyr::group_by(id, frequency)
 	data_feat <- data_full  
 	
 	if (params$feat_calendar) {
@@ -202,8 +201,12 @@ generate_features <- function(data, params, n_future, verbose = 1) {
 		data_feat <- data_feat |> augment_interaction(.expr = inter_expr)
 	}
 	
-	data_feat <- data_feat |>	dplyr::select(-where(is_zv)) |>	dplyr::ungroup()
-	return(data_feat)
+	data_feat <- data_feat |>	
+		generate_recipe_spec(method = "default") |>  
+		get_features() |> 
+		dplyr::select(-dplyr::ends_with(".lbl_01"), -dplyr::ends_with(".lbl_1"), -date) 
+	data_feat_full <- data_full |> dplyr::bind_cols(data_feat)
+	return(data_feat_full)
 
 }
 

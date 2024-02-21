@@ -32,6 +32,7 @@ pkgs <- c(
 )
 install_and_load(pkgs)
 
+options(shiny.sanitize.errors = TRUE)
 set_options()
 Sys.setenv(JAVA_HOME = "/usr/lib/jvm/jdk-17/")
 logging::addHandler(logging::writeToFile, file = "tsf_dashboard.log")
@@ -47,12 +48,9 @@ tune_methods <- methods$tune
 ens_methods <- methods$ens
 stk_methods <- methods$stk
 all_methods <- c(ts_methods, ml_methods, dl_methods, mix_methods, aml_methods)
-
 mtd_prm <- getOption("tsf.dashboard.methods_params")
 mtd_prm_names <- purrr::map(mtd_prm, names)
-
 metrics <- toupper(getOption("tsf.dashboard.metrics"))
-
 transf <- getOption("tsf.dashboard.transformations")
 ```
 
@@ -66,11 +64,13 @@ Input {.sidebar}
 
 ```{r}
 selectInput(
-  inputId = "dataset", label = h4("Dataset"), 
+  inputId = "dataset", label = h5("Dataset"), 
   choices = datasets, selected = datasets[1], multiple = FALSE
 )
 
-h4("Upload your dataset: ")
+br()
+
+h5("Upload your dataset: ")
 h6("The dataset must be a .csv file containing columns 'date', 'id', 'frequency' and 'value'.")
 fileInput(
   inputId = "upload_custom", label = NULL, accept = c(".csv"), multiple = FALSE,
@@ -79,6 +79,8 @@ fileInput(
 actionButton(inputId = "data_import", label = "Import", icon = icon("upload"))
 actionButton(inputId = "data_reset", label = "Reset", icon = icon("sync"))
 
+br()
+br()
 br()
 br()
 
@@ -128,7 +130,7 @@ output$data_table <- renderDT({
       datatable(
         options = list(
           ordering = TRUE, pageLength = 20, lengthChange = TRUE, searching = TRUE, 
-          info = FALSE, paging = TRUE, scrollCollapse = TRUE, scrollY = 575 # 250
+          info = FALSE, paging = TRUE, scrollCollapse = TRUE, scrollY = 575, scrollX = TRUE
         )
       )
 })
@@ -181,13 +183,11 @@ numericInput(
   value = 48, min = 1, max = 300, step = 1, width = "45%"
 )
 
-br()
-
 h5("Missing imputation")
 switchInput(inputId = "impute", value = FALSE, size = "mini")
 
 br()
-
+br()
 actionButton(inputId = "viz_reset", label = "Reset", icon = icon("sync"))
 ```
 
@@ -317,17 +317,17 @@ Input {.sidebar}
 ---------------------------------------------------------------------------
 
 ```{r}
-h3("Normality Tests")
+h4("Normality Tests")
 h5("Shapiro-Wilk and Jarque-Bera")
 br()
 
 hr()
-h3("Autocorrelation Tests")
+h4("Autocorrelation Tests")
 h5("Ljung-Box and Box-Pierce")
 br()
 
 hr()
-h3("Stationarity Tests")
+h4("Stationarity Tests")
 h5("ADF, PP and KPSS")
 
 br()
@@ -432,13 +432,13 @@ Input {.sidebar}
 ---------------------------------------------------------------------------
 
 ```{r}
-h3("Anomaly Detection")
+h4("Anomaly Detection")
 
-sliderInput(inputId = "alpha", label = h5("Confidence Level"), min = 0.01, max = 1, value = 0.02, step = 0.01)
-sliderInput(inputId = "max_anomalies", label = h5("Max Anomalies (%)"), min = 0.01, max = 1, value = 0.1, step = 0.01)
+sliderInput(inputId = "alpha", label = "Confidence Level", min = 0.01, max = 1, value = 0.02, step = 0.01)
+sliderInput(inputId = "max_anomalies", label = "Max Anomalies (%)", min = 0.01, max = 1, value = 0.1, step = 0.01)
 
 hr()
-h3("Anomaly Cleaning")
+h4("Anomaly Cleaning")
 switchInput(inputId = "clean", value = FALSE, size = "mini")
 
 br()
@@ -524,13 +524,13 @@ numericInput(
   value = 48, min = 1, max = 300, step = 1, width = "45%"
 )
 
-br()
-
+hr()
 pickerInput(
   inputId = "transf", label = h5("Transformations"), multiple = TRUE,
   choices = transf[1:7], selected = NULL # not possible to do Diff and SDiff !!!!!
 )
 
+br()
 br()
 
 actionButton(inputId = "transf_reset", label = "Reset", icon = icon("sync"))
@@ -719,7 +719,7 @@ output$feat_table <- renderDT({
       datatable(
         options = list(
           ordering = TRUE, pageLength = 20, lengthChange = TRUE, searching = TRUE, 
-          info = FALSE, paging = TRUE, scrollCollapse = TRUE, scrollY = 550 # 250
+          info = FALSE, paging = TRUE, scrollCollapse = TRUE, scrollY = 550, scrollX = TRUE
         )
       )
   }
@@ -741,7 +741,7 @@ output$feat_ts_plot <- renderPlotly({
 	if (get_features(data_features(), number_only = TRUE) > 1) {
   	feat_nms <- get_features(data_features(), names_only = TRUE, remove_date = TRUE)
 		data_features() |> 
-			dplyr::mutate(dplyr::across(feat_nms, as.numeric)) |>
+			dplyr::mutate(dplyr::across(dplyr::all_of(feat_nms)/, as.numeric)) |>
 			tidyr::pivot_longer(cols = c("value", feat_nms), names_to = "name", values_to = "value") |>
 			timetk::plot_time_series(
 				.date_var = date, .value = value, .color_var = name,
@@ -1038,7 +1038,7 @@ output$featsel_table <- renderDT({
     datatable(
       options = list(
         ordering = TRUE, pageLength = 20, lengthChange = TRUE, searching = TRUE, 
-        info = FALSE, paging = TRUE, scrollCollapse = TRUE, scrollY = 550 # 250
+        info = FALSE, paging = TRUE, scrollCollapse = TRUE, scrollY = 550, scrollX = TRUE
       )
     )
 })
@@ -1491,14 +1491,14 @@ output$accuracy_table <- renderDT({
     datatable(
       options = list(
         ordering = FALSE, pageLength = 20, lengthChange = FALSE, searching = FALSE,
-        info = FALSE, paging = FALSE
+        info = FALSE, paging = FALSE, scrollY = 275
       ), 
       rownames = FALSE
     )
 })
 
 output$model_summary <- renderPrint({
-  back_forecast_results()$fit
+  back_forecast_results()$fit |> parse_model_fit()
 })
 
 output$plot_resid_ts <- renderPlotly({
@@ -1599,7 +1599,7 @@ dropdownButton(
   ),
   prettyRadioButtons(
     inputId = "tune_valid_type", label = "Validation Type", 
-    choices = c("TS CV", "K-Fold CV"), selected = "Time Series CV", 
+    choices = c("TS CV", "K-Fold CV"), selected = "TS CV", 
     inline = TRUE
   ),
   sliderInput(
@@ -1631,7 +1631,7 @@ pickerInput(
 
 awesomeCheckbox(inputId = "tune_back_transf", label = "Back transform?", value = FALSE)
 
-actionButton(inputId = "tune_apply_forecast", label = "Forecast!", icon = icon("play"))
+actionButton(inputId = "tune_apply_forecast", label = "Optimize!", icon = icon("play"))
 actionButton(inputId = "tune_reset", label = "Reset", icon = icon("sync"))
 
 br() # break rule
@@ -1882,14 +1882,14 @@ output$tune_accuracy_table <- renderDT({
     datatable(
       options = list(
         ordering = FALSE, pageLength = 20, lengthChange = FALSE, searching = FALSE,
-        info = FALSE, paging = FALSE
+        info = FALSE, paging = FALSE, scrollY = 275
       ), 
       rownames = FALSE
     )
 })
 
 output$tune_model_summary <- renderPrint({
-  tune_results()$fit
+  tune_results()$fit |> parse_model_fit()
 })
 
 output$plot_tune_resid_ts <- renderPlotly({
@@ -2103,17 +2103,16 @@ output$comp_accuracy_table <- renderDT({
     datatable(
       options = list(
         ordering = TRUE, pageLength = 6, lengthChange = FALSE, searching = FALSE, 
-        info = FALSE, paging = FALSE, scrollCollapse = TRUE, scrollY = 300
+        info = FALSE, paging = FALSE, scrollY = 275
       ), 
       rownames = FALSE
     )
 })
 
 output$comp_model_summary <- renderPrint({
-  compare_results()$fit
+  compare_results()$fit |> parse_model_fit()
 })
 ```
-
 
 Row {data-height=500}
 ---------------------------------------------------------------------------
@@ -2129,7 +2128,6 @@ plotlyOutput(outputId = "plot_comp_test_forecast")
 ```{r}
 plotlyOutput(outputId = "plot_comp_oos_forecast")
 ```
-
 
 Row {data-height=500} 
 ---------------------------------------------------------------------------
@@ -2281,7 +2279,7 @@ output$exp_features_table <- renderDT({
 		datatable(
       options = list(
         ordering = FALSE, pageLength = 50, lengthChange = FALSE, searching = FALSE,
-        info = FALSE, paging = FALSE, scrollY = 760, scrollCollapse = TRUE
+        info = FALSE, paging = FALSE, scrollY = 660
       ),
       rownames = FALSE, colnames = ""
     )
@@ -2324,7 +2322,6 @@ output$plot_exp_locstab <- renderPlot({
 })
 ```
 
-
 Column {data-width=150}
 ---------------------------------------------------------------------------
 
@@ -2333,7 +2330,6 @@ Column {data-width=150}
 ```{r}
 DTOutput(outputId = "exp_features_table")
 ```
-
 
 Column {data-width=425}
 ---------------------------------------------------------------------------
@@ -2349,7 +2345,6 @@ plotOutput(outputId = "plot_exp_featimp")
 ```{r}
 plotOutput(outputId = "plot_exp_varresp")
 ```
-
 
 Column {data-width=425}
 ---------------------------------------------------------------------------
@@ -2420,7 +2415,7 @@ pickerInput(
   choices = ens_methods, selected = "Average", multiple = TRUE,
   options =  list("actions-box" = TRUE)
 )
-actionButton(inputId = "ens_apply_forecast", label = "Forecast!", icon = icon("play"))
+actionButton(inputId = "ens_apply_forecast", label = "Combine!", icon = icon("play"))
 
 br()
 br()
@@ -2432,7 +2427,7 @@ pickerInput(
 )
 awesomeCheckbox(inputId = "stk_tune", label = "Optimize stack?", value = FALSE)
 
-actionButton(inputId = "stk_apply_forecast", label = "Forecast!", icon = icon("play"))
+actionButton(inputId = "stk_apply_forecast", label = "Combine!", icon = icon("play"))
 
 br()
 br()
@@ -2580,14 +2575,8 @@ output$ens_accuracy_table <- renderDT({
     filter(Type == "Test") |>
     datatable(
       options = list(
-        ordering = TRUE,
-        pageLength = 6,
-        lengthChange = FALSE,
-        searching = FALSE,
-        info = FALSE,
-        paging = FALSE,
-        scrollCollapse = TRUE,
-        scrollY = 300
+        ordering = TRUE, pageLength = 5, lengthChange = FALSE,
+        searching = FALSE, info = FALSE, paging = FALSE, scrollY = 275
       ),
       rownames = FALSE
     )
@@ -2595,10 +2584,9 @@ output$ens_accuracy_table <- renderDT({
 
 output$ens_model_summary <- renderPrint({
   req(react_val$combine_results$fit)
-  react_val$combine_results$fit
+  react_val$combine_results$fit |> parse_model_fit()
 })
 ```
-
 
 Row {data-height=500}
 ---------------------------------------------------------------------------
@@ -2614,7 +2602,6 @@ plotlyOutput(outputId = "plot_ens_test_forecast")
 ```{r}
 plotlyOutput(outputId = "plot_ens_oos_forecast")
 ```
-
 
 Row {data-height=500} 
 ---------------------------------------------------------------------------
@@ -2877,7 +2864,7 @@ output$scn_accuracy_table <- renderDT({
     datatable(
       options = list(
         ordering = FALSE, pageLength = 20, lengthChange = FALSE, searching = FALSE,
-        info = FALSE, paging = FALSE
+        info = FALSE, paging = FALSE, scrollY = 275
       ), 
       rownames = FALSE
     )
@@ -2892,7 +2879,7 @@ output$scn_aggregate_table <- renderDT({
     datatable(
       options = list(
         ordering = FALSE, pageLength = 20, lengthChange = FALSE, searching = FALSE,
-        info = FALSE, paging = FALSE
+        info = FALSE, paging = FALSE, scrollY = 275
       ), 
       rownames = FALSE
     )
@@ -2908,7 +2895,7 @@ output$scn_wb_table <- renderDT({
     datatable(
       options = list(
         ordering = FALSE, pageLength = 20, lengthChange = FALSE, searching = FALSE,
-        info = FALSE, paging = FALSE, scrollY = 350, scrollCollapse = TRUE
+        info = FALSE, paging = FALSE, scrollY = TRUE, scrollCollapse = TRUE
       ), 
       rownames = TRUE
     )
@@ -2935,13 +2922,13 @@ plotlyOutput(outputId = "plot_scn_oos_forecast_wb")
 Row {data-height=500} 
 ---------------------------------------------------------------------------
 
-### Evaluation Metrics {data-width=100 .no-padding}
+### Evaluation Metrics {data-width=125 .no-padding}
 
 ```{r}
 DTOutput(outputId = "scn_accuracy_table")
 ```
 
-### Aggregate Resuts {data-width=397 .no-padding}
+### Aggregate Resuts {data-width=372 .no-padding}
 
 ```{r}
 DTOutput(outputId = "scn_aggregate_table")
