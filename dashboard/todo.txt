@@ -9,14 +9,14 @@ Next steps:
 
 
 To Do:
--- condizionale che setta tutti i future frame uguali a quello di internal features
--- condizionale che setta tutti i use_feat_set a TRUE se get_features ha più di 1 colonna
--- use_feature_set option in forecasting
+- setting dei forecast horizon ereditari dal primo n_future nelle feature
+- use_feature_set option in forecasting
 
 - creazione fanchart al posto del primo grafico in scenario
 - add stacking models (Random Forest, ecc)
 - aggiungere metodi di dl (NeuralProphet + NBEATS + DeepAR)
 - option tune stack? per il tuning degli stack
+- anomalyEnsemble package for anomaly detection
 
 
 Bugs:

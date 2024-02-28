@@ -127,10 +127,11 @@ generate_features <- function(data, params, n_future, verbose = 1) {
 	if (params$feat_calendar) {
 		if (verbose > 0) logging::loginfo("Generating calendar features...")
 		data_feat <- data_feat |> 
-			dplyr::mutate("time_trend" = timetk::normalize_vec(as.numeric(date), silent = TRUE)) |> 
+			dplyr::mutate("time_trend" = 1:dplyr::n()) |> # timetk::normalize_vec(as.numeric(date), silent = TRUE)) |> 
 			timetk::tk_augment_timeseries_signature(.date_var = date) |> 
-			dplyr::mutate(year = timetk::normalize_vec(year, silent = TRUE)) |> 
-			dplyr::select(-dplyr::matches("(diff)|(iso)|(xts)|(index.num)"))
+			# dplyr::mutate(year = timetk::normalize_vec(year, silent = TRUE)) |> 
+			dplyr::select(-dplyr::matches("(diff)|(iso)|(xts)|(index.num)")) 
+			
 	}
 	
 	if (params$feat_holiday) {
@@ -204,7 +205,7 @@ generate_features <- function(data, params, n_future, verbose = 1) {
 	data_feat <- data_feat |>	
 		generate_recipe_spec(method = "default") |>  
 		get_features() |> 
-		dplyr::select(-dplyr::ends_with(".lbl_01"), -dplyr::ends_with(".lbl_1"), -date) 
+		dplyr::select(-date) 
 	data_feat_full <- data_full |> dplyr::bind_cols(data_feat)
 	return(data_feat_full)
 

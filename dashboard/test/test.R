@@ -876,12 +876,30 @@ input <- list(
 	feat_inter = "week2 * wday.lbl,week3 * wday.lbl"
 )
 
+input <- list(
+	feat_n_future = 12,
+	feat_calendar = TRUE,
+	feat_holiday = FALSE,
+	feat_fourier_p = "",
+	feat_fourier_k = 1,
+	feat_spline_deg = "",
+	feat_lag = "",
+	feat_roll = "",
+	feat_inter = ""
+)
+
 data = data_selected
 params = input
 n_future = input$feat_n_future
 
 data_feat <- data_selected |> 
 	generate_features(params = input, n_future = input$feat_n_future)
+
+generate_recipe_spec(data_selected, "Linear Regression") |> prep() |> juice()
+data_feat_rcp <- generate_recipe_spec(data_selected, "Linear Regression") |> get_features()
+View(data_feat, "data_feat")
+View(data_feat_rcp, "data_feat_rcp")
+
 xfeatures <- read_csv("dashboard/data/xfeatures.csv")
 data_feature_selected <- data_feat |> 
 	dplyr::left_join(xfeatures, by = c("date", "id", "frequency"))
@@ -908,9 +926,7 @@ input <- list(
 	n_assess = 24,
 	assess_type = "Rolling",
 	use_feat_set = TRUE,
-	method = "Elastic Net",
-	penalty = 1,
-	mixture = 0.5
+	method = "Linear Regression"
 )
 
 data_fit <- data_feature_selected |> 
@@ -945,4 +961,62 @@ forecast_results$residuals
 forecast_results$accuracy
 forecast_results$test_forecast |> plot_modeltime_forecast()
 forecast_results$oos_forecast |> plot_modeltime_forecast()
+
+
+# compare manual feature with default feature
+data_selected <- get_data(datasets[1])
+ts_freq <- data_selected$frequency |> unique() |> parse_frequency()
+
+input <- list(
+	feat_n_future = 12,
+	feat_calendar = TRUE,
+	feat_holiday = FALSE,
+	feat_fourier_p = "",
+	feat_fourier_k = 1,
+	feat_spline_deg = "",
+	feat_lag = "",
+	feat_roll = "",
+	feat_inter = "",
+	n_future = 12,
+	n_assess = 24,
+	assess_type = "Rolling",
+	use_feat_set = TRUE,
+	method = "Linear Regression"
+)
+
+data_feat <- data_selected |> 
+	generate_features(params = input, n_future = input$feat_n_future)
+
+data = data_selected
+data = data_feat
+params = input
+n_future = input$feat_n_future
+n_assess = input$n_assess
+assess_type = input$assess_type
+method = input$method
+
+fitted_model <- fit_model(
+	data = data_fit, method = input$method, params = input,
+	n_assess = input$n_assess, assess_type = input$assess_type, seed = 1992
+)
+
+forecast_results1 <- generate_forecast(
+	fitted_model_list = list(wkfl_fit1), data = data_selected,
+	method = input$method, n_future = input$n_future,
+	n_assess = input$n_assess, assess_type = input$assess_type, 
+	future_data = NULL
+)	
+
+future_tbl <- data_feat |> dplyr::slice_tail(n = n_future)
+forecast_results2 <- generate_forecast(
+	fitted_model_list = list(wkfl_fit2), data = data_feat,
+	method = input$method, n_future = input$n_future,
+	n_assess = input$n_assess, assess_type = input$assess_type, 
+	future_data = future_tbl
+)	
+
+forecast_results1$test_forecast |> plot_modeltime_forecast()
+forecast_results2$test_forecast |> plot_modeltime_forecast()
+forecast_results1$oos_forecast |> plot_modeltime_forecast()
+forecast_results2$oos_forecast |> plot_modeltime_forecast()
 

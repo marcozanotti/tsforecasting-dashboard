@@ -741,7 +741,7 @@ output$feat_ts_plot <- renderPlotly({
 	if (get_features(data_features(), number_only = TRUE) > 1) {
   	feat_nms <- get_features(data_features(), names_only = TRUE, remove_date = TRUE)
 		data_features() |> 
-			dplyr::mutate(dplyr::across(dplyr::all_of(feat_nms)/, as.numeric)) |>
+			dplyr::mutate(dplyr::across(dplyr::all_of(feat_nms), as.numeric)) |>
 			tidyr::pivot_longer(cols = c("value", feat_nms), names_to = "name", values_to = "value") |>
 			timetk::plot_time_series(
 				.date_var = date, .value = value, .color_var = name,
@@ -950,6 +950,8 @@ textInput(
 	inputId = "featsel_reg_formula", label = "Regression Formula", 
 	value = "value ~ .", placeholder = "value ~ x1 + x2 + x3"
 )
+br()
+awesomeCheckbox(inputId = "featsel_save", label = "Save feature set?", value = FALSE)
 ```
 
 ```{r}
@@ -986,6 +988,11 @@ data_feat_selected <- reactive({
 			data_features = data_features_full(), 
 			n_future = input$featsel_n_future
 		)
+})
+
+n_features <- reactive({
+	req(data_feat_selected())
+	get_features(data_feat_selected(), remove_date = TRUE, number_only = TRUE)
 })
 
 output$featsel_corr_plot <- renderPlotly({
@@ -2939,3 +2946,21 @@ DTOutput(outputId = "scn_aggregate_table")
 ```{r}
 DTOutput(outputId = "scn_wb_table")
 ```
+
+
+
+<!------------------------- global conditionals -------------------------->
+
+```{r}
+observeEvent(
+  eventExpr = input$featsel_save,
+  handlerExpr = {
+    req(data_feat_selected())
+  	if (get_features(data_feat_selected()$data, remove_date = TRUE, number_only = TRUE) > 0) {
+  		updateAwesomeCheckbox(inputId = "use_feat_set", session = session, value = TRUE)
+  		updateNumericInput(inputId = "n_future", session = session, value = input$featsel_n_future)
+  	}
+  }
+)
+```
+
