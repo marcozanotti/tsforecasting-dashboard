@@ -1,5 +1,5 @@
 ---
-title: "Forecasting Dashboard"
+title: "Forecast Dashboard"
 output: 
   flexdashboard::flex_dashboard:
     orientation: rows
@@ -9,8 +9,8 @@ output:
     social: ["menu"]
     source_code: https://github.com/marcozanotti/tsforecasting-dashboard
     navbar:
-      - { title: "About", href: "https://marcozanotti.netlify.app/", align: right }
-      - { title: "Manual", href: "https://marcozanotti.github.io/tsforecasting-dashboard/manual/tsforecasting-manual.html", align: right }
+      - { title: "About Me", href: "https://marcozanotti.netlify.app/", align: right }
+      - { title: "Manual", href: "https://marcozanotti.github.io/tsforecasting-dashboard/manual/forecastdash-manual.html", align: right }
 runtime: shiny
 ---
 
@@ -19,11 +19,12 @@ lapply(list.files("R", full.names = TRUE), source)
 
 # Packages
 pkgs <- c(
+	"devtools",
   "tidyverse", "tsibbledata", "janitor", "skimr", "vroom", "logging",
   "forecast", "prophet", "glmnet", "earth", "kernlab", "kknn",
-  "randomForest", "ranger", "xgboost", "treesnip", "lightgbm",
+  "randomForest", "ranger", "xgboost", "bonsai", "lightgbm", 
   "Cubist", "rules",
-  "tidymodels", 
+  "tidymodels", "vip",
   "modeltime", "modeltime.ensemble", "modeltime.resample", "modeltime.h2o",
   "plotly", "DT", "timetk", "ggcorrplot", "ppsr",
   "DALEX", "DALEXtra",
@@ -32,9 +33,14 @@ pkgs <- c(
 )
 install_and_load(pkgs)
 
+if (!require('modeltime.h20')) {
+	devtools::install_github("business-science/modeltime.h2o")
+	library(modeltime.h2o)
+}
+
 options(shiny.sanitize.errors = TRUE)
 set_options()
-Sys.setenv(JAVA_HOME = "/usr/lib/jvm/jdk-17/")
+# Sys.setenv(JAVA_HOME = "/usr/lib/jvm/jdk-17/") # /usr/lib/jvm/java-17-openjdk-amd64/
 logging::addHandler(logging::writeToFile, file = "tsf_dashboard.log")
 
 datasets <- getOption("tsf.dashboard.datasets")

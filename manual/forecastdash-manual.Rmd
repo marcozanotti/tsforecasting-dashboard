@@ -1,0 +1,475 @@
+---
+title: "Forecast Dashboard - Manual"
+author: "Marco Zanotti"
+date: "`r Sys.Date()`"
+output:
+  rmdformats::downcute:
+    highlight: tango
+---
+
+## Introduction
+
+The **Forecast Dashboard** is a comprehensive tool designed to guide users through the entire forecasting workflow, from raw data to scenario analysis. It is tailored for both beginners and experienced practitioners, allowing the exploration, modeling, and explanation of time series data without requiring advanced knowledge of forecasting techniques.  
+
+The dashboard is organized into four main sections —**Data**, **Analyze**, **Features**, and **Forecast**— which collectively enable users to:  
+
+- Upload and explore time series data  
+- Detect and handle missing values and anomalies  
+- Transform and preprocess data for improved forecasting performance  
+- Create and select relevant features, both internal and external  
+- Fit and optimize a wide range of forecasting models, including classical, machine learning, deep learning, and ensemble approaches  
+- Evaluate, compare, and explain the models’ predictions  
+- Generate probabilistic forecasts and business-oriented scenarios  
+
+All actions performed in the dashboard are **automatically saved**, meaning that any transformation, cleaning, or feature engineering applied to the series is carried forward to the subsequent steps. This ensures a consistent and reproducible workflow from raw data to final forecasts.  
+
+The dashboard also provides flexibility in analysis: interactive visualizations, configurable model parameters, and multiple options for evaluation and explanation allow users to tailor the process to their specific needs. Common controls, such as the **gear button** ⚙️, enable the selection of forecast horizon and assessment periods, ensuring that every analysis can be customized for optimal insights. The **play button** ▶️ is used to execute actions like generating forecasts or running tests, while a **reset button** 🔄 is often available to clear all settings and start fresh.
+
+Follow this user guide to leverage the full potential of the Forecast Dashboard to obtain accurate forecasts, understand model behavior, and explore different scenarios for informed decision-making.
+
+If you are interested in who I am and what I do, visit my [website](https://marcozanotti.netlify.app/). 
+The [source code](https://github.com/marcozanotti/tsforecasting-dashboard) of the Forecast Dashboard is available on GitHub under the MIT license.
+If you find bugs or have suggestions for improvements, please open an issue on
+[GitHub](https://github.com/marcozanotti/tsforecasting-dashboard/issues).
+Feel free to share the Forecast Dashboard on LinkeIn if you find it useful and remember to tag [me](https://www.linkedin.com/in/marco-zanotti-a6a978124/)!
+
+
+
+## Section 1: Data
+
+The **Data** section is the starting point of the Forecasting Dashboard. Here you can choose which time series to analyze and prepare for forecasting.  
+
+#### Predefined datasets
+The dashboard includes a few **predefined univariate time series datasets** that you can load instantly. These datasets are useful for exploring the dashboard’s functionalities and testing the workflow without needing to upload your own data.  
+
+#### Import your own data
+You can also import your own **univariate time series dataset** in CSV format.  
+The file must contain the following columns:  
+
+- **`date`**: the timestamp of the observation (must be in a valid date format, e.g., `YYYY-MM-DD`)  
+- **`id`**: an identifier for the time series (can be set to a default value if only one series is provided)  
+- **`frequency`**: the frequency of the series (must be one of the allowed values listed below)  
+- **`value`**: the observed numerical value  
+
+The following frequencies are supported:  
+
+- `year` (1 observation per year)  
+- `semester` (2 observations per year)  
+- `quarter` (4 observations per year)  
+- `month` (12 observations per year)  
+- `week` (52 observations per year)  
+- `bus-day` (252 observations per year, business days)  
+- `day` (365 observations per year, calendar days)  
+- `bus-hour` (252 × 24 observations per year, business hours)  
+- `hour` (365 × 24 observations per year, calendar hours)  
+- `bus-half-hour` (252 × 48 observations per year, business half-hours)  
+- `half-hour` (365 × 48 observations per year, calendar half-hours)  
+
+> ⚠️ **Note**: Make sure your dataset is properly formatted, as incorrect column names or unsupported frequency values will prevent the dashboard from processing the data.  
+
+#### Explore the data
+Once a dataset is loaded, you can briefly explore it using three buttons available in this section:  
+
+- **Table**: view the raw data in tabular format  
+- **Structure**: check the internal structure of the dataset (variable types, number of rows, etc.)  
+- **Summary statistics**: obtain basic descriptive statistics of the time series (mean, median, min, max, missing values, etc.)  
+
+This initial exploration helps you quickly assess whether the data has been uploaded correctly and is ready for further analysis.  
+
+
+
+## Section 2: Analyze
+
+The **Analyze** section provides a set of tools to better understand and prepare your time series before building forecasting models.  
+
+From the main navigation bar, you can click on **Analyze** and then select one of the available options from the dropdown menu. Each option corresponds to a specific step in the analysis workflow.  
+
+In this section you can:  
+
+- **Visualize** the time series with interactive plots to better understand trends, seasonality, and irregular patterns.  
+- Perform **Hypothesis Testing** to check for important statistical properties such as stationarity or autocorrelation.  
+- Detect and correct **Anomalies** in the data (e.g., outliers or unusual spikes).  
+- Apply **Transformations** to stabilize variance, remove seasonality, or make the series more suitable for modeling.  
+
+These tools are designed to help you diagnose potential issues in the data and apply the necessary preprocessing steps before moving on to feature creation and forecasting.  
+
+
+### Visualize
+
+The **Visualize** subsection allows you to explore the main characteristics of your time series through a set of interactive plots.  
+
+#### Options available
+When visualizing the data, you can adjust several parameters:  
+
+- **Select time period**: choose a start and end date to focus on a specific portion of the series.  
+- **Add smooth line**: overlay a smoothed curve on the time series plot to highlight the underlying trend.  
+- **ACF lags**: specify the number of lags to display in the Autocorrelation Function (ACF) plot.  
+- **Impute missing values**: apply automatic interpolation based on the declared frequency to handle missing observations before plotting.  
+
+#### Panels displayed
+Four plots are displayed simultaneously in a 2 × 2 layout:  
+
+1. **Time series plot** (top-left): shows the raw time series (with optional smoothing and imputation).  
+2. **Autocorrelation plot (ACF)** (top-right): displays correlations between the series and its lagged values.  
+3. **Decomposition plot** (bottom-left): breaks down the series into trend, seasonal, and residual components.  
+4. **Seasonality plot** (bottom-right): visualizes recurring seasonal patterns within the chosen frequency.  
+
+This visualization step helps you gain an initial understanding of the structure, seasonality, and quality of your time series before applying more advanced analysis or forecasting techniques. 
+
+
+### Hypothesis Testing
+
+The **Hypothesis Testing** subsection allows you to check key statistical properties of your time series. This step is important to understand whether the data satisfies common assumptions required by forecasting models.  
+
+#### Tests performed
+The dashboard groups the statistical tests into three categories:  
+
+- **Normality tests**:  
+  - *Shapiro-Wilk test*  
+  - *Jarque-Bera test*  
+
+- **Autocorrelation tests**:  
+  - *Ljung-Box test*  
+  - *Box-Pierce test*  
+
+- **Stationarity tests**:  
+  - *Augmented Dickey-Fuller (ADF) test*  
+  - *Phillips-Perron (PP) test*  
+  - *Kwiatkowski-Phillips-Schmidt-Shin (KPSS) test*  
+
+#### Options available
+Before running the tests, you can choose whether to apply a transformation to the series using a dropdown menu. The available transformations are:  
+
+- *Multiply by -1*  
+- *Add 1*  
+- *Log*  
+- *Box-Cox*  
+- *Log-Interval*  
+- *Min-Max* scaling  
+- *Standardization*  
+- *Differencing*  
+- *Seasonal Differencing*  
+
+This feature allows you to test hypotheses not only on the original series but also on transformed versions, which can be useful to verify whether a transformation improves normality, reduces autocorrelation, or induces stationarity.  
+
+#### Panels displayed
+The subsection is organized into four panels:  
+
+1. **Test results table**: displays the outcome of all hypothesis tests (test statistic, p-value, and decision).  
+2. **Distribution plot**: shows the distribution of the time series values compared with a normal curve.  
+3. **Time series plot**: visualizes the raw (or transformed) series to support interpretation of the tests.  
+4. **Autocorrelation plot (ACF)**: highlights the presence of autocorrelation in the series.
+
+
+This subsection helps you assess whether the series is normally distributed, autocorrelated, or stationary — information that is crucial when deciding which forecasting models and preprocessing steps are most appropriate.  
+
+
+### Anomaly Detection
+
+The **Anomaly Detection** subsection allows you to identify and optionally clean unusual observations in your time series. Detecting anomalies is important because extreme values can distort model estimation and forecasts.  
+
+#### Options available
+You can adjust several parameters when detecting anomalies:  
+
+- **Confidence level**: set the statistical threshold for identifying anomalies.  
+- **Maximum % of anomalies**: limit the proportion of points flagged as anomalies.  
+- **Clean anomalies**: choose whether to automatically remove or adjust the detected anomalies.  
+
+#### Panels displayed
+Two plots are generated to visualize the results:  
+
+1. **Time series with anomalies**: shows the original series with anomalies highlighted.  
+2. **Cleaned time series**: displays the series after anomalies have been removed or adjusted (if the cleaning step was triggered).  
+
+This subsection ensures that subsequent analyses and forecasts are performed on a series that reflects the typical behavior of the data, minimizing the impact of extreme or erroneous observations.  
+
+
+### Transform
+
+The **Transform** subsection allows you to apply transformations to your time series to improve its statistical properties and suitability for forecasting models. Transformations can stabilize variance, reduce skewness, or remove trends and seasonality.  
+
+#### Options available
+You can adjust the following parameters:  
+
+- **Time period**: select the start and end of the series to transform.  
+- **Smooth line**: add a smoothing line to visualize trends.  
+- **Number of lags for ACF plot**: adjust the lag parameter for the autocorrelation plot.  
+- **Missing value imputation**: trigger automatic interpolation based on the series frequency.  
+- **Transformation dropdown**: choose a transformation to apply to the series. Available transformations include:  
+  - *Multiply by -1*  
+  - *Add 1*  
+  - *Log*  
+  - *Box-Cox*  
+  - *Log-Interval*  
+  - *Min-Max scaling*  
+  - *Standardization*  
+  - *Differencing*  
+  - *Seasonal Differencing*  
+
+#### Panels displayed
+Four plots are generated to help you assess the effects of transformations:  
+
+1. **Time series**: shows the transformed series.  
+2. **Autocorrelation (ACF) plot**: displays autocorrelations after transformation.  
+3. **Decomposition plot**: visualizes trend, seasonality, and remainder components.  
+4. **Seasonality plot**: highlights the seasonal patterns in the transformed series.  
+
+Using this subsection, you can preprocess your series for modeling, ensuring that it meets the assumptions required by different forecasting methods.  
+
+
+
+## Section 3: Features
+
+The **Features** section allows you to create and manage features that can improve the performance of your forecasting models. Features provide additional information about the series and can capture patterns that help models generate more accurate forecasts.  
+
+You can navigate to the **Features** section in the main bar and select one of the following options from the dropdown menu:  
+
+- **Internal Features**: create features derived from the time series itself.  
+- **External Features**: incorporate external variables that may influence the series.  
+- **Feature Selection**: identify the most relevant features to use in your models.  
+
+
+### Internal Features
+
+The **Internal Features** subsection allows you to create features derived directly from your time series. These features can capture trends, seasonality, and other patterns that improve the accuracy of forecasting models.  
+
+#### Options available
+- **Add calendar features**: include day, week, month, quarter, etc., as features.  
+- **Add holiday features**: include indicators for holidays.  
+- **Fourier Periods**: specify the periods for Fourier terms (values separated by commas).  
+- **Fourier Orders**: select the Fourier order (from 1 to 10).  
+- **Spline Degrees**: specify the degrees for spline features (values separated by commas).  
+- **Lag Orders**: specify lag orders to include past values as features (values separated by commas).  
+- **Lag Rolling Periods**: specify periods for rolling statistics (values separated by commas).  
+- **Interactions**: create interaction features using expressions (expressions separated by commas). 
+- **Feature visualization**: choose how to explore the generated features: table, structure, or summary statistics.  
+
+#### Panels displayed
+1. **Features results**: shows the features in a table, structure, or summary statistics.  
+2. **Time series plot with features**: displays the original series together with all added features for visual inspection.  
+
+
+### External Features
+
+The **External Features** subsection allows you to include features from external datasets that may influence your time series. These features help improve forecast accuracy by incorporating additional information.  
+
+#### Options available
+- **Upload external dataset**: the dataset must follow the same structure as in Section 1, with columns `date`, `id`, `frequency`, and one or more feature columns.  
+- **Feature visualization**: choose how to explore the uploaded features: table, structure, or summary statistics.  
+
+> ⚠️ **Note:** External features must be available in the future to be used in forecasting.  
+
+#### Panels displayed
+1. **Features results**: shows the external features in a table, structure, or summary statistics.  
+2. **Time series plot with features**: displays the original series together with the selected external features.  
+3. **Cross-correlation plot**: visualizes the correlation between the time series and external features to assess potential predictive power.  
+
+
+### Feature Selection
+
+The **Feature Selection** subsection allows you to identify the most relevant features to use in your forecasting models. Different statistical and machine learning methods help evaluate the predictive power of internal and external features.  
+
+#### Options available
+- **Absolute Correlation Threshold**: set the minimum absolute correlation value for a feature to be retained.  
+- **PPS Threshold (Predictive Power Score)**: set the minimum PPS value for a feature to be retained.  
+- **Linear regression formula**: specify a formula to fit a linear regression model (e.g., `value ~ .`).  
+- **Save feature set**: choose whether to save the selected features for later use.  
+
+#### Panels displayed
+1. **Correlation analysis**: shows feature correlations with the target series.  
+2. **PPS analysis**: shows the Predictive Power Score for each feature.  
+3. **LASSO analysis**: shows feature importance using LASSO regression.  
+4. **Random Forest analysis**: shows feature importance using a Random Forest model.  
+5. **Selected feature sets**: displays features retained by each selection method.  
+6. **Linear regression time series plot**: shows the original series with fitted values from the linear regression model.  
+
+
+
+## Section 4: Forecast
+
+The **Forecast** section allows you to test, optimize, compare, explain, and combine forecasting models, as well as perform scenario analysis.  
+
+You can navigate to the **Forecast** section in the main bar and select one of the following options from the dropdown menu:  
+
+- **Test & Evaluate**: assess the performance of different forecasting models.  
+- **Optimize**: tune hyperparameters to improve model accuracy.  
+- **Compare**: compare the performance of multiple models.  
+- **Explain**: understand the drivers of the models' predictions.  
+- **Combine**: create ensembles of models to improve forecasts.  
+- **Scenario Analysis**: simulate different scenarios and assess their impact on forecasts.  
+
+> ⚙️ **General Options:*** In all subsections of the Forecast section, a gear button is available that allows you to specify the **forecast horizon**, the **assessment period**, and the **assessment type** (expanding or rolling window).  
+
+
+### Test & Evaluate
+
+The **Test & Evaluate** subsection allows you to fit a forecasting model and evaluate its performance over the specified assessment period.  
+
+#### Options available
+- **Select forecast algorithm**: choose the model to use for forecasting.  
+- **Algorithm parameters**: based on the selected algorithm, the corresponding parameters appear in the sidebar. By default, the automatic version of the algorithm is used (when available), but you can toggle off the automatic option and manually set parameter values.  
+- **Back-transform results**: choose whether to back-transform the forecasts if a transformation was applied to the time series.  
+- **Forecast button**: click to fit the model and generate forecasts for the specified horizon.  
+
+#### Panels displayed
+- **Time series plot with forecasts on the test set**: shows the model’s predictions over the test period compared with the actual values.  
+- **Time series plot with out-of-sample forecasts**: displays the forecasts for the future horizon beyond the available data.  
+- **Table with evaluation metrics**: summarizes performance metrics such as RMSE, MAE, and MAPE for the selected model.  
+- **Details of the algorithm used**: provides information on the model type, selected parameters, and settings.  
+- **Residuals time series plot**: shows the residuals (errors) of the model over the test period.  
+- **Autocorrelation plot of residuals**: displays the autocorrelation function of residuals to check for remaining patterns or dependencies.  
+
+#### Available Algorithms
+
+The forecasting algorithms are grouped into five categories:  
+
+- **Time Series (TS)**: classical time series methods.  
+  - Naive  
+  - Seasonal Naive  
+  - Rolling Average  
+  - ETS  
+  - Theta  
+  - SARIMA  
+  - TBATS  
+  - STLM  
+  - Prophet  
+
+- **Machine Learning (ML)**: regression and tree-based models.  
+  - Linear Regression  
+  - Elastic Net  
+  - MARS  
+  - KNN  
+  - SVM  
+  - Random Forest  
+  - Boosted Trees  
+  - Cubist  
+
+- **Deep Learning (DL)**: neural network-based models.  
+  - Feed-Forward  
+
+- **Mixed (MIX)**: hybrid models combining TS and ML methods.  
+  - Feed-Forward AR  
+  - ARIMA-Boost  
+  - Prophet-Boost  
+
+- **AutoML (AML)**: automated machine learning frameworks.  
+  - H2O AutoML  
+
+> ⚙️ **General Options:** In the gear button you can specify whether to use the selected features or not.
+
+
+
+### Optimize
+
+The **Optimize** subsection allows you to perform hyperparameter tuning for a selected forecasting model.  
+
+#### Options available
+- **Select forecast algorithm**: choose the model for which you want to optimize hyperparameters.  
+- **Select hyperparameters to optimize**: based on the selected algorithm, the corresponding hyperparameters are displayed for optimization.  
+- **Back-transform results**: choose whether to back-transform forecasts if a transformation was applied to the time series.  
+- **Optimize button**: click to perform hyperparameter optimization and identify the best hyperparameter combination for the selected model.  
+
+#### Panels displayed
+- **Time series plot with forecasts on the test set**: shows the model’s predictions over the test period compared with the actual values.  
+- **Time series plot with out-of-sample forecasts**: displays the forecasts for the future horizon beyond the available data.  
+- **Table with evaluation metrics**: summarizes performance metrics such as RMSE, MAE, and MAPE for the selected model.  
+- **Details of the algorithm used**: provides information on the model type, selected parameters, and settings.  
+- **Residuals time series plot**: shows the residuals (errors) of the model over the test period.  
+- **Autocorrelation plot of residuals**: displays the autocorrelation function of residuals to check for remaining patterns or dependencies.  
+
+> ⚙️ **General Options:** Using the gear button, the user can specify the parameters of the tuning process, including the **Validation Type** (Time Series CV or K-Fold CV), the number of **Folds**, the **Validation Metric**, whether to **Use Bayesian Optimization** for optimization, and the **Grid Size** for grid search.  
+
+> ⚠️ **Note:** Hyperparameter optimization is only available for certain algorithms, including Elastic Net, MARS, KNN, SVM, Random Forest, Boosted Trees, Cubist, Feed-Forward, Feed-Forward AR, ARIMA-Boost, and Prophet-Boost. 
+
+
+
+### Compare
+
+The **Compare** subsection allows you to compare the forecasts of multiple algorithms.  
+
+#### Options available
+- **Select forecast algorithm**: choose the models to compare.   
+- **Back-transform**: choose whether to back-transform forecasts if a transformation was applied to the time series.  
+- **Forecast button**: click to fit the models and compare forecasts for the specified horizon.   
+
+#### Panels displayed
+- **Time series plot with forecasts on the test set**: shows the predictions of all selected algorithms over the test period.  
+- **Time series plot with out-of-sample forecasts**: displays the forecasts of all algorithms for the future horizon beyond the available data.  
+- **Table with evaluation metrics**: compares performance metrics such as RMSE, MAE, and MAPE for all selected algorithms.  
+- **Details of the algorithms used**: provides information on the model type, parameters, and settings for each algorithm.  
+
+
+
+### Explain
+
+The **Explain** subsection allows the user to understand how the selected forecasting algorithm produces its predictions using eXplainable AI techniques. The process is divided into two steps.  
+
+#### Options available
+- **Step 1: Select Algorithm**
+  - **Select forecast algorithm**: choose the algorithm to explain.  
+  - **Use optimized algorithm?**: toggle to use the hyperparameter-optimized version if available.  
+  - **Back-transform**: choose whether to back-transform forecasts if a transformation was applied to the time series.  
+  - **Explain button**: click to produce the default XAI analysis.  
+
+- **Step 2: Local Explanation**
+  - **Feature**: select the specific feature to explain.  
+  - **Date**: choose the date for which a local explanation is desired.  
+
+#### Panels displayed
+- **List of features**: shows all features used by the selected algorithm.  
+- **Feature importance**: displays the global importance of each feature for the model.  
+- **Break-down analysis**: illustrates the contribution of each feature to the forecast.  
+- **Variable response analysis**: shows how changes in a feature affect the forecast.  
+- **Local stability analysis**: evaluates the stability of feature contributions for the selected date and feature.  
+
+> ⚠️ **Note:** XAI is only available for certain algorithms, including Linear Regression, Elastic Net, MARS, KNN, SVM, Random Forest, Boosted Trees, Cubist, Feed-Forward, Feed-Forward AR, ARIMA-Boost, Prophet-Boost, and H2O AutoML. 
+
+
+
+### Combine
+
+The **Combine** subsection allows the user to create ensembles of forecasting algorithms using simple combination methods or stacking approaches.  
+
+#### Options available
+- **Select forecast algorithm**: select one or more algorithms to include in the ensemble.  
+- **Use optimized algorithm?**: toggle to use the hyperparameter-optimized version if available.  
+- **Back-transform**: choose whether to back-transform forecasts if a transformation was applied to the time series. 
+- **Select ensemble method**: choose between simple mean of all selected forecasts, 
+weighted mean based on the ranking of algorithms' performance, or median of forecasts.
+- **Select stacking method**: choose the meta-learner for stacking (linear regression, elastic net, or boosted tree).
+- **Optimize stack?**: toggle to perform hyperparameter tuning for the stacking model.  
+- **Combine button**: click to produce the combined forecasts through simple ensembles or stacking.  
+
+#### Panels displayed
+- **Time series plot with forecasts on the test set**: shows the ensemble or stacked forecasts over the test period.  
+- **Time series plot with out-of-sample forecasts**: displays the ensemble or stacked forecasts for the future horizon.  
+- **Table with evaluation metrics**: compares performance of the ensemble or stacked forecasts.  
+- **Details of the algorithm(s) used**: provides information on the models included in the ensemble or stacking model.  
+
+
+
+### Scenario Analysis
+
+The **Scenario Analysis** subsection allows the user to generate alternative future scenarios based on one selected forecasting model. This step is always performed after obtaining forecasts, either from a single model or from combinations (ensembles or stacking).  
+
+#### Options available
+- **Select forecast algorithm**: choose the algorithm to use for scenario generation (can also be a combination of models).  
+- **Use optimized algorithm?**: toggle to use the hyperparameter-optimized version if available.  
+- **Back-transform**: choose whether to back-transform forecasts if a transformation was applied.  
+- **Forecast button**: click to generate the baseline out-of-sample forecasts.  
+
+Once the baseline forecast is produced, the user can define three scenario parameters to generate alternative scenarios:  
+- **Confidence level**: defines the prediction intervals for upper and lower scenarios.  
+- **Aggregation function**: select how results should be aggregated over the forecast horizon.
+- **Business adjustment (%)**: apply a manual adjustment to the mean forecast (negative values decrease).   
+
+#### Panels displayed
+- **Out-of-sample forecast with prediction intervals**: shows the baseline forecast with upper and lower confidence bounds.  
+- **Scenario forecast**: displays mean forecast, worst-case, and best-case scenarios over the forecast horizon.  
+- **Table of evaluation metrics**: performance metrics calculated on the test set.  
+- **Table of aggregate results**: aggregated forecast values over the horizon, with comparisons to the previous period and previous seasonal period.  
+- **Table of scenario values**: lists the values for worst-case, mean forecast, and best-case scenarios.  
+
+> ⚠️ **Note:** If combinations of models were used, only the best performing combination (in ensemble or stacking) is used for scenario analysis.  
+
+> ⚠️ **Note:** The worst and best case scenarios are not affected by the manual adjustment.
