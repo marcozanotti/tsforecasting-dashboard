@@ -23,7 +23,7 @@ The app provides great flexibility in analysis: interactive visualizations,
 configurable model parameters, and multiple options for evaluation and 
 explanation allow users to tailor the process to their specific needs.
 
-You can access the stable version at [Forecast App](https://marcozanotti.shinyapps.io/forecastapp/).
+You can access the stable version at [Forecast App](https://marcozanotti.shinyapps.io/ForecastApp/).
 
 Follow the [user guide](https://marcozanotti.github.io/tsforecasting-dashboard/manual/forecastapp-manual.html) 
 to leverage the full potential of the Forecast App to obtain accurate 
