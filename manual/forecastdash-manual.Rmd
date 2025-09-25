@@ -23,15 +23,18 @@ The dashboard is organized into four main sections —**Data**, **Analyze**, **F
 
 All actions performed in the dashboard are **automatically saved**, meaning that any transformation, cleaning, or feature engineering applied to the series is carried forward to the subsequent steps. This ensures a consistent and reproducible workflow from raw data to final forecasts.  
 
-The dashboard also provides flexibility in analysis: interactive visualizations, configurable model parameters, and multiple options for evaluation and explanation allow users to tailor the process to their specific needs. Common controls, such as the **gear button** ⚙️, enable the selection of forecast horizon and assessment periods, ensuring that every analysis can be customized for optimal insights. The **play button** ▶️ is used to execute actions like generating forecasts or running tests, while a **reset button** 🔄 is often available to clear all settings and start fresh.
+The dashboard also provides great flexibility in analysis: interactive visualizations, configurable model parameters, and multiple options for evaluation and explanation allow users to tailor the process to their specific needs. Common controls, such as the **gear button** ⚙️, enable the selection of forecast horizon and assessment periods, ensuring that every analysis can be customized for optimal insights. The **play button** ▶️ is used to execute actions like generating forecasts or running tests, while a **reset button** 🔄 is often available to clear all settings and start fresh.
 
-Follow this user guide to leverage the full potential of the Forecast Dashboard to obtain accurate forecasts, understand model behavior, and explore different scenarios for informed decision-making.
+Follow this user guide to leverage the full potential of the Forecast Dashboard to obtain accurate forecasts, understand model behavior, and explore different scenarios for informed decision-making.  
 
-If you are interested in who I am and what I do, visit my [website](https://marcozanotti.netlify.app/). 
-The [source code](https://github.com/marcozanotti/tsforecasting-dashboard) of the Forecast Dashboard is available on GitHub under the MIT license.
+If you are interested in who I am and what I do, visit my [website](https://marcozanotti.netlify.app/).   
+
+The [source code](https://github.com/marcozanotti/tsforecasting-dashboard) of the Forecast Dashboard is available on GitHub under the MIT license.  
+
 If you find bugs or have suggestions for improvements, please open an issue on
-[GitHub](https://github.com/marcozanotti/tsforecasting-dashboard/issues).
-Feel free to share the Forecast Dashboard on LinkeIn if you find it useful and remember to tag [me](https://www.linkedin.com/in/marco-zanotti-a6a978124/)!
+[GitHub](https://github.com/marcozanotti/tsforecasting-dashboard/issues).  
+
+Feel free to share the Forecast Dashboard on LinkedIn if you find it useful and remember to tag [me](https://www.linkedin.com/in/marco-zanotti-a6a978124/)!  
 
 
 

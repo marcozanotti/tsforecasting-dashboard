@@ -28,16 +28,16 @@ You can access the stable version at [Forecast Dashboard](https://marcozanotti.s
 Follow the [user guide](https://marcozanotti.github.io/tsforecasting-dashboard/manual/forecastdash-manual.html) 
 to leverage the full potential of the Forecast Dashboard to obtain accurate 
 forecasts, understand model behavior, and explore different scenarios for 
-informed decision-making.
+informed decision-making.  
 
-Feel free to share the Forecast Dashboard on LinkeIn if you find it useful and 
-remember to tag [me](https://www.linkedin.com/in/marco-zanotti-a6a978124/)!
+Feel free to share the Forecast Dashboard on LinkedIn if you find it useful and 
+remember to tag [me](https://www.linkedin.com/in/marco-zanotti-a6a978124/)!  
 
 If you find bugs or have suggestions for improvements, please open an issue on
-[GitHub](https://github.com/marcozanotti/tsforecasting-dashboard/issues).
+[GitHub](https://github.com/marcozanotti/tsforecasting-dashboard/issues).  
 
 If you are interested in who I am and what I do, visit my 
-[website](https://marcozanotti.netlify.app/). 
+[website](https://marcozanotti.netlify.app/).  
 
 The [source code](https://github.com/marcozanotti/tsforecasting-dashboard) of 
 the Forecast Dashboard is available on GitHub under the MIT license.
