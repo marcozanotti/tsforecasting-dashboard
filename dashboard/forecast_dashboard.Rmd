@@ -17,7 +17,6 @@ runtime: shiny
 ```{r setup, include=FALSE, message=FALSE}
 lapply(list.files("R", full.names = TRUE), source)
 
-# Packages
 pkgs <- c(
 	"devtools",
   "tidyverse", "tsibbledata", "janitor", "skimr", "vroom", "logging",
@@ -31,12 +30,7 @@ pkgs <- c(
   "rmarkdown", "flexdashboard",
   "shiny", "shinyWidgets", "shinyjs"
 )
-install_and_load(pkgs)
-
-if (!require(modeltime.h20)) {
-	devtools::install_github("business-science/modeltime.h2o")
-	library(modeltime.h2o)
-}
+lapply(pkgs, library, character.only = TRUE)
 
 options(shiny.sanitize.errors = TRUE)
 set_options()
