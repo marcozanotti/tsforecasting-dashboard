@@ -97,3 +97,8 @@ install_and_load <- function(pkgs, repos = getOption("repos")) {
   return(invisible(res))
 
 }
+
+force_package_install <- function() {
+	rules::committees() # to force the installation of 'rules' package on server side
+	return(invisible(NULL))
+}

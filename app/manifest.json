@@ -4692,6 +4692,35 @@
         "Built": "R 4.5.1; ; 2025-08-11 10:13:34 UTC; unix"
       }
     },
+    "rules": {
+      "Source": "CRAN",
+      "Repository": "https://cloud.r-project.org",
+      "description": {
+        "Package": "rules",
+        "Title": "Model Wrappers for Rule-Based Models",
+        "Version": "1.0.2",
+        "Authors@R": "c(\n    person(\"Emil\", \"Hvitfeldt\", , \"emil.hvitfeldt@posit.co\", role = c(\"aut\", \"cre\"),\n           comment = c(ORCID = \"0000-0002-0679-1945\")),\n    person(\"Max\", \"Kuhn\", , \"max@posit.co\", role = c(\"aut\"),\n           comment = c(ORCID = \"0000-0003-2402-136X\")),\n    person(given = \"Posit Software, PBC\", role = c(\"cph\", \"fnd\"))\n  )",
+        "Description": "Bindings for additional models for use with the 'parsnip'\n    package.  Models include prediction rule ensembles (Friedman and\n    Popescu, 2008) <doi:10.1214/07-AOAS148>, C5.0 rules (Quinlan, 1992\n    ISBN: 1558602380), and Cubist (Kuhn and Johnson, 2013)\n    <doi:10.1007/978-1-4614-6849-3>.",
+        "License": "MIT + file LICENSE",
+        "URL": "https://github.com/tidymodels/rules, https://rules.tidymodels.org/",
+        "BugReports": "https://github.com/tidymodels/rules/issues",
+        "Depends": "parsnip (>= 0.2.1.9004), R (>= 3.4)",
+        "Imports": "dials (>= 0.1.1.9001), dplyr, generics (>= 0.1.0), purrr,\nrlang, stats, stringr, tidyr, utils",
+        "Suggests": "C50, covr, Cubist, knitr, modeldata, recipes, rmarkdown,\nspelling, testthat (>= 3.0.0), tibble, xrf (>= 0.2.0)",
+        "Config/Needs/website": "tidyr, tidyverse/tidytemplate, recipes, xrf",
+        "Config/testthat/edition": "3",
+        "Encoding": "UTF-8",
+        "Language": "en-US",
+        "RoxygenNote": "7.2.3",
+        "NeedsCompilation": "no",
+        "Packaged": "2023-03-08 23:14:01 UTC; emilhvitfeldt",
+        "Author": "Emil Hvitfeldt [aut, cre] (<https://orcid.org/0000-0002-0679-1945>),\n  Max Kuhn [aut] (<https://orcid.org/0000-0003-2402-136X>),\n  Posit Software, PBC [cph, fnd]",
+        "Maintainer": "Emil Hvitfeldt <emil.hvitfeldt@posit.co>",
+        "Repository": "CRAN",
+        "Date/Publication": "2023-03-08 23:40:02 UTC",
+        "Built": "R 4.5.1; ; 2025-09-24 17:25:31 UTC; unix"
+      }
+    },
     "sass": {
       "Source": "CRAN",
       "Repository": "https://cloud.r-project.org",
@@ -6187,7 +6216,7 @@
       "checksum": "79e925aaf476301eef1a775ae2d486ea"
     },
     "R/utils-packages.R": {
-      "checksum": "392ecd02765aafa63817087a972b5053"
+      "checksum": "82563d1a94a69674211753456ef6e998"
     },
     "R/utils.R": {
       "checksum": "8d32cc428f684a4f1bf4ac5cd5663a17"

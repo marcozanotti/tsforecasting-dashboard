@@ -1,5 +1,5 @@
 ---
-title: "Forecast Dashboard"
+title: "Forecast App"
 output: 
   flexdashboard::flex_dashboard:
     orientation: rows
@@ -10,7 +10,7 @@ output:
     source_code: https://github.com/marcozanotti/tsforecasting-dashboard
     navbar:
       - { title: "About Me", href: "https://marcozanotti.netlify.app/", align: right }
-      - { title: "Manual", href: "https://marcozanotti.github.io/tsforecasting-dashboard/manual/forecastdash-manual.html", align: right }
+      - { title: "Manual", href: "https://marcozanotti.github.io/tsforecasting-dashboard/manual/forecastapp-manual.html", align: right }
 runtime: shiny
 ---
 
@@ -26,7 +26,7 @@ lapply(pkgs, library, character.only = TRUE)
 options(shiny.sanitize.errors = TRUE)
 set_options()
 # Sys.setenv(JAVA_HOME = "/usr/lib/jvm/jdk-17/") # /usr/lib/jvm/java-17-openjdk-amd64/ , for h2o
-logging::addHandler(logging::writeToFile, file = "forecast_dashboard.log")
+# logging::addHandler(logging::writeToFile, file = "forecast_dashboard.log") # add to log file
 
 datasets <- getOption("tsf.dashboard.datasets")
 methods <- getOption("tsf.dashboard.methods")
