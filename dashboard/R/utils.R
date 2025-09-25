@@ -69,8 +69,8 @@ set_options <- function() {
         )),
       "Cubist" = c("committees", "cub_neighbors", "max_rules") |>
         purrr::set_names(c("Num Members", "Neighbors", "Max Rules")),
-      "Feed-Forward" = c("ff_hidden_units", "ff_penalty", "ff_epochs", "ff_dropout", "ff_learn_rate") |>
-        purrr::set_names(c("Hidden Units", "Decay", "Epochs", "Dropout", "Learning Rate")),
+      "Feed-Forward" = c("ff_hidden_units", "ff_penalty", "ff_epochs") |> # "ff_dropout", "ff_learn_rate"
+        purrr::set_names(c("Hidden Units", "Decay", "Epochs")), # "Dropout", "Learning Rate"
       "Feed-Forward AR" = c(
         "ffar_non_seasonal_ar", "ffar_seasonal_ar",
         "ffar_hidden_units", "ffar_penalty", "ffar_epochs", "ffar_num_networks"
@@ -208,7 +208,7 @@ get_default <- function(parameter, return_value = TRUE) {
     "boost_mtry" = 5, "boost_trees" = 1000, "boost_min_n" = 1, "boost_tree_depth" = 6,
     "boost_learn_rate" = 0.3, "boost_loss_reduction" = 0, "boost_sample_size" = 1,
     "committees" = 1, "cub_neighbors" = 0, "max_rules" = 20, # Cubist
-    "ff_hidden_units" = 10, "ff_penalty" = 0, "ff_epochs" = 100, "ff_dropout" = 0.1, "ff_learn_rate" = 0.3, # Feed-Forward
+    "ff_hidden_units" = 10, "ff_penalty" = 0, "ff_epochs" = 100, # Feed-Forward "ff_dropout" = 0.1, "ff_learn_rate" = 0.3,
     "ffar_non_seasonal_ar" = 1, "ffar_seasonal_ar" = 0, # Feed-Forward AR
     "ffar_hidden_units" = 10, "ffar_penalty" = 0, "ffar_epochs" = 100, "ffar_num_networks" = 20,
     "arima_boost_mtry" = 5, "arima_boost_trees" = 100, "arima_boost_min_n" = 1, "arima_boost_tree_depth" = 6, # ARIMA-Boost

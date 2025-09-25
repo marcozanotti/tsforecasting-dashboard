@@ -31,3 +31,2192 @@
 2025-09-25 13:16:32.700366 INFO::Explaining Algorithm: break_down
 2025-09-25 13:16:40.370085 INFO::Explaining Algorithm: variable_response
 2025-09-25 13:16:40.471092 INFO::Explaining Algorithm: local_stability
+2025-09-25 14:27:36.212563 INFO::Getting Air Passengers data...
+2025-09-25 14:27:37.894274 INFO::Hypothesis testing...
+2025-09-25 14:27:37.921122 INFO::Normality Tests
+2025-09-25 14:27:37.954998 INFO::Autocorrelation Tests
+2025-09-25 14:27:37.956237 INFO::Stationarity Tests
+2025-09-25 14:27:42.882418 INFO::*** Generating Forecasts ***
+2025-09-25 14:27:42.883562 INFO::Method(s): Naive
+2025-09-25 14:27:42.884135 INFO::Initial Split
+2025-09-25 14:27:42.936099 INFO::Future Frame
+2025-09-25 14:27:42.957323 INFO::Modeltime Table
+2025-09-25 14:27:42.972348 INFO::*** Fitting Algorithm ***
+2025-09-25 14:27:42.973103 INFO::Method(s): Naive
+2025-09-25 14:27:42.973919 INFO::Initial Split
+2025-09-25 14:27:43.021426 INFO::Recipe Specification
+2025-09-25 14:27:43.02348 INFO::Using default recipe specification
+2025-09-25 14:27:43.026408 INFO::Model Specification
+2025-09-25 14:27:43.027746 INFO::Workflow Specification
+2025-09-25 14:27:43.029368 INFO::Fitting
+2025-09-25 14:30:12.466948 INFO::Getting Air Passengers data...
+2025-09-25 14:30:13.140562 INFO::Hypothesis testing...
+2025-09-25 14:30:13.14301 INFO::Normality Tests
+2025-09-25 14:30:13.14395 INFO::Autocorrelation Tests
+2025-09-25 14:30:13.145016 INFO::Stationarity Tests
+2025-09-25 14:30:16.497182 INFO::*** Generating Forecasts ***
+2025-09-25 14:30:16.498082 INFO::Method(s): Naive
+2025-09-25 14:30:16.498538 INFO::Initial Split
+2025-09-25 14:30:16.539584 INFO::Future Frame
+2025-09-25 14:30:16.557969 INFO::Modeltime Table
+2025-09-25 14:30:16.564224 INFO::*** Fitting Algorithm ***
+2025-09-25 14:30:16.564771 INFO::Method(s): Naive
+2025-09-25 14:30:16.565333 INFO::Initial Split
+2025-09-25 14:30:16.609066 INFO::Recipe Specification
+2025-09-25 14:30:16.610969 INFO::Using default recipe specification
+2025-09-25 14:30:16.613909 INFO::Model Specification
+2025-09-25 14:30:16.614799 INFO::Workflow Specification
+2025-09-25 14:30:16.615587 INFO::Fitting
+2025-09-25 14:30:16.646286 INFO::Calibration
+2025-09-25 14:30:16.708679 INFO::Residuals
+2025-09-25 14:30:16.736463 INFO::Accuracy Evaluation
+2025-09-25 14:30:16.922508 INFO::Test Forecasting
+2025-09-25 14:30:16.979048 INFO::Refitting
+2025-09-25 14:30:17.006084 INFO::Out-of-Sample Forecasting
+2025-09-25 14:30:21.496008 INFO::*** Generating Forecasts ***
+2025-09-25 14:30:21.496732 INFO::Method(s): Linear Regression
+2025-09-25 14:30:21.497211 INFO::Initial Split
+2025-09-25 14:30:21.53935 INFO::Future Frame
+2025-09-25 14:30:21.558813 INFO::Modeltime Table
+2025-09-25 14:30:21.565006 INFO::*** Fitting Algorithm ***
+2025-09-25 14:30:21.565571 INFO::Method(s): Linear Regression
+2025-09-25 14:30:21.56818 INFO::Initial Split
+2025-09-25 14:30:21.613183 INFO::Recipe Specification
+2025-09-25 14:30:21.620942 INFO::Using default recipe specification
+2025-09-25 14:30:21.624492 INFO::Model Specification
+2025-09-25 14:30:21.689778 INFO::Workflow Specification
+2025-09-25 14:30:21.690886 INFO::Fitting
+2025-09-25 14:30:21.774668 INFO::Calibration
+2025-09-25 14:30:21.968555 INFO::Residuals
+2025-09-25 14:30:22.190477 INFO::Accuracy Evaluation
+2025-09-25 14:30:22.648519 INFO::Test Forecasting
+2025-09-25 14:30:22.849616 INFO::Refitting
+2025-09-25 14:30:22.963454 INFO::Out-of-Sample Forecasting
+2025-09-25 14:30:28.892815 INFO::*** Generating Forecasts ***
+2025-09-25 14:30:28.894253 INFO::Method(s): Random Forest
+2025-09-25 14:30:28.895081 INFO::Initial Split
+2025-09-25 14:30:28.941934 INFO::Future Frame
+2025-09-25 14:30:28.96162 INFO::Modeltime Table
+2025-09-25 14:30:28.967797 INFO::*** Fitting Algorithm ***
+2025-09-25 14:30:28.968396 INFO::Method(s): Random Forest
+2025-09-25 14:30:28.968987 INFO::Initial Split
+2025-09-25 14:30:29.008019 INFO::Recipe Specification
+2025-09-25 14:30:29.009954 INFO::Using default recipe specification
+2025-09-25 14:30:29.013362 INFO::Model Specification
+2025-09-25 14:30:29.015129 INFO::Workflow Specification
+2025-09-25 14:30:29.016055 INFO::Fitting
+2025-09-25 14:30:29.173217 INFO::Calibration
+2025-09-25 14:30:29.340204 INFO::Residuals
+2025-09-25 14:30:29.520469 INFO::Accuracy Evaluation
+2025-09-25 14:30:29.916152 INFO::Test Forecasting
+2025-09-25 14:30:30.085734 INFO::Refitting
+2025-09-25 14:30:30.225551 INFO::Out-of-Sample Forecasting
+2025-09-25 14:30:36.292936 INFO::*** Generating Forecasts ***
+2025-09-25 14:30:36.293976 INFO::Method(s): ARIMA-Boost
+2025-09-25 14:30:36.294895 INFO::Initial Split
+2025-09-25 14:30:36.340642 INFO::Future Frame
+2025-09-25 14:30:36.359426 INFO::Modeltime Table
+2025-09-25 14:30:36.365276 INFO::*** Fitting Algorithm ***
+2025-09-25 14:30:36.365869 INFO::Method(s): ARIMA-Boost
+2025-09-25 14:30:36.366403 INFO::Initial Split
+2025-09-25 14:30:36.403114 INFO::Recipe Specification
+2025-09-25 14:30:36.405119 INFO::Using default recipe specification
+2025-09-25 14:30:36.408513 INFO::Model Specification
+2025-09-25 14:30:36.411102 INFO::Workflow Specification
+2025-09-25 14:30:36.41203 INFO::Fitting
+2025-09-25 14:30:37.217422 INFO::Calibration
+2025-09-25 14:30:37.377528 INFO::Residuals
+2025-09-25 14:30:37.390874 INFO::Accuracy Evaluation
+2025-09-25 14:30:37.617039 INFO::Test Forecasting
+2025-09-25 14:30:37.804746 INFO::Refitting
+2025-09-25 14:30:38.92193 INFO::Out-of-Sample Forecasting
+2025-09-25 14:30:47.072342 INFO::*** Generating Forecasts ***
+2025-09-25 14:30:47.073554 INFO::Method(s): SARIMA
+2025-09-25 14:30:47.07429 INFO::Initial Split
+2025-09-25 14:30:47.133971 INFO::Future Frame
+2025-09-25 14:30:47.153373 INFO::Modeltime Table
+2025-09-25 14:30:47.159424 INFO::*** Fitting Algorithm ***
+2025-09-25 14:30:47.159979 INFO::Method(s): SARIMA
+2025-09-25 14:30:47.160486 INFO::Initial Split
+2025-09-25 14:30:47.19828 INFO::Recipe Specification
+2025-09-25 14:30:47.200253 INFO::Using default recipe specification
+2025-09-25 14:30:47.203187 INFO::Model Specification
+2025-09-25 14:30:47.204628 INFO::Workflow Specification
+2025-09-25 14:30:47.205503 INFO::Fitting
+2025-09-25 14:30:47.732006 INFO::Calibration
+2025-09-25 14:30:47.778724 INFO::Residuals
+2025-09-25 14:30:47.794391 INFO::Accuracy Evaluation
+2025-09-25 14:30:47.901142 INFO::Test Forecasting
+2025-09-25 14:30:47.955607 INFO::Refitting
+2025-09-25 14:30:48.920881 INFO::Out-of-Sample Forecasting
+2025-09-25 14:30:56.66262 INFO::*** Generating Forecasts ***
+2025-09-25 14:30:56.664492 INFO::Method(s): Elastic Net
+2025-09-25 14:30:56.66543 INFO::Initial Split
+2025-09-25 14:30:56.707668 INFO::Future Frame
+2025-09-25 14:30:56.725993 INFO::Modeltime Table
+2025-09-25 14:30:56.744536 INFO::*** Tuning Algorithm ***
+2025-09-25 14:30:56.745164 INFO::Method(s): Elastic Net
+2025-09-25 14:31:31.497715 INFO::Getting Air Passengers data...
+2025-09-25 14:31:32.119415 INFO::Hypothesis testing...
+2025-09-25 14:31:32.121848 INFO::Normality Tests
+2025-09-25 14:31:32.122838 INFO::Autocorrelation Tests
+2025-09-25 14:31:32.123929 INFO::Stationarity Tests
+2025-09-25 14:31:35.31331 INFO::Getting EU Population data...
+2025-09-25 14:31:38.083024 INFO::Getting People Traffic data...
+2025-09-25 14:31:50.478316 INFO::Getting Air Passengers data...
+2025-09-25 14:31:51.454648 INFO::Hypothesis testing...
+2025-09-25 14:31:51.480529 INFO::Normality Tests
+2025-09-25 14:31:51.524301 INFO::Autocorrelation Tests
+2025-09-25 14:31:51.525958 INFO::Stationarity Tests
+2025-09-25 14:31:54.241212 INFO::Getting EU Population data...
+2025-09-25 14:31:56.163707 INFO::Getting People Traffic data...
+2025-09-25 14:31:58.066883 INFO::Getting Stock Price data...
+2025-09-25 14:31:59.871207 INFO::Getting Tobacco Prod data...
+2025-09-25 14:32:01.981309 INFO::Getting Air Passengers data...
+2025-09-25 14:32:04.048941 INFO::Getting EU Population data...
+2025-09-25 14:32:05.846356 INFO::Getting People Traffic data...
+2025-09-25 14:32:07.600658 INFO::Getting Stock Price data...
+2025-09-25 14:32:09.349586 INFO::Getting Tobacco Prod data...
+2025-09-25 14:32:27.757397 INFO::Hypothesis testing...
+2025-09-25 14:32:27.759711 INFO::Normality Tests
+2025-09-25 14:32:27.76079 INFO::Autocorrelation Tests
+2025-09-25 14:32:27.762024 INFO::Stationarity Tests
+2025-09-25 14:32:31.16475 INFO::Hypothesis testing...
+2025-09-25 14:32:31.166383 INFO::Transforming data...
+2025-09-25 14:32:31.167197 INFO::Add 1
+2025-09-25 14:32:31.170146 INFO::Normality Tests
+2025-09-25 14:32:31.179752 INFO::Autocorrelation Tests
+2025-09-25 14:32:31.182045 INFO::Stationarity Tests
+2025-09-25 14:32:34.405302 INFO::Hypothesis testing...
+2025-09-25 14:32:34.407067 INFO::Transforming data...
+2025-09-25 14:32:34.407874 INFO::Add 1
+2025-09-25 14:32:34.409631 INFO::Log-Interval
+2025-09-25 14:32:34.413422 INFO::Normality Tests
+2025-09-25 14:32:34.4158 INFO::Autocorrelation Tests
+2025-09-25 14:32:34.417724 INFO::Stationarity Tests
+2025-09-25 14:32:36.815564 INFO::Hypothesis testing...
+2025-09-25 14:32:36.81761 INFO::Transforming data...
+2025-09-25 14:32:36.818786 INFO::Log-Interval
+2025-09-25 14:32:36.822764 INFO::Normality Tests
+2025-09-25 14:32:36.823873 INFO::Autocorrelation Tests
+2025-09-25 14:32:36.825282 INFO::Stationarity Tests
+2025-09-25 14:32:37.449253 INFO::Hypothesis testing...
+2025-09-25 14:32:37.451741 INFO::Normality Tests
+2025-09-25 14:32:37.452963 INFO::Autocorrelation Tests
+2025-09-25 14:32:37.454166 INFO::Stationarity Tests
+2025-09-25 14:32:56.918151 INFO::Transforming data...
+2025-09-25 14:32:56.919722 INFO::Log-Interval
+2025-09-25 14:32:58.860932 INFO::Transforming data...
+2025-09-25 14:32:58.862379 INFO::Log-Interval
+2025-09-25 14:32:58.865184 INFO::Standardization
+2025-09-25 14:33:01.698046 INFO::Transforming data...
+2025-09-25 14:33:01.698758 INFO::Log
+2025-09-25 14:33:01.700137 INFO::Log-Interval
+2025-09-25 14:33:01.701519 INFO::Standardization
+2025-09-25 14:33:16.635707 INFO::Transforming data...
+2025-09-25 14:33:16.636778 INFO::Log-Interval
+2025-09-25 14:33:16.638673 INFO::Standardization
+2025-09-25 14:33:17.128764 INFO::Transforming data...
+2025-09-25 14:33:17.129477 INFO::Standardization
+2025-09-25 14:33:36.671263 INFO::Hypothesis testing...
+2025-09-25 14:33:36.672911 INFO::Transforming data...
+2025-09-25 14:33:36.673764 INFO::Log
+2025-09-25 14:33:36.676486 INFO::Normality Tests
+2025-09-25 14:33:36.677594 INFO::Autocorrelation Tests
+2025-09-25 14:33:36.678777 INFO::Stationarity Tests
+2025-09-25 14:33:37.218619 INFO::Hypothesis testing...
+2025-09-25 14:33:37.22066 INFO::Transforming data...
+2025-09-25 14:33:37.221763 INFO::Log
+2025-09-25 14:33:37.223864 INFO::Normalization
+2025-09-25 14:33:37.22701 INFO::Normality Tests
+2025-09-25 14:33:37.228116 INFO::Autocorrelation Tests
+2025-09-25 14:33:37.229243 INFO::Stationarity Tests
+2025-09-25 14:33:38.810733 INFO::Hypothesis testing...
+2025-09-25 14:33:38.813407 INFO::Transforming data...
+2025-09-25 14:33:38.81487 INFO::Log
+2025-09-25 14:33:38.817774 INFO::Normalization
+2025-09-25 14:33:38.820625 INFO::Differencing
+2025-09-25 14:33:38.825642 INFO::Normality Tests
+2025-09-25 14:33:38.827463 INFO::Autocorrelation Tests
+2025-09-25 14:33:38.829028 INFO::Stationarity Tests
+2025-09-25 14:33:40.976896 INFO::Hypothesis testing...
+2025-09-25 14:33:40.978523 INFO::Transforming data...
+2025-09-25 14:33:40.979482 INFO::Normalization
+2025-09-25 14:33:40.981719 INFO::Differencing
+2025-09-25 14:33:40.986015 INFO::Normality Tests
+2025-09-25 14:33:40.987893 INFO::Autocorrelation Tests
+2025-09-25 14:33:40.989979 INFO::Stationarity Tests
+2025-09-25 14:33:41.741497 INFO::Hypothesis testing...
+2025-09-25 14:33:41.743944 INFO::Transforming data...
+2025-09-25 14:33:41.745436 INFO::Differencing
+2025-09-25 14:33:41.750446 INFO::Normality Tests
+2025-09-25 14:33:41.752332 INFO::Autocorrelation Tests
+2025-09-25 14:33:41.754456 INFO::Stationarity Tests
+2025-09-25 14:33:42.392738 INFO::Hypothesis testing...
+2025-09-25 14:33:42.405368 INFO::Normality Tests
+2025-09-25 14:33:42.411419 INFO::Autocorrelation Tests
+2025-09-25 14:33:42.418535 INFO::Stationarity Tests
+2025-09-25 14:34:07.323445 INFO::Imputing missing values...
+2025-09-25 14:35:54.40408 INFO::Getting Air Passengers data...
+2025-09-25 14:35:54.979447 INFO::Hypothesis testing...
+2025-09-25 14:35:54.981569 INFO::Normality Tests
+2025-09-25 14:35:54.982429 INFO::Autocorrelation Tests
+2025-09-25 14:35:54.983452 INFO::Stationarity Tests
+2025-09-25 14:36:02.766859 INFO::Imputing missing values...
+2025-09-25 14:37:05.018825 INFO::Getting Air Passengers data...
+2025-09-25 14:37:05.651021 INFO::Hypothesis testing...
+2025-09-25 14:37:05.653219 INFO::Normality Tests
+2025-09-25 14:37:05.654111 INFO::Autocorrelation Tests
+2025-09-25 14:37:05.65513 INFO::Stationarity Tests
+2025-09-25 14:37:53.813767 INFO::Getting Air Passengers data...
+2025-09-25 14:37:54.393066 INFO::Hypothesis testing...
+2025-09-25 14:37:54.395266 INFO::Normality Tests
+2025-09-25 14:37:54.396275 INFO::Autocorrelation Tests
+2025-09-25 14:37:54.397413 INFO::Stationarity Tests
+2025-09-25 14:37:57.612214 INFO::Imputing missing values...
+2025-09-25 14:38:04.266947 INFO::Transforming data...
+2025-09-25 14:38:04.268133 INFO::Multiply by -1
+2025-09-25 14:38:04.799413 INFO::Transforming data...
+2025-09-25 14:38:04.800204 INFO::Multiply by -1
+2025-09-25 14:38:04.801677 INFO::Log
+2025-09-25 14:38:05.870348 INFO::Transforming data...
+2025-09-25 14:38:05.871531 INFO::Log
+2025-09-25 14:39:19.906403 INFO::*** Generating Correlation Matrix ***
+2025-09-25 14:39:19.935928 INFO::*** Generating Predictive Power Score ***
+2025-09-25 14:39:20.018022 INFO::*** Fitting Feature Algorithm ***
+2025-09-25 14:39:20.018883 INFO::Method(s): LASSO
+2025-09-25 14:39:20.074229 INFO::*** Fitting Feature Algorithm ***
+2025-09-25 14:39:20.074844 INFO::Method(s): Random Forest
+2025-09-25 14:39:20.141155 INFO::*** Extracting Feature Importance ***
+2025-09-25 14:39:20.186064 INFO::*** Extracting Feature Importance ***
+2025-09-25 14:39:42.197971 INFO::Selecting features...
+2025-09-25 14:39:46.224097 INFO::Selecting features...
+2025-09-25 14:39:48.523056 INFO::Selecting features...
+2025-09-25 14:39:52.833607 INFO::Selecting features...
+2025-09-25 14:39:54.585407 INFO::Selecting features...
+2025-09-25 14:39:56.02239 INFO::Selecting features...
+2025-09-25 14:40:07.548389 INFO::Selecting features...
+2025-09-25 14:40:07.915519 INFO::Selecting features...
+2025-09-25 14:40:08.104467 INFO::Selecting features...
+2025-09-25 14:40:08.295515 INFO::Selecting features...
+2025-09-25 14:40:08.52305 INFO::Selecting features...
+2025-09-25 14:40:09.878132 INFO::Selecting features...
+2025-09-25 14:40:10.123281 INFO::Selecting features...
+2025-09-25 14:40:10.298393 INFO::Selecting features...
+2025-09-25 14:40:10.495925 INFO::Selecting features...
+2025-09-25 14:40:10.659398 INFO::Selecting features...
+2025-09-25 14:40:10.858952 INFO::Selecting features...
+2025-09-25 14:40:11.568312 INFO::Selecting features...
+2025-09-25 14:40:18.57558 INFO::Selecting features...
+2025-09-25 14:40:33.317703 INFO::*** Generating Forecasts ***
+2025-09-25 14:40:33.318682 INFO::Method(s): Naive
+2025-09-25 14:40:33.319129 INFO::Initial Split
+2025-09-25 14:40:33.36367 INFO::Future Frame
+2025-09-25 14:40:33.382467 INFO::Modeltime Table
+2025-09-25 14:40:33.395305 INFO::*** Fitting Algorithm ***
+2025-09-25 14:40:33.39599 INFO::Method(s): Naive
+2025-09-25 14:40:33.396679 INFO::Initial Split
+2025-09-25 14:40:33.437364 INFO::Recipe Specification
+2025-09-25 14:40:33.439317 INFO::Using default recipe specification
+2025-09-25 14:40:33.442146 INFO::Model Specification
+2025-09-25 14:40:33.443157 INFO::Workflow Specification
+2025-09-25 14:40:33.444041 INFO::Fitting
+2025-09-25 14:40:33.47682 INFO::Calibration
+2025-09-25 14:40:33.536444 INFO::Residuals
+2025-09-25 14:40:33.550637 INFO::Accuracy Evaluation
+2025-09-25 14:40:33.732565 INFO::Test Forecasting
+2025-09-25 14:40:33.811167 INFO::Refitting
+2025-09-25 14:40:33.837659 INFO::Out-of-Sample Forecasting
+2025-09-25 14:40:35.7368 INFO::Back-transforming residuals results..
+2025-09-25 14:40:35.738925 INFO::Back-transforming forecast test results..
+2025-09-25 14:40:35.759212 INFO::Back-transforming forecast oos results..
+2025-09-25 14:40:35.759857 INFO::Back-transforming forecast accuracy results..
+2025-09-25 14:40:35.782006 INFO::Back transforming accuracy table...
+2025-09-25 14:40:40.490023 INFO::*** Generating Forecasts ***
+2025-09-25 14:40:40.491315 INFO::Method(s): Seasonal Naive
+2025-09-25 14:40:40.4921 INFO::Initial Split
+2025-09-25 14:40:40.539058 INFO::Future Frame
+2025-09-25 14:40:40.560292 INFO::Modeltime Table
+2025-09-25 14:40:40.566996 INFO::*** Fitting Algorithm ***
+2025-09-25 14:40:40.567705 INFO::Method(s): Seasonal Naive
+2025-09-25 14:40:40.570652 INFO::Initial Split
+2025-09-25 14:40:40.634675 INFO::Recipe Specification
+2025-09-25 14:40:40.64414 INFO::Using default recipe specification
+2025-09-25 14:40:40.647178 INFO::Model Specification
+2025-09-25 14:40:40.719021 INFO::Workflow Specification
+2025-09-25 14:40:40.720127 INFO::Fitting
+2025-09-25 14:40:40.759711 INFO::Calibration
+2025-09-25 14:40:40.797336 INFO::Residuals
+2025-09-25 14:40:40.811353 INFO::Accuracy Evaluation
+2025-09-25 14:40:40.968934 INFO::Test Forecasting
+2025-09-25 14:40:41.064818 INFO::Refitting
+2025-09-25 14:40:41.123799 INFO::Out-of-Sample Forecasting
+2025-09-25 14:40:44.738659 INFO::*** Generating Forecasts ***
+2025-09-25 14:40:44.739827 INFO::Method(s): Rolling Average
+2025-09-25 14:40:44.740587 INFO::Initial Split
+2025-09-25 14:40:44.791722 INFO::Future Frame
+2025-09-25 14:40:44.814472 INFO::Modeltime Table
+2025-09-25 14:40:44.821064 INFO::*** Fitting Algorithm ***
+2025-09-25 14:40:44.821695 INFO::Method(s): Rolling Average
+2025-09-25 14:40:44.822258 INFO::Initial Split
+2025-09-25 14:40:44.86054 INFO::Recipe Specification
+2025-09-25 14:40:44.86253 INFO::Using default recipe specification
+2025-09-25 14:40:44.865474 INFO::Model Specification
+2025-09-25 14:40:44.866874 INFO::Workflow Specification
+2025-09-25 14:40:44.867834 INFO::Fitting
+2025-09-25 14:40:44.904781 INFO::Calibration
+2025-09-25 14:40:44.941323 INFO::Residuals
+2025-09-25 14:40:44.954345 INFO::Accuracy Evaluation
+2025-09-25 14:40:45.156541 INFO::Test Forecasting
+2025-09-25 14:40:45.210805 INFO::Refitting
+2025-09-25 14:40:45.238733 INFO::Out-of-Sample Forecasting
+2025-09-25 14:40:48.01645 INFO::*** Generating Forecasts ***
+2025-09-25 14:40:48.017757 INFO::Method(s): ETS
+2025-09-25 14:40:48.018585 INFO::Initial Split
+2025-09-25 14:40:48.061016 INFO::Future Frame
+2025-09-25 14:40:48.082154 INFO::Modeltime Table
+2025-09-25 14:40:48.088735 INFO::*** Fitting Algorithm ***
+2025-09-25 14:40:48.089367 INFO::Method(s): ETS
+2025-09-25 14:40:48.089968 INFO::Initial Split
+2025-09-25 14:40:48.129443 INFO::Recipe Specification
+2025-09-25 14:40:48.131486 INFO::Using default recipe specification
+2025-09-25 14:40:48.134416 INFO::Model Specification
+2025-09-25 14:40:48.135781 INFO::Workflow Specification
+2025-09-25 14:40:48.1367 INFO::Fitting
+2025-09-25 14:40:48.588303 INFO::Calibration
+2025-09-25 14:40:48.647646 INFO::Residuals
+2025-09-25 14:40:48.665456 INFO::Accuracy Evaluation
+2025-09-25 14:40:48.782667 INFO::Test Forecasting
+2025-09-25 14:40:48.852336 INFO::Refitting
+2025-09-25 14:40:49.300184 INFO::Out-of-Sample Forecasting
+2025-09-25 14:40:52.411878 INFO::*** Generating Forecasts ***
+2025-09-25 14:40:52.413236 INFO::Method(s): Theta
+2025-09-25 14:40:52.414068 INFO::Initial Split
+2025-09-25 14:40:52.458961 INFO::Future Frame
+2025-09-25 14:40:52.480197 INFO::Modeltime Table
+2025-09-25 14:40:52.487417 INFO::*** Fitting Algorithm ***
+2025-09-25 14:40:52.488179 INFO::Method(s): Theta
+2025-09-25 14:40:52.488806 INFO::Initial Split
+2025-09-25 14:40:52.773083 INFO::Recipe Specification
+2025-09-25 14:40:52.775317 INFO::Using default recipe specification
+2025-09-25 14:40:52.778405 INFO::Model Specification
+2025-09-25 14:40:52.779373 INFO::Workflow Specification
+2025-09-25 14:40:52.780266 INFO::Fitting
+2025-09-25 14:40:52.807197 INFO::Calibration
+2025-09-25 14:40:52.843203 INFO::Residuals
+2025-09-25 14:40:52.856361 INFO::Accuracy Evaluation
+2025-09-25 14:40:52.948225 INFO::Test Forecasting
+2025-09-25 14:40:53.011572 INFO::Refitting
+2025-09-25 14:40:53.039201 INFO::Out-of-Sample Forecasting
+2025-09-25 14:40:55.801759 INFO::*** Generating Forecasts ***
+2025-09-25 14:40:55.802833 INFO::Method(s): SARIMA
+2025-09-25 14:40:55.803458 INFO::Initial Split
+2025-09-25 14:40:55.848017 INFO::Future Frame
+2025-09-25 14:40:55.867027 INFO::Modeltime Table
+2025-09-25 14:40:55.872919 INFO::*** Fitting Algorithm ***
+2025-09-25 14:40:55.873455 INFO::Method(s): SARIMA
+2025-09-25 14:40:55.873988 INFO::Initial Split
+2025-09-25 14:40:55.912338 INFO::Recipe Specification
+2025-09-25 14:40:55.914324 INFO::Using default recipe specification
+2025-09-25 14:40:55.917291 INFO::Model Specification
+2025-09-25 14:40:55.918716 INFO::Workflow Specification
+2025-09-25 14:40:55.919599 INFO::Fitting
+2025-09-25 14:40:56.439468 INFO::Calibration
+2025-09-25 14:40:56.485847 INFO::Residuals
+2025-09-25 14:40:56.502363 INFO::Accuracy Evaluation
+2025-09-25 14:40:56.60795 INFO::Test Forecasting
+2025-09-25 14:40:56.66601 INFO::Refitting
+2025-09-25 14:40:57.612861 INFO::Out-of-Sample Forecasting
+2025-09-25 14:41:00.49154 INFO::*** Generating Forecasts ***
+2025-09-25 14:41:00.492608 INFO::Method(s): TBATS
+2025-09-25 14:41:00.493234 INFO::Initial Split
+2025-09-25 14:41:00.542475 INFO::Future Frame
+2025-09-25 14:41:00.562663 INFO::Modeltime Table
+2025-09-25 14:41:00.5691 INFO::*** Fitting Algorithm ***
+2025-09-25 14:41:00.569856 INFO::Method(s): TBATS
+2025-09-25 14:41:00.570525 INFO::Initial Split
+2025-09-25 14:41:00.612776 INFO::Recipe Specification
+2025-09-25 14:41:00.614706 INFO::Using default recipe specification
+2025-09-25 14:41:00.617543 INFO::Model Specification
+2025-09-25 14:41:00.618869 INFO::Workflow Specification
+2025-09-25 14:41:00.619739 INFO::Fitting
+2025-09-25 14:41:02.610495 INFO::Calibration
+2025-09-25 14:41:02.651536 INFO::Residuals
+2025-09-25 14:41:02.664886 INFO::Accuracy Evaluation
+2025-09-25 14:41:02.765177 INFO::Test Forecasting
+2025-09-25 14:41:02.817448 INFO::Refitting
+2025-09-25 14:41:04.163108 INFO::Out-of-Sample Forecasting
+2025-09-25 14:41:06.935247 INFO::*** Generating Forecasts ***
+2025-09-25 14:41:06.93664 INFO::Method(s): STLM
+2025-09-25 14:41:06.937474 INFO::Initial Split
+2025-09-25 14:41:06.982098 INFO::Future Frame
+2025-09-25 14:41:07.000969 INFO::Modeltime Table
+2025-09-25 14:41:07.007 INFO::*** Fitting Algorithm ***
+2025-09-25 14:41:07.00758 INFO::Method(s): STLM
+2025-09-25 14:41:07.008177 INFO::Initial Split
+2025-09-25 14:41:07.046459 INFO::Recipe Specification
+2025-09-25 14:41:07.048426 INFO::Using default recipe specification
+2025-09-25 14:41:07.051399 INFO::Model Specification
+2025-09-25 14:41:07.052901 INFO::Workflow Specification
+2025-09-25 14:41:07.053817 INFO::Fitting
+2025-09-25 14:41:07.10284 INFO::Calibration
+2025-09-25 14:41:07.141196 INFO::Residuals
+2025-09-25 14:41:07.16618 INFO::Accuracy Evaluation
+2025-09-25 14:41:07.260809 INFO::Test Forecasting
+2025-09-25 14:41:07.318099 INFO::Refitting
+2025-09-25 14:41:07.363772 INFO::Out-of-Sample Forecasting
+2025-09-25 14:41:11.462884 INFO::*** Generating Forecasts ***
+2025-09-25 14:41:11.464359 INFO::Method(s): Prophet
+2025-09-25 14:41:11.465233 INFO::Initial Split
+2025-09-25 14:41:11.508349 INFO::Future Frame
+2025-09-25 14:41:11.527511 INFO::Modeltime Table
+2025-09-25 14:41:11.534189 INFO::*** Fitting Algorithm ***
+2025-09-25 14:41:11.535007 INFO::Method(s): Prophet
+2025-09-25 14:41:11.535633 INFO::Initial Split
+2025-09-25 14:41:11.574448 INFO::Recipe Specification
+2025-09-25 14:41:11.576362 INFO::Using default recipe specification
+2025-09-25 14:41:11.579167 INFO::Model Specification
+2025-09-25 14:41:11.580618 INFO::Workflow Specification
+2025-09-25 14:41:11.581543 INFO::Fitting
+2025-09-25 14:41:12.268106 INFO::Calibration
+2025-09-25 14:41:12.313256 INFO::Residuals
+2025-09-25 14:41:12.326326 INFO::Accuracy Evaluation
+2025-09-25 14:41:12.423459 INFO::Test Forecasting
+2025-09-25 14:41:12.484748 INFO::Refitting
+2025-09-25 14:41:12.605499 INFO::Out-of-Sample Forecasting
+2025-09-25 14:41:15.910523 INFO::*** Generating Forecasts ***
+2025-09-25 14:41:15.911418 INFO::Method(s): Linear Regression
+2025-09-25 14:41:15.912012 INFO::Initial Split
+2025-09-25 14:41:15.95724 INFO::Future Frame
+2025-09-25 14:41:15.975863 INFO::Modeltime Table
+2025-09-25 14:41:15.982035 INFO::*** Fitting Algorithm ***
+2025-09-25 14:41:15.982617 INFO::Method(s): Linear Regression
+2025-09-25 14:41:15.983164 INFO::Initial Split
+2025-09-25 14:41:16.02511 INFO::Recipe Specification
+2025-09-25 14:41:16.027095 INFO::Using default recipe specification
+2025-09-25 14:41:16.030826 INFO::Model Specification
+2025-09-25 14:41:16.031744 INFO::Workflow Specification
+2025-09-25 14:41:16.032692 INFO::Fitting
+2025-09-25 14:41:16.127646 INFO::Calibration
+2025-09-25 14:41:16.325422 INFO::Residuals
+2025-09-25 14:41:16.552277 INFO::Accuracy Evaluation
+2025-09-25 14:41:17.034797 INFO::Test Forecasting
+2025-09-25 14:41:17.253938 INFO::Refitting
+2025-09-25 14:41:17.331707 INFO::Out-of-Sample Forecasting
+2025-09-25 14:41:20.658915 INFO::*** Generating Forecasts ***
+2025-09-25 14:41:20.660359 INFO::Method(s): MARS
+2025-09-25 14:41:20.661234 INFO::Initial Split
+2025-09-25 14:41:20.722527 INFO::Future Frame
+2025-09-25 14:41:20.740605 INFO::Modeltime Table
+2025-09-25 14:41:20.746637 INFO::*** Fitting Algorithm ***
+2025-09-25 14:41:20.747282 INFO::Method(s): MARS
+2025-09-25 14:41:20.747849 INFO::Initial Split
+2025-09-25 14:41:20.78746 INFO::Recipe Specification
+2025-09-25 14:41:20.789469 INFO::Using default recipe specification
+2025-09-25 14:41:20.793005 INFO::Model Specification
+2025-09-25 14:41:20.794824 INFO::Workflow Specification
+2025-09-25 14:41:20.795891 INFO::Fitting
+2025-09-25 14:41:20.955379 INFO::Calibration
+2025-09-25 14:41:21.114774 INFO::Residuals
+2025-09-25 14:41:21.324521 INFO::Accuracy Evaluation
+2025-09-25 14:41:21.707394 INFO::Test Forecasting
+2025-09-25 14:41:21.874171 INFO::Refitting
+2025-09-25 14:41:21.973303 INFO::Out-of-Sample Forecasting
+2025-09-25 14:41:25.065124 INFO::*** Generating Forecasts ***
+2025-09-25 14:41:25.066344 INFO::Method(s): Elastic Net
+2025-09-25 14:41:25.067148 INFO::Initial Split
+2025-09-25 14:41:25.112703 INFO::Future Frame
+2025-09-25 14:41:25.132489 INFO::Modeltime Table
+2025-09-25 14:41:25.13886 INFO::*** Fitting Algorithm ***
+2025-09-25 14:41:25.139422 INFO::Method(s): Elastic Net
+2025-09-25 14:41:25.139952 INFO::Initial Split
+2025-09-25 14:41:25.191159 INFO::Recipe Specification
+2025-09-25 14:41:25.193118 INFO::Using default recipe specification
+2025-09-25 14:41:25.196637 INFO::Model Specification
+2025-09-25 14:41:25.198183 INFO::Workflow Specification
+2025-09-25 14:41:25.199214 INFO::Fitting
+2025-09-25 14:41:25.285598 INFO::Calibration
+2025-09-25 14:41:25.4498 INFO::Residuals
+2025-09-25 14:41:25.618947 INFO::Accuracy Evaluation
+2025-09-25 14:41:26.015316 INFO::Test Forecasting
+2025-09-25 14:41:26.191422 INFO::Refitting
+2025-09-25 14:41:26.271429 INFO::Out-of-Sample Forecasting
+2025-09-25 14:41:29.63711 INFO::*** Generating Forecasts ***
+2025-09-25 14:41:29.638444 INFO::Method(s): KNN
+2025-09-25 14:41:29.639326 INFO::Initial Split
+2025-09-25 14:41:29.684303 INFO::Future Frame
+2025-09-25 14:41:29.70343 INFO::Modeltime Table
+2025-09-25 14:41:29.70958 INFO::*** Fitting Algorithm ***
+2025-09-25 14:41:29.710213 INFO::Method(s): KNN
+2025-09-25 14:41:29.710788 INFO::Initial Split
+2025-09-25 14:41:29.749827 INFO::Recipe Specification
+2025-09-25 14:41:29.751853 INFO::Using default recipe specification
+2025-09-25 14:41:29.755433 INFO::Model Specification
+2025-09-25 14:41:29.756927 INFO::Workflow Specification
+2025-09-25 14:41:29.758036 INFO::Fitting
+2025-09-25 14:41:29.900019 INFO::Calibration
+2025-09-25 14:41:30.075605 INFO::Residuals
+2025-09-25 14:41:30.246079 INFO::Accuracy Evaluation
+2025-09-25 14:41:30.656341 INFO::Test Forecasting
+2025-09-25 14:41:30.845118 INFO::Refitting
+2025-09-25 14:41:30.928738 INFO::Out-of-Sample Forecasting
+2025-09-25 14:41:34.706239 INFO::*** Generating Forecasts ***
+2025-09-25 14:41:34.707039 INFO::Method(s): SVM
+2025-09-25 14:41:34.707474 INFO::Initial Split
+2025-09-25 14:41:34.773477 INFO::Future Frame
+2025-09-25 14:41:34.794107 INFO::Modeltime Table
+2025-09-25 14:41:34.800519 INFO::*** Fitting Algorithm ***
+2025-09-25 14:41:34.801202 INFO::Method(s): SVM
+2025-09-25 14:41:34.801803 INFO::Initial Split
+2025-09-25 14:41:34.840963 INFO::Recipe Specification
+2025-09-25 14:41:34.84294 INFO::Using default recipe specification
+2025-09-25 14:41:34.846345 INFO::Model Specification
+2025-09-25 14:41:34.848186 INFO::Workflow Specification
+2025-09-25 14:41:34.849202 INFO::Fitting
+2025-09-25 14:41:35.144921 INFO::Calibration
+2025-09-25 14:41:35.425766 INFO::Residuals
+2025-09-25 14:41:35.74398 INFO::Accuracy Evaluation
+2025-09-25 14:41:36.137125 INFO::Test Forecasting
+2025-09-25 14:41:36.318017 INFO::Refitting
+2025-09-25 14:41:36.760874 INFO::Out-of-Sample Forecasting
+2025-09-25 14:41:40.285227 INFO::*** Generating Forecasts ***
+2025-09-25 14:41:40.286563 INFO::Method(s): Random Forest
+2025-09-25 14:41:40.287342 INFO::Initial Split
+2025-09-25 14:41:40.333661 INFO::Future Frame
+2025-09-25 14:41:40.354097 INFO::Modeltime Table
+2025-09-25 14:41:40.360198 INFO::*** Fitting Algorithm ***
+2025-09-25 14:41:40.360751 INFO::Method(s): Random Forest
+2025-09-25 14:41:40.361274 INFO::Initial Split
+2025-09-25 14:41:40.413311 INFO::Recipe Specification
+2025-09-25 14:41:40.415987 INFO::Using default recipe specification
+2025-09-25 14:41:40.420871 INFO::Model Specification
+2025-09-25 14:41:40.423106 INFO::Workflow Specification
+2025-09-25 14:41:40.424231 INFO::Fitting
+2025-09-25 14:41:40.571003 INFO::Calibration
+2025-09-25 14:41:40.742395 INFO::Residuals
+2025-09-25 14:41:40.960074 INFO::Accuracy Evaluation
+2025-09-25 14:41:41.380327 INFO::Test Forecasting
+2025-09-25 14:41:41.572001 INFO::Refitting
+2025-09-25 14:41:41.715111 INFO::Out-of-Sample Forecasting
+2025-09-25 14:41:45.023498 INFO::*** Generating Forecasts ***
+2025-09-25 14:41:45.024934 INFO::Method(s): Boosted Trees
+2025-09-25 14:41:45.0258 INFO::Initial Split
+2025-09-25 14:41:45.071573 INFO::Future Frame
+2025-09-25 14:41:45.090254 INFO::Modeltime Table
+2025-09-25 14:41:45.09618 INFO::*** Fitting Algorithm ***
+2025-09-25 14:41:45.096874 INFO::Method(s): Boosted Trees
+2025-09-25 14:41:45.097432 INFO::Initial Split
+2025-09-25 14:41:45.136313 INFO::Recipe Specification
+2025-09-25 14:41:45.138274 INFO::Using default recipe specification
+2025-09-25 14:41:45.141801 INFO::Model Specification
+2025-09-25 14:41:45.144768 INFO::Workflow Specification
+2025-09-25 14:41:45.145781 INFO::Fitting
+2025-09-25 14:41:45.335958 INFO::Calibration
+2025-09-25 14:41:45.487659 INFO::Residuals
+2025-09-25 14:41:45.656902 INFO::Accuracy Evaluation
+2025-09-25 14:41:46.021626 INFO::Test Forecasting
+2025-09-25 14:41:46.193933 INFO::Refitting
+2025-09-25 14:41:46.379521 INFO::Out-of-Sample Forecasting
+2025-09-25 14:41:49.473443 INFO::*** Generating Forecasts ***
+2025-09-25 14:41:49.474843 INFO::Method(s): Cubist
+2025-09-25 14:41:49.475689 INFO::Initial Split
+2025-09-25 14:41:49.523934 INFO::Future Frame
+2025-09-25 14:41:49.545374 INFO::Modeltime Table
+2025-09-25 14:41:49.551943 INFO::*** Fitting Algorithm ***
+2025-09-25 14:41:49.55262 INFO::Method(s): Cubist
+2025-09-25 14:41:49.553225 INFO::Initial Split
+2025-09-25 14:41:49.591315 INFO::Recipe Specification
+2025-09-25 14:41:49.593227 INFO::Using default recipe specification
+2025-09-25 14:41:49.596694 INFO::Model Specification
+2025-09-25 14:41:49.598395 INFO::Workflow Specification
+2025-09-25 14:42:34.091038 INFO::*** Generating Forecasts ***
+2025-09-25 14:42:34.092524 INFO::Method(s): Feed-Forward
+2025-09-25 14:42:34.093353 INFO::Initial Split
+2025-09-25 14:42:34.134534 INFO::Future Frame
+2025-09-25 14:42:34.154622 INFO::Modeltime Table
+2025-09-25 14:42:34.160903 INFO::*** Fitting Algorithm ***
+2025-09-25 14:42:34.161466 INFO::Method(s): Feed-Forward
+2025-09-25 14:42:34.162014 INFO::Initial Split
+2025-09-25 14:42:34.201299 INFO::Recipe Specification
+2025-09-25 14:42:34.20352 INFO::Using default recipe specification
+2025-09-25 14:42:34.207182 INFO::Model Specification
+2025-09-25 14:42:34.209331 INFO::Workflow Specification
+2025-09-25 14:42:34.210329 INFO::Fitting
+2025-09-25 14:42:34.295916 INFO::Calibration
+2025-09-25 14:42:34.451483 INFO::Residuals
+2025-09-25 14:42:34.612099 INFO::Accuracy Evaluation
+2025-09-25 14:42:35.076597 INFO::Test Forecasting
+2025-09-25 14:42:35.262446 INFO::Refitting
+2025-09-25 14:42:35.346661 INFO::Out-of-Sample Forecasting
+2025-09-25 14:42:39.09133 INFO::*** Generating Forecasts ***
+2025-09-25 14:42:39.092195 INFO::Method(s): Feed-Forward AR
+2025-09-25 14:42:39.092747 INFO::Initial Split
+2025-09-25 14:42:39.141061 INFO::Future Frame
+2025-09-25 14:42:39.16253 INFO::Modeltime Table
+2025-09-25 14:42:39.16918 INFO::*** Fitting Algorithm ***
+2025-09-25 14:42:39.169797 INFO::Method(s): Feed-Forward AR
+2025-09-25 14:42:39.170376 INFO::Initial Split
+2025-09-25 14:42:39.211472 INFO::Recipe Specification
+2025-09-25 14:42:39.213852 INFO::Using default recipe specification
+2025-09-25 14:42:39.217968 INFO::Model Specification
+2025-09-25 14:42:39.220707 INFO::Workflow Specification
+2025-09-25 14:42:39.221922 INFO::Fitting
+2025-09-25 14:42:39.849223 INFO::Calibration
+2025-09-25 14:42:40.026459 INFO::Residuals
+2025-09-25 14:42:40.039766 INFO::Accuracy Evaluation
+2025-09-25 14:42:40.2824 INFO::Test Forecasting
+2025-09-25 14:42:40.476474 INFO::Refitting
+2025-09-25 14:42:41.226351 INFO::Out-of-Sample Forecasting
+2025-09-25 14:42:44.705571 INFO::*** Generating Forecasts ***
+2025-09-25 14:42:44.706878 INFO::Method(s): ARIMA-Boost
+2025-09-25 14:42:44.707599 INFO::Initial Split
+2025-09-25 14:42:44.751761 INFO::Future Frame
+2025-09-25 14:42:44.773706 INFO::Modeltime Table
+2025-09-25 14:42:44.780424 INFO::*** Fitting Algorithm ***
+2025-09-25 14:42:44.78103 INFO::Method(s): ARIMA-Boost
+2025-09-25 14:42:44.78161 INFO::Initial Split
+2025-09-25 14:42:44.820356 INFO::Recipe Specification
+2025-09-25 14:42:44.82236 INFO::Using default recipe specification
+2025-09-25 14:42:44.825731 INFO::Model Specification
+2025-09-25 14:42:44.82832 INFO::Workflow Specification
+2025-09-25 14:42:44.829316 INFO::Fitting
+2025-09-25 14:42:45.471455 INFO::Calibration
+2025-09-25 14:42:45.656372 INFO::Residuals
+2025-09-25 14:42:45.669703 INFO::Accuracy Evaluation
+2025-09-25 14:42:45.882957 INFO::Test Forecasting
+2025-09-25 14:42:46.076368 INFO::Refitting
+2025-09-25 14:42:47.140503 INFO::Out-of-Sample Forecasting
+2025-09-25 14:42:51.080827 INFO::*** Generating Forecasts ***
+2025-09-25 14:42:51.082333 INFO::Method(s): Prophet-Boost
+2025-09-25 14:42:51.083218 INFO::Initial Split
+2025-09-25 14:42:51.129561 INFO::Future Frame
+2025-09-25 14:42:51.150219 INFO::Modeltime Table
+2025-09-25 14:42:51.157102 INFO::*** Fitting Algorithm ***
+2025-09-25 14:42:51.157906 INFO::Method(s): Prophet-Boost
+2025-09-25 14:42:51.158573 INFO::Initial Split
+2025-09-25 14:42:51.198675 INFO::Recipe Specification
+2025-09-25 14:42:51.20066 INFO::Using default recipe specification
+2025-09-25 14:42:51.203987 INFO::Model Specification
+2025-09-25 14:42:51.206782 INFO::Workflow Specification
+2025-09-25 14:42:51.207995 INFO::Fitting
+2025-09-25 14:42:51.398978 INFO::Calibration
+2025-09-25 14:42:51.580743 INFO::Residuals
+2025-09-25 14:42:51.59481 INFO::Accuracy Evaluation
+2025-09-25 14:42:51.849345 INFO::Test Forecasting
+2025-09-25 14:42:52.066785 INFO::Refitting
+2025-09-25 14:42:52.257598 INFO::Out-of-Sample Forecasting
+2025-09-25 14:43:02.091252 INFO::*** Generating Forecasts ***
+2025-09-25 14:43:02.092967 INFO::Method(s): H2O AutoML
+2025-09-25 14:43:02.093967 INFO::Initial Split
+2025-09-25 14:43:02.147788 INFO::Future Frame
+2025-09-25 14:43:02.192072 INFO::Modeltime Table
+2025-09-25 14:43:02.2028 INFO::*** Fitting Algorithm ***
+2025-09-25 14:43:02.203892 INFO::Method(s): H2O AutoML
+2025-09-25 14:43:02.204735 INFO::Initial Split
+2025-09-25 14:43:02.250112 INFO::Recipe Specification
+2025-09-25 14:43:02.252031 INFO::Using default recipe specification
+2025-09-25 14:43:02.255561 INFO::Model Specification
+2025-09-25 14:43:02.386467 INFO::Workflow Specification
+2025-09-25 14:43:02.38759 INFO::Fitting
+2025-09-25 14:44:05.925884 INFO::Getting Air Passengers data...
+2025-09-25 14:44:06.503113 INFO::Hypothesis testing...
+2025-09-25 14:44:06.505556 INFO::Normality Tests
+2025-09-25 14:44:06.506701 INFO::Autocorrelation Tests
+2025-09-25 14:44:06.507792 INFO::Stationarity Tests
+2025-09-25 14:44:17.776295 INFO::*** Generating Forecasts ***
+2025-09-25 14:44:17.778314 INFO::Method(s): H2O AutoML
+2025-09-25 14:44:17.779377 INFO::Initial Split
+2025-09-25 14:44:17.823707 INFO::Future Frame
+2025-09-25 14:44:17.842266 INFO::Modeltime Table
+2025-09-25 14:44:17.848091 INFO::*** Fitting Algorithm ***
+2025-09-25 14:44:17.84864 INFO::Method(s): H2O AutoML
+2025-09-25 14:44:17.849265 INFO::Initial Split
+2025-09-25 14:44:17.886205 INFO::Recipe Specification
+2025-09-25 14:44:17.888149 INFO::Using default recipe specification
+2025-09-25 14:44:17.901532 INFO::Model Specification
+2025-09-25 14:44:17.904484 INFO::Workflow Specification
+2025-09-25 14:44:17.905873 INFO::Fitting
+2025-09-25 14:44:55.547918 INFO::Calibration
+2025-09-25 14:44:56.344306 INFO::Residuals
+2025-09-25 14:44:56.3569 INFO::Accuracy Evaluation
+2025-09-25 14:44:56.926677 INFO::Test Forecasting
+2025-09-25 14:44:57.446954 INFO::Refitting
+2025-09-25 14:45:38.201795 INFO::Out-of-Sample Forecasting
+2025-09-25 14:46:12.652399 INFO::Getting Air Passengers data...
+2025-09-25 14:46:13.402889 INFO::Hypothesis testing...
+2025-09-25 14:46:13.405321 INFO::Normality Tests
+2025-09-25 14:46:13.406419 INFO::Autocorrelation Tests
+2025-09-25 14:46:13.407569 INFO::Stationarity Tests
+2025-09-25 14:46:17.654365 INFO::*** Generating Forecasts ***
+2025-09-25 14:46:17.65584 INFO::Method(s): Cubist
+2025-09-25 14:46:17.656584 INFO::Initial Split
+2025-09-25 14:46:17.700936 INFO::Future Frame
+2025-09-25 14:46:17.718992 INFO::Modeltime Table
+2025-09-25 14:46:17.725114 INFO::*** Fitting Algorithm ***
+2025-09-25 14:46:17.725689 INFO::Method(s): Cubist
+2025-09-25 14:46:17.726275 INFO::Initial Split
+2025-09-25 14:46:17.776973 INFO::Recipe Specification
+2025-09-25 14:46:17.779785 INFO::Using default recipe specification
+2025-09-25 14:46:17.784035 INFO::Model Specification
+2025-09-25 14:46:17.785742 INFO::Workflow Specification
+2025-09-25 14:46:27.775311 INFO::*** Generating Forecasts ***
+2025-09-25 14:46:27.776406 INFO::Method(s): Cubist
+2025-09-25 14:46:27.776865 INFO::Initial Split
+2025-09-25 14:46:27.81971 INFO::Future Frame
+2025-09-25 14:46:27.849445 INFO::Modeltime Table
+2025-09-25 14:46:27.858947 INFO::*** Fitting Algorithm ***
+2025-09-25 14:46:27.859795 INFO::Method(s): Cubist
+2025-09-25 14:46:27.860618 INFO::Initial Split
+2025-09-25 14:46:27.901515 INFO::Recipe Specification
+2025-09-25 14:46:27.90342 INFO::Using default recipe specification
+2025-09-25 14:46:27.906732 INFO::Model Specification
+2025-09-25 14:46:27.907941 INFO::Workflow Specification
+2025-09-25 14:47:24.350338 INFO::Getting Air Passengers data...
+2025-09-25 14:47:25.108422 INFO::Hypothesis testing...
+2025-09-25 14:47:25.134631 INFO::Normality Tests
+2025-09-25 14:47:25.166117 INFO::Autocorrelation Tests
+2025-09-25 14:47:25.16737 INFO::Stationarity Tests
+2025-09-25 14:47:37.552572 INFO::*** Generating Forecasts ***
+2025-09-25 14:47:37.553586 INFO::Method(s): Cubist
+2025-09-25 14:47:37.554058 INFO::Initial Split
+2025-09-25 14:47:37.599886 INFO::Future Frame
+2025-09-25 14:47:37.619549 INFO::Modeltime Table
+2025-09-25 14:47:37.633374 INFO::*** Fitting Algorithm ***
+2025-09-25 14:47:37.634023 INFO::Method(s): Cubist
+2025-09-25 14:47:37.634725 INFO::Initial Split
+2025-09-25 14:47:37.68485 INFO::Recipe Specification
+2025-09-25 14:47:37.706075 INFO::Using default recipe specification
+2025-09-25 14:47:37.710144 INFO::Model Specification
+2025-09-25 14:47:37.712324 INFO::Workflow Specification
+2025-09-25 14:48:12.370451 INFO::Getting Air Passengers data...
+2025-09-25 14:48:13.126979 INFO::Hypothesis testing...
+2025-09-25 14:48:13.153468 INFO::Normality Tests
+2025-09-25 14:48:13.185295 INFO::Autocorrelation Tests
+2025-09-25 14:48:13.186595 INFO::Stationarity Tests
+2025-09-25 14:48:18.358385 INFO::*** Generating Forecasts ***
+2025-09-25 14:48:18.359361 INFO::Method(s): Naive
+2025-09-25 14:48:18.359773 INFO::Initial Split
+2025-09-25 14:48:18.403122 INFO::Future Frame
+2025-09-25 14:48:18.42171 INFO::Modeltime Table
+2025-09-25 14:48:18.43429 INFO::*** Fitting Algorithm ***
+2025-09-25 14:48:18.434919 INFO::Method(s): Naive
+2025-09-25 14:48:18.435582 INFO::Initial Split
+2025-09-25 14:48:18.480224 INFO::Recipe Specification
+2025-09-25 14:48:18.50106 INFO::Using default recipe specification
+2025-09-25 14:48:18.504244 INFO::Model Specification
+2025-09-25 14:48:18.505709 INFO::Workflow Specification
+2025-09-25 14:48:18.507525 INFO::Fitting
+2025-09-25 14:48:18.553852 INFO::Calibration
+2025-09-25 14:48:18.5944 INFO::Residuals
+2025-09-25 14:48:18.608338 INFO::Accuracy Evaluation
+2025-09-25 14:48:18.933678 INFO::Test Forecasting
+2025-09-25 14:48:18.991132 INFO::Refitting
+2025-09-25 14:48:19.01701 INFO::Out-of-Sample Forecasting
+2025-09-25 14:48:27.068303 INFO::*** Generating Forecasts ***
+2025-09-25 14:48:27.070167 INFO::Method(s): Cubist
+2025-09-25 14:48:27.071177 INFO::Initial Split
+2025-09-25 14:48:27.122082 INFO::Future Frame
+2025-09-25 14:48:27.14367 INFO::Modeltime Table
+2025-09-25 14:48:27.150187 INFO::*** Fitting Algorithm ***
+2025-09-25 14:48:27.150831 INFO::Method(s): Cubist
+2025-09-25 14:48:27.153877 INFO::Initial Split
+2025-09-25 14:48:27.199995 INFO::Recipe Specification
+2025-09-25 14:48:27.210704 INFO::Using default recipe specification
+2025-09-25 14:48:27.2145 INFO::Model Specification
+2025-09-25 14:48:27.286213 INFO::Workflow Specification
+2025-09-25 14:48:27.287353 INFO::Fitting
+2025-09-25 14:48:27.413574 INFO::Calibration
+2025-09-25 14:48:27.569989 INFO::Residuals
+2025-09-25 14:48:27.743705 INFO::Accuracy Evaluation
+2025-09-25 14:48:28.14049 INFO::Test Forecasting
+2025-09-25 14:48:28.31597 INFO::Refitting
+2025-09-25 14:48:28.418347 INFO::Out-of-Sample Forecasting
+2025-09-25 14:49:24.282196 INFO::*** Generating Forecasts ***
+2025-09-25 14:49:24.284101 INFO::Method(s): Elastic Net
+2025-09-25 14:49:24.285151 INFO::Initial Split
+2025-09-25 14:49:24.527038 INFO::Future Frame
+2025-09-25 14:49:24.544491 INFO::Modeltime Table
+2025-09-25 14:49:24.562249 INFO::*** Tuning Algorithm ***
+2025-09-25 14:49:24.562899 INFO::Method(s): Elastic Net
+2025-09-25 15:43:06.89479 INFO::Getting Air Passengers data...
+2025-09-25 15:43:07.668978 INFO::Hypothesis testing...
+2025-09-25 15:43:07.695995 INFO::Normality Tests
+2025-09-25 15:43:07.728261 INFO::Autocorrelation Tests
+2025-09-25 15:43:07.729548 INFO::Stationarity Tests
+2025-09-25 15:43:38.304966 INFO::Getting Air Passengers data...
+2025-09-25 15:43:39.103412 INFO::Hypothesis testing...
+2025-09-25 15:43:39.13174 INFO::Normality Tests
+2025-09-25 15:43:39.16362 INFO::Autocorrelation Tests
+2025-09-25 15:43:39.164887 INFO::Stationarity Tests
+2025-09-25 15:43:45.613865 INFO::*** Generating Forecasts ***
+2025-09-25 15:43:45.614825 INFO::Method(s): Elastic Net
+2025-09-25 15:43:45.615275 INFO::Initial Split
+2025-09-25 15:43:45.659889 INFO::Future Frame
+2025-09-25 15:43:45.678334 INFO::Modeltime Table
+2025-09-25 15:43:45.70033 INFO::*** Tuning Algorithm ***
+2025-09-25 15:43:45.701495 INFO::Method(s): Elastic Net
+2025-09-25 15:43:45.719078 INFO::Initial Split
+2025-09-25 15:43:45.758557 INFO::Validation Split
+2025-09-25 15:43:45.803039 INFO::Recipe Specification
+2025-09-25 15:43:45.823897 INFO::Using default recipe specification
+2025-09-25 15:43:45.827611 INFO::Model Specification
+2025-09-25 15:43:45.828844 INFO::Workflow Specification
+2025-09-25 15:43:45.830592 INFO::Tuning
+2025-09-25 15:45:11.233946 INFO::Getting Air Passengers data...
+2025-09-25 15:45:11.797463 INFO::Hypothesis testing...
+2025-09-25 15:45:11.799812 INFO::Normality Tests
+2025-09-25 15:45:11.800799 INFO::Autocorrelation Tests
+2025-09-25 15:45:11.801891 INFO::Stationarity Tests
+2025-09-25 15:45:29.561576 INFO::*** Generating Forecasts ***
+2025-09-25 15:45:29.562796 INFO::Method(s): ETS, SARIMA, Elastic Net, Random Forest, Feed-Forward, Feed-Forward AR, ARIMA-Boost
+2025-09-25 15:45:29.563287 INFO::Initial Split
+2025-09-25 15:45:29.618671 INFO::Future Frame
+2025-09-25 15:45:29.638164 INFO::Modeltime Table
+2025-09-25 15:45:29.650843 INFO::*** Fitting Algorithm ***
+2025-09-25 15:45:29.65148 INFO::Method(s): ETS
+2025-09-25 15:45:29.652255 INFO::Initial Split
+2025-09-25 15:45:29.692374 INFO::Recipe Specification
+2025-09-25 15:45:29.694426 INFO::Using default recipe specification
+2025-09-25 15:45:29.697453 INFO::Model Specification
+2025-09-25 15:45:29.698933 INFO::Workflow Specification
+2025-09-25 15:45:29.699834 INFO::Fitting
+2025-09-25 15:45:30.195296 INFO::*** Fitting Algorithm ***
+2025-09-25 15:45:30.19591 INFO::Method(s): SARIMA
+2025-09-25 15:45:30.198728 INFO::Initial Split
+2025-09-25 15:45:30.239017 INFO::Recipe Specification
+2025-09-25 15:45:30.24783 INFO::Using default recipe specification
+2025-09-25 15:45:30.250892 INFO::Model Specification
+2025-09-25 15:45:30.344307 INFO::Workflow Specification
+2025-09-25 15:45:30.34536 INFO::Fitting
+2025-09-25 15:45:30.862028 INFO::*** Fitting Algorithm ***
+2025-09-25 15:45:30.86262 INFO::Method(s): Elastic Net
+2025-09-25 15:45:30.863147 INFO::Initial Split
+2025-09-25 15:45:30.901269 INFO::Recipe Specification
+2025-09-25 15:45:30.903255 INFO::Using default recipe specification
+2025-09-25 15:45:30.906926 INFO::Model Specification
+2025-09-25 15:45:30.90865 INFO::Workflow Specification
+2025-09-25 15:45:30.909646 INFO::Fitting
+2025-09-25 15:45:30.998142 INFO::*** Fitting Algorithm ***
+2025-09-25 15:45:30.998696 INFO::Method(s): Random Forest
+2025-09-25 15:45:30.999166 INFO::Initial Split
+2025-09-25 15:45:31.050763 INFO::Recipe Specification
+2025-09-25 15:45:31.052792 INFO::Using default recipe specification
+2025-09-25 15:45:31.056393 INFO::Model Specification
+2025-09-25 15:45:31.058221 INFO::Workflow Specification
+2025-09-25 15:45:31.059153 INFO::Fitting
+2025-09-25 15:45:31.203927 INFO::*** Fitting Algorithm ***
+2025-09-25 15:45:31.204697 INFO::Method(s): Feed-Forward
+2025-09-25 15:45:31.205229 INFO::Initial Split
+2025-09-25 15:45:31.249817 INFO::Recipe Specification
+2025-09-25 15:45:31.253183 INFO::Using default recipe specification
+2025-09-25 15:45:31.258605 INFO::Model Specification
+2025-09-25 15:45:31.261815 INFO::Workflow Specification
+2025-09-25 15:45:31.263022 INFO::Fitting
+2025-09-25 15:45:31.342367 INFO::*** Fitting Algorithm ***
+2025-09-25 15:45:31.34296 INFO::Method(s): Feed-Forward AR
+2025-09-25 15:45:31.34342 INFO::Initial Split
+2025-09-25 15:45:31.380428 INFO::Recipe Specification
+2025-09-25 15:45:31.382441 INFO::Using default recipe specification
+2025-09-25 15:45:31.385725 INFO::Model Specification
+2025-09-25 15:45:31.387998 INFO::Workflow Specification
+2025-09-25 15:45:31.388921 INFO::Fitting
+2025-09-25 15:45:31.987007 INFO::*** Fitting Algorithm ***
+2025-09-25 15:45:31.987595 INFO::Method(s): ARIMA-Boost
+2025-09-25 15:45:31.988082 INFO::Initial Split
+2025-09-25 15:45:32.02589 INFO::Recipe Specification
+2025-09-25 15:45:32.027879 INFO::Using default recipe specification
+2025-09-25 15:45:32.031109 INFO::Model Specification
+2025-09-25 15:45:32.033707 INFO::Workflow Specification
+2025-09-25 15:45:32.034767 INFO::Fitting
+2025-09-25 15:45:32.766007 INFO::Calibration
+2025-09-25 15:45:33.64291 INFO::Residuals
+2025-09-25 15:45:34.154036 INFO::Accuracy Evaluation
+2025-09-25 15:45:35.857545 INFO::Test Forecasting
+2025-09-25 15:45:36.606512 INFO::Refitting
+2025-09-25 15:45:40.169997 INFO::Out-of-Sample Forecasting
+2025-09-25 15:45:45.553489 INFO::Back-transforming residuals results..
+2025-09-25 15:45:45.556558 INFO::Back-transforming forecast test results..
+2025-09-25 15:45:45.57793 INFO::Back-transforming forecast oos results..
+2025-09-25 15:45:45.578647 INFO::Back-transforming forecast accuracy results..
+2025-09-25 15:45:45.601467 INFO::Back transforming accuracy table...
+2025-09-25 15:46:00.07586 INFO::*** Explaining Algorithm ***
+2025-09-25 15:46:00.07725 INFO::Method(s): Elastic Net
+2025-09-25 15:46:00.077852 INFO::Initial Split
+2025-09-25 15:46:00.121412 INFO::Recipe Specification
+2025-09-25 15:46:00.123261 INFO::Using default recipe specification
+2025-09-25 15:46:00.298028 INFO::Model Specification
+2025-09-25 15:46:00.299237 INFO::Workflow Specification
+2025-09-25 15:46:00.300097 INFO::Fitting
+2025-09-25 15:46:00.318073 INFO::Creating Explainer
+2025-09-25 15:46:00.370445 INFO::Explaining Algorithm: feature_importance
+2025-09-25 15:46:02.076959 INFO::Using default recipe specification
+2025-09-25 15:46:02.163756 INFO::Explaining Algorithm: break_down
+2025-09-25 15:46:02.502182 INFO::Explaining Algorithm: variable_response
+2025-09-25 15:46:02.680133 INFO::Using default recipe specification
+2025-09-25 15:46:02.771019 INFO::Explaining Algorithm: local_stability
+2025-09-25 15:46:02.932508 INFO::Explaining Algorithm: break_down
+2025-09-25 15:46:20.106209 INFO::*** Generating Forecasts ***
+2025-09-25 15:46:20.107926 INFO::Method(s): ETS, SARIMA, Linear Regression, SVM, Feed-Forward
+2025-09-25 15:46:20.108869 INFO::Initial Split
+2025-09-25 15:46:20.157838 INFO::Future Frame
+2025-09-25 15:46:20.176871 INFO::Modeltime Table
+2025-09-25 15:46:20.182723 INFO::*** Fitting Algorithm ***
+2025-09-25 15:46:20.183245 INFO::Method(s): ETS
+2025-09-25 15:46:20.183744 INFO::Initial Split
+2025-09-25 15:46:20.221488 INFO::Recipe Specification
+2025-09-25 15:46:20.2234 INFO::Using default recipe specification
+2025-09-25 15:46:20.226293 INFO::Model Specification
+2025-09-25 15:46:20.227374 INFO::Workflow Specification
+2025-09-25 15:46:20.228176 INFO::Fitting
+2025-09-25 15:46:20.625751 INFO::*** Fitting Algorithm ***
+2025-09-25 15:46:20.626321 INFO::Method(s): SARIMA
+2025-09-25 15:46:20.626766 INFO::Initial Split
+2025-09-25 15:46:20.67203 INFO::Recipe Specification
+2025-09-25 15:46:20.673921 INFO::Using default recipe specification
+2025-09-25 15:46:20.676656 INFO::Model Specification
+2025-09-25 15:46:20.677677 INFO::Workflow Specification
+2025-09-25 15:46:20.67848 INFO::Fitting
+2025-09-25 15:46:21.156253 INFO::*** Fitting Algorithm ***
+2025-09-25 15:46:21.156827 INFO::Method(s): Linear Regression
+2025-09-25 15:46:21.157282 INFO::Initial Split
+2025-09-25 15:46:21.193754 INFO::Recipe Specification
+2025-09-25 15:46:21.195647 INFO::Using default recipe specification
+2025-09-25 15:46:21.199057 INFO::Model Specification
+2025-09-25 15:46:21.200012 INFO::Workflow Specification
+2025-09-25 15:46:21.20093 INFO::Fitting
+2025-09-25 15:46:21.268348 INFO::*** Fitting Algorithm ***
+2025-09-25 15:46:21.268927 INFO::Method(s): SVM
+2025-09-25 15:46:21.26936 INFO::Initial Split
+2025-09-25 15:46:21.306627 INFO::Recipe Specification
+2025-09-25 15:46:21.308609 INFO::Using default recipe specification
+2025-09-25 15:46:21.312277 INFO::Model Specification
+2025-09-25 15:46:21.314361 INFO::Workflow Specification
+2025-09-25 15:46:21.315382 INFO::Fitting
+2025-09-25 15:46:21.564948 INFO::*** Fitting Algorithm ***
+2025-09-25 15:46:21.565489 INFO::Method(s): Feed-Forward
+2025-09-25 15:46:21.565945 INFO::Initial Split
+2025-09-25 15:46:21.605335 INFO::Recipe Specification
+2025-09-25 15:46:21.607421 INFO::Using default recipe specification
+2025-09-25 15:46:21.611176 INFO::Model Specification
+2025-09-25 15:46:21.612601 INFO::Workflow Specification
+2025-09-25 15:46:21.613546 INFO::Fitting
+2025-09-25 15:46:21.749737 INFO::Ensembling
+2025-09-25 15:46:23.082971 INFO::Calibration
+2025-09-25 15:46:24.986694 INFO::Residuals
+2025-09-25 15:46:27.003459 INFO::Accuracy Evaluation
+2025-09-25 15:46:31.234071 INFO::Test Forecasting
+2025-09-25 15:46:33.109784 INFO::Refitting
+2025-09-25 15:46:39.813077 INFO::Out-of-Sample Forecasting
+2025-09-25 15:46:51.927877 INFO::*** Generating Forecasts ***
+2025-09-25 15:46:51.92926 INFO::Method(s): ETS, SARIMA, Linear Regression, SVM, Feed-Forward
+2025-09-25 15:46:51.930123 INFO::Initial Split
+2025-09-25 15:46:51.974403 INFO::Future Frame
+2025-09-25 15:46:52.004349 INFO::Modeltime Table
+2025-09-25 15:46:52.01124 INFO::*** Fitting Algorithm ***
+2025-09-25 15:46:52.011827 INFO::Method(s): ETS
+2025-09-25 15:46:52.012366 INFO::Initial Split
+2025-09-25 15:46:52.052068 INFO::Recipe Specification
+2025-09-25 15:46:52.053966 INFO::Using default recipe specification
+2025-09-25 15:46:52.056867 INFO::Model Specification
+2025-09-25 15:46:52.057939 INFO::Workflow Specification
+2025-09-25 15:46:52.058753 INFO::Fitting
+2025-09-25 15:46:52.453847 INFO::*** Fitting Algorithm ***
+2025-09-25 15:46:52.454429 INFO::Method(s): SARIMA
+2025-09-25 15:46:52.454888 INFO::Initial Split
+2025-09-25 15:46:52.494831 INFO::Recipe Specification
+2025-09-25 15:46:52.496774 INFO::Using default recipe specification
+2025-09-25 15:46:52.499545 INFO::Model Specification
+2025-09-25 15:46:52.500642 INFO::Workflow Specification
+2025-09-25 15:46:52.50147 INFO::Fitting
+2025-09-25 15:46:52.995905 INFO::*** Fitting Algorithm ***
+2025-09-25 15:46:52.996473 INFO::Method(s): Linear Regression
+2025-09-25 15:46:52.996925 INFO::Initial Split
+2025-09-25 15:46:53.035289 INFO::Recipe Specification
+2025-09-25 15:46:53.037282 INFO::Using default recipe specification
+2025-09-25 15:46:53.040711 INFO::Model Specification
+2025-09-25 15:46:53.041609 INFO::Workflow Specification
+2025-09-25 15:46:53.042469 INFO::Fitting
+2025-09-25 15:46:53.114782 INFO::*** Fitting Algorithm ***
+2025-09-25 15:46:53.115374 INFO::Method(s): SVM
+2025-09-25 15:46:53.115872 INFO::Initial Split
+2025-09-25 15:46:53.16612 INFO::Recipe Specification
+2025-09-25 15:46:53.168158 INFO::Using default recipe specification
+2025-09-25 15:46:53.171747 INFO::Model Specification
+2025-09-25 15:46:53.172963 INFO::Workflow Specification
+2025-09-25 15:46:53.173876 INFO::Fitting
+2025-09-25 15:46:53.25058 INFO::*** Fitting Algorithm ***
+2025-09-25 15:46:53.251148 INFO::Method(s): Feed-Forward
+2025-09-25 15:46:53.251606 INFO::Initial Split
+2025-09-25 15:46:53.290199 INFO::Recipe Specification
+2025-09-25 15:46:53.292095 INFO::Using default recipe specification
+2025-09-25 15:46:53.295393 INFO::Model Specification
+2025-09-25 15:46:53.296754 INFO::Workflow Specification
+2025-09-25 15:46:53.297636 INFO::Fitting
+2025-09-25 15:46:53.435619 INFO::Stacking
+2025-09-25 15:47:23.426436 INFO::Calibration
+2025-09-25 15:47:25.37341 INFO::Residuals
+2025-09-25 15:47:27.539806 INFO::Accuracy Evaluation
+2025-09-25 15:47:31.621635 INFO::Test Forecasting
+2025-09-25 15:47:33.524405 INFO::Refitting
+2025-09-25 15:48:28.957953 INFO::Out-of-Sample Forecasting
+2025-09-25 15:48:48.645181 INFO::Back-transforming residuals results..
+2025-09-25 15:48:48.647923 INFO::Back-transforming forecast test results..
+2025-09-25 15:48:48.649003 INFO::Back-transforming forecast oos results..
+2025-09-25 15:48:48.649899 INFO::Back-transforming forecast accuracy results..
+2025-09-25 15:48:48.670887 INFO::Back transforming accuracy table...
+2025-09-25 15:49:03.70963 INFO::*** Generating Forecasts ***
+2025-09-25 15:49:03.710583 INFO::Method(s): SARIMA
+2025-09-25 15:49:03.711239 INFO::Setup Multiple Prediction Intervals
+2025-09-25 15:49:03.711847 INFO::Initial Split
+2025-09-25 15:49:03.754248 INFO::Future Frame
+2025-09-25 15:49:03.772761 INFO::Modeltime Table
+2025-09-25 15:49:03.778876 INFO::*** Fitting Algorithm ***
+2025-09-25 15:49:03.779465 INFO::Method(s): SARIMA
+2025-09-25 15:49:03.780025 INFO::Initial Split
+2025-09-25 15:49:03.819148 INFO::Recipe Specification
+2025-09-25 15:49:03.821129 INFO::Using default recipe specification
+2025-09-25 15:49:03.823949 INFO::Model Specification
+2025-09-25 15:49:03.825089 INFO::Workflow Specification
+2025-09-25 15:49:03.825955 INFO::Fitting
+2025-09-25 15:49:04.317717 INFO::Calibration
+2025-09-25 15:49:04.356846 INFO::Residuals
+2025-09-25 15:49:04.369365 INFO::Accuracy Evaluation
+2025-09-25 15:49:04.464108 INFO::Test Forecasting
+2025-09-25 15:49:05.586463 INFO::Refitting
+2025-09-25 15:49:06.51398 INFO::Out-of-Sample Forecasting
+2025-09-25 15:49:16.633307 INFO::*** Generating Forecasts ***
+2025-09-25 15:49:16.634045 INFO::Method(s): SARIMA
+2025-09-25 15:49:16.634515 INFO::Setup Multiple Prediction Intervals
+2025-09-25 15:49:16.637664 INFO::Initial Split
+2025-09-25 15:49:16.699263 INFO::Future Frame
+2025-09-25 15:49:16.724878 INFO::Modeltime Table
+2025-09-25 15:49:16.731183 INFO::*** Fitting Algorithm ***
+2025-09-25 15:49:16.731842 INFO::Method(s): SARIMA
+2025-09-25 15:49:16.732414 INFO::Initial Split
+2025-09-25 15:49:16.784056 INFO::Recipe Specification
+2025-09-25 15:49:16.786247 INFO::Using default recipe specification
+2025-09-25 15:49:16.789385 INFO::Model Specification
+2025-09-25 15:49:16.790505 INFO::Workflow Specification
+2025-09-25 15:49:16.79144 INFO::Fitting
+2025-09-25 15:49:17.298055 INFO::Calibration
+2025-09-25 15:49:17.344329 INFO::Residuals
+2025-09-25 15:49:17.359822 INFO::Accuracy Evaluation
+2025-09-25 15:49:17.462678 INFO::Test Forecasting
+2025-09-25 15:49:18.610703 INFO::Refitting
+2025-09-25 15:49:19.554244 INFO::Out-of-Sample Forecasting
+2025-09-25 15:49:27.067468 INFO::*** Generating Forecasts ***
+2025-09-25 15:49:27.068567 INFO::Method(s): ETS
+2025-09-25 15:49:27.069272 INFO::Setup Multiple Prediction Intervals
+2025-09-25 15:49:27.069959 INFO::Initial Split
+2025-09-25 15:49:27.127547 INFO::Future Frame
+2025-09-25 15:49:27.147521 INFO::Modeltime Table
+2025-09-25 15:49:27.154184 INFO::*** Fitting Algorithm ***
+2025-09-25 15:49:27.154758 INFO::Method(s): ETS
+2025-09-25 15:49:27.155281 INFO::Initial Split
+2025-09-25 15:49:27.194218 INFO::Recipe Specification
+2025-09-25 15:49:27.196295 INFO::Using default recipe specification
+2025-09-25 15:49:27.199412 INFO::Model Specification
+2025-09-25 15:49:27.200539 INFO::Workflow Specification
+2025-09-25 15:49:27.201409 INFO::Fitting
+2025-09-25 15:49:27.610264 INFO::Calibration
+2025-09-25 15:49:27.661331 INFO::Residuals
+2025-09-25 15:49:27.678154 INFO::Accuracy Evaluation
+2025-09-25 15:49:27.806255 INFO::Test Forecasting
+2025-09-25 15:49:28.983424 INFO::Refitting
+2025-09-25 15:49:29.420041 INFO::Out-of-Sample Forecasting
+2025-09-25 15:50:43.568125 INFO::*** Generating Forecasts ***
+2025-09-25 15:50:43.56908 INFO::Method(s): Elastic Net
+2025-09-25 15:50:43.569542 INFO::Initial Split
+2025-09-25 15:50:43.611168 INFO::Future Frame
+2025-09-25 15:50:43.630055 INFO::Modeltime Table
+2025-09-25 15:50:43.636358 INFO::*** Tuning Algorithm ***
+2025-09-25 15:50:43.636924 INFO::Method(s): Elastic Net
+2025-09-25 15:50:43.638148 INFO::Initial Split
+2025-09-25 15:50:43.687849 INFO::Validation Split
+2025-09-25 15:50:43.727212 INFO::Recipe Specification
+2025-09-25 15:50:43.729271 INFO::Using default recipe specification
+2025-09-25 15:50:43.732593 INFO::Model Specification
+2025-09-25 15:50:43.733495 INFO::Workflow Specification
+2025-09-25 15:50:43.734377 INFO::Tuning
+2025-09-25 15:51:14.781958 INFO::Getting Air Passengers data...
+2025-09-25 15:51:15.395769 INFO::Hypothesis testing...
+2025-09-25 15:51:15.39803 INFO::Normality Tests
+2025-09-25 15:51:15.398933 INFO::Autocorrelation Tests
+2025-09-25 15:51:15.399969 INFO::Stationarity Tests
+2025-09-25 15:51:29.184435 INFO::*** Generating Forecasts ***
+2025-09-25 15:51:29.185519 INFO::Method(s): ETS
+2025-09-25 15:51:29.186179 INFO::Setup Multiple Prediction Intervals
+2025-09-25 15:51:29.186787 INFO::Initial Split
+2025-09-25 15:51:29.23031 INFO::Future Frame
+2025-09-25 15:51:29.249185 INFO::Modeltime Table
+2025-09-25 15:51:29.255504 INFO::*** Fitting Algorithm ***
+2025-09-25 15:51:29.256094 INFO::Method(s): ETS
+2025-09-25 15:51:29.256708 INFO::Initial Split
+2025-09-25 15:51:29.294966 INFO::Recipe Specification
+2025-09-25 15:51:29.296983 INFO::Using default recipe specification
+2025-09-25 15:51:29.29987 INFO::Model Specification
+2025-09-25 15:51:29.301197 INFO::Workflow Specification
+2025-09-25 15:51:29.302087 INFO::Fitting
+2025-09-25 15:51:29.722358 INFO::Calibration
+2025-09-25 15:51:29.762522 INFO::Residuals
+2025-09-25 15:51:29.775517 INFO::Accuracy Evaluation
+2025-09-25 15:51:29.872851 INFO::Test Forecasting
+2025-09-25 15:51:31.105279 INFO::Refitting
+2025-09-25 15:51:31.548062 INFO::Out-of-Sample Forecasting
+2025-09-25 15:51:37.817144 INFO::*** Generating Forecasts ***
+2025-09-25 15:51:37.818994 INFO::Method(s): Elastic Net
+2025-09-25 15:51:37.819959 INFO::Initial Split
+2025-09-25 15:51:37.867374 INFO::Future Frame
+2025-09-25 15:51:37.88644 INFO::Modeltime Table
+2025-09-25 15:51:37.904212 INFO::*** Tuning Algorithm ***
+2025-09-25 15:51:37.905491 INFO::Method(s): Elastic Net
+2025-09-25 15:51:37.907408 INFO::Initial Split
+2025-09-25 15:51:37.953471 INFO::Validation Split
+2025-09-25 15:51:37.987142 INFO::Recipe Specification
+2025-09-25 15:51:37.989104 INFO::Using default recipe specification
+2025-09-25 15:51:37.992388 INFO::Model Specification
+2025-09-25 15:51:37.993368 INFO::Workflow Specification
+2025-09-25 15:51:37.994301 INFO::Tuning
+2025-09-25 15:55:49.86236 INFO::Getting Air Passengers data...
+2025-09-25 15:55:50.64933 INFO::Hypothesis testing...
+2025-09-25 15:55:50.676873 INFO::Normality Tests
+2025-09-25 15:55:50.708855 INFO::Autocorrelation Tests
+2025-09-25 15:55:50.710155 INFO::Stationarity Tests
+2025-09-25 15:56:23.691462 INFO::*** Generating Forecasts ***
+2025-09-25 15:56:23.692452 INFO::Method(s): Elastic Net
+2025-09-25 15:56:23.692947 INFO::Initial Split
+2025-09-25 15:56:23.735779 INFO::Future Frame
+2025-09-25 15:56:23.75519 INFO::Modeltime Table
+2025-09-25 15:56:23.768443 INFO::*** Fitting Algorithm ***
+2025-09-25 15:56:23.769088 INFO::Method(s): Elastic Net
+2025-09-25 15:56:23.769805 INFO::Initial Split
+2025-09-25 15:56:23.810921 INFO::Recipe Specification
+2025-09-25 15:56:23.831962 INFO::Using default recipe specification
+2025-09-25 15:56:23.835804 INFO::Model Specification
+2025-09-25 15:56:23.837662 INFO::Workflow Specification
+2025-09-25 15:56:23.839394 INFO::Fitting
+2025-09-25 15:56:23.952099 INFO::Calibration
+2025-09-25 15:56:24.117098 INFO::Residuals
+2025-09-25 15:56:24.269825 INFO::Accuracy Evaluation
+2025-09-25 15:56:24.646342 INFO::Test Forecasting
+2025-09-25 15:56:24.817317 INFO::Refitting
+2025-09-25 15:56:24.893868 INFO::Out-of-Sample Forecasting
+2025-09-25 15:56:32.084032 INFO::*** Generating Forecasts ***
+2025-09-25 15:56:32.08556 INFO::Method(s): Elastic Net
+2025-09-25 15:56:32.086405 INFO::Initial Split
+2025-09-25 15:56:32.141953 INFO::Future Frame
+2025-09-25 15:56:32.159855 INFO::Modeltime Table
+2025-09-25 15:56:32.178385 INFO::*** Tuning Algorithm ***
+2025-09-25 15:56:32.179019 INFO::Method(s): Elastic Net
+2025-09-25 15:56:32.196221 INFO::Initial Split
+2025-09-25 15:56:32.236058 INFO::Validation Split
+2025-09-25 15:56:32.270212 INFO::Recipe Specification
+2025-09-25 15:56:32.278626 INFO::Using default recipe specification
+2025-09-25 15:56:32.288215 INFO::Model Specification
+2025-09-25 15:56:32.365547 INFO::Workflow Specification
+2025-09-25 15:56:32.366669 INFO::Tuning
+2025-09-25 16:01:30.523605 INFO::Getting Air Passengers data...
+2025-09-25 16:01:31.261246 INFO::Hypothesis testing...
+2025-09-25 16:01:31.289265 INFO::Normality Tests
+2025-09-25 16:01:31.32043 INFO::Autocorrelation Tests
+2025-09-25 16:01:31.321655 INFO::Stationarity Tests
+2025-09-25 16:02:48.284234 INFO::*** Generating Forecasts ***
+2025-09-25 16:02:48.285211 INFO::Method(s): Elastic Net
+2025-09-25 16:02:48.285616 INFO::Initial Split
+2025-09-25 16:02:48.333022 INFO::Future Frame
+2025-09-25 16:02:48.351673 INFO::Modeltime Table
+2025-09-25 16:02:48.364253 INFO::*** Fitting Algorithm ***
+2025-09-25 16:02:48.364866 INFO::Method(s): Elastic Net
+2025-09-25 16:02:48.365523 INFO::Initial Split
+2025-09-25 16:02:48.406041 INFO::Recipe Specification
+2025-09-25 16:02:48.407953 INFO::Using default recipe specification
+2025-09-25 16:02:48.411517 INFO::Model Specification
+2025-09-25 16:02:48.413414 INFO::Workflow Specification
+2025-09-25 16:02:48.415114 INFO::Fitting
+2025-09-25 16:02:48.533347 INFO::Calibration
+2025-09-25 16:02:48.690449 INFO::Residuals
+2025-09-25 16:02:48.852821 INFO::Accuracy Evaluation
+2025-09-25 16:02:49.233517 INFO::Test Forecasting
+2025-09-25 16:02:49.403308 INFO::Refitting
+2025-09-25 16:02:49.484944 INFO::Out-of-Sample Forecasting
+2025-09-25 16:02:58.816879 INFO::*** Generating Forecasts ***
+2025-09-25 16:02:58.818248 INFO::Method(s): Linear Regression
+2025-09-25 16:02:58.81906 INFO::Initial Split
+2025-09-25 16:02:58.863148 INFO::Future Frame
+2025-09-25 16:02:58.88368 INFO::Modeltime Table
+2025-09-25 16:02:58.890048 INFO::*** Fitting Algorithm ***
+2025-09-25 16:02:58.890673 INFO::Method(s): Linear Regression
+2025-09-25 16:02:58.893672 INFO::Initial Split
+2025-09-25 16:02:58.943141 INFO::Recipe Specification
+2025-09-25 16:02:58.951915 INFO::Using default recipe specification
+2025-09-25 16:02:58.955507 INFO::Model Specification
+2025-09-25 16:02:59.0301 INFO::Workflow Specification
+2025-09-25 16:02:59.031374 INFO::Fitting
+2025-09-25 16:02:59.120602 INFO::Calibration
+2025-09-25 16:02:59.460277 INFO::Residuals
+2025-09-25 16:02:59.689675 INFO::Accuracy Evaluation
+2025-09-25 16:03:00.145512 INFO::Test Forecasting
+2025-09-25 16:03:00.368402 INFO::Refitting
+2025-09-25 16:03:00.453001 INFO::Out-of-Sample Forecasting
+2025-09-25 16:03:08.983529 INFO::*** Generating Forecasts ***
+2025-09-25 16:03:08.985245 INFO::Method(s): Elastic Net
+2025-09-25 16:03:08.986084 INFO::Initial Split
+2025-09-25 16:03:09.257271 INFO::Future Frame
+2025-09-25 16:03:09.275069 INFO::Modeltime Table
+2025-09-25 16:03:09.293042 INFO::*** Tuning Algorithm ***
+2025-09-25 16:03:09.293663 INFO::Method(s): Elastic Net
+2025-09-25 16:03:09.308017 INFO::Initial Split
+2025-09-25 16:03:09.347212 INFO::Validation Split
+2025-09-25 16:03:09.382657 INFO::Recipe Specification
+2025-09-25 16:03:09.384634 INFO::Using default recipe specification
+2025-09-25 16:03:09.394016 INFO::Model Specification
+2025-09-25 16:03:09.395242 INFO::Workflow Specification
+2025-09-25 16:03:09.396333 INFO::Tuning
+2025-09-25 16:03:33.196149 INFO::Getting Air Passengers data...
+2025-09-25 16:03:33.928284 INFO::Hypothesis testing...
+2025-09-25 16:03:33.95593 INFO::Normality Tests
+2025-09-25 16:03:33.987599 INFO::Autocorrelation Tests
+2025-09-25 16:03:33.988913 INFO::Stationarity Tests
+2025-09-25 16:03:49.918763 INFO::*** Generating Forecasts ***
+2025-09-25 16:03:49.919765 INFO::Method(s): Feed-Forward
+2025-09-25 16:03:49.920217 INFO::Initial Split
+2025-09-25 16:03:49.965174 INFO::Future Frame
+2025-09-25 16:03:49.984239 INFO::Modeltime Table
+2025-09-25 16:03:50.002767 INFO::*** Tuning Algorithm ***
+2025-09-25 16:03:50.003376 INFO::Method(s): Feed-Forward
+2025-09-25 16:03:50.018055 INFO::Initial Split
+2025-09-25 16:03:50.058182 INFO::Validation Split
+2025-09-25 16:03:50.099453 INFO::Recipe Specification
+2025-09-25 16:03:50.120977 INFO::Using default recipe specification
+2025-09-25 16:03:50.124737 INFO::Model Specification
+2025-09-25 16:03:50.126056 INFO::Workflow Specification
+2025-09-25 16:03:50.127763 INFO::Tuning
+2025-09-25 16:06:31.770139 INFO::Getting Air Passengers data...
+2025-09-25 16:06:32.554621 INFO::Hypothesis testing...
+2025-09-25 16:06:32.582293 INFO::Normality Tests
+2025-09-25 16:06:32.614129 INFO::Autocorrelation Tests
+2025-09-25 16:06:32.615348 INFO::Stationarity Tests
+2025-09-25 16:06:38.857804 INFO::*** Generating Forecasts ***
+2025-09-25 16:06:38.85876 INFO::Method(s): Elastic Net
+2025-09-25 16:06:38.859187 INFO::Initial Split
+2025-09-25 16:06:38.910725 INFO::Future Frame
+2025-09-25 16:06:38.931128 INFO::Modeltime Table
+2025-09-25 16:06:38.950302 INFO::*** Tuning Algorithm ***
+2025-09-25 16:06:38.951037 INFO::Method(s): Elastic Net
+2025-09-25 16:06:38.965913 INFO::Initial Split
+2025-09-25 16:06:39.013859 INFO::Validation Split
+2025-09-25 16:06:39.051471 INFO::Recipe Specification
+2025-09-25 16:06:39.073118 INFO::Using default recipe specification
+2025-09-25 16:06:39.076895 INFO::Model Specification
+2025-09-25 16:06:39.078252 INFO::Workflow Specification
+2025-09-25 16:06:39.080024 INFO::Tuning
+2025-09-25 16:06:54.603041 INFO::Getting Air Passengers data...
+2025-09-25 16:06:55.178634 INFO::Hypothesis testing...
+2025-09-25 16:06:55.180818 INFO::Normality Tests
+2025-09-25 16:06:55.181729 INFO::Autocorrelation Tests
+2025-09-25 16:06:55.182772 INFO::Stationarity Tests
+2025-09-25 16:07:01.061467 INFO::*** Generating Forecasts ***
+2025-09-25 16:07:01.063313 INFO::Method(s): Elastic Net
+2025-09-25 16:07:01.064202 INFO::Initial Split
+2025-09-25 16:07:01.1073 INFO::Future Frame
+2025-09-25 16:07:01.126852 INFO::Modeltime Table
+2025-09-25 16:07:01.132961 INFO::*** Tuning Algorithm ***
+2025-09-25 16:07:01.133561 INFO::Method(s): Elastic Net
+2025-09-25 16:07:01.134805 INFO::Initial Split
+2025-09-25 16:07:01.184918 INFO::Validation Split
+2025-09-25 16:07:01.219047 INFO::Recipe Specification
+2025-09-25 16:07:01.22112 INFO::Using default recipe specification
+2025-09-25 16:07:01.224825 INFO::Model Specification
+2025-09-25 16:07:01.225901 INFO::Workflow Specification
+2025-09-25 16:07:01.2269 INFO::Tuning
+2025-09-25 16:07:47.144113 INFO::Getting Air Passengers data...
+2025-09-25 16:07:47.944613 INFO::Hypothesis testing...
+2025-09-25 16:07:47.975205 INFO::Normality Tests
+2025-09-25 16:07:48.017338 INFO::Autocorrelation Tests
+2025-09-25 16:07:48.018722 INFO::Stationarity Tests
+2025-09-25 16:07:51.948159 INFO::*** Generating Forecasts ***
+2025-09-25 16:07:51.949162 INFO::Method(s): Elastic Net
+2025-09-25 16:07:51.949658 INFO::Initial Split
+2025-09-25 16:07:51.995384 INFO::Future Frame
+2025-09-25 16:07:52.023498 INFO::Modeltime Table
+2025-09-25 16:07:52.052129 INFO::*** Tuning Algorithm ***
+2025-09-25 16:07:52.052811 INFO::Method(s): Elastic Net
+2025-09-25 16:07:52.071117 INFO::Initial Split
+2025-09-25 16:07:52.111934 INFO::Validation Split
+2025-09-25 16:07:52.148747 INFO::Recipe Specification
+2025-09-25 16:07:52.179524 INFO::Using default recipe specification
+2025-09-25 16:07:52.183692 INFO::Model Specification
+2025-09-25 16:07:52.185048 INFO::Workflow Specification
+2025-09-25 16:07:52.186883 INFO::Tuning
+2025-09-25 16:08:22.405227 INFO::Getting Air Passengers data...
+2025-09-25 16:08:23.161547 INFO::Hypothesis testing...
+2025-09-25 16:08:23.194193 INFO::Normality Tests
+2025-09-25 16:08:23.234391 INFO::Autocorrelation Tests
+2025-09-25 16:08:23.235668 INFO::Stationarity Tests
+2025-09-25 16:08:27.771293 INFO::*** Generating Forecasts ***
+2025-09-25 16:08:27.772398 INFO::Method(s): Elastic Net
+2025-09-25 16:08:27.772849 INFO::Initial Split
+2025-09-25 16:08:27.816965 INFO::Future Frame
+2025-09-25 16:08:27.834971 INFO::Modeltime Table
+2025-09-25 16:08:27.855255 INFO::*** Tuning Algorithm ***
+2025-09-25 16:08:27.855896 INFO::Method(s): Elastic Net
+2025-09-25 16:08:27.874196 INFO::Initial Split
+2025-09-25 16:08:27.923561 INFO::Validation Split
+2025-09-25 16:08:27.962873 INFO::Recipe Specification
+2025-09-25 16:08:27.988424 INFO::Using default recipe specification
+2025-09-25 16:08:27.992147 INFO::Model Specification
+2025-09-25 16:08:27.993402 INFO::Workflow Specification
+2025-09-25 16:08:27.995216 INFO::Tuning
+2025-09-25 16:17:22.801729 INFO::Getting Air Passengers data...
+2025-09-25 16:17:23.560842 INFO::Hypothesis testing...
+2025-09-25 16:17:23.638167 INFO::Normality Tests
+2025-09-25 16:17:23.670058 INFO::Autocorrelation Tests
+2025-09-25 16:17:23.671299 INFO::Stationarity Tests
+2025-09-25 16:17:31.940993 INFO::*** Generating Forecasts ***
+2025-09-25 16:17:31.94207 INFO::Method(s): Elastic Net
+2025-09-25 16:17:31.94257 INFO::Initial Split
+2025-09-25 16:17:32.044218 INFO::Future Frame
+2025-09-25 16:17:32.08919 INFO::Modeltime Table
+2025-09-25 16:17:32.12337 INFO::*** Tuning Algorithm ***
+2025-09-25 16:17:32.124116 INFO::Method(s): Elastic Net
+2025-09-25 16:17:32.191343 INFO::Initial Split
+2025-09-25 16:17:32.249983 INFO::Validation Split
+2025-09-25 16:17:32.287696 INFO::Recipe Specification
+2025-09-25 16:17:32.313191 INFO::Using default recipe specification
+2025-09-25 16:17:32.317024 INFO::Model Specification
+2025-09-25 16:17:32.318308 INFO::Workflow Specification
+2025-09-25 16:17:32.319993 INFO::Tuning
+2025-09-25 16:19:08.647798 INFO::Getting Air Passengers data...
+2025-09-25 16:19:09.493886 INFO::Hypothesis testing...
+2025-09-25 16:19:09.767651 INFO::Normality Tests
+2025-09-25 16:19:09.769404 INFO::Autocorrelation Tests
+2025-09-25 16:19:09.770669 INFO::Stationarity Tests
+2025-09-25 16:19:16.83398 INFO::*** Generating Forecasts ***
+2025-09-25 16:19:16.836029 INFO::Method(s): Elastic Net
+2025-09-25 16:19:16.837214 INFO::Initial Split
+2025-09-25 16:19:16.950221 INFO::Future Frame
+2025-09-25 16:19:16.984928 INFO::Modeltime Table
+2025-09-25 16:19:17.040241 INFO::*** Tuning Algorithm ***
+2025-09-25 16:19:17.041433 INFO::Method(s): Elastic Net
+2025-09-25 16:19:17.073025 INFO::Initial Split
+2025-09-25 16:19:17.123592 INFO::Validation Split
+2025-09-25 16:19:17.157611 INFO::Recipe Specification
+2025-09-25 16:19:17.190053 INFO::Using default recipe specification
+2025-09-25 16:19:17.193835 INFO::Model Specification
+2025-09-25 16:19:17.195171 INFO::Workflow Specification
+2025-09-25 16:19:17.197036 INFO::Tuning
+2025-09-25 16:22:16.909415 INFO::Getting Air Passengers data...
+2025-09-25 16:22:17.73049 INFO::Hypothesis testing...
+2025-09-25 16:22:18.014849 INFO::Normality Tests
+2025-09-25 16:22:18.016537 INFO::Autocorrelation Tests
+2025-09-25 16:22:18.017721 INFO::Stationarity Tests
+2025-09-25 16:22:28.490149 INFO::*** Generating Forecasts ***
+2025-09-25 16:22:28.491201 INFO::Method(s): Feed-Forward
+2025-09-25 16:22:28.491692 INFO::Initial Split
+2025-09-25 16:22:28.543444 INFO::Future Frame
+2025-09-25 16:22:28.561905 INFO::Modeltime Table
+2025-09-25 16:22:28.586102 INFO::*** Tuning Algorithm ***
+2025-09-25 16:22:28.586763 INFO::Method(s): Feed-Forward
+2025-09-25 16:22:28.611502 INFO::Initial Split
+2025-09-25 16:22:28.652793 INFO::Validation Split
+2025-09-25 16:22:28.687482 INFO::Recipe Specification
+2025-09-25 16:22:28.720165 INFO::Using default recipe specification
+2025-09-25 16:22:28.72458 INFO::Model Specification
+2025-09-25 16:22:28.726157 INFO::Workflow Specification
+2025-09-25 16:22:28.728179 INFO::Tuning
+2025-09-25 16:58:44.182508 INFO::Getting Air Passengers data...
+2025-09-25 17:00:07.145469 INFO::*** Tuning Algorithm ***
+2025-09-25 17:00:07.152144 INFO::Method(s): Elastic Net
+2025-09-25 17:00:07.186947 INFO::Initial Split
+2025-09-25 17:00:07.245911 INFO::Validation Split
+2025-09-25 17:00:07.249503 INFO::Recipe Specification
+2025-09-25 17:00:07.252084 INFO::Using default recipe specification
+2025-09-25 17:00:07.25826 INFO::Model Specification
+2025-09-25 17:00:07.259863 INFO::Workflow Specification
+2025-09-25 17:00:07.261979 INFO::Tuning
+2025-09-25 17:01:38.115359 INFO::*** Tuning Algorithm ***
+2025-09-25 17:01:38.117955 INFO::Method(s):
+2025-09-25 17:07:29.164746 INFO::*** Tuning Algorithm ***
+2025-09-25 17:07:29.166573 INFO::Method(s): Elastic Net
+2025-09-25 17:07:29.193105 INFO::Initial Split
+2025-09-25 17:07:29.25162 INFO::Validation Split
+2025-09-25 17:07:29.263967 INFO::Recipe Specification
+2025-09-25 17:07:29.431276 INFO::Using default recipe specification
+2025-09-25 17:07:29.436826 INFO::Model Specification
+2025-09-25 17:07:29.684307 INFO::Workflow Specification
+2025-09-25 17:07:29.685985 INFO::Tuning
+2025-09-25 17:07:40.380076 INFO::*** Tuning Algorithm ***
+2025-09-25 17:07:40.382713 INFO::Method(s): Elastic Net
+2025-09-25 17:07:52.818153 INFO::Initial Split
+2025-09-25 17:08:07.251122 INFO::Validation Split
+2025-09-25 17:08:41.598787 INFO::Recipe Specification
+2025-09-25 17:08:41.605843 INFO::Using default recipe specification
+2025-09-25 17:09:16.502512 INFO::Model Specification
+2025-09-25 17:09:23.713444 INFO::Workflow Specification
+2025-09-25 17:16:06.348053 INFO::*** Tuning Algorithm ***
+2025-09-25 17:16:06.350462 INFO::Method(s): Elastic Net
+2025-09-25 17:16:06.35344 INFO::Initial Split
+2025-09-25 17:16:06.476663 INFO::Validation Split
+2025-09-25 17:16:06.47981 INFO::Recipe Specification
+2025-09-25 17:16:06.482169 INFO::Using default recipe specification
+2025-09-25 17:16:06.486459 INFO::Model Specification
+2025-09-25 17:16:06.487731 INFO::Workflow Specification
+2025-09-25 17:16:06.488987 INFO::Tuning
+2025-09-25 17:16:46.353154 INFO::Extracting Best Model
+2025-09-25 17:16:46.376175 INFO::Fitting
+2025-09-25 17:17:11.106718 INFO::*** Generating Forecasts ***
+2025-09-25 17:17:11.10758 INFO::Method(s): Elastic Net
+2025-09-25 17:17:11.108118 INFO::Initial Split
+2025-09-25 17:17:11.151466 INFO::Future Frame
+2025-09-25 17:17:11.174788 INFO::Modeltime Table
+2025-09-25 17:17:11.19395 INFO::Calibration
+2025-09-25 17:17:11.549427 INFO::Residuals
+2025-09-25 17:17:11.805351 INFO::Accuracy Evaluation
+2025-09-25 17:17:12.318199 INFO::Test Forecasting
+2025-09-25 17:17:12.566347 INFO::Refitting
+2025-09-25 17:17:12.665604 INFO::Out-of-Sample Forecasting
+2025-09-25 17:18:32.750515 INFO::*** Tuning Algorithm ***
+2025-09-25 17:18:32.753167 INFO::Method(s): Elastic Net
+2025-09-25 17:18:32.756345 INFO::Initial Split
+2025-09-25 17:18:32.881284 INFO::Validation Split
+2025-09-25 17:18:32.95411 INFO::Recipe Specification
+2025-09-25 17:18:32.958003 INFO::Using default recipe specification
+2025-09-25 17:18:32.964229 INFO::Model Specification
+2025-09-25 17:18:32.965775 INFO::Workflow Specification
+2025-09-25 17:18:32.967171 INFO::Tuning
+2025-09-25 17:18:48.421101 INFO::Extracting Best Model
+2025-09-25 17:18:48.437478 INFO::Fitting
+2025-09-25 17:18:54.542501 INFO::*** Generating Forecasts ***
+2025-09-25 17:18:54.544459 INFO::Method(s): Elastic Net
+2025-09-25 17:18:54.545595 INFO::Initial Split
+2025-09-25 17:18:54.607707 INFO::Future Frame
+2025-09-25 17:18:54.683021 INFO::Modeltime Table
+2025-09-25 17:18:54.703505 INFO::Calibration
+2025-09-25 17:18:54.92552 INFO::Residuals
+2025-09-25 17:18:55.188279 INFO::Accuracy Evaluation
+2025-09-25 17:18:55.682263 INFO::Test Forecasting
+2025-09-25 17:18:55.960645 INFO::Refitting
+2025-09-25 17:18:56.151102 INFO::Out-of-Sample Forecasting
+2025-09-25 17:20:17.758921 INFO::Getting Air Passengers data...
+2025-09-25 17:20:18.614915 INFO::Hypothesis testing...
+2025-09-25 17:20:18.884222 INFO::Normality Tests
+2025-09-25 17:20:18.885881 INFO::Autocorrelation Tests
+2025-09-25 17:20:18.887033 INFO::Stationarity Tests
+2025-09-25 17:21:23.141475 INFO::*** Generating Forecasts ***
+2025-09-25 17:21:23.142527 INFO::Method(s): Elastic Net
+2025-09-25 17:21:23.14302 INFO::Initial Split
+2025-09-25 17:21:23.193154 INFO::Future Frame
+2025-09-25 17:21:23.212234 INFO::Modeltime Table
+2025-09-25 17:21:23.236222 INFO::*** Tuning Algorithm ***
+2025-09-25 17:21:23.236876 INFO::Method(s): Elastic Net
+2025-09-25 17:21:23.262203 INFO::Initial Split
+2025-09-25 17:21:23.307329 INFO::Validation Split
+2025-09-25 17:21:23.343292 INFO::Recipe Specification
+2025-09-25 17:21:23.345428 INFO::Using default recipe specification
+2025-09-25 17:21:23.349034 INFO::Model Specification
+2025-09-25 17:21:23.350424 INFO::Workflow Specification
+2025-09-25 17:21:23.352348 INFO::Tuning
+2025-09-25 17:21:57.479139 INFO::Extracting Best Model
+2025-09-25 17:21:57.49528 INFO::Fitting
+2025-09-25 17:21:57.714814 INFO::Calibration
+2025-09-25 17:21:57.891114 INFO::Residuals
+2025-09-25 17:21:58.045438 INFO::Accuracy Evaluation
+2025-09-25 17:21:58.43159 INFO::Test Forecasting
+2025-09-25 17:21:58.600866 INFO::Refitting
+2025-09-25 17:21:58.6885 INFO::Out-of-Sample Forecasting
+2025-09-25 17:22:09.616279 INFO::*** Generating Forecasts ***
+2025-09-25 17:22:09.617506 INFO::Method(s): Feed-Forward
+2025-09-25 17:22:09.618362 INFO::Initial Split
+2025-09-25 17:22:09.667878 INFO::Future Frame
+2025-09-25 17:22:09.687278 INFO::Modeltime Table
+2025-09-25 17:22:09.693329 INFO::*** Tuning Algorithm ***
+2025-09-25 17:22:09.693892 INFO::Method(s): Feed-Forward
+2025-09-25 17:22:09.710312 INFO::Initial Split
+2025-09-25 17:22:09.759063 INFO::Validation Split
+2025-09-25 17:22:09.804223 INFO::Recipe Specification
+2025-09-25 17:22:09.81695 INFO::Using default recipe specification
+2025-09-25 17:22:09.820788 INFO::Model Specification
+2025-09-25 17:22:09.966166 INFO::Workflow Specification
+2025-09-25 17:22:09.967311 INFO::Tuning
+2025-09-25 17:22:33.617964 INFO::Extracting Best Model
+2025-09-25 17:24:08.759833 INFO::Getting Air Passengers data...
+2025-09-25 17:24:09.60514 INFO::Hypothesis testing...
+2025-09-25 17:24:09.631983 INFO::Normality Tests
+2025-09-25 17:24:09.663867 INFO::Autocorrelation Tests
+2025-09-25 17:24:09.665165 INFO::Stationarity Tests
+2025-09-25 17:24:16.241696 INFO::*** Generating Forecasts ***
+2025-09-25 17:24:16.242659 INFO::Method(s): Elastic Net
+2025-09-25 17:24:16.243305 INFO::Initial Split
+2025-09-25 17:24:16.307696 INFO::Future Frame
+2025-09-25 17:24:16.326154 INFO::Modeltime Table
+2025-09-25 17:24:16.345877 INFO::*** Tuning Algorithm ***
+2025-09-25 17:24:16.346575 INFO::Method(s): Elastic Net
+2025-09-25 17:24:16.361011 INFO::Initial Split
+2025-09-25 17:24:16.421028 INFO::Validation Split
+2025-09-25 17:24:16.46422 INFO::Recipe Specification
+2025-09-25 17:24:16.486598 INFO::Using default recipe specification
+2025-09-25 17:24:16.490438 INFO::Model Specification
+2025-09-25 17:24:16.491746 INFO::Workflow Specification
+2025-09-25 17:24:16.493515 INFO::Tuning
+2025-09-25 17:25:34.342612 INFO::Getting Air Passengers data...
+2025-09-25 17:25:35.234585 INFO::Hypothesis testing...
+2025-09-25 17:25:35.262485 INFO::Normality Tests
+2025-09-25 17:25:35.295456 INFO::Autocorrelation Tests
+2025-09-25 17:25:35.296805 INFO::Stationarity Tests
+2025-09-25 17:25:39.578931 INFO::*** Generating Forecasts ***
+2025-09-25 17:25:39.579973 INFO::Method(s): Elastic Net
+2025-09-25 17:25:39.580483 INFO::Initial Split
+2025-09-25 17:25:39.624766 INFO::Future Frame
+2025-09-25 17:25:39.643643 INFO::Modeltime Table
+2025-09-25 17:25:39.662687 INFO::*** Tuning Algorithm ***
+2025-09-25 17:25:39.663311 INFO::Method(s): Elastic Net
+2025-09-25 17:25:39.678081 INFO::Initial Split
+2025-09-25 17:25:39.719043 INFO::Validation Split
+2025-09-25 17:25:39.765769 INFO::Recipe Specification
+2025-09-25 17:25:39.788842 INFO::Using default recipe specification
+2025-09-25 17:25:39.793264 INFO::Model Specification
+2025-09-25 17:25:39.794761 INFO::Workflow Specification
+2025-09-25 17:25:39.796812 INFO::Tuning
+2025-09-25 17:26:14.191219 INFO::Extracting Best Model
+2025-09-25 17:26:14.206723 INFO::Fitting
+2025-09-25 17:26:14.429662 INFO::Calibration
+2025-09-25 17:26:14.598337 INFO::Residuals
+2025-09-25 17:26:14.752517 INFO::Accuracy Evaluation
+2025-09-25 17:26:15.133907 INFO::Test Forecasting
+2025-09-25 17:26:15.310508 INFO::Refitting
+2025-09-25 17:26:15.392344 INFO::Out-of-Sample Forecasting
+2025-09-25 17:26:35.376071 INFO::*** Generating Forecasts ***
+2025-09-25 17:26:35.377238 INFO::Method(s): Feed-Forward
+2025-09-25 17:26:35.37794 INFO::Initial Split
+2025-09-25 17:26:35.4184 INFO::Future Frame
+2025-09-25 17:26:35.438118 INFO::Modeltime Table
+2025-09-25 17:26:35.444255 INFO::*** Tuning Algorithm ***
+2025-09-25 17:26:35.44488 INFO::Method(s): Feed-Forward
+2025-09-25 17:26:35.455014 INFO::Initial Split
+2025-09-25 17:26:35.496565 INFO::Validation Split
+2025-09-25 17:26:35.543726 INFO::Recipe Specification
+2025-09-25 17:26:35.552587 INFO::Using default recipe specification
+2025-09-25 17:26:35.556424 INFO::Model Specification
+2025-09-25 17:26:35.629711 INFO::Workflow Specification
+2025-09-25 17:26:35.630803 INFO::Tuning
+2025-09-25 17:27:01.744683 INFO::Extracting Best Model
+2025-09-25 17:27:01.760344 INFO::Fitting
+2025-09-25 17:27:01.974439 INFO::Calibration
+2025-09-25 17:27:02.13054 INFO::Residuals
+2025-09-25 17:27:02.288898 INFO::Accuracy Evaluation
+2025-09-25 17:27:02.729029 INFO::Test Forecasting
+2025-09-25 17:27:02.914095 INFO::Refitting
+2025-09-25 17:27:02.994014 INFO::Out-of-Sample Forecasting
+2025-09-25 17:27:23.596227 INFO::*** Generating Forecasts ***
+2025-09-25 17:27:23.597274 INFO::Method(s): Feed-Forward
+2025-09-25 17:27:23.59783 INFO::Initial Split
+2025-09-25 17:27:23.637867 INFO::Future Frame
+2025-09-25 17:27:23.65824 INFO::Modeltime Table
+2025-09-25 17:27:23.665022 INFO::*** Tuning Algorithm ***
+2025-09-25 17:27:23.665758 INFO::Method(s): Feed-Forward
+2025-09-25 17:27:23.666804 INFO::Initial Split
+2025-09-25 17:27:23.706876 INFO::Validation Split
+2025-09-25 17:27:23.741183 INFO::Recipe Specification
+2025-09-25 17:27:23.743281 INFO::Using default recipe specification
+2025-09-25 17:27:23.746655 INFO::Model Specification
+2025-09-25 17:27:23.74758 INFO::Workflow Specification
+2025-09-25 17:27:23.74849 INFO::Tuning
+2025-09-25 17:34:13.397253 INFO::Getting Air Passengers data...
+2025-09-25 17:34:13.97742 INFO::Hypothesis testing...
+2025-09-25 17:34:13.979716 INFO::Normality Tests
+2025-09-25 17:34:13.980607 INFO::Autocorrelation Tests
+2025-09-25 17:34:13.981632 INFO::Stationarity Tests
+2025-09-25 17:34:27.664082 INFO::*** Generating Forecasts ***
+2025-09-25 17:34:27.665884 INFO::Method(s): Feed-Forward
+2025-09-25 17:34:27.666735 INFO::Initial Split
+2025-09-25 17:34:27.722929 INFO::Future Frame
+2025-09-25 17:34:27.742265 INFO::Modeltime Table
+2025-09-25 17:34:27.755404 INFO::*** Fitting Algorithm ***
+2025-09-25 17:34:27.756047 INFO::Method(s): Feed-Forward
+2025-09-25 17:34:27.756763 INFO::Initial Split
+2025-09-25 17:34:27.795029 INFO::Recipe Specification
+2025-09-25 17:34:27.797183 INFO::Using default recipe specification
+2025-09-25 17:34:27.800872 INFO::Model Specification
+2025-09-25 17:34:27.803026 INFO::Workflow Specification
+2025-09-25 17:34:27.804009 INFO::Fitting
+2025-09-25 17:39:34.549999 INFO::Getting Air Passengers data...
+2025-09-25 17:39:35.292254 INFO::Hypothesis testing...
+2025-09-25 17:39:35.320398 INFO::Normality Tests
+2025-09-25 17:39:35.353543 INFO::Autocorrelation Tests
+2025-09-25 17:39:35.355226 INFO::Stationarity Tests
+2025-09-25 17:39:42.387201 INFO::*** Generating Forecasts ***
+2025-09-25 17:39:42.388384 INFO::Method(s): Elastic Net
+2025-09-25 17:39:42.388936 INFO::Initial Split
+2025-09-25 17:39:42.433417 INFO::Future Frame
+2025-09-25 17:39:42.452802 INFO::Modeltime Table
+2025-09-25 17:39:42.465711 INFO::*** Fitting Algorithm ***
+2025-09-25 17:39:42.466318 INFO::Method(s): Elastic Net
+2025-09-25 17:39:42.467023 INFO::Initial Split
+2025-09-25 17:39:42.507193 INFO::Recipe Specification
+2025-09-25 17:39:42.528259 INFO::Using default recipe specification
+2025-09-25 17:39:42.53213 INFO::Model Specification
+2025-09-25 17:39:42.534189 INFO::Workflow Specification
+2025-09-25 17:39:42.536148 INFO::Fitting
+2025-09-25 17:39:42.659552 INFO::Calibration
+2025-09-25 17:39:42.823521 INFO::Residuals
+2025-09-25 17:39:42.978729 INFO::Accuracy Evaluation
+2025-09-25 17:39:43.364499 INFO::Test Forecasting
+2025-09-25 17:39:43.536975 INFO::Refitting
+2025-09-25 17:39:43.617653 INFO::Out-of-Sample Forecasting
+2025-09-25 17:39:48.154228 INFO::*** Generating Forecasts ***
+2025-09-25 17:39:48.155324 INFO::Method(s): Feed-Forward
+2025-09-25 17:39:48.155952 INFO::Initial Split
+2025-09-25 17:39:48.210073 INFO::Future Frame
+2025-09-25 17:39:48.229724 INFO::Modeltime Table
+2025-09-25 17:39:48.235757 INFO::*** Fitting Algorithm ***
+2025-09-25 17:39:48.236304 INFO::Method(s): Feed-Forward
+2025-09-25 17:39:48.239137 INFO::Initial Split
+2025-09-25 17:39:48.27965 INFO::Recipe Specification
+2025-09-25 17:39:48.288975 INFO::Using default recipe specification
+2025-09-25 17:39:48.292959 INFO::Model Specification
+2025-09-25 17:39:48.375808 INFO::Workflow Specification
+2025-09-25 17:39:48.376926 INFO::Fitting
+2025-09-25 17:39:48.464241 INFO::Calibration
+2025-09-25 17:39:48.62033 INFO::Residuals
+2025-09-25 17:39:48.800257 INFO::Accuracy Evaluation
+2025-09-25 17:39:49.396678 INFO::Test Forecasting
+2025-09-25 17:39:49.583741 INFO::Refitting
+2025-09-25 17:39:49.664643 INFO::Out-of-Sample Forecasting
+2025-09-25 17:40:00.16497 INFO::*** Generating Forecasts ***
+2025-09-25 17:40:00.166878 INFO::Method(s): Feed-Forward
+2025-09-25 17:40:00.167864 INFO::Initial Split
+2025-09-25 17:40:00.210783 INFO::Future Frame
+2025-09-25 17:40:00.228835 INFO::Modeltime Table
+2025-09-25 17:40:00.247089 INFO::*** Tuning Algorithm ***
+2025-09-25 17:40:00.24776 INFO::Method(s): Feed-Forward
+2025-09-25 17:40:00.26235 INFO::Initial Split
+2025-09-25 17:40:00.311026 INFO::Validation Split
+2025-09-25 17:40:00.349838 INFO::Recipe Specification
+2025-09-25 17:40:00.35215 INFO::Using default recipe specification
+2025-09-25 17:40:00.355837 INFO::Model Specification
+2025-09-25 17:40:00.356887 INFO::Workflow Specification
+2025-09-25 17:40:00.357871 INFO::Tuning
+2025-09-25 17:40:46.597419 INFO::Extracting Best Model
+2025-09-25 17:40:46.614094 INFO::Fitting
+2025-09-25 17:40:46.848881 INFO::Calibration
+2025-09-25 17:40:47.000925 INFO::Residuals
+2025-09-25 17:40:47.156437 INFO::Accuracy Evaluation
+2025-09-25 17:40:47.501629 INFO::Test Forecasting
+2025-09-25 17:40:47.677112 INFO::Refitting
+2025-09-25 17:40:47.774773 INFO::Out-of-Sample Forecasting
+2025-09-25 17:41:19.674509 INFO::*** Generating Forecasts ***
+2025-09-25 17:41:19.676019 INFO::Method(s): Feed-Forward AR
+2025-09-25 17:41:19.676879 INFO::Initial Split
+2025-09-25 17:41:19.718701 INFO::Future Frame
+2025-09-25 17:41:19.7465 INFO::Modeltime Table
+2025-09-25 17:41:19.752838 INFO::*** Tuning Algorithm ***
+2025-09-25 17:41:19.753532 INFO::Method(s): Feed-Forward AR
+2025-09-25 17:41:19.761736 INFO::Initial Split
+2025-09-25 17:41:19.801056 INFO::Validation Split
+2025-09-25 17:41:19.83853 INFO::Recipe Specification
+2025-09-25 17:41:19.840633 INFO::Using default recipe specification
+2025-09-25 17:41:19.843946 INFO::Model Specification
+2025-09-25 17:41:19.845097 INFO::Workflow Specification
+2025-09-25 17:41:19.845982 INFO::Tuning
+2025-09-25 17:43:14.532466 INFO::Extracting Best Model
+2025-09-25 17:43:14.548134 INFO::Fitting
+2025-09-25 17:43:15.849644 INFO::Calibration
+2025-09-25 17:43:16.070984 INFO::Residuals
+2025-09-25 17:43:16.084412 INFO::Accuracy Evaluation
+2025-09-25 17:43:16.384635 INFO::Test Forecasting
+2025-09-25 17:43:16.633368 INFO::Refitting
+2025-09-25 17:43:17.958717 INFO::Out-of-Sample Forecasting
+2025-09-25 18:06:18.291331 INFO::Getting Air Passengers data...
+2025-09-25 18:06:19.080659 INFO::Hypothesis testing...
+2025-09-25 18:06:19.108712 INFO::Normality Tests
+2025-09-25 18:06:19.142123 INFO::Autocorrelation Tests
+2025-09-25 18:06:19.143424 INFO::Stationarity Tests
+2025-09-25 18:06:30.742766 INFO::*** Generating Forecasts ***
+2025-09-25 18:06:30.743908 INFO::Method(s): ETS
+2025-09-25 18:06:30.744385 INFO::Initial Split
+2025-09-25 18:06:30.787298 INFO::Future Frame
+2025-09-25 18:06:30.806334 INFO::Modeltime Table
+2025-09-25 18:06:30.819359 INFO::*** Fitting Algorithm ***
+2025-09-25 18:06:30.819968 INFO::Method(s): ETS
+2025-09-25 18:06:30.820627 INFO::Initial Split
+2025-09-25 18:06:30.859997 INFO::Recipe Specification
+2025-09-25 18:06:30.880715 INFO::Using default recipe specification
+2025-09-25 18:06:30.883763 INFO::Model Specification
+2025-09-25 18:06:30.885468 INFO::Workflow Specification
+2025-09-25 18:06:30.88721 INFO::Fitting
+2025-09-25 18:06:31.392707 INFO::Calibration
+2025-09-25 18:06:31.501879 INFO::Residuals
+2025-09-25 18:06:31.516613 INFO::Accuracy Evaluation
+2025-09-25 18:06:31.640408 INFO::Test Forecasting
+2025-09-25 18:06:31.714143 INFO::Refitting
+2025-09-25 18:06:32.147315 INFO::Out-of-Sample Forecasting
+2025-09-25 18:06:39.051525 INFO::*** Generating Forecasts ***
+2025-09-25 18:06:39.052615 INFO::Method(s): Random Forest
+2025-09-25 18:06:39.053296 INFO::Initial Split
+2025-09-25 18:06:39.096747 INFO::Future Frame
+2025-09-25 18:06:39.116387 INFO::Modeltime Table
+2025-09-25 18:06:39.12268 INFO::*** Fitting Algorithm ***
+2025-09-25 18:06:39.123281 INFO::Method(s): Random Forest
+2025-09-25 18:06:39.126115 INFO::Initial Split
+2025-09-25 18:06:39.18055 INFO::Recipe Specification
+2025-09-25 18:06:39.189386 INFO::Using default recipe specification
+2025-09-25 18:06:39.193254 INFO::Model Specification
+2025-09-25 18:06:39.267861 INFO::Workflow Specification
+2025-09-25 18:06:39.269011 INFO::Fitting
+2025-09-25 18:06:39.432995 INFO::Calibration
+2025-09-25 18:06:39.834026 INFO::Residuals
+2025-09-25 18:06:40.008152 INFO::Accuracy Evaluation
+2025-09-25 18:06:40.376486 INFO::Test Forecasting
+2025-09-25 18:06:40.556926 INFO::Refitting
+2025-09-25 18:06:40.698178 INFO::Out-of-Sample Forecasting
+2025-09-25 18:06:46.840581 INFO::*** Generating Forecasts ***
+2025-09-25 18:06:46.842412 INFO::Method(s): Elastic Net
+2025-09-25 18:06:46.843312 INFO::Initial Split
+2025-09-25 18:06:46.88615 INFO::Future Frame
+2025-09-25 18:06:46.905133 INFO::Modeltime Table
+2025-09-25 18:06:46.923074 INFO::*** Tuning Algorithm ***
+2025-09-25 18:06:46.923725 INFO::Method(s): Elastic Net
+2025-09-25 18:06:46.946111 INFO::Initial Split
+2025-09-25 18:06:46.984983 INFO::Validation Split
+2025-09-25 18:06:47.022816 INFO::Recipe Specification
+2025-09-25 18:06:47.02492 INFO::Using default recipe specification
+2025-09-25 18:06:47.028399 INFO::Model Specification
+2025-09-25 18:06:47.029404 INFO::Workflow Specification
+2025-09-25 18:06:47.030336 INFO::Tuning
+2025-09-25 18:07:21.895141 INFO::Extracting Best Model
+2025-09-25 18:07:21.911805 INFO::Fitting
+2025-09-25 18:07:22.120291 INFO::Calibration
+2025-09-25 18:07:22.330642 INFO::Residuals
+2025-09-25 18:07:22.489803 INFO::Accuracy Evaluation
+2025-09-25 18:07:22.922488 INFO::Test Forecasting
+2025-09-25 18:07:23.090531 INFO::Refitting
+2025-09-25 18:07:23.168065 INFO::Out-of-Sample Forecasting
+2025-09-25 18:08:41.206049 INFO::Getting Air Passengers data...
+2025-09-25 18:08:41.948423 INFO::Hypothesis testing...
+2025-09-25 18:08:41.976162 INFO::Normality Tests
+2025-09-25 18:08:42.008039 INFO::Autocorrelation Tests
+2025-09-25 18:08:42.009323 INFO::Stationarity Tests
+2025-09-25 18:08:46.634072 INFO::*** Generating Forecasts ***
+2025-09-25 18:08:46.635021 INFO::Method(s): Elastic Net
+2025-09-25 18:08:46.635437 INFO::Initial Split
+2025-09-25 18:08:46.686618 INFO::Future Frame
+2025-09-25 18:08:46.704963 INFO::Modeltime Table
+2025-09-25 18:08:46.723976 INFO::*** Tuning Algorithm ***
+2025-09-25 18:08:46.724658 INFO::Method(s): Elastic Net
+2025-09-25 18:08:46.742492 INFO::Initial Split
+2025-09-25 18:08:46.783893 INFO::Validation Split
+2025-09-25 18:08:46.831651 INFO::Recipe Specification
+2025-09-25 18:08:46.853736 INFO::Using default recipe specification
+2025-09-25 18:08:46.857771 INFO::Model Specification
+2025-09-25 18:08:46.859154 INFO::Workflow Specification
+2025-09-25 18:08:46.860993 INFO::Tuning
+2025-09-25 18:10:04.979078 INFO::Getting Air Passengers data...
+2025-09-25 18:10:05.804111 INFO::Hypothesis testing...
+2025-09-25 18:10:05.832547 INFO::Normality Tests
+2025-09-25 18:10:05.865769 INFO::Autocorrelation Tests
+2025-09-25 18:10:05.867054 INFO::Stationarity Tests
+2025-09-25 18:10:11.854011 INFO::*** Generating Forecasts ***
+2025-09-25 18:10:11.855111 INFO::Method(s): Elastic Net
+2025-09-25 18:10:11.855605 INFO::Initial Split
+2025-09-25 18:10:11.901553 INFO::Future Frame
+2025-09-25 18:10:11.921497 INFO::Modeltime Table
+2025-09-25 18:10:11.941082 INFO::*** Tuning Algorithm ***
+2025-09-25 18:10:11.941719 INFO::Method(s): Elastic Net
+2025-09-25 18:10:11.956809 INFO::Initial Split
+2025-09-25 18:10:11.997465 INFO::Validation Split
+2025-09-25 18:10:12.04416 INFO::Recipe Specification
+2025-09-25 18:10:12.067075 INFO::Using default recipe specification
+2025-09-25 18:10:12.071424 INFO::Model Specification
+2025-09-25 18:10:12.072848 INFO::Workflow Specification
+2025-09-25 18:10:12.074764 INFO::Tuning
+2025-09-25 18:10:46.711419 INFO::Extracting Best Model
+2025-09-25 18:10:46.731875 INFO::Fitting
+2025-09-25 18:10:46.95167 INFO::Calibration
+2025-09-25 18:10:47.112967 INFO::Residuals
+2025-09-25 18:10:47.266253 INFO::Accuracy Evaluation
+2025-09-25 18:10:47.640468 INFO::Test Forecasting
+2025-09-25 18:10:47.812586 INFO::Refitting
+2025-09-25 18:10:47.892874 INFO::Out-of-Sample Forecasting
+2025-09-25 18:14:17.623069 INFO::Getting Air Passengers data...
+2025-09-25 18:14:18.523659 INFO::Hypothesis testing...
+2025-09-25 18:14:18.550984 INFO::Normality Tests
+2025-09-25 18:14:18.583283 INFO::Autocorrelation Tests
+2025-09-25 18:14:18.584593 INFO::Stationarity Tests
+2025-09-25 18:15:51.880821 INFO::Getting Air Passengers data...
+2025-09-25 18:15:52.779043 INFO::Hypothesis testing...
+2025-09-25 18:15:52.806437 INFO::Normality Tests
+2025-09-25 18:15:52.838895 INFO::Autocorrelation Tests
+2025-09-25 18:15:52.840214 INFO::Stationarity Tests
+2025-09-25 18:21:10.64164 INFO::Getting Air Passengers data...
+2025-09-25 18:21:11.611729 INFO::Hypothesis testing...
+2025-09-25 18:21:11.639774 INFO::Normality Tests
+2025-09-25 18:21:11.671942 INFO::Autocorrelation Tests
+2025-09-25 18:21:11.673259 INFO::Stationarity Tests
+2025-09-25 18:21:19.798255 INFO::*** Generating Forecasts ***
+2025-09-25 18:21:19.800043 INFO::Method(s): Elastic Net
+2025-09-25 18:21:19.801003 INFO::Initial Split
+2025-09-25 18:21:19.860018 INFO::Future Frame
+2025-09-25 18:21:19.879009 INFO::Modeltime Table
+2025-09-25 18:21:19.898715 INFO::*** Tuning Algorithm ***
+2025-09-25 18:21:19.89941 INFO::Method(s): Elastic Net
+2025-09-25 18:21:19.913949 INFO::Initial Split
+2025-09-25 18:21:19.956333 INFO::Validation Split
+2025-09-25 18:21:20.004787 INFO::Recipe Specification
+2025-09-25 18:21:20.026789 INFO::Using default recipe specification
+2025-09-25 18:21:20.030623 INFO::Model Specification
+2025-09-25 18:21:20.031996 INFO::Workflow Specification
+2025-09-25 18:21:20.033806 INFO::Tuning
+2025-09-25 18:21:47.357024 INFO::Extracting Best Model
+2025-09-25 18:21:47.372815 INFO::Fitting
+2025-09-25 18:21:47.595279 INFO::Calibration
+2025-09-25 18:21:47.75958 INFO::Residuals
+2025-09-25 18:21:47.912308 INFO::Accuracy Evaluation
+2025-09-25 18:21:48.291343 INFO::Test Forecasting
+2025-09-25 18:21:48.4663 INFO::Refitting
+2025-09-25 18:21:48.549787 INFO::Out-of-Sample Forecasting
+2025-09-25 18:23:17.802669 INFO::Getting Air Passengers data...
+2025-09-25 18:23:18.536113 INFO::Hypothesis testing...
+2025-09-25 18:23:18.56384 INFO::Normality Tests
+2025-09-25 18:23:18.596338 INFO::Autocorrelation Tests
+2025-09-25 18:23:18.5977 INFO::Stationarity Tests
+2025-09-25 18:23:26.029003 INFO::*** Generating Forecasts ***
+2025-09-25 18:23:26.030393 INFO::Method(s): Elastic Net
+2025-09-25 18:23:26.030916 INFO::Initial Split
+2025-09-25 18:23:26.077228 INFO::Future Frame
+2025-09-25 18:23:26.096753 INFO::Modeltime Table
+2025-09-25 18:23:26.117312 INFO::*** Tuning Algorithm ***
+2025-09-25 18:23:26.11798 INFO::Method(s): Elastic Net
+2025-09-25 18:23:26.133707 INFO::Initial Split
+2025-09-25 18:23:26.177476 INFO::Validation Split
+2025-09-25 18:23:26.223403 INFO::Recipe Specification
+2025-09-25 18:23:26.245106 INFO::Using default recipe specification
+2025-09-25 18:23:26.248926 INFO::Model Specification
+2025-09-25 18:23:26.250225 INFO::Workflow Specification
+2025-09-25 18:23:26.251985 INFO::Tuning
+2025-09-25 18:24:01.170268 INFO::Extracting Best Model
+2025-09-25 18:24:01.186531 INFO::Fitting
+2025-09-25 18:24:01.419382 INFO::Calibration
+2025-09-25 18:24:01.596024 INFO::Residuals
+2025-09-25 18:24:01.761305 INFO::Accuracy Evaluation
+2025-09-25 18:24:02.164461 INFO::Test Forecasting
+2025-09-25 18:24:02.355417 INFO::Refitting
+2025-09-25 18:24:02.446371 INFO::Out-of-Sample Forecasting
+2025-09-25 18:24:12.67293 INFO::*** Generating Forecasts ***
+2025-09-25 18:24:12.673616 INFO::Method(s): Elastic Net
+2025-09-25 18:24:12.674068 INFO::Initial Split
+2025-09-25 18:24:12.714107 INFO::Future Frame
+2025-09-25 18:24:12.733833 INFO::Modeltime Table
+2025-09-25 18:24:12.740175 INFO::*** Tuning Algorithm ***
+2025-09-25 18:24:12.740893 INFO::Method(s): Elastic Net
+2025-09-25 18:24:12.751149 INFO::Initial Split
+2025-09-25 18:24:12.793423 INFO::Validation Split
+2025-09-25 18:24:12.839837 INFO::Recipe Specification
+2025-09-25 18:24:12.848625 INFO::Using default recipe specification
+2025-09-25 18:24:12.852527 INFO::Model Specification
+2025-09-25 18:24:12.927123 INFO::Workflow Specification
+2025-09-25 18:24:12.928321 INFO::Tuning
+2025-09-25 18:24:38.551283 INFO::Extracting Best Model
+2025-09-25 18:24:38.566991 INFO::Fitting
+2025-09-25 18:24:38.795105 INFO::Calibration
+2025-09-25 18:24:38.954937 INFO::Residuals
+2025-09-25 18:24:39.122468 INFO::Accuracy Evaluation
+2025-09-25 18:24:39.500223 INFO::Test Forecasting
+2025-09-25 18:24:39.685347 INFO::Refitting
+2025-09-25 18:24:39.772124 INFO::Out-of-Sample Forecasting
+2025-09-25 18:29:27.079925 INFO::Getting Air Passengers data...
+2025-09-25 18:29:27.662348 INFO::Hypothesis testing...
+2025-09-25 18:29:27.664571 INFO::Normality Tests
+2025-09-25 18:29:27.665578 INFO::Autocorrelation Tests
+2025-09-25 18:29:27.666655 INFO::Stationarity Tests
+2025-09-25 18:29:44.983092 INFO::*** Generating Forecasts ***
+2025-09-25 18:29:44.983989 INFO::Method(s): SARIMA
+2025-09-25 18:29:44.984442 INFO::Initial Split
+2025-09-25 18:29:45.025186 INFO::Future Frame
+2025-09-25 18:29:45.046107 INFO::Modeltime Table
+2025-09-25 18:29:45.060216 INFO::*** Fitting Algorithm ***
+2025-09-25 18:29:45.061034 INFO::Method(s): SARIMA
+2025-09-25 18:29:45.061885 INFO::Initial Split
+2025-09-25 18:29:45.104768 INFO::Recipe Specification
+2025-09-25 18:29:45.106852 INFO::Using default recipe specification
+2025-09-25 18:29:45.109736 INFO::Model Specification
+2025-09-25 18:29:45.111148 INFO::Workflow Specification
+2025-09-25 18:29:45.112055 INFO::Fitting
+2025-09-25 18:29:45.710863 INFO::Calibration
+2025-09-25 18:29:45.754747 INFO::Residuals
+2025-09-25 18:29:45.769908 INFO::Accuracy Evaluation
+2025-09-25 18:29:45.881428 INFO::Test Forecasting
+2025-09-25 18:29:45.940465 INFO::Refitting
+2025-09-25 18:29:46.88699 INFO::Out-of-Sample Forecasting
+2025-09-25 18:29:55.796153 INFO::*** Generating Forecasts ***
+2025-09-25 18:29:55.796948 INFO::Method(s): MARS
+2025-09-25 18:29:55.797422 INFO::Initial Split
+2025-09-25 18:29:55.854339 INFO::Future Frame
+2025-09-25 18:29:55.876455 INFO::Modeltime Table
+2025-09-25 18:29:55.882858 INFO::*** Fitting Algorithm ***
+2025-09-25 18:29:55.884308 INFO::Method(s): MARS
+2025-09-25 18:29:55.885118 INFO::Initial Split
+2025-09-25 18:29:55.934052 INFO::Recipe Specification
+2025-09-25 18:29:55.937288 INFO::Using default recipe specification
+2025-09-25 18:29:55.941838 INFO::Model Specification
+2025-09-25 18:29:55.944882 INFO::Workflow Specification
+2025-09-25 18:29:55.946591 INFO::Fitting
+2025-09-25 18:29:56.110469 INFO::Calibration
+2025-09-25 18:29:56.276033 INFO::Residuals
+2025-09-25 18:29:56.468102 INFO::Accuracy Evaluation
+2025-09-25 18:29:56.868449 INFO::Test Forecasting
+2025-09-25 18:29:57.066753 INFO::Refitting
+2025-09-25 18:29:57.160149 INFO::Out-of-Sample Forecasting
+2025-09-25 18:36:14.122802 INFO::Getting Air Passengers data...
+2025-09-25 18:36:15.020442 INFO::Hypothesis testing...
+2025-09-25 18:36:15.048767 INFO::Normality Tests
+2025-09-25 18:36:15.082593 INFO::Autocorrelation Tests
+2025-09-25 18:36:15.083915 INFO::Stationarity Tests
+2025-09-25 18:37:00.157928 INFO::Getting custom data...
+2025-09-25 18:37:27.573217 INFO::*** Generating Forecasts ***
+2025-09-25 18:37:27.57424 INFO::Method(s): ETS
+2025-09-25 18:37:27.574725 INFO::Initial Split
+2025-09-25 18:37:27.62741 INFO::Future Frame
+2025-09-25 18:37:27.647702 INFO::Modeltime Table
+2025-09-25 18:37:27.660662 INFO::*** Fitting Algorithm ***
+2025-09-25 18:37:27.661359 INFO::Method(s): ETS
+2025-09-25 18:37:27.66208 INFO::Initial Split
+2025-09-25 18:37:27.703073 INFO::Recipe Specification
+2025-09-25 18:37:27.705037 INFO::Using default recipe specification
+2025-09-25 18:37:27.707735 INFO::Model Specification
+2025-09-25 18:37:27.709349 INFO::Workflow Specification
+2025-09-25 18:37:27.711035 INFO::Fitting
+2025-09-25 18:37:28.210548 INFO::Calibration
+2025-09-25 18:37:28.256011 INFO::Residuals
+2025-09-25 18:37:28.274613 INFO::Accuracy Evaluation
+2025-09-25 18:37:28.432958 INFO::Test Forecasting
+2025-09-25 18:37:28.512813 INFO::Refitting
+2025-09-25 18:37:28.94448 INFO::Out-of-Sample Forecasting
+2025-09-25 18:38:05.903018 INFO::*** Generating Forecasts ***
+2025-09-25 18:38:05.904285 INFO::Method(s): Elastic Net
+2025-09-25 18:38:05.904888 INFO::Initial Split
+2025-09-25 18:38:05.947117 INFO::Future Frame
+2025-09-25 18:38:05.968034 INFO::Modeltime Table
+2025-09-25 18:38:05.988375 INFO::*** Tuning Algorithm ***
+2025-09-25 18:38:05.989143 INFO::Method(s): Elastic Net
+2025-09-25 18:38:06.007789 INFO::Initial Split
+2025-09-25 18:38:06.060464 INFO::Validation Split
+2025-09-25 18:38:06.099861 INFO::Recipe Specification
+2025-09-25 18:38:06.111637 INFO::Using default recipe specification
+2025-09-25 18:38:06.118715 INFO::Model Specification
+2025-09-25 18:38:06.222986 INFO::Workflow Specification
+2025-09-25 18:38:06.224169 INFO::Tuning
+2025-09-25 18:38:31.664036 INFO::Getting Air Passengers data...
+2025-09-25 18:38:32.512756 INFO::Hypothesis testing...
+2025-09-25 18:38:32.54152 INFO::Normality Tests
+2025-09-25 18:38:32.575291 INFO::Autocorrelation Tests
+2025-09-25 18:38:32.576711 INFO::Stationarity Tests
+2025-09-25 18:38:49.608562 INFO::*** Generating Forecasts ***
+2025-09-25 18:38:49.609579 INFO::Method(s): Elastic Net
+2025-09-25 18:38:49.610077 INFO::Initial Split
+2025-09-25 18:38:49.674011 INFO::Future Frame
+2025-09-25 18:38:49.697539 INFO::Modeltime Table
+2025-09-25 18:38:49.717523 INFO::*** Tuning Algorithm ***
+2025-09-25 18:38:49.718205 INFO::Method(s): Elastic Net
+2025-09-25 18:38:49.733427 INFO::Initial Split
+2025-09-25 18:38:49.778638 INFO::Validation Split
+2025-09-25 18:38:49.829885 INFO::Recipe Specification
+2025-09-25 18:38:49.852768 INFO::Using default recipe specification
+2025-09-25 18:38:49.857089 INFO::Model Specification
+2025-09-25 18:38:49.858484 INFO::Workflow Specification
+2025-09-25 18:38:49.86037 INFO::Tuning
+2025-09-25 18:40:31.965715 INFO::Getting Air Passengers data...
+2025-09-25 18:40:32.812801 INFO::Hypothesis testing...
+2025-09-25 18:40:32.841294 INFO::Normality Tests
+2025-09-25 18:40:32.874428 INFO::Autocorrelation Tests
+2025-09-25 18:40:32.875784 INFO::Stationarity Tests
+2025-09-25 18:40:51.553452 INFO::*** Generating Forecasts ***
+2025-09-25 18:40:51.554517 INFO::Method(s): Elastic Net
+2025-09-25 18:40:51.555016 INFO::Initial Split
+2025-09-25 18:40:51.602808 INFO::Future Frame
+2025-09-25 18:40:51.624273 INFO::Modeltime Table
+2025-09-25 18:40:51.644103 INFO::*** Tuning Algorithm ***
+2025-09-25 18:40:51.644736 INFO::Method(s): Elastic Net
+2025-09-25 18:40:51.659915 INFO::Initial Split
+2025-09-25 18:40:51.702052 INFO::Validation Split
+2025-09-25 18:40:51.76156 INFO::Recipe Specification
+2025-09-25 18:40:51.782984 INFO::Using default recipe specification
+2025-09-25 18:40:51.786854 INFO::Model Specification
+2025-09-25 18:40:51.788221 INFO::Workflow Specification
+2025-09-25 18:40:51.790035 INFO::Tuning
+2025-09-25 18:41:15.512831 INFO::Extracting Best Model
+2025-09-25 18:41:15.529478 INFO::Fitting
+2025-09-25 18:41:15.768721 INFO::Calibration
+2025-09-25 18:41:15.948089 INFO::Residuals
+2025-09-25 18:41:16.115032 INFO::Accuracy Evaluation
+2025-09-25 18:41:16.529329 INFO::Test Forecasting
+2025-09-25 18:41:16.760043 INFO::Refitting
+2025-09-25 18:41:16.85812 INFO::Out-of-Sample Forecasting
+2025-09-25 18:41:28.412193 INFO::*** Generating Forecasts ***
+2025-09-25 18:41:28.414117 INFO::Method(s): ETS, SARIMA, Elastic Net, Random Forest
+2025-09-25 18:41:28.41512 INFO::Initial Split
+2025-09-25 18:41:28.459893 INFO::Future Frame
+2025-09-25 18:41:28.48264 INFO::Modeltime Table
+2025-09-25 18:41:28.496124 INFO::*** Fitting Algorithm ***
+2025-09-25 18:41:28.496771 INFO::Method(s): ETS
+2025-09-25 18:41:28.499946 INFO::Initial Split
+2025-09-25 18:41:28.54244 INFO::Recipe Specification
+2025-09-25 18:41:28.554258 INFO::Using default recipe specification
+2025-09-25 18:41:28.560147 INFO::Model Specification
+2025-09-25 18:41:28.666769 INFO::Workflow Specification
+2025-09-25 18:41:28.668097 INFO::Fitting
+2025-09-25 18:41:29.164288 INFO::*** Fitting Algorithm ***
+2025-09-25 18:41:29.164982 INFO::Method(s): SARIMA
+2025-09-25 18:41:29.165519 INFO::Initial Split
+2025-09-25 18:41:29.207843 INFO::Recipe Specification
+2025-09-25 18:41:29.210168 INFO::Using default recipe specification
+2025-09-25 18:41:29.213728 INFO::Model Specification
+2025-09-25 18:41:29.215387 INFO::Workflow Specification
+2025-09-25 18:41:29.216437 INFO::Fitting
+2025-09-25 18:41:29.727921 INFO::*** Fitting Algorithm ***
+2025-09-25 18:41:29.728505 INFO::Method(s): Elastic Net
+2025-09-25 18:41:29.728977 INFO::Initial Split
+2025-09-25 18:41:29.76772 INFO::Recipe Specification
+2025-09-25 18:41:29.76969 INFO::Using default recipe specification
+2025-09-25 18:41:29.772991 INFO::Model Specification
+2025-09-25 18:41:29.774459 INFO::Workflow Specification
+2025-09-25 18:41:29.775473 INFO::Fitting
+2025-09-25 18:41:29.850054 INFO::*** Fitting Algorithm ***
+2025-09-25 18:41:29.850666 INFO::Method(s): Random Forest
+2025-09-25 18:41:29.851156 INFO::Initial Split
+2025-09-25 18:41:29.900181 INFO::Recipe Specification
+2025-09-25 18:41:29.902343 INFO::Using default recipe specification
+2025-09-25 18:41:29.906059 INFO::Model Specification
+2025-09-25 18:41:29.907991 INFO::Workflow Specification
+2025-09-25 18:41:29.908976 INFO::Fitting
+2025-09-25 18:41:30.097074 INFO::Calibration
+2025-09-25 18:41:30.489106 INFO::Residuals
+2025-09-25 18:41:30.819942 INFO::Accuracy Evaluation
+2025-09-25 18:41:31.654938 INFO::Test Forecasting
+2025-09-25 18:41:31.992069 INFO::Refitting
+2025-09-25 18:41:33.55323 INFO::Out-of-Sample Forecasting
+2025-09-25 18:41:39.813789 INFO::*** Explaining Algorithm ***
+2025-09-25 18:41:39.814842 INFO::Method(s): Linear Regression
+2025-09-25 18:41:39.815316 INFO::Initial Split
+2025-09-25 18:41:39.858945 INFO::Recipe Specification
+2025-09-25 18:41:39.860898 INFO::Using default recipe specification
+2025-09-25 18:41:40.050898 INFO::Model Specification
+2025-09-25 18:41:40.051914 INFO::Workflow Specification
+2025-09-25 18:41:40.05279 INFO::Fitting
+2025-09-25 18:41:40.078211 INFO::Creating Explainer
+2025-09-25 18:41:40.131071 INFO::Explaining Algorithm: feature_importance
+2025-09-25 18:41:41.871522 INFO::Using default recipe specification
+2025-09-25 18:41:41.971711 INFO::Explaining Algorithm: break_down
+2025-09-25 18:41:42.297928 INFO::Explaining Algorithm: variable_response
+2025-09-25 18:41:42.45693 INFO::Using default recipe specification
+2025-09-25 18:41:42.553241 INFO::Explaining Algorithm: local_stability
+2025-09-25 18:41:42.720771 INFO::Explaining Algorithm: break_down
+2025-09-25 18:41:46.55504 INFO::Explaining Algorithm: variable_response
+2025-09-25 18:41:46.650406 INFO::Explaining Algorithm: local_stability
+2025-09-25 18:41:59.703573 INFO::*** Generating Forecasts ***
+2025-09-25 18:41:59.704888 INFO::Method(s): ETS, SARIMA, Elastic Net, KNN
+2025-09-25 18:41:59.705521 INFO::Initial Split
+2025-09-25 18:41:59.772337 INFO::Future Frame
+2025-09-25 18:41:59.791881 INFO::Modeltime Table
+2025-09-25 18:41:59.798631 INFO::*** Fitting Algorithm ***
+2025-09-25 18:41:59.799242 INFO::Method(s): ETS
+2025-09-25 18:41:59.79979 INFO::Initial Split
+2025-09-25 18:41:59.84577 INFO::Recipe Specification
+2025-09-25 18:41:59.848691 INFO::Using default recipe specification
+2025-09-25 18:41:59.852365 INFO::Model Specification
+2025-09-25 18:41:59.85372 INFO::Workflow Specification
+2025-09-25 18:41:59.854754 INFO::Fitting
+2025-09-25 18:42:00.273246 INFO::*** Fitting Algorithm ***
+2025-09-25 18:42:00.273888 INFO::Method(s): SARIMA
+2025-09-25 18:42:00.274363 INFO::Initial Split
+2025-09-25 18:42:00.314133 INFO::Recipe Specification
+2025-09-25 18:42:00.316327 INFO::Using default recipe specification
+2025-09-25 18:42:00.31939 INFO::Model Specification
+2025-09-25 18:42:00.320548 INFO::Workflow Specification
+2025-09-25 18:42:00.321407 INFO::Fitting
+2025-09-25 18:42:00.81037 INFO::*** Fitting Algorithm ***
+2025-09-25 18:42:00.810954 INFO::Method(s): Elastic Net
+2025-09-25 18:42:00.811428 INFO::Initial Split
+2025-09-25 18:42:00.850829 INFO::Recipe Specification
+2025-09-25 18:42:00.852798 INFO::Using default recipe specification
+2025-09-25 18:42:00.856405 INFO::Model Specification
+2025-09-25 18:42:00.857539 INFO::Workflow Specification
+2025-09-25 18:42:00.858457 INFO::Fitting
+2025-09-25 18:42:00.934076 INFO::*** Fitting Algorithm ***
+2025-09-25 18:42:00.934651 INFO::Method(s): KNN
+2025-09-25 18:42:00.935129 INFO::Initial Split
+2025-09-25 18:42:00.973194 INFO::Recipe Specification
+2025-09-25 18:42:00.97511 INFO::Using default recipe specification
+2025-09-25 18:42:00.978542 INFO::Model Specification
+2025-09-25 18:42:00.979885 INFO::Workflow Specification
+2025-09-25 18:42:00.980797 INFO::Fitting
+2025-09-25 18:42:01.147716 INFO::Ensembling
+2025-09-25 18:42:01.964213 INFO::Calibration
+2025-09-25 18:42:02.636692 INFO::Residuals
+2025-09-25 18:42:03.321638 INFO::Accuracy Evaluation
+2025-09-25 18:42:04.807021 INFO::Test Forecasting
+2025-09-25 18:42:05.446532 INFO::Refitting
+2025-09-25 18:42:08.436502 INFO::Out-of-Sample Forecasting
+2025-09-25 18:42:17.304775 INFO::*** Generating Forecasts ***
+2025-09-25 18:42:17.306114 INFO::Method(s): ETS, SARIMA, Elastic Net, KNN
+2025-09-25 18:42:17.306744 INFO::Initial Split
+2025-09-25 18:42:17.349866 INFO::Future Frame
+2025-09-25 18:42:17.370282 INFO::Modeltime Table
+2025-09-25 18:42:17.376488 INFO::*** Fitting Algorithm ***
+2025-09-25 18:42:17.377149 INFO::Method(s): ETS
+2025-09-25 18:42:17.377735 INFO::Initial Split
+2025-09-25 18:42:17.418465 INFO::Recipe Specification
+2025-09-25 18:42:17.420449 INFO::Using default recipe specification
+2025-09-25 18:42:17.423438 INFO::Model Specification
+2025-09-25 18:42:17.424605 INFO::Workflow Specification
+2025-09-25 18:42:17.42547 INFO::Fitting
+2025-09-25 18:42:17.828808 INFO::*** Fitting Algorithm ***
+2025-09-25 18:42:17.829387 INFO::Method(s): SARIMA
+2025-09-25 18:42:17.829847 INFO::Initial Split
+2025-09-25 18:42:17.879097 INFO::Recipe Specification
+2025-09-25 18:42:17.88116 INFO::Using default recipe specification
+2025-09-25 18:42:17.884155 INFO::Model Specification
+2025-09-25 18:42:17.885232 INFO::Workflow Specification
+2025-09-25 18:42:17.886046 INFO::Fitting
+2025-09-25 18:42:18.361114 INFO::*** Fitting Algorithm ***
+2025-09-25 18:42:18.361694 INFO::Method(s): Elastic Net
+2025-09-25 18:42:18.362153 INFO::Initial Split
+2025-09-25 18:42:18.401058 INFO::Recipe Specification
+2025-09-25 18:42:18.402961 INFO::Using default recipe specification
+2025-09-25 18:42:18.406329 INFO::Model Specification
+2025-09-25 18:42:18.407496 INFO::Workflow Specification
+2025-09-25 18:42:18.408499 INFO::Fitting
+2025-09-25 18:42:18.486398 INFO::*** Fitting Algorithm ***
+2025-09-25 18:42:18.486971 INFO::Method(s): KNN
+2025-09-25 18:42:18.487433 INFO::Initial Split
+2025-09-25 18:42:18.526971 INFO::Recipe Specification
+2025-09-25 18:42:18.52916 INFO::Using default recipe specification
+2025-09-25 18:42:18.532823 INFO::Model Specification
+2025-09-25 18:42:18.533893 INFO::Workflow Specification
+2025-09-25 18:42:18.534848 INFO::Fitting
+2025-09-25 18:42:18.651423 INFO::Stacking
+2025-09-25 18:42:31.94368 INFO::Calibration
+2025-09-25 18:42:32.639439 INFO::Residuals
+2025-09-25 18:42:33.297017 INFO::Accuracy Evaluation
+2025-09-25 18:42:34.783373 INFO::Test Forecasting
+2025-09-25 18:42:35.434319 INFO::Refitting
+2025-09-25 18:42:51.772548 INFO::Out-of-Sample Forecasting
+2025-09-25 18:43:02.664983 INFO::*** Generating Forecasts ***
+2025-09-25 18:43:02.665817 INFO::Method(s): ETS
+2025-09-25 18:43:02.666339 INFO::Setup Multiple Prediction Intervals
+2025-09-25 18:43:02.666829 INFO::Initial Split
+2025-09-25 18:43:02.722609 INFO::Future Frame
+2025-09-25 18:43:02.743696 INFO::Modeltime Table
+2025-09-25 18:43:02.750148 INFO::*** Fitting Algorithm ***
+2025-09-25 18:43:02.750879 INFO::Method(s): ETS
+2025-09-25 18:43:02.751517 INFO::Initial Split
+2025-09-25 18:43:02.792966 INFO::Recipe Specification
+2025-09-25 18:43:02.795188 INFO::Using default recipe specification
+2025-09-25 18:43:02.798415 INFO::Model Specification
+2025-09-25 18:43:02.79959 INFO::Workflow Specification
+2025-09-25 18:43:02.800516 INFO::Fitting
+2025-09-25 18:43:03.210202 INFO::Calibration
+2025-09-25 18:43:03.253655 INFO::Residuals
+2025-09-25 18:43:03.267434 INFO::Accuracy Evaluation
+2025-09-25 18:43:03.371682 INFO::Test Forecasting
+2025-09-25 18:43:04.574304 INFO::Refitting
+2025-09-25 18:43:05.011628 INFO::Out-of-Sample Forecasting

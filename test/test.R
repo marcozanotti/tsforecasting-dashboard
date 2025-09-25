@@ -253,14 +253,15 @@ forecast_results |> extract_ensemble_results(input$ens_type)
 data_selected <- get_data(datasets[1])
 ts_freq <- data_selected$frequency |> unique() |> parse_frequency()
 input <- list(
-  n_future = 12,
-  n_assess = 24,
-  assess_type = "Rolling",
-  method = "Elastic Net",
-  valid_type = "K-Fold CV",
-  n_folds = 5,
-  metric = "RMSE",
-  grid_size = 10,
+  tune_n_future = 12,
+  tune_n_assess = 24,
+  tune_assess_type = "Rolling",
+  tune_method = "Elastic Net",
+  tune_valid_type = "TS CV",
+  tune_n_folds = 5,
+  tune_valid_metric = "RMSE",
+  tune_grid_size = 10,
+  tune_bayes = TRUE,
   tune_elanet = c("Penalty", "Mixture")
 )
 input <- list(
@@ -271,8 +272,8 @@ input <- list(
   tune_valid_type = "K-Fold CV",
   tune_n_folds = 5,
   tune_valid_metric = "RMSE",
-  tune_bayes = TRUE,
   tune_grid_size = 10,
+  tune_bayes = TRUE,
   tune_rf = c("Random Predictors", "Trees")
 )
 
@@ -290,21 +291,21 @@ n_future = input$tune_n_future
 seed = 1992
 
 fitted_model_list <- map(
-  input$method,
+  input$tune_method,
   ~ fit_model_tuning(
     data = data_selected, method = ., params = input,
-    n_assess = input$n_assess, assess_type = input$assess_type,
-    validation_type = input$valid_type, n_folds = input$n_folds,
-    validation_metric = input$metric, grid_size = input$grid_size,
-    seed = 1992
+    n_assess = input$tune_n_assess, assess_type = input$tune_assess_type,
+    validation_type = input$tune_valid_type, n_folds = input$tune_n_folds,
+    validation_metric = input$tune_valid_metric, grid_size = input$tune_grid_size,
+    bayesian_optimization = input$tune_bayes, seed = 1992
   )
 )
 forecast_results <- generate_forecast(
   fitted_model_list = fitted_model_list, data = data_selected,
-  method = input$method, n_future = input$n_future,
-  n_assess = input$n_assess, assess_type = input$assess_type,
-  ensemble_method = input$ens_type
+  method = input$tune_method, n_future = input$tune_n_future,
+  n_assess = input$tune_n_assess, assess_type = input$tune_assess_type
 )
+forecast_results$accuracy |> format_accuracy(single_method = TRUE)
 
 res <- map(
   input$method,
@@ -1019,4 +1020,20 @@ forecast_results1$test_forecast |> plot_modeltime_forecast()
 forecast_results2$test_forecast |> plot_modeltime_forecast()
 forecast_results1$oos_forecast |> plot_modeltime_forecast()
 forecast_results2$oos_forecast |> plot_modeltime_forecast()
+
+
+
+# Spinners -------------------------------------------------------------
+waiter::autoWaiter(
+	id = "waiter", 
+	html = tagList(
+		waiter::spin_google(), br(), br(), 
+		tagAppendAttributes(style = "color:black;", p("Please wait..."))
+	), 
+	color = "#2c3e50"
+)
+shinybusy::add_busy_spinner(
+	spin = "cube-grid", margins = c(10, 20), timeout = 100, color = "#2c3e50"
+)
+
 

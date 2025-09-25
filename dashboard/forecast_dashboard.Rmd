@@ -17,7 +17,10 @@ runtime: shiny
 ```{r setup, include=FALSE, message=FALSE}
 lapply(list.files("R", full.names = TRUE), source)
 
-pkgs <- c("plotly", "DT", "rmarkdown", "flexdashboard", "shiny", "shinyWidgets", "shinyjs")
+pkgs <- c(
+	"modeltime", "modeltime.h2o", "rules", "yardstick", "timetk"
+	# "rmarkdown", "flexdashboard", "shiny", 
+)
 lapply(pkgs, library, character.only = TRUE)
 
 options(shiny.sanitize.errors = TRUE)
@@ -72,7 +75,7 @@ br()
 br()
 br()
 
-prettyRadioButtons(
+shinyWidgets::prettyRadioButtons(
   inputId = "table_type", label = h5("Show:"), 
   choices = c("Preview", "Structure", "Summary")
 )
@@ -85,7 +88,7 @@ observeEvent(
   eventExpr = input$data_reset, 
   handlerExpr = {
   	updateSelectInput(session = session, inputId = "dataset", selected = datasets[1])
-  	reset("upload_custom")
+  	shinyjs::reset("upload_custom")
   	react_val$uploaded_data <- NULL
   }
 )
@@ -113,7 +116,7 @@ ts_freq <- reactive({
   data_selected()$frequency |> unique() |> parse_frequency()
 })
 
-output$data_table <- renderDT({
+output$data_table <- DT::renderDT({
   data_selected() |>
       DT::datatable(
         options = list(
@@ -161,7 +164,7 @@ dateRangeInput(
   start = as.Date("1940-01-01"), end = as.Date("2023-12-31")
 )
 
-materialSwitch(
+shinyWidgets::materialSwitch(
   inputId = "viz_smooth_line", label = h5("Smooth Line"), 
   value = TRUE, status = "primary", inline = TRUE
 )
@@ -171,12 +174,15 @@ numericInput(
   value = 48, min = 1, max = 300, step = 1, width = "45%"
 )
 
-h5("Missing imputation")
-switchInput(inputId = "impute", value = FALSE, size = "mini")
-
 br()
 br()
 actionButton(inputId = "viz_reset", label = "Reset", icon = icon("sync"))
+
+br()
+br()
+hr()
+h5("Missing imputation")
+shinyWidgets::switchInput(inputId = "impute", value = FALSE, size = "mini")
 ```
 
 ```{r}
@@ -205,9 +211,9 @@ observeEvent(
 observeEvent(
   eventExpr = input$viz_reset, 
   handlerExpr = {
-    updateMaterialSwitch(session = session, inputId = "viz_smooth_line", value = TRUE)
+    shinyWidgets::updateMaterialSwitch(session = session, inputId = "viz_smooth_line", value = TRUE)
     updateNumericInput(session = session, inputId = "viz_acf_lag", value = ifelse(ts_freq() < 60, ts_freq() * 3, ts_freq()))
-    updateSwitchInput(session = session, inputId = "viz_impute", value = FALSE)
+    shinyWidgets::updateSwitchInput(session = session, inputId = "viz_impute", value = FALSE)
   }
 )
 
@@ -223,7 +229,7 @@ data_visualized <- reactive({
     dplyr::filter(dplyr::between(date, input$viz_date_range[1], input$viz_date_range[2]))
 })
 
-output$viz_ts_plot_smooth <- renderPlotly({
+output$viz_ts_plot_smooth <- plotly::renderPlotly({
 	req(data_visualized())
   data_visualized() |>
     timetk::plot_time_series(
@@ -233,7 +239,7 @@ output$viz_ts_plot_smooth <- renderPlotly({
     )
 })
 
-output$viz_autocorr_plot <- renderPlotly({
+output$viz_autocorr_plot <- plotly::renderPlotly({
 	req(data_visualized())
   data_visualized() |>
     timetk::plot_acf_diagnostics(
@@ -244,7 +250,7 @@ output$viz_autocorr_plot <- renderPlotly({
     )
 })
 
-output$viz_decomp_plot <- renderPlotly({
+output$viz_decomp_plot <- plotly::renderPlotly({
 	req(data_visualized())
   data_visualized() |>
     timetk::plot_stl_diagnostics(
@@ -254,7 +260,7 @@ output$viz_decomp_plot <- renderPlotly({
     )
 })
 
-output$viz_season_plot <- renderPlotly({
+output$viz_season_plot <- plotly::renderPlotly({
 	req(data_visualized())
   data_visualized() |>
     timetk::plot_seasonal_diagnostics(
@@ -321,7 +327,7 @@ h5("ADF, PP and KPSS")
 br()
 br()
 br()
-pickerInput(
+shinyWidgets::pickerInput(
   inputId = "test_transf", label = h5("Test on transformed data?"), multiple = TRUE,
   choices = transf, selected = NULL
 )
@@ -338,7 +344,7 @@ test_results <- reactive({
   data_test() |> compute_hptests()
 })
 
-output$test_table <- renderDT({
+output$test_table <- DT::renderDT({
   test_results() |>
     DT::datatable(
       options = list(
@@ -353,16 +359,16 @@ output$test_table <- renderDT({
     )
 })
 
-output$test_dist_plot <- renderPlotly({
+output$test_dist_plot <- plotly::renderPlotly({
 	g <- data_test() |>
 		ggplot2::ggplot(ggplot2::aes(x = value)) +
     ggplot2::geom_density(fill = "lightblue", alpha = 0.5) +
     ggplot2::labs(title = "Distribution", x = NULL, y = NULL) +
-    timetk::theme_tq()
+    timetk:::theme_tq()
 	plotly::ggplotly(g, dynamicTicks = TRUE)
 })
 
-output$test_ts_plot <- renderPlotly({
+output$test_ts_plot <- plotly::renderPlotly({
   data_test() |>
     timetk::plot_time_series(
       .date_var = date, .value = value,
@@ -370,7 +376,7 @@ output$test_ts_plot <- renderPlotly({
     )
 })
 
-output$test_autocorr_plot <- renderPlotly({
+output$test_autocorr_plot <- plotly::renderPlotly({
   data_test() |>
     timetk::plot_acf_diagnostics(
       .date_var = date, .value = value, 
@@ -427,7 +433,7 @@ sliderInput(inputId = "max_anomalies", label = "Max Anomalies (%)", min = 0.01, 
 
 hr()
 h4("Anomaly Cleaning")
-switchInput(inputId = "clean", value = FALSE, size = "mini")
+shinyWidgets::switchInput(inputId = "clean", value = FALSE, size = "mini")
 
 br()
 
@@ -440,7 +446,7 @@ observeEvent(
   handlerExpr = {
     updateSliderInput(session = session, inputId = "alpha", value = 0.02)
     updateSliderInput(session = session, inputId = "max_anomalies", value = 0.1)
-    updateSwitchInput(session = session, inputId = "clean", value = FALSE)
+    shinyWidgets::updateSwitchInput(session = session, inputId = "clean", value = FALSE)
   }
 )
 
@@ -449,7 +455,7 @@ data_cleaned <- reactive({
 		clean_data(clean = input$clean)
 })
 
-output$anomaly_plot <- renderPlotly({
+output$anomaly_plot <- plotly::renderPlotly({
   data_imputed() |>
     timetk::plot_anomaly_diagnostics(
       .date_var = date, .value = value, 
@@ -458,7 +464,7 @@ output$anomaly_plot <- renderPlotly({
     )
 })
 
-output$clean_plot <- renderPlotly({
+output$clean_plot <- plotly::renderPlotly({
   data_cleaned() |>
     timetk::plot_time_series(
       .date_var = date, .value = value,
@@ -502,7 +508,7 @@ dateRangeInput(
   start = as.Date("1940-01-01"), end = as.Date("2023-12-31")
 )
 
-materialSwitch(
+shinyWidgets::materialSwitch(
   inputId = "transf_smooth_line", label = h5("Smooth Line"), 
   value = TRUE, status = "primary", inline = TRUE
 )
@@ -512,16 +518,18 @@ numericInput(
   value = 48, min = 1, max = 300, step = 1, width = "45%"
 )
 
-hr()
-pickerInput(
-  inputId = "transf", label = h5("Transformations"), multiple = TRUE,
-  choices = transf[1:7], selected = NULL # not possible to do Diff and SDiff !!!!!
-)
-
 br()
 br()
 
 actionButton(inputId = "transf_reset", label = "Reset", icon = icon("sync"))
+
+br()
+br()
+hr()
+shinyWidgets::pickerInput(
+  inputId = "transf", label = h5("Transformations"), multiple = TRUE,
+  choices = transf[1:7], selected = NULL # not possible to do Diff and SDiff !!!!!
+)
 ```
 
 ```{r}
@@ -550,12 +558,12 @@ observeEvent(
 observeEvent(
   eventExpr = input$transf_reset, 
   handlerExpr = {
-    updateMaterialSwitch(session = session, inputId = "transf_smooth_line", value = TRUE)
+    shinyWidgets::updateMaterialSwitch(session = session, inputId = "transf_smooth_line", value = TRUE)
     updateNumericInput(
     	session = session, inputId = "transf_acf_lag", 
     	value = ifelse(ts_freq() < 60, ts_freq() * 3, ts_freq())
     )
-    updatePickerInput(session = session, inputId = "transf", selected = NULL)
+   shinyWidgets:: updatePickerInput(session = session, inputId = "transf", selected = NULL)
   }
 )
 
@@ -572,7 +580,7 @@ data_transformed <- reactive({
     dplyr::filter(dplyr::between(date, input$transf_date_range[1], input$transf_date_range[2]))
 })
 
-output$transf_ts_plot_smooth <- renderPlotly({
+output$transf_ts_plot_smooth <- plotly::renderPlotly({
   data_transformed() |>
     timetk::plot_time_series(
       .date_var = date, .value = value,
@@ -581,7 +589,7 @@ output$transf_ts_plot_smooth <- renderPlotly({
     )
 })
 
-output$transf_autocorr_plot <- renderPlotly({
+output$transf_autocorr_plot <- plotly::renderPlotly({
   data_transformed() |>
     timetk::plot_acf_diagnostics(
       .date_var = date, .value = value, 
@@ -591,7 +599,7 @@ output$transf_autocorr_plot <- renderPlotly({
     )
 })
 
-output$transf_decomp_plot <- renderPlotly({
+output$transf_decomp_plot <- plotly::renderPlotly({
     data_transformed() |>
       timetk::plot_stl_diagnostics(
     .date_var = date, .value = value, 
@@ -600,7 +608,7 @@ output$transf_decomp_plot <- renderPlotly({
   )
 })
 
-output$transf_season_plot <- renderPlotly({
+output$transf_season_plot <- plotly::renderPlotly({
   data_transformed() |>
     timetk::plot_seasonal_diagnostics(
       .date_var = date, .value = value, 
@@ -650,20 +658,19 @@ Input {.sidebar}
 ---------------------------------------------------------------------------
 
 ```{r}
-useShinyjs(rmd = TRUE) # use Shiny JavaScript to allow delay on buttons
-dropdownButton(
+shinyjs::useShinyjs(rmd = TRUE) # use Shiny JavaScript to allow delay on buttons
+shinyWidgets::dropdownButton(
   numericInput(
     inputId = "feat_n_future", label = "Forecast Horizon", 
     value = 12, min = 1, max = Inf, step = 1, width = "100%"
   ),
   icon = icon("gear"), width = "225px", size = "sm", circle = TRUE,
-  tooltip = tooltipOptions(title = "Click to see inputs!")
+  tooltip = shinyWidgets::tooltipOptions(title = "Click to see inputs!")
 )
 
 h5("Calendar & Holidays")
-awesomeCheckbox(inputId = "feat_calendar", label = "Add calendar features?", value = FALSE)
-awesomeCheckbox(inputId = "feat_holiday", label = "Add holiday features?", value = FALSE)
-hr()
+shinyWidgets::awesomeCheckbox(inputId = "feat_calendar", label = "Add calendar features?", value = FALSE)
+shinyWidgets::awesomeCheckbox(inputId = "feat_holiday", label = "Add holiday features?", value = FALSE)
 textInput(
 	inputId = "feat_fourier_p", label = "Fourier Periods", value = "", placeholder = "Values separated by a comma..."
 )
@@ -671,24 +678,19 @@ sliderInput(
 	inputId = "feat_fourier_k", label = "Fourier Orders",
 	min = 1, max = 10, value = 1, step = 1
 )
-hr()
 textInput(
 	inputId = "feat_spline_deg", label = "Spline Degrees", value = "", placeholder = "Values separated by a comma..."
 )
-hr()
 textInput(
 	inputId = "feat_lag", label = "Lag Orders", value = "", placeholder = "Values separated by a comma..."
 )
 textInput(
 	inputId = "feat_roll", label = "Lag Rolling Periods", value = "", placeholder = "Values separated by a comma..."
 )
-hr()
 textInput(
 	inputId = "feat_inter", label = "Interactions", value = "", placeholder = "Expressions separated by a comma..."
 )
-
-br()
-prettyRadioButtons(
+shinyWidgets::prettyRadioButtons(
   inputId = "feat_table_type", label = h5("Show:"), 
   choices = c("Preview", "Structure", "Summary"), selected = "Structure"
 )
@@ -701,7 +703,7 @@ data_features <- reactive({
 		generate_features(params = input, n_future = input$feat_n_future, verbose = 0)
 })
 
-output$feat_table <- renderDT({
+output$feat_table <- DT::renderDT({
   if (get_features(data_features(), number_only = TRUE) > 1) {
   	data_features() |>
       DT::datatable(
@@ -725,7 +727,7 @@ output$feat_summ <- renderPrint({
   }
 })
 
-output$feat_ts_plot <- renderPlotly({
+output$feat_ts_plot <- plotly::renderPlotly({
 	if (get_features(data_features(), number_only = TRUE) > 1) {
   	feat_nms <- get_features(data_features(), names_only = TRUE, remove_date = TRUE)
 		data_features() |> 
@@ -780,14 +782,14 @@ Input {.sidebar}
 ---------------------------------------------------------------------------
 
 ```{r}
-useShinyjs(rmd = TRUE) # use Shiny JavaScript to allow delay on buttons
-dropdownButton(
+shinyjs::useShinyjs(rmd = TRUE) # use Shiny JavaScript to allow delay on buttons
+shinyWidgets::dropdownButton(
   numericInput(
     inputId = "xfeat_n_future", label = "Forecast Horizon", 
     value = 12, min = 1, max = Inf, step = 1, width = "100%"
   ),
   icon = icon("gear"), width = "225px", size = "sm", circle = TRUE,
-  tooltip = tooltipOptions(title = "Click to see inputs!")
+  tooltip = shinyWidgets::tooltipOptions(title = "Click to see inputs!")
 )
 
 h4("Upload your dataset: ")
@@ -802,7 +804,7 @@ actionButton(inputId = "xfeat_reset", label = "Reset", icon = icon("sync"))
 br()
 br()
 
-prettyRadioButtons(
+shinyWidgets::prettyRadioButtons(
   inputId = "xfeat_table_type", label = h5("Show:"), 
   choices = c("Preview", "Structure", "Summary")
 )
@@ -814,7 +816,7 @@ react_val <- reactiveValues(uploaded_xfeatures = NULL)
 observeEvent(
   eventExpr = input$xfeat_reset, 
   handlerExpr = {
-  	reset("upload_xfeatures")
+  	shinyjs::reset("upload_xfeatures")
   	react_val$uploaded_xfeatures <- NULL
   }
 )
@@ -834,7 +836,7 @@ data_xfeatures <- reactive({
   get_data("custom", path = react_val$uploaded_xfeatures$datapath)
 })
 
-output$xfeat_table <- renderDT({
+output$xfeat_table <- DT::renderDT({
   data_xfeatures() |>
       DT::datatable(
         options = list(
@@ -843,10 +845,10 @@ output$xfeat_table <- renderDT({
         )
       )
 })
-output$xfeat_str <- renderPrint({ glimpse(data_xfeatures()) })
-output$xfeat_summ <- renderPrint({ skim(data_xfeatures()) })
+output$xfeat_str <- renderPrint({ dplyr::glimpse(data_xfeatures()) })
+output$xfeat_summ <- renderPrint({ skimr::skim(data_xfeatures()) })
 
-output$xfeat_ts_plot <- renderPlotly({
+output$xfeat_ts_plot <- plotly::renderPlotly({
 	req(data_xfeatures())
   data_transformed() |>
     add_future_frame(input$xfeat_n_future) |> 
@@ -858,7 +860,7 @@ output$xfeat_ts_plot <- renderPlotly({
   	)
 })
 
-output$xfeat_crosscorr_plot <- renderPlotly({
+output$xfeat_crosscorr_plot <- plotly::renderPlotly({
 	req(data_xfeatures())
   data_transformed() |>
     add_future_frame(input$xfeat_n_future) |> 
@@ -915,14 +917,14 @@ Input {.sidebar}
 ---------------------------------------------------------------------------
 
 ```{r}
-useShinyjs(rmd = TRUE) # use Shiny JavaScript to allow delay on buttons
-dropdownButton(
+shinyjs::useShinyjs(rmd = TRUE) # use Shiny JavaScript to allow delay on buttons
+shinyWidgets::dropdownButton(
   numericInput(
     inputId = "featsel_n_future", label = "Forecast Horizon", 
     value = 12, min = 1, max = Inf, step = 1, width = "100%"
   ),
   icon = icon("gear"), width = "225px", size = "sm", circle = TRUE,
-  tooltip = tooltipOptions(title = "Click to see inputs!")
+  tooltip = shinyWidgets::tooltipOptions(title = "Click to see inputs!")
 )
 br()
 sliderInput(
@@ -939,7 +941,7 @@ textInput(
 	value = "value ~ .", placeholder = "value ~ x1 + x2 + x3"
 )
 br()
-awesomeCheckbox(inputId = "featsel_save", label = "Save feature set?", value = FALSE)
+shinyWidgets::awesomeCheckbox(inputId = "featsel_save", label = "Save feature set?", value = FALSE)
 ```
 
 ```{r}
@@ -983,7 +985,7 @@ n_features <- reactive({
 	get_features(data_feat_selected(), remove_date = TRUE, number_only = TRUE)
 })
 
-output$featsel_corr_plot <- renderPlotly({
+output$featsel_corr_plot <- plotly::renderPlotly({
 	req(data_importance())
 	g <- data_importance() |> 
 		dplyr::filter(type == "Correlation") |> 
@@ -991,20 +993,20 @@ output$featsel_corr_plot <- renderPlotly({
 	plotly::ggplotly(g)
 })
 
-# output$featsel_corr_plot <- renderPlotly({
+# output$featsel_corr_plot <- plotly::renderPlotly({
 # 	req(data_importance())
 # 	g <- data_features() |> 
 #			generate_correlations(cor_method = input$featsel_cormethod, full_matrix = TRUE) |> 
 # 		ggcorrplot::ggcorrplot(
 # 			type = "upper", lab = FALSE, colors = c( "darkred", "white", "darkgreen")
 # 		) + 
-# 		timetk::theme_tq() +
+# 		timetk:::theme_tq() +
 # 		ggplot2::labs(x = "", y = "") + 
 # 		ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45))
 # 	plotly::ggplotly(g)
 # })
 
-output$featsel_ppsr_plot <- renderPlotly({
+output$featsel_ppsr_plot <- plotly::renderPlotly({
 	req(data_importance())
 	g <- data_importance() |> 
 		dplyr::filter(type == "PPS") |> 
@@ -1012,7 +1014,7 @@ output$featsel_ppsr_plot <- renderPlotly({
 	plotly::ggplotly(g)
 })
 
-output$featsel_lasso_plot <- renderPlotly({
+output$featsel_lasso_plot <- plotly::renderPlotly({
 	req(data_importance())
 	g <- data_importance() |> 
 		dplyr::filter(type == "LASSO") |>
@@ -1020,7 +1022,7 @@ output$featsel_lasso_plot <- renderPlotly({
 	plotly::ggplotly(g)
 })
 
-output$featsel_rf_plot <- renderPlotly({
+output$featsel_rf_plot <- plotly::renderPlotly({
 	req(data_importance())
 	g <- data_importance() |> 
 		dplyr::filter(type == "Random Forest") |> 
@@ -1028,7 +1030,7 @@ output$featsel_rf_plot <- renderPlotly({
 	plotly::ggplotly(g)
 })
 
-output$featsel_table <- renderDT({
+output$featsel_table <- DT::renderDT({
   data_feat_selected()$summary_table |>
     DT::datatable(
       options = list(
@@ -1038,7 +1040,7 @@ output$featsel_table <- renderDT({
     )
 })
 
-output$featsel_reg_plot <- renderPlotly({
+output$featsel_reg_plot <- plotly::renderPlotly({
 	reg_f <- input$featsel_reg_formula |> 
 		parse_textinput(format_to = "character") |>
 		rlang::parse_expr()
@@ -1099,8 +1101,8 @@ Input {.sidebar}
 
 *Forecast - Test & Evaluate* 
 ```{r}
-useShinyjs(rmd = TRUE) # use Shiny JavaScript to allow delay on buttons
-dropdownButton(
+shinyjs::useShinyjs(rmd = TRUE) # use Shiny JavaScript to allow delay on buttons
+shinyWidgets::dropdownButton(
   numericInput(
     inputId = "n_future", label = "Forecast Horizon", 
     value = 12, min = 1, max = Inf, step = 1, width = "100%"
@@ -1109,17 +1111,17 @@ dropdownButton(
     inputId = "n_assess", label = "Assessment Period", 
     value = 24, min = 1, max = Inf, step = 1, width = "100%"
   ), 
-  prettyRadioButtons(
+  shinyWidgets::prettyRadioButtons(
     inputId = "assess_type", label = "Assessment Type", 
     choices = c("Expanding", "Rolling"), selected = "Rolling", 
     inline = TRUE
   ),
-  awesomeCheckbox(inputId = "use_feat_set", label = "Use selected fetures?", value = FALSE),
+  shinyWidgets::awesomeCheckbox(inputId = "use_feat_set", label = "Use selected fetures?", value = FALSE),
   icon = icon("gear"), width = "225px", size = "sm", circle = TRUE,
-  tooltip = tooltipOptions(title = "Click to see inputs!")
+  tooltip = shinyWidgets::tooltipOptions(title = "Click to see inputs!")
 )
 
-pickerInput(
+shinyWidgets::pickerInput(
   inputId = "method", label = h3("Forecast Algorithm"), multiple = FALSE,
   choices = list(
     `Time Series` = ts_methods, 
@@ -1131,7 +1133,7 @@ pickerInput(
   selected = "Naive"
 )
 
-awesomeCheckbox(inputId = "back_transf", label = "Back transform?", value = FALSE)
+shinyWidgets::awesomeCheckbox(inputId = "back_transf", label = "Back transform?", value = FALSE)
 
 actionButton(inputId = "apply_forecast", label = "Forecast!", icon = icon("play"))
 actionButton(inputId = "tsf_reset", label = "Reset", icon = icon("sync"))
@@ -1164,7 +1166,7 @@ conditionalPanel(
 conditionalPanel(
   condition = "input.method == 'ETS'",
   h5("Algorithm hyperparameters: "),
-  awesomeCheckbox(inputId = "auto_ets", label = "Automatic estimation?", value = get_default("auto_ets")),
+  shinyWidgets::awesomeCheckbox(inputId = "auto_ets", label = "Automatic estimation?", value = get_default("auto_ets")),
   selectInput(inputId = "error", label = "Error", choices = c("additive", "multiplicative"), selected = get_default("error")),
   selectInput(inputId = "trend", label = "Trend", choices = c("additive", "multiplicative", "none"), selected = get_default("trend")),
   selectInput(inputId = "season", label = "Seasonality", choices = c("additive", "multiplicative", "none"), selected = get_default("season")),
@@ -1186,7 +1188,7 @@ conditionalPanel(
 conditionalPanel(
   condition = "input.method == 'SARIMA'",
   h5("Algorithm hyperparameters: "),
-  awesomeCheckbox(inputId = "auto_arima", label = "Automatic estimation?", value = get_default("auto_arima")),
+  shinyWidgets::awesomeCheckbox(inputId = "auto_arima", label = "Automatic estimation?", value = get_default("auto_arima")),
   sliderInput(inputId = "non_seasonal_ar", label = "p", value = get_default("non_seasonal_ar"), min = 0, max = 5, step = 1),
   sliderInput(inputId = "non_seasonal_differences", label = "d", value = get_default("non_seasonal_differences"), min = 0, max = 2, step = 1),
   sliderInput(inputId = "non_seasonal_ma", label = "q", value = get_default("non_seasonal_ma"), min = 0, max = 5, step = 1),
@@ -1199,7 +1201,7 @@ conditionalPanel(
 conditionalPanel(
   condition = "input.method == 'TBATS'",
   h5("Algorithm hyperparameters: "),
-  awesomeCheckbox(inputId = "auto_tbats", label = "Automatic estimation?", value = get_default("auto_tbats")),
+  shinyWidgets::awesomeCheckbox(inputId = "auto_tbats", label = "Automatic estimation?", value = get_default("auto_tbats")),
   numericInput(inputId = "tbats_seasonal_period_1", label = "Seasonal Period 1", value = get_default("tbats_seasonal_period_1"), min = 0, max = Inf, step = 1),
   numericInput(inputId = "tbats_seasonal_period_2", label = "Seasonal Period 2", value = get_default("tbats_seasonal_period_2"), min = 0, max = Inf, step = 1),
   numericInput(inputId = "tbats_seasonal_period_3", label = "Seasonal Period 3", value = get_default("tbats_seasonal_period_3"), min = 0, max = Inf, step = 1)
@@ -1209,8 +1211,8 @@ conditionalPanel(
 conditionalPanel(
   condition = "input.method == 'STLM'",
   h5("Algorithm hyperparameters: "),
-  awesomeCheckbox(inputId = "auto_stlm", label = "Automatic estimation?", value = get_default("auto_stlm")),
-  prettyRadioButtons(inputId = "trend_model", label = "Trend Model", choices = c("ETS", "ARIMA"), inline = TRUE, selected = get_default("trend_model")),
+  shinyWidgets::awesomeCheckbox(inputId = "auto_stlm", label = "Automatic estimation?", value = get_default("auto_stlm")),
+  shinyWidgets::prettyRadioButtons(inputId = "trend_model", label = "Trend Model", choices = c("ETS", "ARIMA"), inline = TRUE, selected = get_default("trend_model")),
   numericInput(inputId = "stlm_seasonal_period_1", label = "Seasonal Period 1", value = get_default("stlm_seasonal_period_1"), min = 0, max = Inf, step = 1),
   numericInput(inputId = "stlm_seasonal_period_2", label = "Seasonal Period 2", value = get_default("stlm_seasonal_period_2"), min = 0, max = Inf, step = 1),
   numericInput(inputId = "stlm_seasonal_period_3", label = "Seasonal Period 3", value = get_default("stlm_seasonal_period_3"), min = 0, max = Inf, step = 1)
@@ -1220,8 +1222,8 @@ conditionalPanel(
 conditionalPanel(
   condition = "input.method == 'Prophet'",
   h5("Algorithm hyperparameters: "),
-  awesomeCheckbox(inputId = "auto_prophet", label = "Automatic estimation?", value = get_default("auto_prophet")),
-  prettyRadioButtons(inputId = "growth", label = "Growth", choices = c("linear", "logistic"), inline = TRUE, selected = get_default("growth")),
+  shinyWidgets::awesomeCheckbox(inputId = "auto_prophet", label = "Automatic estimation?", value = get_default("auto_prophet")),
+  shinyWidgets::prettyRadioButtons(inputId = "growth", label = "Growth", choices = c("linear", "logistic"), inline = TRUE, selected = get_default("growth")),
   conditionalPanel(
     condition = "input.growth == 'logistic'",
     numericInput(inputId = "logistic_cap", label = "Logistic Cap", value = get_default("logistic_cap"), min = -Inf, max = Inf, step = 1),
@@ -1229,10 +1231,10 @@ conditionalPanel(
   ),
   numericInput(inputId = "changepoint_num", label = "Changepoints Num", value = get_default("changepoint_num"), min = 0, max = Inf, step = 1),
   numericInput(inputId = "changepoint_range", label = "Changepoints Range", value = get_default("changepoint_range"), min = 0, max = 1),
-  prettyRadioButtons(inputId = "prophet_season", label = "Seasonality", choices = c("additive", "multiplicative"), inline = TRUE, selected = get_default("prophet_season")),
-  awesomeCheckbox(inputId = "seasonality_yearly", label = "Yearly Seasonality?", value = get_default("seasonality_yearly")),
-  awesomeCheckbox(inputId = "seasonality_weekly", label = "Weekly Seasonality?", value = get_default("seasonality_weekly")),
-  awesomeCheckbox(inputId = "seasonality_daily", label = "Daily Seasonality?", value = get_default("seasonality_daily")),
+  shinyWidgets::prettyRadioButtons(inputId = "prophet_season", label = "Seasonality", choices = c("additive", "multiplicative"), inline = TRUE, selected = get_default("prophet_season")),
+  shinyWidgets::awesomeCheckbox(inputId = "seasonality_yearly", label = "Yearly Seasonality?", value = get_default("seasonality_yearly")),
+  shinyWidgets::awesomeCheckbox(inputId = "seasonality_weekly", label = "Weekly Seasonality?", value = get_default("seasonality_weekly")),
+  shinyWidgets::awesomeCheckbox(inputId = "seasonality_daily", label = "Daily Seasonality?", value = get_default("seasonality_daily")),
   numericInput(inputId = "prior_scale_changepoints", label = "Changepoint Flexibility", value = get_default("prior_scale_changepoints") , min = 0, max = 1),
   numericInput(inputId = "prior_scale_seasonality", label = "Seasonality Stength", value = get_default("prior_scale_seasonality"), min = 0, max = Inf),
   numericInput(inputId = "prior_scale_holidays", label = "Holidays Strength", value = get_default("prior_scale_holidays"), min = 0, max = Inf)
@@ -1273,7 +1275,7 @@ conditionalPanel(
 conditionalPanel(
   condition = "input.method == 'SVM'",
   h5("Algorithm hyperparameters: "),
-  prettyRadioButtons(inputId = "boundary", label = "Boundary Type", choices = c("Linear", "Radial"), inline = TRUE, selected = get_default("boundary")),
+  shinyWidgets::prettyRadioButtons(inputId = "boundary", label = "Boundary Type", choices = c("Linear", "Radial"), inline = TRUE, selected = get_default("boundary")),
   numericInput(inputId = "cost", label = "Cost", value = get_default("cost"), min = 0, max = Inf),
   numericInput(inputId = "margin", label = "Margin", value = get_default("margin"), min = 0, max = Inf),
   conditionalPanel(
@@ -1295,7 +1297,7 @@ conditionalPanel(
 conditionalPanel(
   condition = "input.method == 'Boosted Trees'",
   h5("Algorithm hyperparameters: "),
-  prettyRadioButtons(
+  shinyWidgets::prettyRadioButtons(
     inputId = "boost_method", label = "Boosting Method", 
     choices = c("XGBoost", "LightGBM"), 
     inline = TRUE, selected = get_default("boost_method")
@@ -1324,9 +1326,9 @@ conditionalPanel(
   h5("Algorithm hyperparameters: "),
   numericInput(inputId = "ff_hidden_units", label = "Hidden Units", value = get_default("ff_hidden_units"), min = 0, max = Inf, step = 1),
   numericInput(inputId = "ff_penalty", label = "Decay", value = get_default("ff_penalty"), min = 0, max = 1),
-  numericInput(inputId = "ff_epochs", label = "Epochs", value = get_default("ff_epochs"), min = 1, max = Inf, step = 1),
-  numericInput(inputId = "ff_dropout", label = "Dropout", value = get_default("ff_dropout"), min = 0, max = 1),
-  numericInput(inputId = "ff_learn_rate", label = "Learning Rate", value = get_default("ff_learn_rate"), min = 0, max = 1),
+  numericInput(inputId = "ff_epochs", label = "Epochs", value = get_default("ff_epochs"), min = 1, max = Inf, step = 1)#,
+  # numericInput(inputId = "ff_dropout", label = "Dropout", value = get_default("ff_dropout"), min = 0, max = 1),
+  # numericInput(inputId = "ff_learn_rate", label = "Learning Rate", value = get_default("ff_learn_rate"), min = 0, max = 1),
 )
 
 # Feed-Forward AR
@@ -1388,12 +1390,12 @@ conditionalPanel(
 observeEvent(
   eventExpr = input$tsf_reset, 
   handlerExpr = {
-    updateNumericInput(session = session, inputId = "n_future", value = 12)
-    updateNumericInput(session = session, inputId = "n_assess", value = 24)
-    updatePrettyRadioButtons(session = session, inputId = "assess_type", selected = "Rolling")
-    updateAwesomeCheckbox(session = session, inputId = "use_feat_set", value = FALSE)
-    updatePickerInput(session = session, inputId = "method", selected = "Naive")
-    updateAwesomeCheckbox(session = session, inputId = "back_transf", value = FALSE)
+    shinyWidgets::updateNumericInput(session = session, inputId = "n_future", value = 12)
+    shinyWidgets::updateNumericInput(session = session, inputId = "n_assess", value = 24)
+    shinyWidgets::updatePrettyRadioButtons(session = session, inputId = "assess_type", selected = "Rolling")
+    shinyWidgets::updateAwesomeCheckbox(session = session, inputId = "use_feat_set", value = FALSE)
+    shinyWidgets::updatePickerInput(session = session, inputId = "method", selected = "Naive")
+    shinyWidgets::updateAwesomeCheckbox(session = session, inputId = "back_transf", value = FALSE)
     # shinyjs::delay(ms = 300, expr = {shinyjs::click(id = "apply_forecast")})
   }
 )
@@ -1401,6 +1403,7 @@ observeEvent(
 forecast_results <- eventReactive(
   eventExpr = input$apply_forecast,
   valueExpr = {
+  	shinybusy::show_modal_spinner(color = "#2c3e50", text = "Fitting model... This may take a while.")
     if (input$use_feat_set) {
     	
     	purrr::map(
@@ -1455,6 +1458,7 @@ forecast_results <- eventReactive(
 
 back_forecast_results <- reactive({
 	req(forecast_results())
+	shinybusy::remove_modal_spinner()
 	forecast_results() |> 
 		back_transform_forecast(
 			transform = input$back_transf, 
@@ -1464,23 +1468,23 @@ back_forecast_results <- reactive({
 })
 
 
-output$plot_test_forecast <- renderPlotly({
+output$plot_test_forecast <- plotly::renderPlotly({
   back_forecast_results()$test_forecast |> 
     modeltime::plot_modeltime_forecast(.legend_show = FALSE, .title = FALSE, .conf_interval_fill = "lightblue")
 })
 
-# output$plot_splits <- renderPlotly({
+# output$plot_splits <- plotly::renderPlotly({
 #   forecast_results()$splits |>
 #     tk_time_series_cv_plan() |>
 #     plot_time_series_cv_plan(date, value, .title = NULL, .legend_show = FALSE)
 # })
 
-output$plot_oos_forecast <- renderPlotly({
+output$plot_oos_forecast <- plotly::renderPlotly({
   back_forecast_results()$oos_forecast |> 
     modeltime::plot_modeltime_forecast(.legend_show = FALSE, .title = FALSE, .conf_interval_fill = "lightblue")
 })
 
-output$accuracy_table <- renderDT({
+output$accuracy_table <- DT::renderDT({
 	back_forecast_results()$accuracy |>	
     format_accuracy(single_method = TRUE) |>
     DT::datatable(
@@ -1496,7 +1500,7 @@ output$model_summary <- renderPrint({
   back_forecast_results()$fit |> parse_model_fit()
 })
 
-output$plot_resid_ts <- renderPlotly({
+output$plot_resid_ts <- plotly::renderPlotly({
   back_forecast_results()$residuals |> 
     dplyr::select(.index, .residuals) |> 
     purrr::set_names(c("date", "value")) |> 
@@ -1506,7 +1510,7 @@ output$plot_resid_ts <- renderPlotly({
     )
 })
 
-output$plot_resid_acf <- renderPlotly({
+output$plot_resid_acf <- plotly::renderPlotly({
   back_forecast_results()$residuals |> 
     dplyr::select(.index, .residuals) |> 
     purrr::set_names(c("date", "value")) |> 
@@ -1577,8 +1581,8 @@ Input {.sidebar}
 
 *Forecast - Optimize*  
 ```{r}
-useShinyjs(rmd = TRUE) # use Shiny JavaScript to allow delay on buttons
-dropdownButton(
+shinyjs::useShinyjs(rmd = TRUE) # use Shiny JavaScript to allow delay on buttons
+shinyWidgets::dropdownButton(
   numericInput(
     inputId = "tune_n_future", label = "Forecast Horizon", 
     value = 12, min = 1, max = Inf, step = 1
@@ -1587,12 +1591,12 @@ dropdownButton(
     inputId = "tune_n_assess", label = "Assessment Period", 
     value = 24, min = 1, max = Inf, step = 1
   ), 
-  prettyRadioButtons(
+  shinyWidgets::prettyRadioButtons(
     inputId = "tune_assess_type", label = "Assessment Type", 
     choices = c("Expanding", "Rolling"), selected = "Rolling", 
     inline = TRUE
   ),
-  prettyRadioButtons(
+  shinyWidgets::prettyRadioButtons(
     inputId = "tune_valid_type", label = "Validation Type", 
     choices = c("TS CV", "K-Fold CV"), selected = "TS CV", 
     inline = TRUE
@@ -1605,16 +1609,16 @@ dropdownButton(
     inputId = "tune_valid_metric", label = "Validation Metric", 
     choices = metrics, selected = "RMSE"
   ),
-  awesomeCheckbox(inputId = "tune_bayes", label = "Use Bayes-Optim?", value = TRUE),
+  shinyWidgets::awesomeCheckbox(inputId = "tune_bayes", label = "Use Bayes-Optim?", value = TRUE),
   sliderInput(
     inputId = "tune_grid_size", label = "Grid Size", 
-    value = 10, min = 1, max = 200, step = 10
+    value = 10, min = 5, max = 100, step = 5
   ),
   icon = icon("gear"), width = "225px", size = "sm", circle = TRUE,
-  tooltip = tooltipOptions(title = "Click to see inputs!")
+  tooltip = shinyWidgets::tooltipOptions(title = "Click to see inputs!")
 )
 
-pickerInput(
+shinyWidgets::pickerInput(
   inputId = "tune_method", label = h3("Forecast Algorithm"), multiple = FALSE,
   choices = list(
     `Machine Learning` = ml_methods[-1],
@@ -1624,7 +1628,7 @@ pickerInput(
   selected = "Elastic Net"
 )
 
-awesomeCheckbox(inputId = "tune_back_transf", label = "Back transform?", value = FALSE)
+shinyWidgets::awesomeCheckbox(inputId = "tune_back_transf", label = "Back transform?", value = FALSE)
 
 actionButton(inputId = "tune_apply_forecast", label = "Optimize!", icon = icon("play"))
 actionButton(inputId = "tune_reset", label = "Reset", icon = icon("sync"))
@@ -1636,7 +1640,7 @@ br() # break rule
 conditionalPanel(
   condition = "input.tune_method == 'Elastic Net'",
   h5("Algorithm hyperparameters to optimize: "),
-  pickerInput(
+  shinyWidgets::pickerInput(
     inputId = "tune_elanet", label = NULL, 
     choices = mtd_prm_names[["Elastic Net"]], multiple = TRUE, 
     selected = mtd_prm_names[["Elastic Net"]],
@@ -1648,7 +1652,7 @@ conditionalPanel(
 conditionalPanel(
   condition = "input.tune_method == 'MARS'",
   h5("Algorithm hyperparameters to optimize: "),
-  pickerInput(
+  shinyWidgets::pickerInput(
     inputId = "tune_mars", label = NULL, 
     choices = mtd_prm_names[["MARS"]], multiple = TRUE, 
     selected = mtd_prm_names[["MARS"]][1:2],
@@ -1660,7 +1664,7 @@ conditionalPanel(
 conditionalPanel(
   condition = "input.tune_method == 'KNN'",
   h5("Algorithm hyperparameters to optimize: "),
-  pickerInput(
+  shinyWidgets::pickerInput(
     inputId = "tune_knn", label = NULL, 
     choices = mtd_prm_names[["KNN"]], multiple = TRUE, 
     selected = mtd_prm_names[["KNN"]],
@@ -1672,13 +1676,13 @@ conditionalPanel(
 conditionalPanel(
   condition = "input.tune_method == 'SVM'",
   h5("Algorithm hyperparameters to optimize: "),
-  prettyRadioButtons(
+  shinyWidgets::prettyRadioButtons(
     inputId = "tune_boundary", label = "Boundary Type", choices = c("Linear", "Radial"), 
     inline = TRUE, selected = get_default("boundary")
   ),
   conditionalPanel(
     condition = "input.tune_boundary == 'Linear'",
-    pickerInput(
+    shinyWidgets::pickerInput(
       inputId = "tune_svm_linear", label = NULL, multiple = TRUE,
       choices = mtd_prm_names[["SVM"]][-c(1, 4)], selected = mtd_prm_names[["SVM"]][2:3],
       options = list("actions-box" = TRUE)
@@ -1686,7 +1690,7 @@ conditionalPanel(
   ),
   conditionalPanel(
     condition = "input.tune_boundary == 'Radial'",
-    pickerInput(
+    shinyWidgets::pickerInput(
       inputId = "tune_svm_rbf", label = NULL, multiple = TRUE,
       choices = mtd_prm_names[["SVM"]][-1], selected = mtd_prm_names[["SVM"]][2:3],
       options = list("actions-box" = TRUE)
@@ -1698,7 +1702,7 @@ conditionalPanel(
 conditionalPanel(
   condition = "input.tune_method == 'Random Forest'",
   h5("Algorithm hyperparameters to optimize: "),
-  pickerInput(
+  shinyWidgets::pickerInput(
     inputId = "tune_rf", label = NULL, 
     choices = mtd_prm_names[["Random Forest"]], multiple = TRUE, 
     selected = mtd_prm_names[["Random Forest"]],
@@ -1710,12 +1714,12 @@ conditionalPanel(
 conditionalPanel(
   condition = "input.tune_method == 'Boosted Trees'",
   h5("Algorithm hyperparameters to optimize: "),
-  prettyRadioButtons(
+  shinyWidgets::prettyRadioButtons(
     inputId = "tune_boost_method", label = "Boosting Method", 
     choices = c("XGBoost", "LightGBM"), 
     inline = TRUE, selected = get_default("boost_method")
   ),
-  pickerInput(
+  shinyWidgets::pickerInput(
     inputId = "tune_boost", label = NULL, 
     choices = mtd_prm_names[["Boosted Trees"]][-1], multiple = TRUE, 
     selected = mtd_prm_names[["Boosted Trees"]][6],
@@ -1727,7 +1731,7 @@ conditionalPanel(
 conditionalPanel(
   condition = "input.tune_method == 'Cubist'",
   h5("Algorithm hyperparameters to optimize: "),
-  pickerInput(
+  shinyWidgets::pickerInput(
     inputId = "tune_cub", label = NULL, 
     choices = mtd_prm_names[["Cubist"]], multiple = TRUE, 
     selected = mtd_prm_names[["Cubist"]],
@@ -1739,7 +1743,7 @@ conditionalPanel(
 conditionalPanel(
   condition = "input.tune_method == 'Feed-Forward'",
   h5("Algorithm hyperparameters to optimize: "),
-  pickerInput(
+  shinyWidgets::pickerInput(
     inputId = "tune_ff", label = NULL, 
     choices = mtd_prm_names[["Feed-Forward"]], multiple = TRUE, 
     selected = mtd_prm_names[["Feed-Forward"]][1:3],
@@ -1751,7 +1755,7 @@ conditionalPanel(
 conditionalPanel(
   condition = "input.tune_method == 'Feed-Forward AR'",
   h5("Algorithm hyperparameters to optimize: "),
-  pickerInput(
+  shinyWidgets::pickerInput(
     inputId = "tune_ffar", label = NULL, 
     choices = mtd_prm_names[["Feed-Forward AR"]], multiple = TRUE, 
     selected = mtd_prm_names[["Feed-Forward AR"]][2:4],
@@ -1763,7 +1767,7 @@ conditionalPanel(
 conditionalPanel(
   condition = "input.tune_method == 'ARIMA-Boost'",
   h5("Algorithm hyperparameters to optimize: "),
-  pickerInput(
+  shinyWidgets::pickerInput(
     inputId = "tune_arima_boost", label = NULL, 
     choices = mtd_prm_names[["ARIMA-Boost"]], multiple = TRUE, 
     selected = mtd_prm_names[["ARIMA-Boost"]][5],
@@ -1775,7 +1779,7 @@ conditionalPanel(
 conditionalPanel(
   condition = "input.tune_method == 'Prophet-Boost'",
   h5("Algorithm hyperparameters to optimize: "),
-  pickerInput(
+  shinyWidgets::pickerInput(
     inputId = "tune_prophet_boost", label = NULL, 
     choices = mtd_prm_names[["Prophet-Boost"]], multiple = TRUE, 
     selected = mtd_prm_names[["Prophet-Boost"]][5],
@@ -1796,29 +1800,27 @@ observeEvent(
   handlerExpr = {
     updateNumericInput(session = session, inputId = "tune_n_future", value = 12)
     updateNumericInput(session = session, inputId = "tune_n_assess", value = 24)
-    updatePrettyRadioButtons(session = session, inputId = "tune_assess_type", selected = "Rolling")
-    updatePrettyRadioButtons(session = session, inputId = "tune_valid_type", selected = "Time Series CV")
+    shinyWidgets::updatePrettyRadioButtons(session = session, inputId = "tune_assess_type", selected = "Rolling")
+    shinyWidgets::updatePrettyRadioButtons(session = session, inputId = "tune_valid_type", selected = "Time Series CV")
     updateSliderInput(session = session, inputId = "tune_n_folds", value = 5)
     updateSelectInput(session = session, inputId = "tune_valid_metric", selected = "RMSE")
-    updateAwesomeCheckbox(session = session, inputId = "tune_bayes", value = TRUE)
+    shinyWidgets::updateAwesomeCheckbox(session = session, inputId = "tune_bayes", value = TRUE)
     updateSliderInput(session = session, inputId = "tune_grid_size", value = 10)
     updateSelectInput(session = session, inputId = "tune_method", selected = "Elastic Net")
-    updateAwesomeCheckbox(session = session, inputId = "tune_back_transf", value = FALSE)
-    updatePickerInput(session = session, inputId = "tune_elanet", selected = mtd_prm_names[["Elastic Net"]])
+    shinyWidgets::updateAwesomeCheckbox(session = session, inputId = "tune_back_transf", value = FALSE)
+    shinyWidgets::updatePickerInput(session = session, inputId = "tune_elanet", selected = mtd_prm_names[["Elastic Net"]])
     # shinyjs::delay(ms = 300, expr = {shinyjs::click(id = "tune_apply_forecast")})
   }
 )
 
 react_val <- reactiveValues(
-	tune_fit = purrr::set_names(
-		vector("list", length(tune_methods)), 
-		tune_methods
-	)
+	tune_fit = purrr::set_names(vector("list", length(tune_methods)), tune_methods)
 )
 
 tune_results <- eventReactive(
   eventExpr = input$tune_apply_forecast,
   valueExpr = {
+  	shinybusy::show_modal_spinner(color = "#2c3e50", text = "Optimizing model... This may take a while.")
     purrr::map(
       input$tune_method, 
       ~ fit_model_tuning(
@@ -1826,7 +1828,8 @@ tune_results <- eventReactive(
         n_assess = input$tune_n_assess, assess_type = input$tune_assess_type, 
         validation_type = input$tune_valid_type, n_folds = input$tune_n_folds,
         validation_metric = input$tune_valid_metric, 
-        bayesian_optimization = input$tune_bayes, grid_size = input$tune_grid_size, 
+        grid_size = input$tune_grid_size, 
+        bayesian_optimization = input$tune_bayes, 
         seed = 1992
       )
     ) |> 
@@ -1842,6 +1845,7 @@ observeEvent(
 	handlerExpr = {
 		req(tune_results())
 		react_val$tune_fit[[input$tune_method]] <- tune_results()$fit[[1]]
+		shinybusy::remove_modal_spinner()
 	}
 )
 
@@ -1855,23 +1859,23 @@ back_tune_results <- reactive({
 		)
 })
 
-output$plot_tune_test_forecast <- renderPlotly({
+output$plot_tune_test_forecast <- plotly::renderPlotly({
   back_tune_results()$test_forecast |> 
     modeltime::plot_modeltime_forecast(.legend_show = FALSE, .title = FALSE, .conf_interval_fill = "lightblue")
 })
 
-# output$plot_tune_splits <- renderPlotly({
+# output$plot_tune_splits <- plotly::renderPlotly({
 #   tune_results()$splits |>
 #     tk_time_series_cv_plan() |>
 #     plot_time_series_cv_plan(date, value, .title = NULL, .legend_show = FALSE)
 # })
 
-output$plot_tune_oos_forecast <- renderPlotly({
+output$plot_tune_oos_forecast <- plotly::renderPlotly({
   back_tune_results()$oos_forecast |> 
     modeltime::plot_modeltime_forecast(.legend_show = FALSE, .title = FALSE, .conf_interval_fill = "lightblue")
 })
 
-output$tune_accuracy_table <- renderDT({
+output$tune_accuracy_table <- DT::renderDT({
 	back_tune_results()$accuracy |>
     format_accuracy(single_method = TRUE) |>
     DT::datatable(
@@ -1887,7 +1891,7 @@ output$tune_model_summary <- renderPrint({
   tune_results()$fit |> parse_model_fit()
 })
 
-output$plot_tune_resid_ts <- renderPlotly({
+output$plot_tune_resid_ts <- plotly::renderPlotly({
   back_tune_results()$residuals |> 
     dplyr::select(.index, .residuals) |> 
     purrr::set_names(c("date", "value")) |> 
@@ -1897,7 +1901,7 @@ output$plot_tune_resid_ts <- renderPlotly({
     )
 })
 
-output$plot_tune_resid_acf <- renderPlotly({
+output$plot_tune_resid_acf <- plotly::renderPlotly({
   back_tune_results()$residuals |> 
     dplyr::select(.index, .residuals) |> 
     purrr::set_names(c("date", "value")) |> 
@@ -1968,8 +1972,8 @@ Input {.sidebar}
 
 *Forecast - Compare*
 ```{r}
-useShinyjs(rmd = TRUE) # use Shiny JavaScript to allow delay on buttons
-dropdownButton(
+shinyjs::useShinyjs(rmd = TRUE) # use Shiny JavaScript to allow delay on buttons
+shinyWidgets::dropdownButton(
   numericInput(
     inputId = "comp_n_future", label = "Forecast Horizon", 
     value = 12, min = 1, max = Inf, step = 1, width = "100%"
@@ -1978,16 +1982,16 @@ dropdownButton(
     inputId = "comp_n_assess", label = "Assessment Period", 
     value = 24, min = 1, max = Inf, step = 1, width = "100%"
   ), 
-  prettyRadioButtons(
+  shinyWidgets::prettyRadioButtons(
     inputId = "comp_assess_type", label = "Assessment Type", 
     choices = c("Expanding", "Rolling"), selected = "Rolling", 
     inline = TRUE
   ),
   icon = icon("gear"), width = "225px", size = "sm", circle = TRUE,
-  tooltip = tooltipOptions(title = "Click to see inputs!")
+  tooltip = shinyWidgets::tooltipOptions(title = "Click to see inputs!")
 )
 
-pickerInput(
+shinyWidgets::pickerInput(
   inputId = "comp_method", label = h3("Forecast Algorithm"), multiple = TRUE,
   choices = list(
     `Time Series` = ts_methods, 
@@ -1999,8 +2003,8 @@ pickerInput(
   selected = c("ETS", "SARIMA"), options = list("actions-box" = TRUE)
 )
 
-awesomeCheckbox(inputId = "comp_tune", label = "Use optimized algorithms?", value = FALSE)
-awesomeCheckbox(inputId = "comp_back_transf", label = "Back transform?", value = FALSE)
+shinyWidgets::awesomeCheckbox(inputId = "comp_tune", label = "Use optimized algorithms?", value = FALSE)
+shinyWidgets::awesomeCheckbox(inputId = "comp_back_transf", label = "Back transform?", value = FALSE)
 
 actionButton(inputId = "comp_apply_forecast", label = "Forecast!", icon = icon("play"))
 actionButton(inputId = "comp_reset", label = "Reset", icon = icon("sync"))
@@ -2012,10 +2016,10 @@ observeEvent(
   handlerExpr = {
     updateNumericInput(session = session, inputId = "comp_n_future", value = 12)
     updateNumericInput(session = session, inputId = "comp_n_assess", value = 24)
-    updatePrettyRadioButtons(session = session, inputId = "comp_assess_type", selected = "Rolling")
-    updatePickerInput(session = session, inputId = "comp_method", selected = c("ETS", "SARIMA"))
-    updateAwesomeCheckbox(session = session, inputId = "comp_tune", value = FALSE)
-    updateAwesomeCheckbox(session = session, inputId = "comp_back_transf", value = FALSE)
+    shinyWidgets::updatePrettyRadioButtons(session = session, inputId = "comp_assess_type", selected = "Rolling")
+    shinyWidgets::updatePickerInput(session = session, inputId = "comp_method", selected = c("ETS", "SARIMA"))
+    shinyWidgets::updateAwesomeCheckbox(session = session, inputId = "comp_tune", value = FALSE)
+    shinyWidgets::updateAwesomeCheckbox(session = session, inputId = "comp_back_transf", value = FALSE)
     # shinyjs::delay(ms = 300, expr = {shinyjs::click(id = "tune_apply_forecast")})
   }
 )
@@ -2030,6 +2034,7 @@ react_val <- reactiveValues(
 compare_results <- eventReactive(
   eventExpr = input$comp_apply_forecast,
   valueExpr = {
+  	shinybusy::show_modal_spinner(color = "#2c3e50", text = "Fitting models... This may take a while.")
   	if (input$comp_tune) {
   		comp_no_tune_mtd <- input$comp_method[!input$comp_method %in% tune_methods]
   		if (length(comp_no_tune_mtd) > 0) {
@@ -2073,6 +2078,7 @@ compare_results <- eventReactive(
 
 back_compare_results <- reactive({
 	req(compare_results())
+	shinybusy::remove_modal_spinner()
 	compare_results() |> 
 		back_transform_forecast(
 			transform = input$comp_back_transf, 
@@ -2081,17 +2087,17 @@ back_compare_results <- reactive({
 		)
 })
 
-output$plot_comp_test_forecast <- renderPlotly({
+output$plot_comp_test_forecast <- plotly::renderPlotly({
   back_compare_results()$test_forecast |> 
     modeltime::plot_modeltime_forecast(.legend_show = TRUE, .title = FALSE, .conf_interval_fill = "lightblue")
 })
 
-output$plot_comp_oos_forecast <- renderPlotly({
+output$plot_comp_oos_forecast <- plotly::renderPlotly({
   back_compare_results()$oos_forecast |> 
     modeltime::plot_modeltime_forecast(.legend_show = TRUE, .title = FALSE, .conf_interval_fill = "lightblue")
 })
 
-output$comp_accuracy_table <- renderDT({
+output$comp_accuracy_table <- DT::renderDT({
 	back_compare_results()$accuracy |>
     format_accuracy(single_method = FALSE) |>
     dplyr::filter(Type == "Test") |> 
@@ -2149,8 +2155,8 @@ Input {.sidebar}
 
 *Forecast - Explain*  
 ```{r}
-useShinyjs(rmd = TRUE) # use Shiny JavaScript to allow delay on buttons
-dropdownButton(
+shinyjs::useShinyjs(rmd = TRUE) # use Shiny JavaScript to allow delay on buttons
+shinyWidgets::dropdownButton(
 	numericInput(
     inputId = "exp_n_future", label = "Forecast Horizon", 
     value = 12, min = 1, max = Inf, step = 1, width = "100%"
@@ -2159,16 +2165,16 @@ dropdownButton(
     inputId = "exp_n_assess", label = "Assessment Period", 
     value = 24, min = 1, max = Inf, step = 1, width = "100%"
   ), 
-  prettyRadioButtons(
+  shinyWidgets::prettyRadioButtons(
     inputId = "exp_assess_type", label = "Assessment Type", 
     choices = c("Expanding", "Rolling"), selected = "Rolling", 
     inline = TRUE
   ),
   icon = icon("gear"), width = "225px", size = "sm", circle = TRUE,
-  tooltip = tooltipOptions(title = "Click to see inputs!")
+  tooltip = shinyWidgets::tooltipOptions(title = "Click to see inputs!")
 )
 
-pickerInput(
+shinyWidgets::pickerInput(
   inputId = "exp_method", label = h3("Forecast Algorithm"), multiple = FALSE,
   choices = list(
     `Machine Learning` = ml_methods,
@@ -2179,8 +2185,8 @@ pickerInput(
   selected = "Linear Regression"
 )
 
-awesomeCheckbox(inputId = "exp_tune", label = "Use optimized algorithm?", value = FALSE)
-awesomeCheckbox(inputId = "exp_back_transf", label = "Back transform?", value = FALSE)
+shinyWidgets::awesomeCheckbox(inputId = "exp_tune", label = "Use optimized algorithm?", value = FALSE)
+shinyWidgets::awesomeCheckbox(inputId = "exp_back_transf", label = "Back transform?", value = FALSE)
 
 actionButton(inputId = "exp_apply_forecast", label = "Explain!", icon = icon("play"))
 actionButton(inputId = "exp_reset", label = "Reset", icon = icon("sync"))
@@ -2189,7 +2195,7 @@ br()
 br()
 br()
 
-pickerInput(
+shinyWidgets::pickerInput(
   inputId = "exp_features", label = h5("Feature to explain"), multiple = FALSE,
   choices = NULL, selected = NULL, options = list("actions-box" = TRUE)
 )
@@ -2205,7 +2211,7 @@ observeEvent(
   handlerExpr = {
   	updateNumericInput(session = session, inputId = "exp_n_future", value = 12)
     updateNumericInput(session = session, inputId = "exp_n_assess", value = 24)
-    updatePrettyRadioButtons(session = session, inputId = "exp_assess_type", selected = "Rolling")
+    shinyWidgets::updatePrettyRadioButtons(session = session, inputId = "exp_assess_type", selected = "Rolling")
     updateSelectInput(session = session, inputId = "exp_method", selected = "Linear Regression")
     updateCheckboxInput(session = session, inputId = "exp_tune", value = FALSE)
     updateCheckboxInput(session = session, inputId = "exp_back_transf", value = FALSE)
@@ -2218,6 +2224,7 @@ observeEvent(
 explainer_results <- eventReactive(
   eventExpr = input$exp_apply_forecast,
   valueExpr = {
+  	shinybusy::show_modal_spinner(color = "#2c3e50", text = "Explainig model... This may take a while.")
   	if (input$exp_tune) {
   		generate_model_explainer(
   			fitted_model = react_val$tune_fit[[input$exp_method]],
@@ -2237,7 +2244,7 @@ observeEvent(
   eventExpr = input$exp_apply_forecast,
   handlerExpr = {
   	req(explainer_results())
-    updatePickerInput(
+    shinyWidgets::updatePickerInput(
     	session = session, inputId = "exp_features",
     	choices = explainer_results()$features,
     	selected = explainer_results()$features[2]
@@ -2262,13 +2269,14 @@ exp_observation <- reactive({
   req(data_transformed())
   req(explainer_results())
   req(input$exp_date)
+  shinybusy::remove_modal_spinner()
   get_observation(
   	data = data_transformed(), date = input$exp_date, method = input$exp_method,
   	n_assess = input$exp_n_assess, assess_type = input$exp_assess_type
   )
 })
 	
-output$exp_features_table <- renderDT({
+output$exp_features_table <- DT::renderDT({
   req(explainer_results()) 
 	tibble::tibble(explainer_results()$features) |>
 		DT::datatable(
@@ -2366,8 +2374,8 @@ Input {.sidebar}
 
 *Forecast - Combine*
 ```{r}
-useShinyjs(rmd = TRUE) # use Shiny JavaScript to allow delay on buttons
-dropdownButton(
+shinyjs::useShinyjs(rmd = TRUE) # use Shiny JavaScript to allow delay on buttons
+shinyWidgets::dropdownButton(
   numericInput(
     inputId = "ens_n_future", label = "Forecast Horizon", 
     value = 12, min = 1, max = Inf, step = 1, width = "100%"
@@ -2376,16 +2384,16 @@ dropdownButton(
     inputId = "ens_n_assess", label = "Assessment Period", 
     value = 24, min = 1, max = Inf, step = 1, width = "100%"
   ), 
-  prettyRadioButtons(
+  shinyWidgets::prettyRadioButtons(
     inputId = "ens_assess_type", label = "Assessment Type", 
     choices = c("Expanding", "Rolling"), selected = "Rolling", 
     inline = TRUE
   ),
   icon = icon("gear"), width = "225px", size = "sm", circle = TRUE,
-  tooltip = tooltipOptions(title = "Click to see inputs!")
+  tooltip = shinyWidgets::tooltipOptions(title = "Click to see inputs!")
 )
 
-pickerInput(
+shinyWidgets::pickerInput(
   inputId = "ens_method", label = h3("Forecast Algorithms"), 
   choices = list(
     `Time Series` = ts_methods, 
@@ -2402,10 +2410,10 @@ pickerInput(
   )
 )
 
-awesomeCheckbox(inputId = "ens_tune", label = "Use optimized algorithms?", value = FALSE)
-awesomeCheckbox(inputId = "ens_back_transf", label = "Back transform?", value = FALSE)
+shinyWidgets::awesomeCheckbox(inputId = "ens_tune", label = "Use optimized algorithms?", value = FALSE)
+shinyWidgets::awesomeCheckbox(inputId = "ens_back_transf", label = "Back transform?", value = FALSE)
 
-pickerInput(
+shinyWidgets::pickerInput(
   inputId = "ens_type", label = h3("Ensemble Method"), 
   choices = ens_methods, selected = "Average", multiple = TRUE,
   options =  list("actions-box" = TRUE)
@@ -2415,12 +2423,12 @@ actionButton(inputId = "ens_apply_forecast", label = "Combine!", icon = icon("pl
 br()
 br()
 
-pickerInput(
+shinyWidgets::pickerInput(
   inputId = "stk_type", label = h3("Stacking Method"), 
   choices = stk_methods, selected = "Linear Regression", multiple = TRUE,
   options =  list("actions-box" = TRUE)
 )
-awesomeCheckbox(inputId = "stk_tune", label = "Optimize stack?", value = FALSE)
+shinyWidgets::awesomeCheckbox(inputId = "stk_tune", label = "Optimize stack?", value = FALSE)
 
 actionButton(inputId = "stk_apply_forecast", label = "Combine!", icon = icon("play"))
 
@@ -2437,13 +2445,13 @@ observeEvent(
   handlerExpr = {
     updateNumericInput(session = session, inputId = "ens_n_future", value = 12)
     updateNumericInput(session = session, inputId = "ens_n_assess", value = 24)
-    updatePrettyRadioButtons(session = session, inputId = "ens_assess_type", selected = "Rolling")
-    updatePickerInput(session = session, inputId = "ens_method", selected = c("ETS", "SARIMA"))
-    updateAwesomeCheckbox(session = session, inputId = "ens_tune", value = FALSE)
-    updateAwesomeCheckbox(session = session, inputId = "ens_back_transf", value = FALSE)
-    updatePickerInput(session = session, inputId = "ens_type", selected = "Average")
-    updatePickerInput(session = session, inputId = "stk_type", selected = "Linear Regression")
-    updateAwesomeCheckbox(session = session, inputId = "stk_tune", value = FALSE)
+    shinyWidgets::updatePrettyRadioButtons(session = session, inputId = "ens_assess_type", selected = "Rolling")
+    shinyWidgets::updatePickerInput(session = session, inputId = "ens_method", selected = c("ETS", "SARIMA"))
+    shinyWidgets::updateAwesomeCheckbox(session = session, inputId = "ens_tune", value = FALSE)
+    shinyWidgets::updateAwesomeCheckbox(session = session, inputId = "ens_back_transf", value = FALSE)
+    shinyWidgets::updatePickerInput(session = session, inputId = "ens_type", selected = "Average")
+    shinyWidgets::updatePickerInput(session = session, inputId = "stk_type", selected = "Linear Regression")
+    shinyWidgets::updateAwesomeCheckbox(session = session, inputId = "stk_tune", value = FALSE)
     # shinyjs::delay(ms = 300, expr = {shinyjs::click(id = "tune_apply_forecast")})
   }
 )
@@ -2454,6 +2462,7 @@ react_val <- reactiveValues(ens_fit = purrr::set_names(vector("list", length(all
 observeEvent(
   eventExpr = input$ens_apply_forecast, 
   handlerExpr = {
+  	shinybusy::show_modal_spinner(color = "#2c3e50", text = "Combining models... This may take a while.")
   	if (input$ens_tune) {
   		ens_no_tune_mtd <- input$ens_method[!input$ens_method %in% tune_methods]
   		if (length(ens_no_tune_mtd) > 0) {
@@ -2500,6 +2509,7 @@ observeEvent(
 observeEvent(
   eventExpr = input$stk_apply_forecast, 
   handlerExpr = {
+  	shinybusy::show_modal_spinner(color = "#2c3e50", text = "Combining models... This may take a while.")
   	if (input$ens_tune) {
   		ens_no_tune_mtd <- input$ens_method[!input$ens_method %in% tune_methods]
   		if (length(ens_no_tune_mtd) > 0) {
@@ -2546,6 +2556,7 @@ observeEvent(
 
 back_combine_results <- reactive({
 	req(react_val$combine_results)
+	shinybusy::remove_modal_spinner()
 	react_val$combine_results |> 
 		back_transform_forecast(
 			transform = input$ens_back_transf, 
@@ -2554,17 +2565,17 @@ back_combine_results <- reactive({
 		)
 })
 
-output$plot_ens_test_forecast <- renderPlotly({
+output$plot_ens_test_forecast <- plotly::renderPlotly({
   back_combine_results()$test_forecast |> 
     modeltime::plot_modeltime_forecast(.legend_show = TRUE, .title = FALSE, .conf_interval_fill = "lightblue")
 })
 
-output$plot_ens_oos_forecast <- renderPlotly({
+output$plot_ens_oos_forecast <- plotly::renderPlotly({
 	back_combine_results()$oos_forecast |> 
     modeltime::plot_modeltime_forecast(.legend_show = TRUE, .title = FALSE, .conf_interval_fill = "lightblue")
 })
 
-output$ens_accuracy_table <- renderDT({
+output$ens_accuracy_table <- DT::renderDT({
 	back_combine_results()$accuracy |> 
     format_accuracy(single_method = FALSE) |>
     dplyr::filter(Type == "Test") |>
@@ -2623,8 +2634,8 @@ Input {.sidebar}
 
 *Forecast - Scenario*
 ```{r}
-useShinyjs(rmd = TRUE) # use Shiny JavaScript to allow delay on buttons
-dropdownButton(
+shinyjs::useShinyjs(rmd = TRUE) # use Shiny JavaScript to allow delay on buttons
+shinyWidgets::dropdownButton(
   numericInput(
     inputId = "scn_n_future", label = "Forecast Horizon", 
     value = 12, min = 1, max = Inf, step = 1, width = "100%"
@@ -2633,16 +2644,16 @@ dropdownButton(
     inputId = "scn_n_assess", label = "Assessment Period", 
     value = 24, min = 1, max = Inf, step = 1, width = "100%"
   ), 
-  prettyRadioButtons(
+  shinyWidgets::prettyRadioButtons(
     inputId = "scn_assess_type", label = "Assessment Type", 
     choices = c("Expanding", "Rolling"), selected = "Rolling", 
     inline = TRUE
   ),
   icon = icon("gear"), width = "225px", size = "sm", circle = TRUE,
-  tooltip = tooltipOptions(title = "Click to see inputs!")
+  tooltip = shinyWidgets::tooltipOptions(title = "Click to see inputs!")
 )
 
-pickerInput(
+shinyWidgets::pickerInput(
   inputId = "scn_method", label = h3("Forecast Algorithm"), multiple = FALSE,
   choices = list(
   	`Ensembling` = c("Ensemble", "Stacking"),
@@ -2655,8 +2666,8 @@ pickerInput(
   selected = "Ensemble"
 )
 
-awesomeCheckbox(inputId = "scn_tune", label = "Use optimized algorithm?", value = FALSE)
-awesomeCheckbox(inputId = "scn_back_transf", label = "Back transform?", value = FALSE)
+shinyWidgets::awesomeCheckbox(inputId = "scn_tune", label = "Use optimized algorithm?", value = FALSE)
+shinyWidgets::awesomeCheckbox(inputId = "scn_back_transf", label = "Back transform?", value = FALSE)
 
 actionButton(inputId = "scn_apply_forecast", label = "Forecast!", icon = icon("play"))
 actionButton(inputId = "scn_reset", label = "Reset", icon = icon("sync"))
@@ -2685,10 +2696,10 @@ observeEvent(
   handlerExpr = {
     updateNumericInput(session = session, inputId = "scn_n_future", value = 12)
     updateNumericInput(session = session, inputId = "scn_n_assess", value = 24)
-    updatePrettyRadioButtons(session = session, inputId = "scn_assess_type", selected = "Rolling")
+    shinyWidgets::updatePrettyRadioButtons(session = session, inputId = "scn_assess_type", selected = "Rolling")
     updateSelectInput(session = session, inputId = "scn_method", selected = "Ensemble")
-    updateAwesomeCheckbox(session = session, inputId = "scn_tune", value = FALSE)
-    updateAwesomeCheckbox(session = session, inputId = "scn_back_transf", value = FALSE)
+    shinyWidgets::updateAwesomeCheckbox(session = session, inputId = "scn_tune", value = FALSE)
+    shinyWidgets::updateAwesomeCheckbox(session = session, inputId = "scn_back_transf", value = FALSE)
     updateSliderInput(session = session, inputId = "scn_conf_lvl", value = 0.9)
     updateSelectInput(session = session, inputId = "scn_aggreg_fun", selected = "sum")
     updateNumericInput(session = session, inputId = "scn_adjust", value = 0)
@@ -2708,6 +2719,7 @@ observeEvent(
 scenario_results <- eventReactive(
   eventExpr = input$scn_apply_forecast,
   valueExpr = {
+  	shinybusy::show_modal_spinner(color = "#2c3e50", text = "Fitting model... This may take a while.")
   	if (input$scn_method == "Ensemble") {
   		
   		if (input$scn_tune) {
@@ -2825,6 +2837,7 @@ scenario_results <- eventReactive(
 
 back_scenario_results <- reactive({
 	req(scenario_results())
+	shinybusy::remove_modal_spinner()
 	scenario_results() |> 
 		back_transform_forecast(
 			transform = input$scn_back_transf, 
@@ -2833,26 +2846,26 @@ back_scenario_results <- reactive({
 		)
 })
 
-output$plot_scn_oos_forecast_fan <- renderPlotly({
+output$plot_scn_oos_forecast_fan <- plotly::renderPlotly({
   back_scenario_results()$oos_forecast |> 
     dplyr::filter(.key == "actual" | .conf_lvl == as.character(input$scn_conf_lvl)) |> 
 		adjust_forecast(input$scn_adjust) |>
     modeltime::plot_modeltime_forecast(.legend_show = FALSE, .title = FALSE, .conf_interval_fill = "lightblue")
 })
 
-output$plot_scn_oos_forecast_wb <- renderPlotly({
+output$plot_scn_oos_forecast_wb <- plotly::renderPlotly({
   g <- back_scenario_results()$oos_forecast |> 
   	dplyr::filter(.key == "actual" | .conf_lvl == as.character(input$scn_conf_lvl)) |> 
   	adjust_forecast(input$scn_adjust) |>
     modeltime::plot_modeltime_forecast(
       .interactive = FALSE, .conf_interval_show = FALSE, .legend_show = FALSE, .title = FALSE
     ) +
-      ggplot2::geom_line(aes(x = .index, y = .conf_lo), col = "darkred", linetype = 2) +
-      ggplot2::geom_line(aes(x = .index, y = .conf_hi), col = "darkgreen", linetype = 2)
+      ggplot2::geom_line(ggplot2::aes(x = .index, y = .conf_lo), col = "darkred", linetype = 2) +
+      ggplot2::geom_line(ggplot2::aes(x = .index, y = .conf_hi), col = "darkgreen", linetype = 2)
   plotly::ggplotly(g, dynamicTicks = TRUE)
 })
 
-output$scn_accuracy_table <- renderDT({
+output$scn_accuracy_table <- DT::renderDT({
 	back_scenario_results()$accuracy |> 
     format_accuracy(single_method = TRUE) |>
     dplyr::select(-Train) |> 
@@ -2865,7 +2878,7 @@ output$scn_accuracy_table <- renderDT({
     )
 })
 
-output$scn_aggregate_table <- renderDT({
+output$scn_aggregate_table <- DT::renderDT({
   back_scenario_results()$oos_forecast |>
 		dplyr::filter(.key == "actual" | .conf_lvl == as.character(input$scn_conf_lvl)) |> 
     adjust_forecast(input$scn_adjust) |>
@@ -2880,7 +2893,7 @@ output$scn_aggregate_table <- renderDT({
     )
 })
 
-output$scn_wb_table <- renderDT({
+output$scn_wb_table <- DT::renderDT({
   back_scenario_results()$oos_forecast |>
 		dplyr::filter(.key == "prediction" & .conf_lvl == as.character(input$scn_conf_lvl)) |> 
     adjust_forecast(input$scn_adjust) |>
@@ -2945,7 +2958,7 @@ observeEvent(
   handlerExpr = {
     req(data_feat_selected())
   	if (get_features(data_feat_selected()$data, remove_date = TRUE, number_only = TRUE) > 0) {
-  		updateAwesomeCheckbox(inputId = "use_feat_set", session = session, value = TRUE)
+  		shinyWidgets::updateAwesomeCheckbox(inputId = "use_feat_set", session = session, value = TRUE)
   		updateNumericInput(inputId = "n_future", session = session, value = input$featsel_n_future)
   	}
   }

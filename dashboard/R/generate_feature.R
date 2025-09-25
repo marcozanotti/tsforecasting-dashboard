@@ -31,7 +31,7 @@ get_features <- function(object, remove_date = FALSE, names_only = FALSE, number
 		stop("object must be a workflow, recipe or data.frame")
 	}
 	
-	if (remove_date) { feats <- dplyr::select(feats, -date) }
+	if (remove_date) { feats <- dplyr::select(feats, -dplyr::any_of(c("date"))) }
 	if (names_only) { feats <- names(feats)	}
 	if (number_only) { feats <- ncol(feats) }
 	
@@ -44,7 +44,7 @@ generate_feature_set <- function(recipe_spec) {
 	feature_set <- recipe_spec |>
 		recipes::prep() |>
 		recipes::bake(new_data = NULL) |>
-		dplyr::select(-date, -value)
+		dplyr::select(-dplyr::any_of(c("date", "value")))
 	return(feature_set)
 }
 
