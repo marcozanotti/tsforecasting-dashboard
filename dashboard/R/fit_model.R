@@ -405,7 +405,7 @@ generate_model_spec <- function(method, params) {
     	parsnip::set_engine(
         engine = "h2o",
         project_name = "h2o_tsf_dashboard",
-        max_models = 50,
+        max_models = 30,
         max_runtime_secs = !!params$h2o_max_time,
         max_runtime_secs_per_model = !!params$h2o_max_time_model,
         nfolds = !!params$h2o_nfolds,

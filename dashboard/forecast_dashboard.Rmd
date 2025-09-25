@@ -4,8 +4,8 @@ output:
   flexdashboard::flex_dashboard:
     orientation: rows
     vertical_layout: fill
-    css: css/styles-default.css
-    logo: img/tsf_logo.png
+    css: styles-default.css
+    logo: tsf_logo.png
     social: ["menu"]
     source_code: https://github.com/marcozanotti/tsforecasting-dashboard
     navbar:
@@ -29,11 +29,11 @@ pkgs <- c(
   "plotly", "DT", "timetk", "ggcorrplot", "ppsr",
   "DALEX", "DALEXtra",
   "rmarkdown", "flexdashboard",
-  "shiny", "shinyWidgets", "shinyjs", "shinymanager"
+  "shiny", "shinyWidgets", "shinyjs"
 )
 install_and_load(pkgs)
 
-if (!require('modeltime.h20')) {
+if (!require(modeltime.h20)) {
 	devtools::install_github("business-science/modeltime.h2o")
 	library(modeltime.h2o)
 }
@@ -41,7 +41,7 @@ if (!require('modeltime.h20')) {
 options(shiny.sanitize.errors = TRUE)
 set_options()
 # Sys.setenv(JAVA_HOME = "/usr/lib/jvm/jdk-17/") # /usr/lib/jvm/java-17-openjdk-amd64/
-logging::addHandler(logging::writeToFile, file = "tsf_dashboard.log")
+logging::addHandler(logging::writeToFile, file = "forecast_dashboard.log")
 
 datasets <- getOption("tsf.dashboard.datasets")
 methods <- getOption("tsf.dashboard.methods")
