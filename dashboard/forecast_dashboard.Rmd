@@ -17,23 +17,12 @@ runtime: shiny
 ```{r setup, include=FALSE, message=FALSE}
 lapply(list.files("R", full.names = TRUE), source)
 
-pkgs <- c(
-  "tidyverse", "tsibbledata", "janitor", "skimr", "vroom", "logging",
-  "forecast", "prophet", "glmnet", "earth", "kernlab", "kknn",
-  "randomForest", "ranger", "xgboost", "bonsai", "lightgbm", 
-  "Cubist", "rules",
-  "tidymodels", "vip",
-  "modeltime", "modeltime.ensemble", "modeltime.resample", "modeltime.h2o",
-  "plotly", "DT", "timetk", "ggcorrplot", "ppsr",
-  "DALEX", "DALEXtra",
-  "rmarkdown", "flexdashboard",
-  "shiny", "shinyWidgets", "shinyjs"
-)
+pkgs <- c("plotly", "DT", "rmarkdown", "flexdashboard", "shiny", "shinyWidgets", "shinyjs")
 lapply(pkgs, library, character.only = TRUE)
 
 options(shiny.sanitize.errors = TRUE)
 set_options()
-# Sys.setenv(JAVA_HOME = "/usr/lib/jvm/jdk-17/") # /usr/lib/jvm/java-17-openjdk-amd64/
+# Sys.setenv(JAVA_HOME = "/usr/lib/jvm/jdk-17/") # /usr/lib/jvm/java-17-openjdk-amd64/ , for h2o
 logging::addHandler(logging::writeToFile, file = "forecast_dashboard.log")
 
 datasets <- getOption("tsf.dashboard.datasets")
@@ -126,15 +115,15 @@ ts_freq <- reactive({
 
 output$data_table <- renderDT({
   data_selected() |>
-      datatable(
+      DT::datatable(
         options = list(
           ordering = TRUE, pageLength = 20, lengthChange = TRUE, searching = TRUE, 
           info = FALSE, paging = TRUE, scrollCollapse = TRUE, scrollY = 575, scrollX = TRUE
         )
       )
 })
-output$data_str <- renderPrint({ glimpse(data_selected()) })
-output$data_summ <- renderPrint({ skim(data_selected()) })
+output$data_str <- renderPrint({ dplyr::glimpse(data_selected()) })
+output$data_summ <- renderPrint({ skimr::skim(data_selected()) })
 ```
 
 
@@ -146,7 +135,7 @@ Row 1
 ```{r}
 conditionalPanel(
   condition = "input.table_type == 'Preview'",
-  DTOutput(outputId = "data_table")
+  DT::DTOutput(outputId = "data_table")
 )
 conditionalPanel(
   condition = "input.table_type == 'Structure'",
@@ -231,7 +220,7 @@ data_imputed <- reactive({
 data_visualized <- reactive({
 	req(data_imputed())
   data_imputed() |> 
-    filter(between(date, input$viz_date_range[1], input$viz_date_range[2]))
+    dplyr::filter(dplyr::between(date, input$viz_date_range[1], input$viz_date_range[2]))
 })
 
 output$viz_ts_plot_smooth <- renderPlotly({
@@ -282,13 +271,13 @@ Row 1 {data-height=400}
 ### {.no-padding}
 
 ```{r}
-plotlyOutput(outputId = "viz_ts_plot_smooth")
+plotly::plotlyOutput(outputId = "viz_ts_plot_smooth")
 ```
 
 ### {.no-padding}
 
 ```{r}
-plotlyOutput(outputId = "viz_autocorr_plot")
+plotly::plotlyOutput(outputId = "viz_autocorr_plot")
 ```
 
 
@@ -298,13 +287,13 @@ Row 2 {data-height=600}
 ### {.no-padding}
 
 ```{r}
-plotlyOutput(outputId = "viz_decomp_plot")
+plotly::plotlyOutput(outputId = "viz_decomp_plot")
 ```
 
 ### {.no-padding}
 
 ```{r}
-plotlyOutput(outputId = "viz_season_plot")
+plotly::plotlyOutput(outputId = "viz_season_plot")
 ```
 
 
@@ -351,7 +340,7 @@ test_results <- reactive({
 
 output$test_table <- renderDT({
   test_results() |>
-    datatable(
+    DT::datatable(
       options = list(
         ordering = FALSE,
         pageLength = 20,
@@ -369,7 +358,7 @@ output$test_dist_plot <- renderPlotly({
 		ggplot2::ggplot(ggplot2::aes(x = value)) +
     ggplot2::geom_density(fill = "lightblue", alpha = 0.5) +
     ggplot2::labs(title = "Distribution", x = NULL, y = NULL) +
-    timetk:::theme_tq()
+    timetk::theme_tq()
 	plotly::ggplotly(g, dynamicTicks = TRUE)
 })
 
@@ -398,13 +387,13 @@ Row {data-height=500}
 ### {.no-padding}
 
 ```{r}
-DTOutput(outputId = "test_table")
+DT::DTOutput(outputId = "test_table")
 ```
 
 ### {.no-padding}
 
 ```{r}
-plotlyOutput(outputId = "test_dist_plot")
+plotly::plotlyOutput(outputId = "test_dist_plot")
 ```
 
 Row {data-height=500}
@@ -413,13 +402,13 @@ Row {data-height=500}
 ### {.no-padding}
 
 ```{r}
-plotlyOutput(outputId = "test_ts_plot")
+plotly::plotlyOutput(outputId = "test_ts_plot")
 ```
 
 ### {.no-padding}
 
 ```{r}
-plotlyOutput(outputId = "test_autocorr_plot")
+plotly::plotlyOutput(outputId = "test_autocorr_plot")
 ```
 
 
@@ -486,7 +475,7 @@ Row 1 {data-height=650}
 ### {.no-padding}
 
 ```{r}
-plotlyOutput(outputId = "anomaly_plot")
+plotly::plotlyOutput(outputId = "anomaly_plot")
 ```
 
 
@@ -496,7 +485,7 @@ Row 2 {data-height=350}
 ### {.no-padding}
 
 ```{r}
-plotlyOutput(outputId = "clean_plot")
+plotly::plotlyOutput(outputId = "clean_plot")
 ```
 
 
@@ -580,7 +569,7 @@ data_transformed <- reactive({
   data_cleaned() |> 
     transform_data(transformations = input$transf,	freq = ts_freq()) |> 
 		purrr::pluck("data_transformed") |> 
-    filter(between(date, input$transf_date_range[1], input$transf_date_range[2]))
+    dplyr::filter(dplyr::between(date, input$transf_date_range[1], input$transf_date_range[2]))
 })
 
 output$transf_ts_plot_smooth <- renderPlotly({
@@ -627,13 +616,13 @@ Row 1 {data-height=400}
 ### {.no-padding}
 
 ```{r}
-plotlyOutput(outputId = "transf_ts_plot_smooth")
+plotly::plotlyOutput(outputId = "transf_ts_plot_smooth")
 ```
 
 ### {.no-padding}
 
 ```{r}
-plotlyOutput(outputId = "transf_autocorr_plot")
+plotly::plotlyOutput(outputId = "transf_autocorr_plot")
 ```
 
 
@@ -643,13 +632,13 @@ Row 2 {data-height=600}
 ### {.no-padding}
 
 ```{r}
-plotlyOutput(outputId = "transf_decomp_plot")
+plotly::plotlyOutput(outputId = "transf_decomp_plot")
 ```
 
 ### {.no-padding}
 
 ```{r}
-plotlyOutput(outputId = "transf_season_plot")
+plotly::plotlyOutput(outputId = "transf_season_plot")
 ```
 
 
@@ -715,7 +704,7 @@ data_features <- reactive({
 output$feat_table <- renderDT({
   if (get_features(data_features(), number_only = TRUE) > 1) {
   	data_features() |>
-      datatable(
+      DT::datatable(
         options = list(
           ordering = TRUE, pageLength = 20, lengthChange = TRUE, searching = TRUE, 
           info = FALSE, paging = TRUE, scrollCollapse = TRUE, scrollY = 550, scrollX = TRUE
@@ -726,13 +715,13 @@ output$feat_table <- renderDT({
 
 output$feat_str <- renderPrint({ 
 	if (get_features(data_features(), number_only = TRUE) > 1) {
-  	glimpse(data_features()) 
+  	dplyr::glimpse(data_features()) 
   }
 })
 
 output$feat_summ <- renderPrint({ 
 	if (get_features(data_features(), number_only = TRUE) > 1) {
-  	skim(data_features()) 
+  	skimr::skim(data_features()) 
   }
 })
 
@@ -764,7 +753,7 @@ Row 1 {.tabset}
 ```{r}
 conditionalPanel(
   condition = "input.feat_table_type == 'Preview'",
-  DTOutput(outputId = "feat_table")
+  DT::DTOutput(outputId = "feat_table")
 )
 conditionalPanel(
   condition = "input.feat_table_type == 'Structure'",
@@ -779,7 +768,7 @@ conditionalPanel(
 ### Time Series {.no-padding}
 
 ```{r}
-plotlyOutput(outputId = "feat_ts_plot")
+plotly::plotlyOutput(outputId = "feat_ts_plot")
 ```
 
 
@@ -847,7 +836,7 @@ data_xfeatures <- reactive({
 
 output$xfeat_table <- renderDT({
   data_xfeatures() |>
-      datatable(
+      DT::datatable(
         options = list(
           ordering = TRUE, pageLength = 20, lengthChange = TRUE, searching = TRUE, 
           info = FALSE, paging = TRUE, scrollCollapse = TRUE, scrollY = 550 # 250
@@ -893,7 +882,7 @@ Row 1 {.tabset}
 ```{r}
 conditionalPanel(
   condition = "input.xfeat_table_type == 'Preview'",
-  DTOutput(outputId = "xfeat_table")
+  DT::DTOutput(outputId = "xfeat_table")
 )
 conditionalPanel(
   condition = "input.xfeat_table_type == 'Structure'",
@@ -908,13 +897,13 @@ conditionalPanel(
 ### Time Series {.no-padding}
 
 ```{r}
-plotlyOutput(outputId = "xfeat_ts_plot")
+plotly::plotlyOutput(outputId = "xfeat_ts_plot")
 ```
 
 ### Cross Correlation {.no-padding}
 
 ```{r}
-plotlyOutput(outputId = "xfeat_crosscorr_plot")
+plotly::plotlyOutput(outputId = "xfeat_crosscorr_plot")
 ```
 
 
@@ -1009,7 +998,7 @@ output$featsel_corr_plot <- renderPlotly({
 # 		ggcorrplot::ggcorrplot(
 # 			type = "upper", lab = FALSE, colors = c( "darkred", "white", "darkgreen")
 # 		) + 
-# 		timetk:::theme_tq() +
+# 		timetk::theme_tq() +
 # 		ggplot2::labs(x = "", y = "") + 
 # 		ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45))
 # 	plotly::ggplotly(g)
@@ -1041,7 +1030,7 @@ output$featsel_rf_plot <- renderPlotly({
 
 output$featsel_table <- renderDT({
   data_feat_selected()$summary_table |>
-    datatable(
+    DT::datatable(
       options = list(
         ordering = TRUE, pageLength = 20, lengthChange = TRUE, searching = TRUE, 
         info = FALSE, paging = TRUE, scrollCollapse = TRUE, scrollY = 550, scrollX = TRUE
@@ -1067,37 +1056,37 @@ Row 1 {.tabset}
 ### Correlation {.no-padding}
 
 ```{r}
-plotlyOutput(outputId = "featsel_corr_plot")
+plotly::plotlyOutput(outputId = "featsel_corr_plot")
 ```
 
 ### Predictive Power Score {.no-padding}
 
 ```{r}
-plotlyOutput(outputId = "featsel_ppsr_plot")
+plotly::plotlyOutput(outputId = "featsel_ppsr_plot")
 ```
 
 ### LASSO {.no-padding}
 
 ```{r}
-plotlyOutput(outputId = "featsel_lasso_plot")
+plotly::plotlyOutput(outputId = "featsel_lasso_plot")
 ```
 
 ### Random Forest {.no-padding}
 
 ```{r}
-plotlyOutput(outputId = "featsel_rf_plot")
+plotly::plotlyOutput(outputId = "featsel_rf_plot")
 ```
 
 ### Selected Feature Set
 
 ```{r}
-DTOutput(outputId = "featsel_table")
+DT::DTOutput(outputId = "featsel_table")
 ```
 
 ### Regression Analysis {.no-padding}
 
 ```{r}
-plotlyOutput(outputId = "featsel_reg_plot")
+plotly::plotlyOutput(outputId = "featsel_reg_plot")
 ```
 
 
@@ -1414,7 +1403,7 @@ forecast_results <- eventReactive(
   valueExpr = {
     if (input$use_feat_set) {
     	
-    	map(
+    	purrr::map(
     		input$method, 
         ~ fit_model(
           data = data_feat_selected()$data, method = ., params = input, 
@@ -1430,7 +1419,7 @@ forecast_results <- eventReactive(
     	
     } else {
     	
-    	map(
+    	purrr::map(
     		input$method, 
         ~ fit_model(
           data = data_transformed(), method = ., params = input, 
@@ -1450,7 +1439,7 @@ forecast_results <- eventReactive(
 # forecast_results <- eventReactive(
 #   eventExpr = input$apply_forecast,
 #   valueExpr = {
-#     map(
+#     purrr::map(
 #       input$method, 
 #       ~ fit_model(
 #         data = data_transformed(), method = ., params = input, 
@@ -1477,7 +1466,7 @@ back_forecast_results <- reactive({
 
 output$plot_test_forecast <- renderPlotly({
   back_forecast_results()$test_forecast |> 
-    plot_modeltime_forecast(.legend_show = FALSE, .title = FALSE, .conf_interval_fill = "lightblue")
+    modeltime::plot_modeltime_forecast(.legend_show = FALSE, .title = FALSE, .conf_interval_fill = "lightblue")
 })
 
 # output$plot_splits <- renderPlotly({
@@ -1488,13 +1477,13 @@ output$plot_test_forecast <- renderPlotly({
 
 output$plot_oos_forecast <- renderPlotly({
   back_forecast_results()$oos_forecast |> 
-    plot_modeltime_forecast(.legend_show = FALSE, .title = FALSE, .conf_interval_fill = "lightblue")
+    modeltime::plot_modeltime_forecast(.legend_show = FALSE, .title = FALSE, .conf_interval_fill = "lightblue")
 })
 
 output$accuracy_table <- renderDT({
 	back_forecast_results()$accuracy |>	
     format_accuracy(single_method = TRUE) |>
-    datatable(
+    DT::datatable(
       options = list(
         ordering = FALSE, pageLength = 20, lengthChange = FALSE, searching = FALSE,
         info = FALSE, paging = FALSE, scrollY = 275
@@ -1509,8 +1498,8 @@ output$model_summary <- renderPrint({
 
 output$plot_resid_ts <- renderPlotly({
   back_forecast_results()$residuals |> 
-    select(.index, .residuals) |> 
-    set_names(c("date", "value")) |> 
+    dplyr::select(.index, .residuals) |> 
+    purrr::set_names(c("date", "value")) |> 
     timetk::plot_time_series(
       .date_var = date, .value = value,
       .smooth = FALSE, .interactive = TRUE, .title = NULL
@@ -1519,8 +1508,8 @@ output$plot_resid_ts <- renderPlotly({
 
 output$plot_resid_acf <- renderPlotly({
   back_forecast_results()$residuals |> 
-    select(.index, .residuals) |> 
-    set_names(c("date", "value")) |> 
+    dplyr::select(.index, .residuals) |> 
+    purrr::set_names(c("date", "value")) |> 
     timetk::plot_acf_diagnostics(
       .date_var = date, .value = value, .lags = 60,
       .interactive = TRUE, .title = NULL, .y_lab = NULL,
@@ -1535,19 +1524,19 @@ Row {data-height=500}
 ### Test Forecasts {.no-padding}
 
 ```{r}
-plotlyOutput(outputId = "plot_test_forecast")
+plotly::plotlyOutput(outputId = "plot_test_forecast")
 ```
 
 <!-- ### Validation Plan {.no-padding} -->
 
 <!-- ```{r} -->
-<!-- plotlyOutput(outputId = "plot_splits") -->
+<!-- plotly::plotlyOutput(outputId = "plot_splits") -->
 <!-- ``` -->
 
 ### Out-of-Sample Forecasts {.no-padding}
 
 ```{r}
-plotlyOutput(outputId = "plot_oos_forecast")
+plotly::plotlyOutput(outputId = "plot_oos_forecast")
 ```
 
 
@@ -1557,7 +1546,7 @@ Row {data-height=500}
 ### Evaluation Metrics {.no-padding}
 
 ```{r}
-DTOutput(outputId = "accuracy_table")
+DT::DTOutput(outputId = "accuracy_table")
 ```
 
 ### Algorithm Summary {.no-padding}
@@ -1569,13 +1558,13 @@ verbatimTextOutput(outputId = "model_summary")
 ### Residuals Time Plot {.no-padding}
 
 ```{r}
-plotlyOutput(outputId = "plot_resid_ts")
+plotly::plotlyOutput(outputId = "plot_resid_ts")
 ```
 
 ### Residuals ACF {.no-padding}
 
 ```{r}
-plotlyOutput(outputId = "plot_resid_acf")
+plotly::plotlyOutput(outputId = "plot_resid_acf")
 ```
 
 
@@ -1830,7 +1819,7 @@ react_val <- reactiveValues(
 tune_results <- eventReactive(
   eventExpr = input$tune_apply_forecast,
   valueExpr = {
-    map(
+    purrr::map(
       input$tune_method, 
       ~ fit_model_tuning(
         data = data_transformed(), method = ., params = input, 
@@ -1868,7 +1857,7 @@ back_tune_results <- reactive({
 
 output$plot_tune_test_forecast <- renderPlotly({
   back_tune_results()$test_forecast |> 
-    plot_modeltime_forecast(.legend_show = FALSE, .title = FALSE, .conf_interval_fill = "lightblue")
+    modeltime::plot_modeltime_forecast(.legend_show = FALSE, .title = FALSE, .conf_interval_fill = "lightblue")
 })
 
 # output$plot_tune_splits <- renderPlotly({
@@ -1879,13 +1868,13 @@ output$plot_tune_test_forecast <- renderPlotly({
 
 output$plot_tune_oos_forecast <- renderPlotly({
   back_tune_results()$oos_forecast |> 
-    plot_modeltime_forecast(.legend_show = FALSE, .title = FALSE, .conf_interval_fill = "lightblue")
+    modeltime::plot_modeltime_forecast(.legend_show = FALSE, .title = FALSE, .conf_interval_fill = "lightblue")
 })
 
 output$tune_accuracy_table <- renderDT({
 	back_tune_results()$accuracy |>
     format_accuracy(single_method = TRUE) |>
-    datatable(
+    DT::datatable(
       options = list(
         ordering = FALSE, pageLength = 20, lengthChange = FALSE, searching = FALSE,
         info = FALSE, paging = FALSE, scrollY = 275
@@ -1900,8 +1889,8 @@ output$tune_model_summary <- renderPrint({
 
 output$plot_tune_resid_ts <- renderPlotly({
   back_tune_results()$residuals |> 
-    select(.index, .residuals) |> 
-    set_names(c("date", "value")) |> 
+    dplyr::select(.index, .residuals) |> 
+    purrr::set_names(c("date", "value")) |> 
     timetk::plot_time_series(
       .date_var = date, .value = value,
       .smooth = FALSE, .interactive = TRUE, .title = NULL
@@ -1910,8 +1899,8 @@ output$plot_tune_resid_ts <- renderPlotly({
 
 output$plot_tune_resid_acf <- renderPlotly({
   back_tune_results()$residuals |> 
-    select(.index, .residuals) |> 
-    set_names(c("date", "value")) |> 
+    dplyr::select(.index, .residuals) |> 
+    purrr::set_names(c("date", "value")) |> 
     timetk::plot_acf_diagnostics(
       .date_var = date, .value = value, .lags = 60,
       .interactive = TRUE, .title = NULL, .y_lab = NULL,
@@ -1926,19 +1915,19 @@ Row {data-height=500}
 ### Test Forecasts {.no-padding}
 
 ```{r}
-plotlyOutput(outputId = "plot_tune_test_forecast")
+plotly::plotlyOutput(outputId = "plot_tune_test_forecast")
 ```
 
 <!-- ### Validation Plan {.no-padding} -->
 
 <!-- ```{r} -->
-<!-- plotlyOutput(outputId = "plot_tune_splits") -->
+<!-- plotly::plotlyOutput(outputId = "plot_tune_splits") -->
 <!-- ``` -->
 
 ### Out-of-Sample Forecasts {.no-padding}
 
 ```{r}
-plotlyOutput(outputId = "plot_tune_oos_forecast")
+plotly::plotlyOutput(outputId = "plot_tune_oos_forecast")
 ```
 
 
@@ -1948,7 +1937,7 @@ Row {data-height=500}
 ### Evaluation Metrics {.no-padding}
 
 ```{r}
-DTOutput(outputId = "tune_accuracy_table")
+DT::DTOutput(outputId = "tune_accuracy_table")
 ```
 
 ### Algorithm Summary {.no-padding}
@@ -1960,13 +1949,13 @@ verbatimTextOutput(outputId = "tune_model_summary")
 ### Residuals Time Plot {.no-padding}
 
 ```{r}
-plotlyOutput(outputId = "plot_tune_resid_ts")
+plotly::plotlyOutput(outputId = "plot_tune_resid_ts")
 ```
 
 ### Residuals ACF {.no-padding}
 
 ```{r}
-plotlyOutput(outputId = "plot_tune_resid_acf")
+plotly::plotlyOutput(outputId = "plot_tune_resid_acf")
 ```
 
 
@@ -2065,7 +2054,7 @@ compare_results <- eventReactive(
   				assess_type = input$comp_assess_type
   			)
   	} else {
-  		map(
+  		purrr::map(
   			input$comp_method,
   			~ fit_model(
   				data = data_transformed(), method = ., params = input,
@@ -2094,19 +2083,19 @@ back_compare_results <- reactive({
 
 output$plot_comp_test_forecast <- renderPlotly({
   back_compare_results()$test_forecast |> 
-    plot_modeltime_forecast(.legend_show = TRUE, .title = FALSE, .conf_interval_fill = "lightblue")
+    modeltime::plot_modeltime_forecast(.legend_show = TRUE, .title = FALSE, .conf_interval_fill = "lightblue")
 })
 
 output$plot_comp_oos_forecast <- renderPlotly({
   back_compare_results()$oos_forecast |> 
-    plot_modeltime_forecast(.legend_show = TRUE, .title = FALSE, .conf_interval_fill = "lightblue")
+    modeltime::plot_modeltime_forecast(.legend_show = TRUE, .title = FALSE, .conf_interval_fill = "lightblue")
 })
 
 output$comp_accuracy_table <- renderDT({
 	back_compare_results()$accuracy |>
     format_accuracy(single_method = FALSE) |>
-    filter(Type == "Test") |> 
-    datatable(
+    dplyr::filter(Type == "Test") |> 
+    DT::datatable(
       options = list(
         ordering = TRUE, pageLength = 6, lengthChange = FALSE, searching = FALSE, 
         info = FALSE, paging = FALSE, scrollY = 275
@@ -2126,13 +2115,13 @@ Row {data-height=500}
 ### Test Forecasts {.no-padding}
 
 ```{r}
-plotlyOutput(outputId = "plot_comp_test_forecast")
+plotly::plotlyOutput(outputId = "plot_comp_test_forecast")
 ```
 
 ### Out-of-Sample Forecasts {.no-padding}
 
 ```{r}
-plotlyOutput(outputId = "plot_comp_oos_forecast")
+plotly::plotlyOutput(outputId = "plot_comp_oos_forecast")
 ```
 
 Row {data-height=500} 
@@ -2141,7 +2130,7 @@ Row {data-height=500}
 ### Evaluation Metrics {data-width=700 .no-padding}
 
 ```{r}
-DTOutput(outputId = "comp_accuracy_table")
+DT::DTOutput(outputId = "comp_accuracy_table")
 ```
 
 ### Algorithm Summary {data-width=300 .no-padding}
@@ -2282,7 +2271,7 @@ exp_observation <- reactive({
 output$exp_features_table <- renderDT({
   req(explainer_results()) 
 	tibble::tibble(explainer_results()$features) |>
-		datatable(
+		DT::datatable(
       options = list(
         ordering = FALSE, pageLength = 50, lengthChange = FALSE, searching = FALSE,
         info = FALSE, paging = FALSE, scrollY = 660
@@ -2295,7 +2284,7 @@ output$plot_exp_featimp <- renderPlot({
 	req(explainer_results())
 	explainer_results()$explainer |> 
 		explain_model(type = "feature_importance") |>
-		plot() + labs(title = NULL, subtitle = NULL, caption = NULL)
+		plot() + ggplot2::labs(title = NULL, subtitle = NULL, caption = NULL)
 })
 
 output$plot_exp_varresp <- renderPlot({
@@ -2303,7 +2292,7 @@ output$plot_exp_varresp <- renderPlot({
 	req(input$exp_features)
 	explainer_results()$explainer |> 
 		explain_model(type = "variable_response",	features = input$exp_features) |>
-		plot() + labs(title = NULL, subtitle = NULL, caption = NULL)	
+		plot() + ggplot2::labs(title = NULL, subtitle = NULL, caption = NULL)	
 })
 
 output$plot_exp_bd <- renderPlot({
@@ -2311,7 +2300,7 @@ output$plot_exp_bd <- renderPlot({
 	req(exp_observation())
 	explainer_results()$explainer |> 
 		explain_model(type = "break_down", observation = exp_observation()) |>
-		plot() + labs(title = NULL, subtitle = NULL, caption = NULL)
+		plot() + ggplot2::labs(title = NULL, subtitle = NULL, caption = NULL)
 })
 
 output$plot_exp_locstab <- renderPlot({
@@ -2324,7 +2313,7 @@ output$plot_exp_locstab <- renderPlot({
 			type = "local_stability",	observation = exp_observation(), 
 			features = input$exp_features
 		) |>
-		plot() + labs(title = NULL, subtitle = NULL, caption = NULL)
+		plot() + ggplot2::labs(title = NULL, subtitle = NULL, caption = NULL)
 })
 ```
 
@@ -2334,7 +2323,7 @@ Column {data-width=150}
 ### Features {.no-padding}
 
 ```{r}
-DTOutput(outputId = "exp_features_table")
+DT::DTOutput(outputId = "exp_features_table")
 ```
 
 Column {data-width=425}
@@ -2491,7 +2480,7 @@ observeEvent(
   			)
   	} else {
   		react_val$combine_results <-
-  			map(
+  			purrr::map(
   				input$ens_method,
   				~ fit_model(
   					data = data_transformed(), method = ., params = input,
@@ -2537,7 +2526,7 @@ observeEvent(
   			)
   	} else {
   		react_val$combine_results <-
-  			map(
+  			purrr::map(
   				input$ens_method,
   				~ fit_model(
   					data = data_transformed(), method = ., params = input,
@@ -2567,19 +2556,19 @@ back_combine_results <- reactive({
 
 output$plot_ens_test_forecast <- renderPlotly({
   back_combine_results()$test_forecast |> 
-    plot_modeltime_forecast(.legend_show = TRUE, .title = FALSE, .conf_interval_fill = "lightblue")
+    modeltime::plot_modeltime_forecast(.legend_show = TRUE, .title = FALSE, .conf_interval_fill = "lightblue")
 })
 
 output$plot_ens_oos_forecast <- renderPlotly({
 	back_combine_results()$oos_forecast |> 
-    plot_modeltime_forecast(.legend_show = TRUE, .title = FALSE, .conf_interval_fill = "lightblue")
+    modeltime::plot_modeltime_forecast(.legend_show = TRUE, .title = FALSE, .conf_interval_fill = "lightblue")
 })
 
 output$ens_accuracy_table <- renderDT({
 	back_combine_results()$accuracy |> 
     format_accuracy(single_method = FALSE) |>
-    filter(Type == "Test") |>
-    datatable(
+    dplyr::filter(Type == "Test") |>
+    DT::datatable(
       options = list(
         ordering = TRUE, pageLength = 5, lengthChange = FALSE,
         searching = FALSE, info = FALSE, paging = FALSE, scrollY = 275
@@ -2600,13 +2589,13 @@ Row {data-height=500}
 ### Test Forecasts {.no-padding}
 
 ```{r}
-plotlyOutput(outputId = "plot_ens_test_forecast")
+plotly::plotlyOutput(outputId = "plot_ens_test_forecast")
 ```
 
 ### Out-of-Sample Forecasts {.no-padding}
 
 ```{r}
-plotlyOutput(outputId = "plot_ens_oos_forecast")
+plotly::plotlyOutput(outputId = "plot_ens_oos_forecast")
 ```
 
 Row {data-height=500} 
@@ -2615,7 +2604,7 @@ Row {data-height=500}
 ### Evaluation Metrics {data-width=700 .no-padding}
 
 ```{r}
-DTOutput(outputId = "ens_accuracy_table")
+DT::DTOutput(outputId = "ens_accuracy_table")
 ```
 
 ### Algorithm Summary {data-width=300 .no-padding}
@@ -2746,7 +2735,7 @@ scenario_results <- eventReactive(
   				) |> 
   				extract_ensemble_results()
   		} else {
-  				map(
+  				purrr::map(
   					input$ens_method,
   					~ fit_model(
   						data = data_transformed(), method = ., params = input,
@@ -2790,7 +2779,7 @@ scenario_results <- eventReactive(
   				) |> 
   				extract_ensemble_results()
   		} else {
-  				map(
+  				purrr::map(
   					input$ens_method,
   					~ fit_model(
   						data = data_transformed(), method = ., params = input,
@@ -2816,7 +2805,7 @@ scenario_results <- eventReactive(
   					assess_type = input$scn_assess_type, confidence_level = c(0.05, 0.99)
   				)
   		} else {
-  			map(
+  			purrr::map(
   				input$scn_method,
   				~ fit_model(
   					data = data_transformed(), method = ., params = input,
@@ -2846,14 +2835,14 @@ back_scenario_results <- reactive({
 
 output$plot_scn_oos_forecast_fan <- renderPlotly({
   back_scenario_results()$oos_forecast |> 
-    filter(.key == "actual" | .conf_lvl == as.character(input$scn_conf_lvl)) |> 
+    dplyr::filter(.key == "actual" | .conf_lvl == as.character(input$scn_conf_lvl)) |> 
 		adjust_forecast(input$scn_adjust) |>
-    plot_modeltime_forecast(.legend_show = FALSE, .title = FALSE, .conf_interval_fill = "lightblue")
+    modeltime::plot_modeltime_forecast(.legend_show = FALSE, .title = FALSE, .conf_interval_fill = "lightblue")
 })
 
 output$plot_scn_oos_forecast_wb <- renderPlotly({
   g <- back_scenario_results()$oos_forecast |> 
-  	filter(.key == "actual" | .conf_lvl == as.character(input$scn_conf_lvl)) |> 
+  	dplyr::filter(.key == "actual" | .conf_lvl == as.character(input$scn_conf_lvl)) |> 
   	adjust_forecast(input$scn_adjust) |>
     modeltime::plot_modeltime_forecast(
       .interactive = FALSE, .conf_interval_show = FALSE, .legend_show = FALSE, .title = FALSE
@@ -2866,8 +2855,8 @@ output$plot_scn_oos_forecast_wb <- renderPlotly({
 output$scn_accuracy_table <- renderDT({
 	back_scenario_results()$accuracy |> 
     format_accuracy(single_method = TRUE) |>
-    select(-Train) |> 
-    datatable(
+    dplyr::select(-Train) |> 
+    DT::datatable(
       options = list(
         ordering = FALSE, pageLength = 20, lengthChange = FALSE, searching = FALSE,
         info = FALSE, paging = FALSE, scrollY = 275
@@ -2878,11 +2867,11 @@ output$scn_accuracy_table <- renderDT({
 
 output$scn_aggregate_table <- renderDT({
   back_scenario_results()$oos_forecast |>
-		filter(.key == "actual" | .conf_lvl == as.character(input$scn_conf_lvl)) |> 
+		dplyr::filter(.key == "actual" | .conf_lvl == as.character(input$scn_conf_lvl)) |> 
     adjust_forecast(input$scn_adjust) |>
     aggregate_forecast(react_val$aggregate_n_future, input$scn_conf_lvl, input$scn_aggreg_fun) |> 
-    mutate(across(.cols = where(is.numeric), .fns = ~ round(., 2))) |>
-    datatable(
+    dplyr::mutate(dplyr::across(.cols = where(is.numeric), .fns = ~ round(., 2))) |>
+    DT::datatable(
       options = list(
         ordering = FALSE, pageLength = 20, lengthChange = FALSE, searching = FALSE,
         info = FALSE, paging = FALSE, scrollY = 275
@@ -2893,12 +2882,12 @@ output$scn_aggregate_table <- renderDT({
 
 output$scn_wb_table <- renderDT({
   back_scenario_results()$oos_forecast |>
-		filter(.key == "prediction" & .conf_lvl == as.character(input$scn_conf_lvl)) |> 
+		dplyr::filter(.key == "prediction" & .conf_lvl == as.character(input$scn_conf_lvl)) |> 
     adjust_forecast(input$scn_adjust) |>
-    select(.index, .conf_lo, .value, .conf_hi) |> 
-    mutate(across(.cols = where(is.numeric), .fns = ~ round(., 2))) |> 
-    set_names(c("Date", "Worst Case", "Forecast", "Best Case")) |> 
-    datatable(
+    dplyr::select(.index, .conf_lo, .value, .conf_hi) |> 
+    dplyr::mutate(across(.cols = where(is.numeric), .fns = ~ round(., 2))) |> 
+    purrr::set_names(c("Date", "Worst Case", "Forecast", "Best Case")) |> 
+    DT::datatable(
       options = list(
         ordering = FALSE, pageLength = 20, lengthChange = FALSE, searching = FALSE,
         info = FALSE, paging = FALSE, scrollY = TRUE, scrollCollapse = TRUE
@@ -2915,13 +2904,13 @@ Row {data-height=500}
 ### Out-of-Sample Forecasts {.no-padding}
 
 ```{r}
-plotlyOutput(outputId = "plot_scn_oos_forecast_fan")
+plotly::plotlyOutput(outputId = "plot_scn_oos_forecast_fan")
 ```
 
 ### Scenario Forecasts {.no-padding}
 
 ```{r}
-plotlyOutput(outputId = "plot_scn_oos_forecast_wb")
+plotly::plotlyOutput(outputId = "plot_scn_oos_forecast_wb")
 ```
 
 
@@ -2931,19 +2920,19 @@ Row {data-height=500}
 ### Evaluation Metrics {data-width=125 .no-padding}
 
 ```{r}
-DTOutput(outputId = "scn_accuracy_table")
+DT::DTOutput(outputId = "scn_accuracy_table")
 ```
 
 ### Aggregate Resuts {data-width=372 .no-padding}
 
 ```{r}
-DTOutput(outputId = "scn_aggregate_table")
+DT::DTOutput(outputId = "scn_aggregate_table")
 ```
 
 ### Scenario Results {data-width=503 .no-padding}
 
 ```{r}
-DTOutput(outputId = "scn_wb_table")
+DT::DTOutput(outputId = "scn_wb_table")
 ```
 
 

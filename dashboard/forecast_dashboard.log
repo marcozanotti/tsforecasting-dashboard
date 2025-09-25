@@ -3,3 +3,31 @@
 2025-09-25 11:37:39.38474 INFO::Normality Tests
 2025-09-25 11:37:39.38637 INFO::Autocorrelation Tests
 2025-09-25 11:37:39.38749 INFO::Stationarity Tests
+2025-09-25 13:14:50.559561 INFO::Getting Air Passengers data...
+2025-09-25 13:14:52.698765 INFO::Hypothesis testing...
+2025-09-25 13:14:52.726065 INFO::Normality Tests
+2025-09-25 13:14:52.760606 INFO::Autocorrelation Tests
+2025-09-25 13:14:52.761974 INFO::Stationarity Tests
+2025-09-25 13:16:16.991488 INFO::Getting Air Passengers data...
+2025-09-25 13:16:17.597511 INFO::Hypothesis testing...
+2025-09-25 13:16:17.599743 INFO::Normality Tests
+2025-09-25 13:16:17.600625 INFO::Autocorrelation Tests
+2025-09-25 13:16:17.601673 INFO::Stationarity Tests
+2025-09-25 13:16:29.875513 INFO::*** Explaining Algorithm ***
+2025-09-25 13:16:29.876527 INFO::Method(s): Linear Regression
+2025-09-25 13:16:29.876982 INFO::Initial Split
+2025-09-25 13:16:29.916906 INFO::Recipe Specification
+2025-09-25 13:16:29.938478 INFO::Using default recipe specification
+2025-09-25 13:16:30.119622 INFO::Model Specification
+2025-09-25 13:16:30.121105 INFO::Workflow Specification
+2025-09-25 13:16:30.122831 INFO::Fitting
+2025-09-25 13:16:30.146271 INFO::Creating Explainer
+2025-09-25 13:16:30.205606 INFO::Explaining Algorithm: feature_importance
+2025-09-25 13:16:31.845349 INFO::Using default recipe specification
+2025-09-25 13:16:31.930587 INFO::Explaining Algorithm: break_down
+2025-09-25 13:16:32.295984 INFO::Explaining Algorithm: variable_response
+2025-09-25 13:16:32.431185 INFO::Using default recipe specification
+2025-09-25 13:16:32.527161 INFO::Explaining Algorithm: local_stability
+2025-09-25 13:16:32.700366 INFO::Explaining Algorithm: break_down
+2025-09-25 13:16:40.370085 INFO::Explaining Algorithm: variable_response
+2025-09-25 13:16:40.471092 INFO::Explaining Algorithm: local_stability
