@@ -312,7 +312,7 @@ fit_feature_model <- function(data, method, seed = 1992) {
 
 # function to extract feature importance
 extract_feature_importance <- function(
-		feature_fit, method#, importance_type = "absolute"
+		feature_fit, method
 ) {
 	
 	logging::loginfo("*** Extracting Feature Importance ***")
@@ -340,11 +340,6 @@ extract_feature_importance <- function(
 		dplyr::filter(variable != "(Intercept)") |> 
 		dplyr::arrange(desc(importance))
 	
-	# if (importance_type == "relative") {
-	# 	res_imp <- res_imp |> 
-	# 		dplyr::mutate(importance = timetk::normalize_vec(importance, silent = TRUE))
-	# }
-	
 	return(res_imp)
 	
 }
@@ -363,9 +358,47 @@ generate_model_importance <- function(data, method) {
 	return(res)
 }
 
-# function to plot feature importance
-plot_feature_importance <- function(importance_data) {
+# function to normalize importance scores
+normalize_importance <- function(data_importance) {
 	
+	methods <- unique(data_importance$type)
+	data_res <- NULL
+	
+	if ("Correlation" %in% methods) {
+		corr_norm <- data_importance |> 
+			dplyr::filter(type == "Correlation") |>
+			dplyr::mutate(importance = abs(importance)) # take absolute value of correlation
+		data_res <- dplyr::bind_rows(data_res, corr_norm)
+	}
+	if ("PPS" %in% methods) {
+		pps_norm <- data_importance |> 
+			dplyr::filter(type == "PPS") |>
+			dplyr::mutate(importance = importance) # already between 0 and 1
+		data_res <- dplyr::bind_rows(data_res, pps_norm)
+	}
+	if ("LASSO" %in% methods) {
+		lasso_norm <- data_importance |> 
+			dplyr::filter(type == "LASSO") |> 
+			dplyr::mutate(importance = timetk::normalize_vec(abs(importance), silent = TRUE, min = 0))
+		data_res <- dplyr::bind_rows(data_res, lasso_norm)
+	}
+	if ("Random Forest" %in% methods) {
+		rf_norm <- data_importance |> 
+			dplyr::filter(type == "Random Forest") |>
+			dplyr::mutate(importance = timetk::normalize_vec(importance, silent = TRUE, min = 0))
+		data_res <- dplyr::bind_rows(data_res, rf_norm)
+	}
+	
+	return(data_res)
+	
+}
+
+# function to plot feature importance
+plot_feature_importance <- function(importance_data, normalized = FALSE) {
+	
+	if (normalized) {
+		importance_data <- importance_data |> normalize_importance()
+	}
 	g <- importance_data |> 
 		ggplot2::ggplot(
 			ggplot2::aes(
@@ -375,7 +408,7 @@ plot_feature_importance <- function(importance_data) {
 			)
 		) +
 		ggplot2::geom_col() + 
-		ggplot2::scale_fill_gradient(low = "#FFFFFF", high = "#08306B") +
+		ggplot2::scale_fill_gradient(low = "#deebf7", high = "#08306B") +
 		timetk:::theme_tq() +
 		ggplot2::theme(legend.position = "right") +
 		ggplot2::labs(y = "", x = "")
@@ -387,79 +420,53 @@ plot_feature_importance <- function(importance_data) {
 select_features <- function(data_importance, params, data_features, n_future) {
 	
 	n_feats <- get_features(data_features, number_only = TRUE, remove_date = TRUE)
-	feat_names <- get_features(data_features, names_only = TRUE, remove_date = TRUE)
+	sum_tbl <- tibble::tibble(
+		"Variable" = NA_character_, "N. Methods" = NA_real_, 
+		"Average Importance" = NA_real_, "Methods" = NA_character_
+	)
+	data_final <- data_features |> 
+		dplyr::slice_head(n = nrow(data_features) - n_future) |> 
+		tidyr::drop_na()
+	data_future <- data_features |> dplyr::slice_tail(n = n_future)
 	
-	if (n_feats == 0) {
-		
-		sum_tbl <- tibble::tibble(
-			"Variable" = NA_character_, "N. Methods" = NA_real_, "Methods" = NA_character_
-		)
-		data_final <- data_features |> 
-			dplyr::slice_head(n = nrow(data_features) - n_future) |> 
-			tidyr::drop_na()
-		data_future <- data_features |> dplyr::slice_tail(n = n_future)
-		
-	} else {
-		
+	if (n_feats > 0) {
+
 		logging::loginfo("Selecting features...")
-		imp_types <- unique(data_importance$type)
 		sel_feat <- data_importance |>
+			normalize_importance() |>
 			dplyr::filter(
-				(type == "Correlation" & abs(importance) > params$featsel_cor_thresh) |
-					(type == "PPS" & importance > params$featsel_pps_thresh) |
-					(type %in% imp_types)
+				(type == "Correlation" & importance >= params$featsel_cor_thresh) |
+					(type == "PPS" & importance >= params$featsel_pps_thresh) |
+					(type == "LASSO" & importance >= params$featsel_lasso_thresh) |
+					(type == "Random Forest" & importance >= params$featsel_rf_thresh)
 			)
 		
-		cat_feats <- grep(pattern = "\\.lbl", feat_names, value = TRUE)
-		num_feats <- feat_names[!feat_names %in% cat_feats]
-		sum_tbl <- tibble::tibble(
-			"Variable" = NA_character_, "N. Methods" = NA_real_, "Methods" = NA_character_
-		)
-		
-		if (length(num_feats) > 0) {
-			sel_num_feat <- sel_feat |> dplyr::filter(variable %in% num_feats)
-			f_num_sel <- unique(sel_num_feat$variable)
-			mtd_num_n <- vector("numeric", length(f_num_sel))
-			mtd_num_type <- vector("character", length(f_num_sel))
-			for (i in seq_along(f_num_sel)) {
-				data_num_tmp <- sel_num_feat |> dplyr::filter(variable == f_num_sel[i])
-				mtd_num_n[i] <- nrow(data_num_tmp)
-				mtd_num_type[i] <- data_num_tmp |> dplyr::pull("type") |>	unique() |> stringr::str_flatten(", ")
-			}
-			sum_num_tbl <- tibble::tibble(
-				"Variable" = f_num_sel, "N. Methods" = mtd_num_n, "Methods" = mtd_num_type
-			) 
-			sum_tbl <- sum_tbl |> dplyr::bind_rows(sum_num_tbl)
-		}
-		
-		if (length(cat_feats) > 0) {
-			cat_feats_regex <- paste0("(", paste0(cat_feats, collapse = ")|("), ")")
-			sel_cat_feat <- sel_feat |> dplyr::filter(grepl(cat_feats_regex, variable))
-			cat_feats_in_selection <- sel_cat_feat$variable |> 
-				stringr::str_extract_all(cat_feats_regex) |> 
-				unlist() |> unique()
-			f_cat_sel <- cat_feats[cat_feats %in% cat_feats_in_selection]
-			mtd_cat_n <- vector("numeric", length(f_cat_sel))
-			mtd_cat_type <- vector("character", length(f_cat_sel))
-			for (i in seq_along(f_cat_sel)) {
-				data_cat_tmp <- sel_cat_feat |> dplyr::filter(grepl(f_cat_sel[i], variable))
-				mtd_cat_n[i] <- nrow(data_cat_tmp)
-				mtd_cat_type[i] <- data_cat_tmp |> dplyr::pull("type") |>	unique() |> stringr::str_flatten(", ")
-			}
-			sum_cat_tbl <- tibble::tibble(
-				"Variable" = f_cat_sel, "N. Methods" = mtd_cat_n,	"Methods" = mtd_cat_type
-			) 
-			sum_tbl <- sum_tbl |> dplyr::bind_rows(sum_cat_tbl)
-		}
+		sel_feat_names <- unique(sel_feat$variable)
 
+		if (length(sel_feat_names) > 0) {
+			
+			mtd_n <- vector("numeric", length(sel_feat_names))
+			mtd_ave <- vector("numeric", length(sel_feat_names))
+			mtd_type <- vector("character", length(sel_feat_names))
+			for (i in seq_along(sel_feat_names)) {
+				sel_data_tmp <- sel_feat |> dplyr::filter(variable == sel_feat_names[i])
+				mtd_n[i] <- nrow(sel_data_tmp)
+				mtd_ave[i] <- mean(sel_data_tmp$importance, na.rm = TRUE)
+				mtd_type[i] <- sel_data_tmp |> dplyr::pull("type") |>	unique() |> stringr::str_flatten(", ")
+			}
+			sum_tbl <- tibble::tibble(
+				"Variable" = sel_feat_names, "N. Methods" = mtd_n, 
+				"Average Importance" = mtd_ave, "Methods" = mtd_type
+			)
+			
+		}
+		
 		sum_tbl <- sum_tbl |> 
-			dplyr::slice(-1) |> 
-			dplyr::arrange(factor(Variable, levels = feat_names))
-		f_sel <- unique(sum_tbl$Variable)
+			dplyr::arrange(dplyr::desc(`N. Methods`), dplyr::desc(`Average Importance`))
 		data_selected <- data_features |> 
 			dplyr::select(
 				dplyr::any_of(c("id", "date", "value")), 
-				dplyr::all_of(f_sel)
+				dplyr::all_of(sel_feat_names)
 			)
 		data_final <- data_selected |> 
 			dplyr::slice_head(n = nrow(data_selected) - n_future) |> 
