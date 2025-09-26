@@ -3,7 +3,9 @@ get_data <- function(dataset_name, path = NULL) {
 
   logging::loginfo(paste("Getting", dataset_name, "data..."))
 
-  if (dataset_name == "Air Passengers") { # Monthly
+	if (dataset_name == "") { #"Select a dataset or upload your own!"
+		data <- NULL
+  } else if (dataset_name == "Air Passengers") { # Monthly
     data <- tibble::tibble(
       "date" = seq.Date(as.Date("1949-01-01"), as.Date("1960-12-01"), by = "month"),
       "id" = "Air Passengers",
