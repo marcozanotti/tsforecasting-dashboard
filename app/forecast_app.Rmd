@@ -79,6 +79,25 @@ shinyWidgets::prettyRadioButtons(
   inputId = "table_type", label = h5("Show:"), 
   choices = c("Preview", "Structure", "Summary")
 )
+
+# tags$div(
+#   style = "
+#     position: absolute;
+#     bottom: 10px;
+#     left: 0;
+#     right: 0;
+#     text-align: center;
+#     font-size: 12px;
+#     color: #2c3e50;
+#   ",
+#   HTML("&copy; 2025 Marco Zanotti <br> Licensed under "),
+#   tags$a("MIT License", href="https://opensource.org/licenses/MIT", target="_blank")
+# )
+tags$div(
+  id = "sidebar-footer",
+  HTML("&copy; 2025 Marco Zanotti <br> Licensed under "),
+  tags$a("MIT License", href="https://opensource.org/licenses/MIT", target="_blank")
+)
 ```
 
 ```{r}
@@ -183,6 +202,12 @@ br()
 hr()
 h5("Missing imputation")
 shinyWidgets::switchInput(inputId = "impute", value = FALSE, size = "mini")
+
+tags$div(
+  id = "sidebar-footer",
+  HTML("&copy; 2025 Marco Zanotti <br> Licensed under "),
+  tags$a("MIT License", href="https://opensource.org/licenses/MIT", target="_blank")
+)
 ```
 
 ```{r}
@@ -331,6 +356,12 @@ shinyWidgets::pickerInput(
   inputId = "test_transf", label = h5("Test on transformed data?"), multiple = TRUE,
   choices = transf, selected = NULL
 )
+
+tags$div(
+  id = "sidebar-footer",
+  HTML("&copy; 2025 Marco Zanotti <br> Licensed under "),
+  tags$a("MIT License", href="https://opensource.org/licenses/MIT", target="_blank")
+)
 ```
 
 ```{r}
@@ -438,6 +469,12 @@ shinyWidgets::switchInput(inputId = "clean", value = FALSE, size = "mini")
 br()
 
 actionButton(inputId = "anomaly_reset", label = "Reset", icon = icon("sync"))
+
+tags$div(
+  id = "sidebar-footer",
+  HTML("&copy; 2025 Marco Zanotti <br> Licensed under "),
+  tags$a("MIT License", href="https://opensource.org/licenses/MIT", target="_blank")
+)
 ```
 
 ```{r}
@@ -529,6 +566,12 @@ hr()
 shinyWidgets::pickerInput(
   inputId = "transf", label = h5("Transformations"), multiple = TRUE,
   choices = transf[1:7], selected = NULL # not possible to do Diff and SDiff !!!!!
+)
+
+tags$div(
+  id = "sidebar-footer",
+  HTML("&copy; 2025 Marco Zanotti <br> Licensed under "),
+  tags$a("MIT License", href="https://opensource.org/licenses/MIT", target="_blank")
 )
 ```
 
@@ -694,6 +737,12 @@ shinyWidgets::prettyRadioButtons(
   inputId = "feat_table_type", label = h5("Show:"), 
   choices = c("Preview", "Structure", "Summary"), selected = "Structure"
 )
+
+tags$div(
+  id = "sidebar-footer",
+  HTML("&copy; 2025 Marco Zanotti <br> Licensed under "),
+  tags$a("MIT License", href="https://opensource.org/licenses/MIT", target="_blank")
+)
 ```
 
 ```{r}
@@ -807,6 +856,12 @@ br()
 shinyWidgets::prettyRadioButtons(
   inputId = "xfeat_table_type", label = h5("Show:"), 
   choices = c("Preview", "Structure", "Summary")
+)
+
+tags$div(
+  id = "sidebar-footer",
+  HTML("&copy; 2025 Marco Zanotti <br> Licensed under "),
+  tags$a("MIT License", href="https://opensource.org/licenses/MIT", target="_blank")
 )
 ```
 
@@ -942,6 +997,12 @@ textInput(
 )
 br()
 shinyWidgets::awesomeCheckbox(inputId = "featsel_save", label = "Save feature set?", value = FALSE)
+
+tags$div(
+  id = "sidebar-footer",
+  HTML("&copy; 2025 Marco Zanotti <br> Licensed under "),
+  tags$a("MIT License", href="https://opensource.org/licenses/MIT", target="_blank")
+)
 ```
 
 ```{r}
@@ -1384,6 +1445,12 @@ conditionalPanel(
   condition = "input.method == 'COMING SOON!'",
   h5("New algorithms will be released soon!")
 )
+
+# tags$div(
+#   id = "sidebar-footer",
+#   HTML("&copy; 2025 Marco Zanotti <br> Licensed under "),
+#   tags$a("MIT License", href="https://opensource.org/licenses/MIT", target="_blank")
+# )
 ```
 
 ```{r}
@@ -1792,6 +1859,12 @@ conditionalPanel(
   condition = "input.tune_method == 'COMING SOON!'",
   h5("New algorithms will be released soon!")
 )
+
+tags$div(
+  id = "sidebar-footer",
+  HTML("&copy; 2025 Marco Zanotti <br> Licensed under "),
+  tags$a("MIT License", href="https://opensource.org/licenses/MIT", target="_blank")
+)
 ```
 
 ```{r}
@@ -2008,6 +2081,12 @@ shinyWidgets::awesomeCheckbox(inputId = "comp_back_transf", label = "Back transf
 
 actionButton(inputId = "comp_apply_forecast", label = "Forecast!", icon = icon("play"))
 actionButton(inputId = "comp_reset", label = "Reset", icon = icon("sync"))
+
+tags$div(
+  id = "sidebar-footer",
+  HTML("&copy; 2025 Marco Zanotti <br> Licensed under "),
+  tags$a("MIT License", href="https://opensource.org/licenses/MIT", target="_blank")
+)
 ```
 
 ```{r}
@@ -2202,6 +2281,12 @@ shinyWidgets::pickerInput(
 dateInput(
 	inputId = "exp_date", label = h5("Date to explain"), value = NULL,
 	min = as.Date("1940-01-01"), max = Sys.Date()
+)
+
+tags$div(
+  id = "sidebar-footer",
+  HTML("&copy; 2025 Marco Zanotti <br> Licensed under "),
+  tags$a("MIT License", href="https://opensource.org/licenses/MIT", target="_blank")
 )
 ```
 
@@ -2437,6 +2522,12 @@ br()
 br()
 
 actionButton(inputId = "ens_reset", label = "Reset", icon = icon("sync"))
+
+tags$div(
+  id = "sidebar-footer",
+  HTML("&copy; 2025 Marco Zanotti <br> Licensed under "),
+  tags$a("MIT License", href="https://opensource.org/licenses/MIT", target="_blank")
+)
 ```
 
 ```{r}
@@ -2687,6 +2778,12 @@ selectInput(
 numericInput(
   inputId = "scn_adjust", label = h5("Business Adjustment (%)"), 
   value = 0, min = -Inf, max = Inf, step = 5
+)
+
+tags$div(
+  id = "sidebar-footer",
+  HTML("&copy; 2025 Marco Zanotti <br> Licensed under "),
+  tags$a("MIT License", href="https://opensource.org/licenses/MIT", target="_blank")
 )
 ```
 
