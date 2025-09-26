@@ -4,8 +4,13 @@ set_options <- function() {
   op <- options()
   op.tsf.dashboard <- list(
   	tsf.dashboard.datasets = c(
+  		"",
   		"Air Passengers", "EU Population", # "Electricity Demand", 
-  		"People Traffic", "Stock Price", "Tobacco Prod", ""
+  		"People Traffic", "Stock Price", "Tobacco Prod"
+  	),
+  	tsf.dashboard.frequencies = c(
+  		"year", "semester", "quarter", "month", "week", "bus-day", "day", 
+  		"bus-hour", "hour", "bus-half-hour", "half-hour"
   	),
     tsf.dashboard.methods = list(
       "ts" = c("Naive", "Seasonal Naive", "Rolling Average", "ETS", "Theta", "SARIMA", "TBATS", "STLM", "Prophet"),
