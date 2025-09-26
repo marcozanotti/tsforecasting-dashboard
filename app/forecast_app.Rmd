@@ -19,7 +19,6 @@ lapply(list.files("R", full.names = TRUE), source)
 
 pkgs <- c(
 	"modeltime", "modeltime.h2o", "rules", "yardstick", "timetk"
-	# "rmarkdown", "flexdashboard", "shiny", 
 )
 lapply(pkgs, library, character.only = TRUE)
 
@@ -29,6 +28,7 @@ set_options()
 # logging::addHandler(logging::writeToFile, file = "forecast_dashboard.log") # add to log file
 
 datasets <- getOption("tsf.dashboard.datasets")
+frequencies <- getOption("tsf.dashboard.frequencies")
 methods <- getOption("tsf.dashboard.methods")
 ts_methods <- methods$ts
 ml_methods <- methods$ml
@@ -46,6 +46,38 @@ transf <- getOption("tsf.dashboard.transformations")
 ```
 
 
+Welcome {data-orientation=rows}
+===========================================================================
+
+<div style="text-align: center; margin-top: 100px;">
+
+<img src="tsf_logo.png" width="200" alt="Forecast App Logo"/>
+
+<p style="font-size:18px; max-width:600px; margin:auto; margin-top:20px;">
+<b>Welcome to the Forecast App!</b>
+<br>
+This app provides a complete framework for analyzing, modeling, and
+forecasting time series data.
+It guides the user through data preparation, exploratory analysis,
+feature engineering, model training, evaluation, and scenario building.
+</p>
+
+<p style="font-size:16px; margin-top:20px;">
+<b>Author:</b> <a href="https://marcozanotti.netlify.app/" target="_blank">Marco Zanotti</a><br>
+<b>Licensed under:</b> <a href="https://opensource.org/licenses/MIT" target="_blank">MIT License</a>
+</p>
+
+<br>
+<br>
+```{r}
+# actionButton(inputId = "start", "Start")
+# observeEvent(input$start, {
+# 	updateTabsetPanel(session, inputId = "main_tabs", selected = "data_section")
+# })
+```
+</div>
+
+
 
 Data {data-orientation=rows}  
 ===========================================================================
@@ -54,24 +86,31 @@ Input {.sidebar}
 ---------------------------------------------------------------------------
 
 ```{r}
-selectInput(
-  inputId = "dataset", label = h5("Dataset"), 
+shinyWidgets::pickerInput(
+	inputId = "dataset", label = h5("Dataset"), 
   choices = datasets, selected = datasets[1], multiple = FALSE
 )
 
 br()
 
 h5("Upload your dataset: ")
-h6("The dataset must be a .csv file containing columns 'date', 'id', 'frequency' and 'value'.")
+h6("The dataset must be a .csv file (sep = ',', dec = '.') containing columns 'date', 'id', and 'value'.")
 fileInput(
   inputId = "upload_custom", label = NULL, accept = c(".csv"), multiple = FALSE,
-  buttonLabel = "Browse...", placeholder = "No file"
+  buttonLabel = "Browse...", placeholder = "No file."
 )
 actionButton(inputId = "data_import", label = "Import", icon = icon("upload"))
 actionButton(inputId = "data_reset", label = "Reset", icon = icon("sync"))
 
 br()
 br()
+br()
+
+selectInput(
+  inputId = "frequency", label = h5("Select dataset frequency"), 
+  choices = frequencies, selected = frequencies[1], multiple = FALSE
+)
+
 br()
 br()
 
@@ -80,19 +119,6 @@ shinyWidgets::prettyRadioButtons(
   choices = c("Preview", "Structure", "Summary")
 )
 
-# tags$div(
-#   style = "
-#     position: absolute;
-#     bottom: 10px;
-#     left: 0;
-#     right: 0;
-#     text-align: center;
-#     font-size: 12px;
-#     color: #2c3e50;
-#   ",
-#   HTML("&copy; 2025 Marco Zanotti <br> Licensed under "),
-#   tags$a("MIT License", href="https://opensource.org/licenses/MIT", target="_blank")
-# )
 tags$div(
   id = "sidebar-footer",
   HTML("&copy; 2025 Marco Zanotti <br> Licensed under "),
@@ -117,7 +143,7 @@ observeEvent(
   handlerExpr = {
     req(input$upload_custom)
     ext <- tools::file_ext(input$upload_custom$datapath)
-    validate(need(ext == "csv", "Please upload a csv file"))
+    validate(need(ext == "csv", "Please upload a csv file."))
     updateSelectInput(session = session, inputId = "dataset", selected = "") # to activate date_range input
     react_val$uploaded_data <- input$upload_custom
   }
@@ -131,8 +157,8 @@ data_selected <- reactive({
   }
 })
 
-ts_freq <- reactive({
-  data_selected()$frequency |> unique() |> parse_frequency()
+ts_freq <- reactive({ 
+	parse_frequency(input$frequency)
 })
 
 output$data_table <- DT::renderDT({
@@ -223,7 +249,7 @@ observeEvent(
 )
 
 observeEvent(
-  eventExpr = input$dataset, 
+  eventExpr = input$frequency, 
   handlerExpr = {
     updateNumericInput(
       session = session, inputId = "viz_acf_lag", 
@@ -457,17 +483,18 @@ Input {.sidebar}
 ---------------------------------------------------------------------------
 
 ```{r}
-h4("Anomaly Detection")
-
-sliderInput(inputId = "alpha", label = "Confidence Level", min = 0.01, max = 1, value = 0.02, step = 0.01)
-sliderInput(inputId = "max_anomalies", label = "Max Anomalies (%)", min = 0.01, max = 1, value = 0.1, step = 0.01)
-
-hr()
-h4("Anomaly Cleaning")
-shinyWidgets::switchInput(inputId = "clean", value = FALSE, size = "mini")
+shinyWidgets::pickerInput(
+  inputId = "anom_method", label = h5("Anomaly Method"), multiple = FALSE,
+  choices = c("stl"), selected = "stl"
+)
+sliderInput(inputId = "anom_alpha", label = h5("Significance Level"), min = 0.00, max = 1, value = 0.02, step = 0.01)
+sliderInput(inputId = "anom_max_anomalies", label = h5("Max Anomalies (%)"), min = 0.00, max = 1, value = 0.1, step = 0.01)
+sliderInput(inputId = "anom_clean_alpha", label = h5("Cleaning level"), min = 0.00, max = 1, value = 0.75, step = 0.01)
+br()
+shinyWidgets::awesomeCheckbox(inputId = "anom_clean", label = "Save cleaned data?", value = FALSE)
 
 br()
-
+br()
 actionButton(inputId = "anomaly_reset", label = "Reset", icon = icon("sync"))
 
 tags$div(
@@ -481,38 +508,65 @@ tags$div(
 observeEvent(
   eventExpr = input$anomaly_reset, 
   handlerExpr = {
-    updateSliderInput(session = session, inputId = "alpha", value = 0.02)
-    updateSliderInput(session = session, inputId = "max_anomalies", value = 0.1)
-    shinyWidgets::updateSwitchInput(session = session, inputId = "clean", value = FALSE)
+  	shinyWidgets::updatePickerInput(session = session, inputId = "anom_method", selected = "stl")
+    updateSliderInput(session = session, inputId = "anom_alpha", value = 0.02)
+    updateSliderInput(session = session, inputId = "anom_max_anomalies", value = 0.1)
+    shinyWidgets::updateSwitchInput(session = session, inputId = "anom_clean", value = FALSE)
   }
 )
 
-data_cleaned <- reactive({
+data_anomaly <- reactive({
   data_imputed() |> 
-		clean_data(clean = input$clean)
+		anomaly_detection_and_cleaning(params = input)
+})
+
+data_cleaned <- reactive({
+  if (!input$anom_clean) {
+  	data_imputed()
+  } else {
+  	data_imputed() |>
+  		dplyr::select(-value) |> 
+  		dplyr::left_join(
+  			data_anomaly() |> 
+  				dplyr::select(date, observed_clean) |> 
+  				dplyr::rename("value" = "observed_clean")
+  		)
+  }
 })
 
 output$anomaly_plot <- plotly::renderPlotly({
-  data_imputed() |>
-    timetk::plot_anomaly_diagnostics(
-      .date_var = date, .value = value, 
-      .alpha = input$alpha, .max_anomalies = input$max_anomalies,
-      .interactive = TRUE, .title = "Anomaly Plot", .legend_show = FALSE
-    )
+  data_anomaly() |> 
+		timetk::plot_anomalies(.date_var = date) |> 
+		plotly::layout(showlegend = FALSE)
 })
 
 output$clean_plot <- plotly::renderPlotly({
-  data_cleaned() |>
-    timetk::plot_time_series(
-      .date_var = date, .value = value,
-      .smooth = FALSE, .interactive = TRUE, 
-      .title = "Cleaned Time Series"
+  data_anomaly() |> 
+		timetk::plot_anomalies_cleaned(.date_var = date) |> 
+		plotly::layout(
+			legend = list(orientation = "h", x = 0.5, y = -0.2, xanchor = "center", yanchor = "top")
+		)
+})
+
+output$anomaly_table <- DT::renderDT({
+  data_anomaly() |> 
+    dplyr::filter(anomaly == "Yes") |>
+		dplyr::select(date, observed, observed_clean, dplyr::everything()) |>
+		dplyr::select(-dplyr::any_of(c("anomaly", "anomaly_direction"))) |>
+		dplyr::rename("value" = "observed", "cleaned_value" = "observed_clean") |>
+		dplyr::mutate(dplyr::across(.cols = where(is.numeric), .fns = ~ round(., 2))) |> 
+    DT::datatable(
+      options = list(
+        ordering = TRUE, pageLength = 10, lengthChange = TRUE, searching = TRUE, 
+        info = FALSE, paging = TRUE, scrollCollapse = TRUE, scrollY = 200, scrollX = TRUE
+      ), 
+      rownames = FALSE
     )
 })
 ```
 
 
-Row 1 {data-height=650}
+Row 1 {data-height=500}
 ---------------------------------------------------------------------------
 
 ### {.no-padding}
@@ -521,14 +575,18 @@ Row 1 {data-height=650}
 plotly::plotlyOutput(outputId = "anomaly_plot")
 ```
 
-
-Row 2 {data-height=350}
----------------------------------------------------------------------------
-
 ### {.no-padding}
 
 ```{r}
 plotly::plotlyOutput(outputId = "clean_plot")
+```
+
+Row 2 {data-height=500}
+---------------------------------------------------------------------------
+
+### Anomaly Data {.no-padding}
+```{r}
+DT::DTOutput(outputId = "anomaly_table")
 ```
 
 
@@ -588,7 +646,7 @@ observeEvent(
 )
 
 observeEvent(
-  eventExpr = input$dataset, 
+  eventExpr = input$frequency, 
   handlerExpr = {
     updateNumericInput(
       session = session, inputId = "transf_acf_lag", 
@@ -842,7 +900,7 @@ shinyWidgets::dropdownButton(
 )
 
 h4("Upload your dataset: ")
-h6("The dataset must be a .csv file containing columns 'date', 'id', 'frequency' and the desired external features.")
+h6("The dataset must be a .csv file containing columns 'date', 'id', and the desired external features.")
 fileInput(
   inputId = "upload_xfeatures", label = NULL, accept = c(".csv"), multiple = FALSE,
   buttonLabel = "Browse...", placeholder = "No file"
@@ -982,12 +1040,26 @@ shinyWidgets::dropdownButton(
   tooltip = shinyWidgets::tooltipOptions(title = "Click to see inputs!")
 )
 br()
+shinyWidgets::awesomeCheckbox(inputId = "featsel_save", label = "Save feature set?", value = FALSE)
+br()
+shinyWidgets::awesomeCheckbox(
+	inputId = "featsel_norm", label = "Plot normalized values?", value = FALSE
+)
+br()
 sliderInput(
-	inputId = "featsel_cor_thresh", label = "Absolute Correlation Threshold",
-	min = 0, max = 1, value = 0, step = 0.05
+	inputId = "featsel_cor_thresh", label = "Correlation Threshold",
+	min = 0, max = 1, value = 0, step = 0.01
 )
 sliderInput(
 	inputId = "featsel_pps_thresh", label = "PPS Threshold",
+	min = 0, max = 1, value = 0, step = 0.01
+)
+sliderInput(
+	inputId = "featsel_lasso_thresh", label = "LASSO Threshold",
+	min = 0, max = 1, value = 0, step = 0.01
+)
+sliderInput(
+	inputId = "featsel_rf_thresh", label = "Random Forest Threshold",
 	min = 0, max = 1, value = 0, step = 0.01
 )
 br()
@@ -995,8 +1067,6 @@ textInput(
 	inputId = "featsel_reg_formula", label = "Regression Formula", 
 	value = "value ~ .", placeholder = "value ~ x1 + x2 + x3"
 )
-br()
-shinyWidgets::awesomeCheckbox(inputId = "featsel_save", label = "Save feature set?", value = FALSE)
 
 tags$div(
   id = "sidebar-footer",
@@ -1010,7 +1080,7 @@ data_features_full <- reactive({
 	req(data_features())
 	if (!is.null(react_val$uploaded_xfeatures)) {
 		req(data_xfeatures())
-		data_features() |> dplyr::left_join(data_xfeatures(), by = "date") # c("date", "id", "frequency")
+		data_features() |> dplyr::left_join(data_xfeatures(), by = c("date", "id", "frequency")) # c("date", "id", "frequency")
 	} else {
 		data_features()
 	}
@@ -1048,9 +1118,15 @@ n_features <- reactive({
 
 output$featsel_corr_plot <- plotly::renderPlotly({
 	req(data_importance())
-	g <- data_importance() |> 
-		dplyr::filter(type == "Correlation") |> 
-		plot_feature_importance() + ggplot2::expand_limits(x = c(-1, 1))
+	if (input$featsel_norm) {
+		g <- data_importance() |> 
+			dplyr::filter(type == "Correlation") |> 
+			plot_feature_importance(normalized = TRUE) + ggplot2::expand_limits(x = c(0, 1))
+	} else {
+		g <- data_importance() |> 
+			dplyr::filter(type == "Correlation") |> 
+			plot_feature_importance(normalized = FALSE) + ggplot2::expand_limits(x = c(-1, 1))
+	}
 	plotly::ggplotly(g)
 })
 
@@ -1071,7 +1147,7 @@ output$featsel_ppsr_plot <- plotly::renderPlotly({
 	req(data_importance())
 	g <- data_importance() |> 
 		dplyr::filter(type == "PPS") |> 
-		plot_feature_importance() + ggplot2::expand_limits(x = c(0, 1))
+		plot_feature_importance(normalized = input$featsel_norm) + ggplot2::expand_limits(x = c(0, 1))
 	plotly::ggplotly(g)
 })
 
@@ -1079,7 +1155,7 @@ output$featsel_lasso_plot <- plotly::renderPlotly({
 	req(data_importance())
 	g <- data_importance() |> 
 		dplyr::filter(type == "LASSO") |>
-		plot_feature_importance() + ggplot2::expand_limits(x = c(0, 1)) 
+		plot_feature_importance(normalized = input$featsel_norm) + ggplot2::expand_limits(x = c(0, 1)) 
 	plotly::ggplotly(g)
 })
 
@@ -1087,11 +1163,11 @@ output$featsel_rf_plot <- plotly::renderPlotly({
 	req(data_importance())
 	g <- data_importance() |> 
 		dplyr::filter(type == "Random Forest") |> 
-		plot_feature_importance() + ggplot2::expand_limits(x = c(0, 1))  
+		plot_feature_importance(normalized = input$featsel_norm) + ggplot2::expand_limits(x = c(0, 1))  
 	plotly::ggplotly(g)
 })
 
-output$featsel_table <- DT::renderDT({
+output$featsel_summary <- DT::renderDT({
   data_feat_selected()$summary_table |>
     DT::datatable(
       options = list(
@@ -1110,6 +1186,17 @@ output$featsel_reg_plot <- plotly::renderPlotly({
 		timetk::plot_time_series_regression(
 			.date_var = date, .formula = reg_f, .show_summary = FALSE
 		)
+})
+
+output$featsel_data <- DT::renderDT({
+  data_feat_selected()$data |>
+		# dplyr::mutate(dplyr::across(.cols = where(is.numeric), .fns = ~ round(., 2))) |> 
+    DT::datatable(
+      options = list(
+        ordering = TRUE, pageLength = 20, lengthChange = TRUE, searching = TRUE, 
+        info = FALSE, paging = TRUE, scrollCollapse = TRUE, scrollY = 550, scrollX = TRUE
+      )
+    )
 })
 ```
 
@@ -1143,13 +1230,19 @@ plotly::plotlyOutput(outputId = "featsel_rf_plot")
 ### Selected Feature Set
 
 ```{r}
-DT::DTOutput(outputId = "featsel_table")
+DT::DTOutput(outputId = "featsel_summary")
 ```
 
 ### Regression Analysis {.no-padding}
 
 ```{r}
 plotly::plotlyOutput(outputId = "featsel_reg_plot")
+```
+
+### Data {.no-padding}
+
+```{r}
+DT::DTOutput(outputId = "featsel_data")
 ```
 
 
@@ -1177,7 +1270,6 @@ shinyWidgets::dropdownButton(
     choices = c("Expanding", "Rolling"), selected = "Rolling", 
     inline = TRUE
   ),
-  shinyWidgets::awesomeCheckbox(inputId = "use_feat_set", label = "Use selected fetures?", value = FALSE),
   icon = icon("gear"), width = "225px", size = "sm", circle = TRUE,
   tooltip = shinyWidgets::tooltipOptions(title = "Click to see inputs!")
 )
@@ -1193,7 +1285,7 @@ shinyWidgets::pickerInput(
   ), 
   selected = "Naive"
 )
-
+shinyWidgets::awesomeCheckbox(inputId = "use_feat_set", label = "Use selected fetures?", value = FALSE)
 shinyWidgets::awesomeCheckbox(inputId = "back_transf", label = "Back transform?", value = FALSE)
 
 actionButton(inputId = "apply_forecast", label = "Forecast!", icon = icon("play"))
@@ -2754,7 +2846,7 @@ shinyWidgets::pickerInput(
     `Mixed Algorithms` = mix_methods,
     `Auto ML` = aml_methods
   ), 
-  selected = "Ensemble"
+  selected = "Naive"
 )
 
 shinyWidgets::awesomeCheckbox(inputId = "scn_tune", label = "Use optimized algorithm?", value = FALSE)
@@ -2995,7 +3087,7 @@ output$scn_wb_table <- DT::renderDT({
 		dplyr::filter(.key == "prediction" & .conf_lvl == as.character(input$scn_conf_lvl)) |> 
     adjust_forecast(input$scn_adjust) |>
     dplyr::select(.index, .conf_lo, .value, .conf_hi) |> 
-    dplyr::mutate(across(.cols = where(is.numeric), .fns = ~ round(., 2))) |> 
+    dplyr::mutate(dplyr::across(.cols = where(is.numeric), .fns = ~ round(., 2))) |> 
     purrr::set_names(c("Date", "Worst Case", "Forecast", "Best Case")) |> 
     DT::datatable(
       options = list(
