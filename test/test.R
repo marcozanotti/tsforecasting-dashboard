@@ -761,10 +761,10 @@ input <- list(
 	feat_n_future = 12,
 	feat_calendar = FALSE,
 	feat_holiday = FALSE,
-	feat_fourier_p = "3",
-	feat_fourier_k = 1,
+	feat_fourier_p = "",
+	feat_fourier_k = 0,
 	feat_spline_deg = "",
-	feat_lag = "",
+	feat_lag = "1,2,12",
 	feat_roll = "",
 	feat_inter = "",
 	featsel_reg_formula = "value ~ ."
@@ -773,68 +773,38 @@ data_feat <- data |>
 	generate_features(params = input, n_future = input$feat_n_future)
 
 # CORR
-cor_mat <- data_feat |> 
+data_feat |> 
+	generate_correlations() |> 
+	plot_feature_importance()
+
+data_feat |> 
 	dplyr::mutate(dplyr::across(5:ncol(data_feat), as.numeric)) |> 
 	dplyr::select(where(is.numeric)) |> 
 	tidyr::drop_na() |> 
-	stats::cor()
-
-ggcorrplot::ggcorrplot(
-	cor_mat, type = "upper", lab = FALSE, 
-	colors = c( "darkred", "white", "darkgreen")
-) |> 
-	plotly::ggplotly()
-
-reg_f <- input$featsel_reg_formula |> 
-	parse_textinput(format_to = "character") |> 
-	rlang::parse_expr()
-data_feat |>
-	dplyr::select(-dplyr::any_of(c("id", "frequency"))) |>
-	timetk::plot_time_series_regression(
-		.date_var = date, .formula = reg_f, .show_summary = FALSE
-	)
-
-
-data_feat |> c
-generate_correlations() |> 
+	stats::cor() |> 
 	ggcorrplot::ggcorrplot(
-		type = "upper", lab = FALSE, 
-		colors = c( "darkred", "white", "darkgreen")
+		type = "upper", lab = FALSE, colors = c( "darkred", "white", "darkgreen")
 	) |> 
 	plotly::ggplotly()
 
-
-
 # PPS
-ppsr_res <- data_feat |> 
-	dplyr::select(-id, -frequency, -date) |>
-	ppsr::score_predictors(
-		y = "value", algorithm = "tree", cv_folds = 5, do_parallel = TRUE
-	)
-
-res <- data_feat |> 
-	generate_pps()
-res |> plot_feature_importance()
-
-
+data_feat |> 
+	generate_pps() |> 
+	plot_feature_importance()
 
 # LASSO & Random Forest
+data_feat |> 
+	generate_model_importance(
+		method = c("LASSO", "Random Forest")
+	) |> 
+	purrr::pluck("LASSO") |> 
+	plot_feature_importance()
+
 res <- purrr::map(
 	c("LASSO", "Random Forest"), 
 	~ fit_feature_model(data = data_feat, method = .x)
 ) |> 
 	purrr::set_names(c("LASSO", "Random Forest"))
-
-res$LASSO |> 
-	extract_feature_importance("LASSO", relative = "relative") |> 
-	plot_feature_importance() |> 
-	plotly::ggplotly()
-
-res$`Random Forest` |> 
-	extract_feature_importance("Random Forest", relative = "relative") |> 
-	plot_feature_importance() |> 
-	plotly::ggplotly()
-
 
 # ALL
 feat_names <- get_features(data_feat, names_only = TRUE)
@@ -843,16 +813,22 @@ corr_values <- data_feat |>	generate_correlations()
 pps_values <- data_feat |> generate_pps()
 imp_values <- data_feat |> 
 	generate_model_importance(
-		method = c("LASSO", "Random Forest")
+		method = c("LASSO", "Random Forest"), importance_type = "absolute"
 	)
 
 input <- list(
 	featsel_cor_thresh = 0,
-	featsel_pps_thresh = 0
+	featsel_pps_thresh = 0,
+	featsel_lasso_thresh = 0,
+	featsel_rf_thresh = 0
 )
 
 data_importance <- c(list("Correlation" = corr_values, "PPS" = pps_values), imp_values) |> 
 	dplyr::bind_rows()
+
+data_importance |>
+	dplyr::filter(type == "Random Forest") |> 
+	plot_feature_importance()
 
 data_importance |> 
 	select_features(params = input, data_features = data_feat, n_future = 12)
@@ -1020,6 +996,22 @@ forecast_results1$test_forecast |> plot_modeltime_forecast()
 forecast_results2$test_forecast |> plot_modeltime_forecast()
 forecast_results1$oos_forecast |> plot_modeltime_forecast()
 forecast_results2$oos_forecast |> plot_modeltime_forecast()
+
+
+# ANOMALY DETECTION & CLEANING -----------------------------------------
+data <- data_selected <- get_data(datasets[1])
+ts_freq <- data_selected$frequency |> unique() |> parse_frequency()
+params <- input <- list(
+	anom_alpha = 0.05,
+	anom_max_anomalies = 0.2
+)
+data |> anomaly_detection_and_cleaning(params)
+
+data |> anomaly_detection_and_cleaning(params) |> 
+	timetk::plot_anomalies(.date_var = date)
+
+data |> anomaly_detection_and_cleaning(params) |> 
+	timetk::plot_anomalies_cleaned(.date_var = date)
 
 
 
