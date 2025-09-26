@@ -14,6 +14,27 @@ impute_data <- function(data, impute = FALSE, freq) {
 
 }
 
+# function to detect anomalies and clean data
+anomaly_detection_and_cleaning <- function(data, params) {
+	
+	ts_freq <- data$frequency |> unique() |> parse_frequency()
+	data_anom <- data |> 
+		timetk::anomalize(
+			.date_var = date, 
+			.value = value, 
+			.frequency = ts_freq,
+			.trend = "auto", 
+			.method = params$anom_method, 
+			.iqr_alpha = params$anom_alpha,
+			.max_anomalies = params$anom_max_anomalies, 
+			.clean_alpha = params$anom_clean_alpha,
+			.message = FALSE
+		)
+	
+	return(data_anom)
+	
+}
+
 # function to clean data from anomalies
 clean_data <- function(data, clean = FALSE) {
 	
