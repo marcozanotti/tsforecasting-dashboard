@@ -153,16 +153,15 @@ br()
 br()
 br()
 selectInput(
-  inputId = "frequency", label = h5("Dataset frequency"), 
+  inputId = "frequency", label = h5("Frequency"), 
   choices = frequencies, selected = frequencies[1], multiple = FALSE
 )
-br()
 numericInput(
-	inputId = "horizon", label = "Forecast horizon", 
+	inputId = "horizon", label = h5("Forecast horizon"), 
 	value = 12, min = 1, max = Inf, step = 1, width = "100%"
 )
 numericInput(
-	inputId = "n_assess", label = "Assessment Period", 
+	inputId = "n_assess", label = h5("Assessment Period"), 
 	value = 24, min = 1, max = Inf, step = 1, width = "100%"
 )
 # shinyWidgets::prettyRadioButtons(
@@ -1915,6 +1914,12 @@ shinyWidgets::pickerInput(
   ), 
   selected = "Elastic Net"
 )
+shinyWidgets::awesomeCheckbox(inputId = "tune_back_transf", label = "Back transform?", value = FALSE)
+actionButton(inputId = "tune_apply_forecast", label = "Optimize!", icon = icon("play"))
+actionButton(inputId = "tune_reset", label = "Reset", icon = icon("sync"))
+
+br()
+br()
 
 # Elastic Net
 conditionalPanel(
@@ -2073,11 +2078,6 @@ conditionalPanel(
   h5("New algorithms will be released soon!")
 )
 
-
-shinyWidgets::awesomeCheckbox(inputId = "tune_back_transf", label = "Back transform?", value = FALSE)
-br()
-actionButton(inputId = "tune_apply_forecast", label = "Optimize!", icon = icon("play"))
-actionButton(inputId = "tune_reset", label = "Reset", icon = icon("sync"))
 br()
 br()
 br()

@@ -137,29 +137,44 @@ transform_data <- function(data, transformations, frequency) {
 
 # function to transform data back
 back_transform_data <- function(
-	data, transform = FALSE, cols_to_transform, 
-	transformations, transform_params#, frequency
+	data, 
+	transform = FALSE, 
+	cols_to_transform, 
+	transformations, 
+	transform_params
+	#, frequency
 ) {
 	
 	trf_prm <- getOption("tsf.dashboard.transformations")
+	
 	if (any(!transformations %in% trf_prm)) {
+		
 		invalid_trf <- transformations[!transformations %in% trf_prm]
 		stop(paste("Invalid transformation", invalid_trf))
+		
 	}
 	
 	if (all(!trf_prm %in% transformations) | transform == FALSE) {
+		
 		data_back_transf <- data
+		
 	} else {
 		
 		logging::loginfo("Back transforming data...")
 		if (all(c(".model_id", ".conf_lvl") %in% names(data))) {
 			data_back_transf <- data |> dplyr::group_by(.model_id, .conf_lvl)
+			# is_forecast_data <- TRUE
 		} else if (".model_id" %in% names(data)) {
 			data_back_transf <- data |> dplyr::group_by(.model_id)
+			# is_forecast_data <- TRUE
 		} else {
 			data_back_transf <- data
+			# is_forecast_data <- FALSE
 		}
 		
+		# FIX: must be performed with complex for loops to handle multiple models and confidence levels
+		# FIX: seasonal differencing and differencing create problems with initial values in case of multiple groups
+		# FIX: seasonal differencing and differencing should be the first to be back-transformed
 		# if ("Seasonal Differencing" %in% transformations) { # Seasonal differencing
 		# 	logging::loginfo("Seasonal Differencing")
 		# 	if (is_frc_data) {
@@ -181,19 +196,20 @@ back_transform_data <- function(
 		# 
 		# if ("Differencing" %in% transformations) { # Differencing
 		# 	logging::loginfo("Differencing")
-		# 	if (is_frc_data) {
-		# 		init_val <- generate_initial_values(transform_params[["Differencing"]])
-		# 		init_val_empty <- init_seas_val |> dplyr::mutate(.value = NA_real_)
+		# 	
+		# 	if (is_forecast_data) {
+		# 		diff_init_val <- generate_initial_values(transform_params[["Differencing"]])
 		# 	} else {
-		# 		init_val <- transform_params[["Differencing"]]
-		# 		init_val_empty <- init_val |> dplyr::mutate(value = NA_real_)
+		# 		diff_init_val <- transform_params[["Differencing"]]
 		# 	}
-		# 	data_back_transf <- data_back_transf |> 
-		# 		tibble::add_row(init_val_empty, .before = 1) |> 
+		# 	diff_init_val <- transform_params[["Differencing"]]
+		# 	diff_init_val_empty <- diff_init_val |> dplyr::mutate(value = NA_real_)
+		# 	data_back_transf <- data_back_transf |>
+		# 		tibble::add_row(diff_init_val_empty, .before = 1) |>
 		# 		dplyr::mutate(
 		# 			dplyr::across(
-		# 				.cols = dplyr::all_of(cols_to_transform), 
-		# 				.fns = ~ timetk::diff_inv_vec(., difference = 1, initial_values = init_val$value)
+		# 				.cols = dplyr::all_of(cols_to_transform),
+		# 				.fns = ~ timetk::diff_inv_vec(as.numeric(.), difference = 1, initial_values = diff_init_val[["value"]])
 		# 			)
 		# 		)
 		# }
@@ -319,7 +335,7 @@ back_transform_accuracy <- function(
 			calibration_table$.calibration_data[[i]] <-	back_transform_data(
 				data = calibration_table$.calibration_data[[i]],
 				transform = transform, 
-				cols_to_transform = dplyr::all_of(c(".actual", ".prediction")), 
+				cols_to_transform = c(".actual", ".prediction"), 
 				transformations = transformations, 
 				transform_params = transform_params
 			) |> 

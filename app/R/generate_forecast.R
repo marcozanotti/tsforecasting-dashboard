@@ -165,34 +165,23 @@ aggregate_forecast <- function(
   actual_t <- frc_tbl |>
     dplyr::filter(.key == "actual") |>
     dplyr::slice_tail(n = n_future)
-  actual_seas_t <- frc_tbl |>
-    dplyr::filter(.key == "actual") |>
-    dplyr::filter(.index %in% (preds$.index - lubridate::years(1))) # previous year
 
   agg_preds <- preds |> dplyr::summarise(value = aggregation_fun(.value), sd = sd(.value))
   agg_conf_lo <- preds |> dplyr::summarise(value = aggregation_fun(.conf_lo), sd = sd(.value))
   agg_conf_up <- preds |> dplyr::summarise(value = aggregation_fun(.conf_hi), sd = sd(.value))
   agg_actual_t <- actual_t |> dplyr::summarise(value = aggregation_fun(.value), sd = sd(.value))
-  agg_actual_seas_t <- actual_seas_t |> dplyr::summarise(value = aggregation_fun(.value), sd = sd(.value))
 
   delta_actual_t <- c(
     rate_of_change(agg_preds$value, agg_actual_t$value),
     rate_of_change(agg_conf_lo$value, agg_actual_t$value),
     rate_of_change(agg_conf_up$value, agg_actual_t$value)
   )
-  delta_actual_seas_t <- c(
-    rate_of_change(agg_actual_t$value, agg_actual_seas_t$value),
-    rate_of_change(agg_preds$value, agg_actual_seas_t$value),
-    rate_of_change(agg_conf_lo$value, agg_actual_seas_t$value),
-    rate_of_change(agg_conf_up$value, agg_actual_seas_t$value)
-  )
 
   res_agg <- tibble::tibble(
-    "Scenario" = c("Previous Season", "Previous Period", NA_character_, "Forecast", "Worst Case", "Best Case"),
-    "Value" = c(agg_actual_seas_t$value, agg_actual_t$value, NA_real_, agg_preds$value, agg_conf_lo$value, agg_conf_up$value),
-    "Variability" = c(agg_actual_seas_t$sd, agg_actual_t$sd, NA_real_, agg_preds$sd, agg_conf_lo$sd, agg_conf_up$sd),
-    "Delta PP (%)" = c(NA_real_, NA_real_, NA_real_, delta_actual_t),
-    "Delta PS (%)" = c(NA_real_, delta_actual_seas_t[1], NA_real_, delta_actual_seas_t[2:4])
+    "Scenario" = c("Previous Period", NA_character_, "Forecast", "Worst Case", "Best Case"),
+    "Value" = c(agg_actual_t$value, NA_real_, agg_preds$value, agg_conf_lo$value, agg_conf_up$value),
+    "Variability" = c(agg_actual_t$sd, NA_real_, agg_preds$sd, agg_conf_lo$sd, agg_conf_up$sd),
+    "Delta PP (%)" = c(NA_real_, NA_real_, delta_actual_t),
   )
   return(res_agg)
 

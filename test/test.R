@@ -557,18 +557,24 @@ plotly::ggplotly(g, dynamicTicks = TRUE)
 
 # Transformations ---------------------------------------------------------
 
-data_selected <- get_data(datasets[1])
-ts_freq <- data_selected$frequency |> unique() |> parse_frequency()
+data_selected <- get_data(datasets[2])
+ts_freq <- 12
 input <- list(
-	"transf" = c(transf) # NULL
+	"transf" = c(transf[8]) # NULL
 )
 res <- transform_data(data_selected, input$transf, ts_freq) 
-res |> purrr::pluck("data_transformed") |> 
-	back_transform_data(input$transf, res$transform_params, ts_freq)
+
+back_transform_data(
+	data = res$data_transformed,
+	transform = TRUE,
+	cols_to_transform = c("value"),
+	transformations = input$transf,
+	transform_params = res$transform_params
+)
 
 # test on forecasts 
 input <- list(
-	transf = transf[2:7],
+	transf = transf[8],
 	n_future = 12,
 	n_assess = 24,
 	assess_type = "Rolling",
@@ -590,24 +596,56 @@ input <- list(
 	assess_type = "Rolling",
 	method = "Naive"
 )
-
 data_transformed <- transform_data(data_selected, input$transf, ts_freq)$data_transformed
 transform_params <- transform_data(data_selected, input$transf, ts_freq)$transform_params
-
-fitted_model_list <- map(
+fitted_model_list <- purrr::map(
 	input$method,
 	~ fit_model(
 		data = data_transformed, method = ., params = input,
 		n_assess = input$n_assess, assess_type = input$assess_type, seed = 1992
 	)
 )
-
 forecast_results <- generate_forecast(
 	fitted_model_list = fitted_model_list, data = data_transformed,
 	method = input$method, n_future = input$n_future,
 	n_assess = input$n_assess, assess_type = input$assess_type, 
 	confidence_level = c(0.8, 0.95)
 )
+
+forecast_results$data
+forecast_results$calibration
+forecast_results$residuals
+forecast_results$accuracy
+forecast_results$test_forecast |> View()
+forecast_results$oos_forecast
+
+back_transform_data(
+	data = forecast_results$residuals,
+	cols_to_transform = c(".actual", ".prediction"),
+	transform = TRUE,
+	transformations = input$transf, 
+	transform_params = transform_params
+) |> 
+	dplyr::mutate(.residuals = .actual - .prediction)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 data = data_selected
 method = input$method
@@ -652,14 +690,7 @@ back_transform_accuracy(
 	transformations = input$transf, transform_params = transform_params
 )
 
-forecast_results$residuals
-forecast_results$residuals |> 
-	back_transform_data(
-		cols_to_transform = c(".actual", ".prediction"),
-		transform = TRUE,
-		transformations = input$transf, transform_params = transform_params
-	) |> 
-	dplyr::mutate(.residuals = .actual - .prediction)
+
 
 forecast_results |> 
 	back_transform_forecast(
@@ -840,7 +871,7 @@ data_importance |>
 
 
 
-# Forecast con Features ---------------------------------------------------
+# Forecast with Features ---------------------------------------------------
 data_selected <- get_data(datasets[1])
 ts_freq <- data_selected$frequency |> unique() |> parse_frequency()
 
