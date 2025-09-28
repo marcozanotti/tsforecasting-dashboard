@@ -127,11 +127,9 @@ generate_features <- function(data, params, n_future, verbose = 1) {
 	if (params$feat_calendar) {
 		if (verbose > 0) logging::loginfo("Generating calendar features...")
 		data_feat <- data_feat |> 
-			dplyr::mutate("time_trend" = 1:dplyr::n()) |> # timetk::normalize_vec(as.numeric(date), silent = TRUE)) |> 
+			dplyr::mutate("time_trend" = 1:dplyr::n()) |> 
 			timetk::tk_augment_timeseries_signature(.date_var = date) |> 
-			# dplyr::mutate(year = timetk::normalize_vec(year, silent = TRUE)) |> 
 			dplyr::select(-dplyr::matches("(diff)|(iso)|(xts)|(index.num)")) 
-			
 	}
 	
 	if (params$feat_holiday) {
@@ -204,8 +202,7 @@ generate_features <- function(data, params, n_future, verbose = 1) {
 	
 	data_feat <- data_feat |>	
 		generate_recipe_spec(method = "default") |>  
-		get_features() |> 
-		dplyr::select(-date) 
+		get_features(remove_date = TRUE)
 	data_feat_full <- data_full |> dplyr::bind_cols(data_feat)
 	return(data_feat_full)
 
@@ -297,8 +294,9 @@ fit_feature_model <- function(data, method, seed = 1992) {
 		dplyr::select(-dplyr::any_of(c("id", "frequency", "date"))) |> 
 		tidyr::drop_na()
 	
-	rcp_spec <- recipes::recipe(value ~ ., data = data_featsel) |> 
-		recipes::step_dummy(recipes::all_nominal(), one_hot = TRUE)
+	# rcp_spec <- recipes::recipe(value ~ ., data = data_featsel) |> 
+	# 	recipes::step_dummy(recipes::all_nominal(), one_hot = TRUE)
+	rcp_spec <- generate_recipe_spec(data = data_featsel, method = "default")
 	
 	wkfl_spec <- workflows::workflow() |> 
 		workflows::add_model(model_spec) |> 
@@ -358,9 +356,39 @@ generate_model_importance <- function(data, method) {
 	return(res)
 }
 
+# wrapper to combine importance from different methods
+generate_importance <- function(data, methods) {
+	
+	logging::loginfo("*** Generating Feature Importance ***")
+	
+	importance_list <- list()
+	
+	if ("Correlation" %in% methods) {
+		cor_mat <- generate_correlations(data = data, cor_method = "spearman", full_matrix = FALSE)
+		importance_list <- c(importance_list, list("Correlation" = cor_mat))
+	}
+	
+	if ("PPS" %in% methods) {
+		pps_mat <- generate_pps(data = data)
+		importance_list <- c(importance_list, list("PPS" = pps_mat))
+	}
+	
+	model_methods <- methods[methods %in% c("LASSO", "Random Forest")]
+	if (length(model_methods) > 0) {
+		model_imp <- generate_model_importance(data = data, method = model_methods)
+		importance_list <- c(importance_list, model_imp)
+	}
+	
+	data_importance <- importance_list |> dplyr::bind_rows()
+	
+	return(data_importance)
+	
+}
+
 # function to normalize importance scores
 normalize_importance <- function(data_importance) {
 	
+	logging::loginfo("Normalizing importance values...")
 	methods <- unique(data_importance$type)
 	data_res <- NULL
 	
@@ -412,18 +440,38 @@ plot_feature_importance <- function(importance_data, normalized = FALSE) {
 		timetk:::theme_tq() +
 		ggplot2::theme(legend.position = "right") +
 		ggplot2::labs(y = "", x = "")
+	if (normalized) {
+		g <- g + ggplot2::expand_limits(x = c(0, 1))
+	}
 	return(g)
+	
+}
+
+# function to filter importance values 
+filter_importance <- function(data_importance, params) {
+	
+	logging::loginfo("Filtering importance values...")
+	sel_feat <- data_importance |>
+		dplyr::filter(
+			(type == "Correlation" & importance >= params$featsel_cor_thresh) |
+				(type == "PPS" & importance >= params$featsel_pps_thresh) |
+				(type == "LASSO" & importance >= params$featsel_lasso_thresh) |
+				(type == "Random Forest" & importance >= params$featsel_rf_thresh)
+		)
+	return(sel_feat)
 	
 }
 
 # function to select features based on importance thresholds
 select_features <- function(data_importance, params, data_features, n_future) {
 	
+	logging::loginfo("Selecting features...")
 	n_feats <- get_features(data_features, number_only = TRUE, remove_date = TRUE)
 	sum_tbl <- tibble::tibble(
 		"Variable" = NA_character_, "N. Methods" = NA_real_, 
 		"Average Importance" = NA_real_, "Methods" = NA_character_
 	)
+	data_sel_importance <- data_importance
 	data_final <- data_features |> 
 		dplyr::slice_head(n = nrow(data_features) - n_future) |> 
 		tidyr::drop_na()
@@ -431,17 +479,8 @@ select_features <- function(data_importance, params, data_features, n_future) {
 	
 	if (n_feats > 0) {
 
-		logging::loginfo("Selecting features...")
-		sel_feat <- data_importance |>
-			normalize_importance() |>
-			dplyr::filter(
-				(type == "Correlation" & importance >= params$featsel_cor_thresh) |
-					(type == "PPS" & importance >= params$featsel_pps_thresh) |
-					(type == "LASSO" & importance >= params$featsel_lasso_thresh) |
-					(type == "Random Forest" & importance >= params$featsel_rf_thresh)
-			)
-		
-		sel_feat_names <- unique(sel_feat$variable)
+		data_sel_importance <- data_importance |> filter_importance(params = params)
+		sel_feat_names <- unique(data_sel_importance$variable)
 
 		if (length(sel_feat_names) > 0) {
 			
@@ -449,7 +488,7 @@ select_features <- function(data_importance, params, data_features, n_future) {
 			mtd_ave <- vector("numeric", length(sel_feat_names))
 			mtd_type <- vector("character", length(sel_feat_names))
 			for (i in seq_along(sel_feat_names)) {
-				sel_data_tmp <- sel_feat |> dplyr::filter(variable == sel_feat_names[i])
+				sel_data_tmp <- data_sel_importance |> dplyr::filter(variable == sel_feat_names[i])
 				mtd_n[i] <- nrow(sel_data_tmp)
 				mtd_ave[i] <- mean(sel_data_tmp$importance, na.rm = TRUE)
 				mtd_type[i] <- sel_data_tmp |> dplyr::pull("type") |>	unique() |> stringr::str_flatten(", ")
@@ -462,7 +501,8 @@ select_features <- function(data_importance, params, data_features, n_future) {
 		}
 		
 		sum_tbl <- sum_tbl |> 
-			dplyr::arrange(dplyr::desc(`N. Methods`), dplyr::desc(`Average Importance`))
+			dplyr::arrange(dplyr::desc(`N. Methods`), dplyr::desc(`Average Importance`)) |> 
+			dplyr::mutate(`Average Importance` = round(`Average Importance`, 3))
 		data_selected <- data_features |> 
 			dplyr::select(
 				dplyr::any_of(c("id", "date", "value")), 
@@ -478,7 +518,8 @@ select_features <- function(data_importance, params, data_features, n_future) {
 	res <- list(
 		"data" = data_final,
 		"future_data" = data_future,
-		"summary_table" = sum_tbl
+		"summary_table" = sum_tbl,
+		"data_importance" = data_sel_importance
 	)
 	return(res)
 	

@@ -42,12 +42,6 @@ body {
 .navbar-logo {
 	padding-left: 0px !important;
   width: 45px;
-  margin-right: 12px; /* add space between logo and title */
-}
-
-/* Ensure tabs start after the sidebar */
-.navbar .navbar-nav {
-    margin-left: 70px !important; /* aligns with sidebar width */
 }
 
 

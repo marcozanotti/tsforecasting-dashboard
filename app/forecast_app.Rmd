@@ -16,17 +16,12 @@ runtime: shiny
 
 ```{r setup, include=FALSE, message=FALSE}
 lapply(list.files("R", full.names = TRUE), source)
-
-pkgs <- c(
-	"modeltime", "modeltime.h2o", "rules", "yardstick", "timetk"
-)
+pkgs <- c("modeltime", "modeltime.h2o", "rules", "yardstick", "timetk")
 lapply(pkgs, library, character.only = TRUE)
-
 options(shiny.sanitize.errors = TRUE)
 set_options()
 # Sys.setenv(JAVA_HOME = "/usr/lib/jvm/jdk-17/") # /usr/lib/jvm/java-17-openjdk-amd64/ , for h2o
 # logging::addHandler(logging::writeToFile, file = "forecast_dashboard.log") # add to log file
-
 datasets <- getOption("tsf.dashboard.datasets")
 frequencies <- getOption("tsf.dashboard.frequencies")
 methods <- getOption("tsf.dashboard.methods")
@@ -43,39 +38,92 @@ mtd_prm <- getOption("tsf.dashboard.methods_params")
 mtd_prm_names <- purrr::map(mtd_prm, names)
 metrics <- toupper(getOption("tsf.dashboard.metrics"))
 transf <- getOption("tsf.dashboard.transformations")
+
+# show modal once after initial UI is flushed to the client
+invisible(session$onFlushed(function() {
+	showModal(
+		modalDialog(
+			title = NULL,
+			easyClose = FALSE,
+			fade = TRUE,
+			size = "l",
+			# htmltools::includeHTML("welcome_modal.html"),
+			footer = htmltools::tags$div(
+				style = "text-align: center;",
+				actionButton("start_app", "Start", class = "btn btn-primary btn")
+			),
+			htmltools::tags$div(
+				class = "modal-body",
+				style = "text-align: center; margin-top: 20px;",
+				# htmltools::tags$img(src = "tsf_logo.png", width = "200px", alt = "Forecast App Logo"),
+				htmltools::tags$p(
+					style = "font-size:18px; max-width:600px; margin:auto; margin-top:20px;",
+					htmltools::tags$b("Welcome to the Forecast App!"),
+					htmltools::tags$br(),
+					"This app provides a complete framework for analyzing, modeling, and forecasting time series data. ",
+					"It guides the user through data preparation, exploratory analysis, feature engineering, ",
+					"model training, evaluation, and scenario building."
+				),
+				htmltools::tags$p(
+					style = "font-size:16px; margin-top:20px;",
+					htmltools::tags$b("Author:"),
+					" ",
+					htmltools::tags$a(href = "https://marcozanotti.netlify.app/", target = "_blank", "Marco Zanotti"),
+					htmltools::tags$br(),
+					htmltools::tags$b("Licensed under:"),
+					" ",
+					htmltools::tags$a(href = "https://opensource.org/licenses/MIT", target = "_blank", "MIT License")
+				)
+			)
+		) |> 
+    htmltools::tagAppendAttributes(class = "custom-modal")
+	)
+}, once = TRUE))
+
+observeEvent(eventExpr = input$start_app, handlerExpr = { removeModal() })
 ```
 
-
+<!--
 Welcome {data-orientation=rows}
 ===========================================================================
-
-<div style="text-align: center; margin-top: 100px;">
-
-<img src="tsf_logo.png" width="200" alt="Forecast App Logo"/>
-
-<p style="font-size:18px; max-width:600px; margin:auto; margin-top:20px;">
-<b>Welcome to the Forecast App!</b>
-<br>
-This app provides a complete framework for analyzing, modeling, and
-forecasting time series data.
-It guides the user through data preparation, exploratory analysis,
-feature engineering, model training, evaluation, and scenario building.
-</p>
-
-<p style="font-size:16px; margin-top:20px;">
-<b>Author:</b> <a href="https://marcozanotti.netlify.app/" target="_blank">Marco Zanotti</a><br>
-<b>Licensed under:</b> <a href="https://opensource.org/licenses/MIT" target="_blank">MIT License</a>
-</p>
-
-<br>
-<br>
-```{r}
-# actionButton(inputId = "start", "Start")
-# observeEvent(input$start, {
-# 	updateTabsetPanel(session, inputId = "main_tabs", selected = "data_section")
-# })
+```{r, welcomepage}
+htmltools::div(
+  style = "text-align: center; margin-top: 100px;",
+  # Logo
+  htmltools::img(
+    src = "tsf_logo.png",
+    width = "200",
+    alt = "Forecast App Logo"
+  ),
+  # Welcome text
+  htmltools::p(
+    style = "font-size:18px; max-width:600px; margin:auto; margin-top:20px;",
+    htmltools::tags$b("Welcome to the Forecast App!"),
+    htmltools::br(),
+    "This app provides a complete framework for analyzing, modeling, and forecasting time series data. ",
+    "It guides the user through data preparation, exploratory analysis, feature engineering, ",
+    "model training, evaluation, and scenario building."
+  ),
+  # Author and license
+  htmltools::p(
+    style = "font-size:16px; margin-top:20px;",
+    htmltools::tags$b("Author:"), " ",
+    htmltools::a(
+      href = "https://marcozanotti.netlify.app/",
+      target = "_blank",
+      "Marco Zanotti"
+    ),
+    htmltools::br(),
+    htmltools::tags$b("Licensed under:"), " ",
+    htmltools::a(
+      href = "https://opensource.org/licenses/MIT",
+      target = "_blank",
+      "MIT License"
+    )
+  )
+)
 ```
-</div>
+-->
 
 
 
@@ -90,33 +138,21 @@ shinyWidgets::pickerInput(
 	inputId = "dataset", label = h5("Dataset"), 
   choices = datasets, selected = datasets[1], multiple = FALSE
 )
-
 br()
-
 h5("Upload your dataset: ")
-h6("The dataset must be a .csv file (sep = ',', dec = '.') containing columns 'date', 'id', and 'value'.")
+h6("The dataset must be a .csv file containing columns 'date', 'id', and 'value'.")
 fileInput(
   inputId = "upload_custom", label = NULL, accept = c(".csv"), multiple = FALSE,
-  buttonLabel = "Browse...", placeholder = "No file."
+  buttonLabel = "Browse...", placeholder = "sep = ',' dec = '.'"
 )
 actionButton(inputId = "data_import", label = "Import", icon = icon("upload"))
 actionButton(inputId = "data_reset", label = "Reset", icon = icon("sync"))
-
 br()
 br()
 br()
-
 selectInput(
-  inputId = "frequency", label = h5("Select dataset frequency"), 
+  inputId = "frequency", label = h5("Dataset frequency"), 
   choices = frequencies, selected = frequencies[1], multiple = FALSE
-)
-
-br()
-br()
-
-shinyWidgets::prettyRadioButtons(
-  inputId = "table_type", label = h5("Show:"), 
-  choices = c("Preview", "Structure", "Summary")
 )
 
 tags$div(
@@ -164,35 +200,39 @@ ts_freq <- reactive({
 output$data_table <- DT::renderDT({
   data_selected() |>
       DT::datatable(
+      	editable = "cell", filter = "top",
         options = list(
-          ordering = TRUE, pageLength = 20, lengthChange = TRUE, searching = TRUE, 
-          info = FALSE, paging = TRUE, scrollCollapse = TRUE, scrollY = 575, scrollX = TRUE
+          ordering = TRUE, pageLength = 20, lengthChange = FALSE, searching = FALSE, 
+          info = FALSE, paging = FALSE, scrollCollapse = TRUE, scrollY = 700, scrollX = TRUE
         )
       )
-})
+	}, 
+	server = TRUE
+)
 output$data_str <- renderPrint({ dplyr::glimpse(data_selected()) })
 output$data_summ <- renderPrint({ skimr::skim(data_selected()) })
 ```
 
 
-Row 1
+Row 1 {.tabset}
 ---------------------------------------------------------------------------
 
-### {.no-padding}
+### Data {.no-padding}
 
 ```{r}
-conditionalPanel(
-  condition = "input.table_type == 'Preview'",
-  DT::DTOutput(outputId = "data_table")
-)
-conditionalPanel(
-  condition = "input.table_type == 'Structure'",
-  verbatimTextOutput(outputId = "data_str")
-)
-conditionalPanel(
-  condition = "input.table_type == 'Summary'",
-  verbatimTextOutput(outputId = "data_summ")
-)
+DT::DTOutput(outputId = "data_table")
+```
+
+### Structure {.no-padding}
+
+```{r}
+verbatimTextOutput(outputId = "data_str")
+```
+
+### Summary {.no-padding}
+
+```{r}
+verbatimTextOutput(outputId = "data_summ")
 ```
 
 
@@ -203,31 +243,25 @@ Visualize {data-navmenu="Analyze" data-orientation=rows}
 Input {.sidebar}
 ---------------------------------------------------------------------------
 
+*Analyze - Visualize* 
 ```{r}
 dateRangeInput(
   inputId = "viz_date_range", label = h5("Date Period"),
   start = as.Date("1940-01-01"), end = as.Date("2023-12-31")
 )
-
 shinyWidgets::materialSwitch(
   inputId = "viz_smooth_line", label = h5("Smooth Line"), 
   value = TRUE, status = "primary", inline = TRUE
 )
-
 numericInput(
   inputId = "viz_acf_lag", label = h5("ACF Lag"),
   value = 48, min = 1, max = 300, step = 1, width = "45%"
 )
-
 br()
+shinyWidgets::awesomeCheckbox(inputId = "impute", label = "Impute missing values?", value = TRUE)
 br()
 actionButton(inputId = "viz_reset", label = "Reset", icon = icon("sync"))
 
-br()
-br()
-hr()
-h5("Missing imputation")
-shinyWidgets::switchInput(inputId = "impute", value = FALSE, size = "mini")
 
 tags$div(
   id = "sidebar-footer",
@@ -265,6 +299,7 @@ observeEvent(
     shinyWidgets::updateMaterialSwitch(session = session, inputId = "viz_smooth_line", value = TRUE)
     updateNumericInput(session = session, inputId = "viz_acf_lag", value = ifelse(ts_freq() < 60, ts_freq() * 3, ts_freq()))
     shinyWidgets::updateSwitchInput(session = session, inputId = "viz_impute", value = FALSE)
+    shinyWidgets::updateAwesomeCheckbox(session = session, inputId = "impute", value = TRUE)
   }
 )
 
@@ -361,27 +396,25 @@ Hypothesis Testing {data-navmenu="Analyze" data-orientation=rows}
 Input {.sidebar}
 ---------------------------------------------------------------------------
 
+*Analyze - Hypothesis Testing* 
 ```{r}
-h4("Normality Tests")
-h5("Shapiro-Wilk and Jarque-Bera")
-br()
-
-hr()
-h4("Autocorrelation Tests")
-h5("Ljung-Box and Box-Pierce")
-br()
-
-hr()
-h4("Stationarity Tests")
-h5("ADF, PP and KPSS")
-
-br()
-br()
-br()
 shinyWidgets::pickerInput(
   inputId = "test_transf", label = h5("Test on transformed data?"), multiple = TRUE,
   choices = transf, selected = NULL
 )
+br()
+h5("Normality Tests")
+h6("Jarque-Bera")
+h6("Shapiro-Wilk")
+br()
+h5("Autocorrelation Tests")
+h6("Box-Pierce")
+h6("Ljung-Box")
+br()
+h5("Stationarity Tests")
+h6("Augmented Dickey-Fuller")
+h6("Phillips-Perron")
+h6("KPSS")
 
 tags$div(
   id = "sidebar-footer",
@@ -397,20 +430,14 @@ data_test <- reactive({
 		purrr::pluck("data_transformed")
 })
 
-test_results <- reactive({
-  data_test() |> compute_hptests()
-})
+test_results <- reactive({ data_test() |> compute_hptests() })
 
 output$test_table <- DT::renderDT({
   test_results() |>
     DT::datatable(
       options = list(
-        ordering = FALSE,
-        pageLength = 20,
-        lengthChange = FALSE,
-        searching = FALSE,
-        info = FALSE,
-        paging = FALSE
+        ordering = FALSE, pageLength = 20, lengthChange = FALSE, searching = FALSE,
+        info = FALSE, paging = FALSE
       ), 
       rownames = FALSE
     )
@@ -482,6 +509,7 @@ Anomaly Detection {data-navmenu="Analyze" data-orientation=rows}
 Input {.sidebar}
 ---------------------------------------------------------------------------
 
+*Analyze - Anomaly Detection* 
 ```{r}
 shinyWidgets::pickerInput(
   inputId = "anom_method", label = h5("Anomaly Method"), multiple = FALSE,
@@ -492,8 +520,6 @@ sliderInput(inputId = "anom_max_anomalies", label = h5("Max Anomalies (%)"), min
 sliderInput(inputId = "anom_clean_alpha", label = h5("Cleaning level"), min = 0.00, max = 1, value = 0.75, step = 0.01)
 br()
 shinyWidgets::awesomeCheckbox(inputId = "anom_clean", label = "Save cleaned data?", value = FALSE)
-
-br()
 br()
 actionButton(inputId = "anomaly_reset", label = "Reset", icon = icon("sync"))
 
@@ -556,13 +582,18 @@ output$anomaly_table <- DT::renderDT({
 		dplyr::rename("value" = "observed", "cleaned_value" = "observed_clean") |>
 		dplyr::mutate(dplyr::across(.cols = where(is.numeric), .fns = ~ round(., 2))) |> 
     DT::datatable(
+    	extensions = "Buttons",
       options = list(
-        ordering = TRUE, pageLength = 10, lengthChange = TRUE, searching = TRUE, 
-        info = FALSE, paging = TRUE, scrollCollapse = TRUE, scrollY = 200, scrollX = TRUE
+        ordering = TRUE, pageLength = 20, lengthChange = FALSE, searching = TRUE, 
+        info = FALSE, paging = FALSE, scrollCollapse = TRUE, scrollY = 200, scrollX = TRUE,
+        dom = 'Bfrt',
+        buttons = list(list(extend = 'collection', buttons = c('csv', 'excel'), text = 'Export'))
       ), 
       rownames = FALSE
     )
-})
+	}, 
+  server = TRUE
+)
 ```
 
 
@@ -597,34 +628,27 @@ Transform {data-navmenu="Analyze" data-orientation=rows}
 Input {.sidebar}
 ---------------------------------------------------------------------------
 
+*Analyze - Transform* 
 ```{r}
-dateRangeInput(
-  inputId = "transf_date_range", label = h5("Date Period"),
-  start = as.Date("1940-01-01"), end = as.Date("2023-12-31")
-)
-
-shinyWidgets::materialSwitch(
-  inputId = "transf_smooth_line", label = h5("Smooth Line"), 
-  value = TRUE, status = "primary", inline = TRUE
-)
-
-numericInput(
-  inputId = "transf_acf_lag", label = h5("ACF Lag"),
-  value = 48, min = 1, max = 300, step = 1, width = "45%"
-)
-
-br()
-br()
-
-actionButton(inputId = "transf_reset", label = "Reset", icon = icon("sync"))
-
-br()
-br()
-hr()
 shinyWidgets::pickerInput(
   inputId = "transf", label = h5("Transformations"), multiple = TRUE,
   choices = transf[1:7], selected = NULL # not possible to do Diff and SDiff !!!!!
 )
+br()
+dateRangeInput(
+  inputId = "transf_date_range", label = h5("Date Period"),
+  start = as.Date("1940-01-01"), end = as.Date("2023-12-31")
+)
+shinyWidgets::materialSwitch(
+  inputId = "transf_smooth_line", label = h5("Smooth Line"), 
+  value = TRUE, status = "primary", inline = TRUE
+)
+numericInput(
+  inputId = "transf_acf_lag", label = h5("ACF Lag"),
+  value = 48, min = 1, max = 300, step = 1
+)
+br()
+actionButton(inputId = "transf_reset", label = "Reset", icon = icon("sync"))
 
 tags$div(
   id = "sidebar-footer",
@@ -758,6 +782,7 @@ Internal Features {data-navmenu="Features" data-orientation=rows}
 Input {.sidebar}
 ---------------------------------------------------------------------------
 
+*Features - Internal Features* 
 ```{r}
 shinyjs::useShinyjs(rmd = TRUE) # use Shiny JavaScript to allow delay on buttons
 shinyWidgets::dropdownButton(
@@ -791,10 +816,6 @@ textInput(
 textInput(
 	inputId = "feat_inter", label = "Interactions", value = "", placeholder = "Expressions separated by a comma..."
 )
-shinyWidgets::prettyRadioButtons(
-  inputId = "feat_table_type", label = h5("Show:"), 
-  choices = c("Preview", "Structure", "Summary"), selected = "Structure"
-)
 
 tags$div(
   id = "sidebar-footer",
@@ -811,28 +832,18 @@ data_features <- reactive({
 })
 
 output$feat_table <- DT::renderDT({
-  if (get_features(data_features(), number_only = TRUE) > 1) {
-  	data_features() |>
-      DT::datatable(
-        options = list(
-          ordering = TRUE, pageLength = 20, lengthChange = TRUE, searching = TRUE, 
-          info = FALSE, paging = TRUE, scrollCollapse = TRUE, scrollY = 550, scrollX = TRUE
-        )
-      )
-  }
+	data_features() |>
+		DT::datatable(
+			extensions = "FixedColumns",
+			options = list(
+				ordering = TRUE, pageLength = 20, lengthChange = FALSE, searching = TRUE, 
+				info = FALSE, paging = FALSE, scrollCollapse = TRUE, scrollY = 550, scrollX = TRUE,
+				fixedColumns = list(leftColumns = 5)
+			)
+		)
 })
-
-output$feat_str <- renderPrint({ 
-	if (get_features(data_features(), number_only = TRUE) > 1) {
-  	dplyr::glimpse(data_features()) 
-  }
-})
-
-output$feat_summ <- renderPrint({ 
-	if (get_features(data_features(), number_only = TRUE) > 1) {
-  	skimr::skim(data_features()) 
-  }
-})
+output$feat_str <- renderPrint({ dplyr::glimpse(data_features()) })
+output$feat_summ <- renderPrint({ skimr::skim(data_features()) })
 
 output$feat_ts_plot <- plotly::renderPlotly({
 	if (get_features(data_features(), number_only = TRUE) > 1) {
@@ -852,32 +863,53 @@ output$feat_ts_plot <- plotly::renderPlotly({
 			)
   }
 })
+
+output$feat_corr_plot <- plotly::renderPlotly({
+	if (get_features(data_features(), number_only = TRUE) > 1) {
+		g <- data_features() |>
+			generate_correlations(full_matrix = TRUE) |>
+			ggcorrplot::ggcorrplot(
+				type = "upper", lab = FALSE, colors = c( "darkred", "white", "darkgreen")
+			) +
+			timetk:::theme_tq() +
+			ggplot2::labs(x = "", y = "") +
+			ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45))
+		plotly::ggplotly(g)
+	}
+})
 ```
 
 Row 1 {.tabset}
 ---------------------------------------------------------------------------
 
-### Features {.no-padding}
+### Data {.no-padding}
 
 ```{r}
-conditionalPanel(
-  condition = "input.feat_table_type == 'Preview'",
-  DT::DTOutput(outputId = "feat_table")
-)
-conditionalPanel(
-  condition = "input.feat_table_type == 'Structure'",
-  verbatimTextOutput(outputId = "feat_str")
-)
-conditionalPanel(
-  condition = "input.feat_table_type == 'Summary'",
-  verbatimTextOutput(outputId = "feat_summ")
-)
+DT::DTOutput(outputId = "feat_table")
 ```
 
-### Time Series {.no-padding}
+### Structure {.no-padding}
+
+```{r}
+verbatimTextOutput(outputId = "feat_str")
+```
+
+### Summary {.no-padding}
+
+```{r}
+verbatimTextOutput(outputId = "feat_summ")
+```
+
+### Time Series Plot {.no-padding}
 
 ```{r}
 plotly::plotlyOutput(outputId = "feat_ts_plot")
+```
+
+### Correlation {.no-padding}
+
+```{r}
+plotly::plotlyOutput(outputId = "feat_corr_plot")
 ```
 
 
@@ -888,6 +920,7 @@ External Features {data-navmenu="Features" data-orientation=rows}
 Input {.sidebar}
 ---------------------------------------------------------------------------
 
+*Features - External Features* 
 ```{r}
 shinyjs::useShinyjs(rmd = TRUE) # use Shiny JavaScript to allow delay on buttons
 shinyWidgets::dropdownButton(
@@ -901,20 +934,14 @@ shinyWidgets::dropdownButton(
 
 h4("Upload your dataset: ")
 h6("The dataset must be a .csv file containing columns 'date', 'id', and the desired external features.")
+h6("At least two external features are required if no internal features are added.")
+h6("External features values must be available also for the whole forecast horizon.")
 fileInput(
   inputId = "upload_xfeatures", label = NULL, accept = c(".csv"), multiple = FALSE,
-  buttonLabel = "Browse...", placeholder = "No file"
+  buttonLabel = "Browse...", placeholder = "sep = ',' dec = '.'"
 )
 actionButton(inputId = "xfeat_import", label = "Import", icon = icon("upload"))
 actionButton(inputId = "xfeat_reset", label = "Reset", icon = icon("sync"))
-
-br()
-br()
-
-shinyWidgets::prettyRadioButtons(
-  inputId = "xfeat_table_type", label = h5("Show:"), 
-  choices = c("Preview", "Structure", "Summary")
-)
 
 tags$div(
   id = "sidebar-footer",
@@ -952,9 +979,10 @@ data_xfeatures <- reactive({
 output$xfeat_table <- DT::renderDT({
   data_xfeatures() |>
       DT::datatable(
+      	filter = "top",
         options = list(
-          ordering = TRUE, pageLength = 20, lengthChange = TRUE, searching = TRUE, 
-          info = FALSE, paging = TRUE, scrollCollapse = TRUE, scrollY = 550 # 250
+          ordering = TRUE, pageLength = 20, lengthChange = FALSE, searching = TRUE, 
+          info = FALSE, paging = FALSE, scrollCollapse = TRUE, scrollY = 550, scrollX = TRUE
         )
       )
 })
@@ -992,24 +1020,25 @@ output$xfeat_crosscorr_plot <- plotly::renderPlotly({
 Row 1 {.tabset}
 ---------------------------------------------------------------------------
 
-### Features {.no-padding}
+### Data {.no-padding}
 
 ```{r}
-conditionalPanel(
-  condition = "input.xfeat_table_type == 'Preview'",
-  DT::DTOutput(outputId = "xfeat_table")
-)
-conditionalPanel(
-  condition = "input.xfeat_table_type == 'Structure'",
-  verbatimTextOutput(outputId = "xfeat_str")
-)
-conditionalPanel(
-  condition = "input.xfeat_table_type == 'Summary'",
-  verbatimTextOutput(outputId = "xfeat_summ")
-)
+DT::DTOutput(outputId = "xfeat_table")
 ```
 
-### Time Series {.no-padding}
+### Structure {.no-padding}
+
+```{r}
+verbatimTextOutput(outputId = "xfeat_str")
+```
+
+### Summary {.no-padding}
+
+```{r}
+verbatimTextOutput(outputId = "xfeat_summ")
+```
+
+### Time Series Plot {.no-padding}
 
 ```{r}
 plotly::plotlyOutput(outputId = "xfeat_ts_plot")
@@ -1029,6 +1058,7 @@ Feature Selection {data-navmenu="Features" data-orientation=rows}
 Input {.sidebar}
 ---------------------------------------------------------------------------
 
+*Features - Feature Selection* 
 ```{r}
 shinyjs::useShinyjs(rmd = TRUE) # use Shiny JavaScript to allow delay on buttons
 shinyWidgets::dropdownButton(
@@ -1039,34 +1069,29 @@ shinyWidgets::dropdownButton(
   icon = icon("gear"), width = "225px", size = "sm", circle = TRUE,
   tooltip = shinyWidgets::tooltipOptions(title = "Click to see inputs!")
 )
-br()
-shinyWidgets::awesomeCheckbox(inputId = "featsel_save", label = "Save feature set?", value = FALSE)
-br()
-shinyWidgets::awesomeCheckbox(
-	inputId = "featsel_norm", label = "Plot normalized values?", value = FALSE
-)
-br()
 sliderInput(
-	inputId = "featsel_cor_thresh", label = "Correlation Threshold",
+	inputId = "featsel_cor_thresh", label = h5("Correlation Threshold"),
 	min = 0, max = 1, value = 0, step = 0.01
 )
 sliderInput(
-	inputId = "featsel_pps_thresh", label = "PPS Threshold",
+	inputId = "featsel_pps_thresh", label = h5("PPS Threshold"),
 	min = 0, max = 1, value = 0, step = 0.01
 )
 sliderInput(
-	inputId = "featsel_lasso_thresh", label = "LASSO Threshold",
+	inputId = "featsel_lasso_thresh", label = h5("LASSO Threshold"),
 	min = 0, max = 1, value = 0, step = 0.01
 )
 sliderInput(
-	inputId = "featsel_rf_thresh", label = "Random Forest Threshold",
+	inputId = "featsel_rf_thresh", label = h5("Random Forest Threshold"),
 	min = 0, max = 1, value = 0, step = 0.01
 )
-br()
 textInput(
-	inputId = "featsel_reg_formula", label = "Regression Formula", 
+	inputId = "featsel_reg_formula", label = h5("Regression Formula"), 
 	value = "value ~ .", placeholder = "value ~ x1 + x2 + x3"
 )
+
+br()
+shinyWidgets::awesomeCheckbox(inputId = "featsel_save", label = "Use selected feature set?", value = FALSE)
 
 tags$div(
   id = "sidebar-footer",
@@ -1077,107 +1102,76 @@ tags$div(
 
 ```{r}
 data_features_full <- reactive({
-	req(data_features())
 	if (!is.null(react_val$uploaded_xfeatures)) {
-		req(data_xfeatures())
-		data_features() |> dplyr::left_join(data_xfeatures(), by = c("date", "id", "frequency")) # c("date", "id", "frequency")
+		data_features() |> dplyr::left_join(data_xfeatures(), by = c("date", "id", "frequency"))
 	} else {
 		data_features()
 	}
 })
 
-data_importance <- reactive({
-	req(data_features_full()) 
-	n_feat <- length(get_features(data_features_full(), names_only = TRUE))
-	if (n_feat > 1) {
-		corr_values <- data_features_full() |> 
-			generate_correlations(cor_method = "spearman", full_matrix = FALSE)
-		pps_values <- data_features_full() |> generate_pps()
-		imp_values <- data_features_full() |> 
-			generate_model_importance(method = c("LASSO", "Random Forest"))
-		c(list("Correlation" = corr_values, "PPS" = pps_values), imp_values) |> 
-			dplyr::bind_rows()
-	}
-})
-
 data_feat_selected <- reactive({
-	req(data_importance())
-	req(data_features_full())
-	data_importance() |> 
-		select_features(
-			params = input, 
-			data_features = data_features_full(), 
-			n_future = input$featsel_n_future
-		)
-})
-
-n_features <- reactive({
-	req(data_feat_selected())
-	get_features(data_feat_selected(), remove_date = TRUE, number_only = TRUE)
+	req(data_features_full()) 
+	n_feat <- get_features(data_features_full(), remove_date = TRUE, number_only = TRUE)
+	if (n_feat > 0) {
+		data_features_full() |> 
+			generate_importance(methods = c("Correlation", "PPS", "LASSO", "Random Forest")) |> 
+			normalize_importance() |> 
+			select_features(
+				params = input, 
+				data_features = data_features_full(), 
+				n_future = input$featsel_n_future
+			)
+	}
 })
 
 output$featsel_corr_plot <- plotly::renderPlotly({
-	req(data_importance())
-	if (input$featsel_norm) {
-		g <- data_importance() |> 
-			dplyr::filter(type == "Correlation") |> 
-			plot_feature_importance(normalized = TRUE) + ggplot2::expand_limits(x = c(0, 1))
-	} else {
-		g <- data_importance() |> 
-			dplyr::filter(type == "Correlation") |> 
-			plot_feature_importance(normalized = FALSE) + ggplot2::expand_limits(x = c(-1, 1))
-	}
+	req(data_feat_selected())
+	g <- data_feat_selected()$data_importance |> 
+		dplyr::filter(type == "Correlation") |> 
+		plot_feature_importance()
 	plotly::ggplotly(g)
 })
 
-# output$featsel_corr_plot <- plotly::renderPlotly({
-# 	req(data_importance())
-# 	g <- data_features() |> 
-#			generate_correlations(cor_method = input$featsel_cormethod, full_matrix = TRUE) |> 
-# 		ggcorrplot::ggcorrplot(
-# 			type = "upper", lab = FALSE, colors = c( "darkred", "white", "darkgreen")
-# 		) + 
-# 		timetk:::theme_tq() +
-# 		ggplot2::labs(x = "", y = "") + 
-# 		ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45))
-# 	plotly::ggplotly(g)
-# })
-
 output$featsel_ppsr_plot <- plotly::renderPlotly({
-	req(data_importance())
-	g <- data_importance() |> 
+	req(data_feat_selected())
+	g <- data_feat_selected()$data_importance |> 
 		dplyr::filter(type == "PPS") |> 
-		plot_feature_importance(normalized = input$featsel_norm) + ggplot2::expand_limits(x = c(0, 1))
+		plot_feature_importance()
 	plotly::ggplotly(g)
 })
 
 output$featsel_lasso_plot <- plotly::renderPlotly({
-	req(data_importance())
-	g <- data_importance() |> 
+	req(data_feat_selected())
+	g <- data_feat_selected()$data_importance |> 
 		dplyr::filter(type == "LASSO") |>
-		plot_feature_importance(normalized = input$featsel_norm) + ggplot2::expand_limits(x = c(0, 1)) 
+		plot_feature_importance()
 	plotly::ggplotly(g)
 })
 
 output$featsel_rf_plot <- plotly::renderPlotly({
-	req(data_importance())
-	g <- data_importance() |> 
+	req(data_feat_selected())
+	g <- data_feat_selected()$data_importance |> 
 		dplyr::filter(type == "Random Forest") |> 
-		plot_feature_importance(normalized = input$featsel_norm) + ggplot2::expand_limits(x = c(0, 1))  
+		plot_feature_importance() 
 	plotly::ggplotly(g)
 })
 
 output$featsel_summary <- DT::renderDT({
+	req(data_feat_selected())
   data_feat_selected()$summary_table |>
     DT::datatable(
+    	extensions = "Buttons", filter = "top",
       options = list(
-        ordering = TRUE, pageLength = 20, lengthChange = TRUE, searching = TRUE, 
-        info = FALSE, paging = TRUE, scrollCollapse = TRUE, scrollY = 550, scrollX = TRUE
+        ordering = TRUE, pageLength = 20, lengthChange = FALSE, searching = TRUE, 
+        info = FALSE, paging = FALSE, scrollCollapse = TRUE, scrollY = TRUE, scrollX = TRUE,
+        dom = 'Bfrt',
+        buttons = list(list(extend = 'collection', buttons = c('csv', 'excel'), text = 'Export'))
       )
     )
 })
 
 output$featsel_reg_plot <- plotly::renderPlotly({
+	req(data_feat_selected())
 	reg_f <- input$featsel_reg_formula |> 
 		parse_textinput(format_to = "character") |>
 		rlang::parse_expr()
@@ -1189,15 +1183,22 @@ output$featsel_reg_plot <- plotly::renderPlotly({
 })
 
 output$featsel_data <- DT::renderDT({
+	req(data_feat_selected())
   data_feat_selected()$data |>
-		# dplyr::mutate(dplyr::across(.cols = where(is.numeric), .fns = ~ round(., 2))) |> 
+  	dplyr::bind_rows(data_feat_selected()$future_data) |>
     DT::datatable(
+    	extensions = c("Buttons", "FixedColumns"),
       options = list(
-        ordering = TRUE, pageLength = 20, lengthChange = TRUE, searching = TRUE, 
-        info = FALSE, paging = TRUE, scrollCollapse = TRUE, scrollY = 550, scrollX = TRUE
+        ordering = TRUE, pageLength = 20, lengthChange = FALSE, searching = TRUE, 
+        info = FALSE, paging = FALSE, scrollCollapse = TRUE, scrollY = TRUE, scrollX = TRUE,
+        dom = 'Bfrt',
+        buttons = list(list(extend = 'collection', buttons = c('csv', 'excel'), text = 'Export')),
+        fixedColumns = list(leftColumns = 4)
       )
     )
-})
+	}, 
+  server = TRUE
+)
 ```
 
 Row 1 {.tabset}
@@ -1275,7 +1276,7 @@ shinyWidgets::dropdownButton(
 )
 
 shinyWidgets::pickerInput(
-  inputId = "method", label = h3("Forecast Algorithm"), multiple = FALSE,
+  inputId = "method", label = h5("Forecast Algorithm"), multiple = FALSE,
   choices = list(
     `Time Series` = ts_methods, 
     `Machine Learning` = ml_methods,
@@ -1598,23 +1599,6 @@ forecast_results <- eventReactive(
   }
 )
 
-# forecast_results <- eventReactive(
-#   eventExpr = input$apply_forecast,
-#   valueExpr = {
-#     purrr::map(
-#       input$method, 
-#       ~ fit_model(
-#         data = data_transformed(), method = ., params = input, 
-#         n_assess = input$n_assess, assess_type = input$assess_type, seed = 1992
-#       )
-#     ) |> 
-#       generate_forecast(
-#         data = data_transformed(), method = input$method, n_future = input$n_future,
-#         n_assess = input$n_assess, assess_type = input$assess_type
-#       )
-#   }
-# )
-
 back_forecast_results <- reactive({
 	req(forecast_results())
 	shinybusy::remove_modal_spinner()
@@ -1625,7 +1609,6 @@ back_forecast_results <- reactive({
 			transform_params = transform_params()
 		)
 })
-
 
 output$plot_test_forecast <- plotly::renderPlotly({
   back_forecast_results()$test_forecast |> 
@@ -1778,7 +1761,7 @@ shinyWidgets::dropdownButton(
 )
 
 shinyWidgets::pickerInput(
-  inputId = "tune_method", label = h3("Forecast Algorithm"), multiple = FALSE,
+  inputId = "tune_method", label = h5("Forecast Algorithm"), multiple = FALSE,
   choices = list(
     `Machine Learning` = ml_methods[-1],
     `Deep Learning` = dl_methods,
@@ -1786,14 +1769,13 @@ shinyWidgets::pickerInput(
   ), 
   selected = "Elastic Net"
 )
-
 shinyWidgets::awesomeCheckbox(inputId = "tune_back_transf", label = "Back transform?", value = FALSE)
 
 actionButton(inputId = "tune_apply_forecast", label = "Optimize!", icon = icon("play"))
 actionButton(inputId = "tune_reset", label = "Reset", icon = icon("sync"))
 
-br() # break rule
-br() # break rule
+br()
+br()
 
 # Elastic Net
 conditionalPanel(
@@ -2157,7 +2139,7 @@ shinyWidgets::dropdownButton(
 )
 
 shinyWidgets::pickerInput(
-  inputId = "comp_method", label = h3("Forecast Algorithm"), multiple = TRUE,
+  inputId = "comp_method", label = h5("Forecast Algorithm"), multiple = TRUE,
   choices = list(
     `Time Series` = ts_methods, 
     `Machine Learning` = ml_methods,
@@ -2167,7 +2149,6 @@ shinyWidgets::pickerInput(
   ), 
   selected = c("ETS", "SARIMA"), options = list("actions-box" = TRUE)
 )
-
 shinyWidgets::awesomeCheckbox(inputId = "comp_tune", label = "Use optimized algorithms?", value = FALSE)
 shinyWidgets::awesomeCheckbox(inputId = "comp_back_transf", label = "Back transform?", value = FALSE)
 
@@ -2346,7 +2327,7 @@ shinyWidgets::dropdownButton(
 )
 
 shinyWidgets::pickerInput(
-  inputId = "exp_method", label = h3("Forecast Algorithm"), multiple = FALSE,
+  inputId = "exp_method", label = h5("Forecast Algorithm"), multiple = FALSE,
   choices = list(
     `Machine Learning` = ml_methods,
     `Deep Learning` = dl_methods,
@@ -2355,7 +2336,6 @@ shinyWidgets::pickerInput(
   ), 
   selected = "Linear Regression"
 )
-
 shinyWidgets::awesomeCheckbox(inputId = "exp_tune", label = "Use optimized algorithm?", value = FALSE)
 shinyWidgets::awesomeCheckbox(inputId = "exp_back_transf", label = "Back transform?", value = FALSE)
 
@@ -2571,7 +2551,7 @@ shinyWidgets::dropdownButton(
 )
 
 shinyWidgets::pickerInput(
-  inputId = "ens_method", label = h3("Forecast Algorithms"), 
+  inputId = "ens_method", label = h5("Forecast Algorithms"), 
   choices = list(
     `Time Series` = ts_methods, 
     `Machine Learning` = ml_methods,
@@ -2586,12 +2566,11 @@ shinyWidgets::pickerInput(
     "max-options-text" = "You can combine maximum 5 algorithms!"
   )
 )
-
 shinyWidgets::awesomeCheckbox(inputId = "ens_tune", label = "Use optimized algorithms?", value = FALSE)
 shinyWidgets::awesomeCheckbox(inputId = "ens_back_transf", label = "Back transform?", value = FALSE)
 
 shinyWidgets::pickerInput(
-  inputId = "ens_type", label = h3("Ensemble Method"), 
+  inputId = "ens_type", label = h5("Ensemble Method"), 
   choices = ens_methods, selected = "Average", multiple = TRUE,
   options =  list("actions-box" = TRUE)
 )
@@ -2601,7 +2580,7 @@ br()
 br()
 
 shinyWidgets::pickerInput(
-  inputId = "stk_type", label = h3("Stacking Method"), 
+  inputId = "stk_type", label = h5("Stacking Method"), 
   choices = stk_methods, selected = "Linear Regression", multiple = TRUE,
   options =  list("actions-box" = TRUE)
 )
@@ -2837,7 +2816,7 @@ shinyWidgets::dropdownButton(
 )
 
 shinyWidgets::pickerInput(
-  inputId = "scn_method", label = h3("Forecast Algorithm"), multiple = FALSE,
+  inputId = "scn_method", label = h5("Forecast Algorithm"), multiple = FALSE,
   choices = list(
   	`Ensembling` = c("Ensemble", "Stacking"),
     `Time Series` = ts_methods, 
@@ -2848,7 +2827,6 @@ shinyWidgets::pickerInput(
   ), 
   selected = "Naive"
 )
-
 shinyWidgets::awesomeCheckbox(inputId = "scn_tune", label = "Use optimized algorithm?", value = FALSE)
 shinyWidgets::awesomeCheckbox(inputId = "scn_back_transf", label = "Back transform?", value = FALSE)
 
@@ -2858,7 +2836,7 @@ actionButton(inputId = "scn_reset", label = "Reset", icon = icon("sync"))
 br()
 br()
 br()
-
+h5("Scenario Analysis Parameters:")
 sliderInput(
   inputId = "scn_conf_lvl", label = h5("Confidence Level"), 
   min = 0.05, max = 0.99, value = 0.9, step = 0.05
@@ -3090,13 +3068,18 @@ output$scn_wb_table <- DT::renderDT({
     dplyr::mutate(dplyr::across(.cols = where(is.numeric), .fns = ~ round(., 2))) |> 
     purrr::set_names(c("Date", "Worst Case", "Forecast", "Best Case")) |> 
     DT::datatable(
+    	extensions = "Buttons",
       options = list(
         ordering = FALSE, pageLength = 20, lengthChange = FALSE, searching = FALSE,
-        info = FALSE, paging = FALSE, scrollY = TRUE, scrollCollapse = TRUE
+        info = FALSE, paging = FALSE, scrollY = TRUE, scrollCollapse = TRUE,
+        dom = 'Bt',
+        buttons = list(list(extend = 'collection', buttons = c('csv', 'excel'), text = 'Export'))
       ), 
       rownames = TRUE
     )
-})
+	},
+  server = TRUE
+)
 ```
 
 
