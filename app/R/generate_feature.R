@@ -2,10 +2,9 @@
 # to do this operation in group_by fashion, simply map to groups !!!!!!!!!!!!!
 add_future_frame <- function(data, n_future) {
 	id <- data$id[1]
-	freq <- data$frequency[1]
 	data_future <- data |> 
 		timetk::future_frame(.date_var = date, .length_out = n_future) |> 
-		dplyr::mutate(id = id, frequency = freq)
+		dplyr::mutate(id = id)
 	data_full <- dplyr::bind_rows(data, data_future)
 	return(data_full)
 }
@@ -25,8 +24,7 @@ get_features <- function(object, remove_date = FALSE, names_only = FALSE, number
 			recipes::bake(new_data = NULL) |> 
 			dplyr::select(-value)
 	} else if (inherits(object, "data.frame")) {
-		feats <- object |> 
-			dplyr::select(-dplyr::any_of(c("id", "frequency", "value")))
+		feats <- object |> dplyr::select(-dplyr::any_of(c("id", "value")))
 	} else {
 		stop("object must be a workflow, recipe or data.frame")
 	}
@@ -121,7 +119,7 @@ generate_features <- function(data, params, n_future, verbose = 1) {
 	if (verbose > 0) logging::loginfo("*** Generating New Features ***")
 	
 	# add future frame
-	data_full <- data |> add_future_frame(n_future) # |> dplyr::group_by(id, frequency)
+	data_full <- data |> add_future_frame(n_future) # |> dplyr::group_by(id)
 	data_feat <- data_full  
 	
 	if (params$feat_calendar) {
@@ -213,7 +211,7 @@ generate_correlations <- function(data, cor_method = "spearman", full_matrix = F
 	
 	logging::loginfo("*** Generating Correlation Matrix ***")
 	data_cor <- data |> 
-		dplyr::select(-dplyr::any_of(c("id", "frequency", "date"))) |> 
+		dplyr::select(-dplyr::any_of(c("id", "date"))) |> 
 		tidyr::drop_na()
 	
 	rcp_spec <- recipes::recipe(value ~ ., data = data_cor) |> 
@@ -246,7 +244,7 @@ generate_pps <- function(data) {
 	
 	logging::loginfo("*** Generating Predictive Power Score ***")
 	data_pps <- data |> 
-		dplyr::select(-dplyr::any_of(c("id", "frequency", "date"))) |> 
+		dplyr::select(-dplyr::any_of(c("id", "date"))) |> 
 		tidyr::drop_na()
 	
 	rcp_spec <- recipes::recipe(value ~ ., data = data_pps) |> 
@@ -291,7 +289,7 @@ fit_feature_model <- function(data, method, seed = 1992) {
 	}
 	
 	data_featsel <- data |> 
-		dplyr::select(-dplyr::any_of(c("id", "frequency", "date"))) |> 
+		dplyr::select(-dplyr::any_of(c("id", "date"))) |> 
 		tidyr::drop_na()
 	
 	# rcp_spec <- recipes::recipe(value ~ ., data = data_featsel) |> 

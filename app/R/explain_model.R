@@ -14,8 +14,8 @@ generate_model_explainer <- function(
 	# initial split
 	logging::loginfo("Initial Split")
 	splits <- generate_initial_split(data, n_assess, assess_type)
-	train_tbl <- rsample::training(splits) |> dplyr::select(-dplyr::any_of(c("id", "frequency")))
-	test_tbl <- rsample::testing(splits) |> dplyr::select(-dplyr::any_of(c("id", "frequency")))
+	train_tbl <- rsample::training(splits) |> dplyr::select(-dplyr::any_of(c("id")))
+	test_tbl <- rsample::testing(splits) |> dplyr::select(-dplyr::any_of(c("id")))
 	
 	# recipe specification
 	logging::loginfo("Recipe Specification")
@@ -86,7 +86,7 @@ get_observation <- function(data, date, method, n_assess, assess_type) {
 	data <- data |> tidyr::drop_na(value)
 	# attention: just from test data, adapt in case it is needed for train 
 	splits <- generate_initial_split(data, n_assess, assess_type)
-	test_tbl <- rsample::testing(splits) |> dplyr::select(-dplyr::any_of(c("id", "frequency")))
+	test_tbl <- rsample::testing(splits) |> dplyr::select(-dplyr::any_of(c("id")))
 	exp_test_tbl <- test_tbl |>   
 		generate_recipe_spec(method) |> 
 		recipes::prep() |> 

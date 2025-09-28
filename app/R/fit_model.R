@@ -543,7 +543,7 @@ fit_model <- function(data, method, params, n_assess, assess_type, seed = 1992) 
   # initial split
   logging::loginfo("Initial Split")
   splits <- generate_initial_split(data, n_assess, assess_type)
-  train_tbl <- rsample::training(splits) |> dplyr::select(-dplyr::any_of(c("id", "frequency")))
+  train_tbl <- rsample::training(splits) |> dplyr::select(-dplyr::any_of(c("id")))
 
   # recipe specification
   logging::loginfo("Recipe Specification")
@@ -690,7 +690,7 @@ fit_model_tuning <- function(
   # initial split
   logging::loginfo("Initial Split")
   splits <- generate_initial_split(data, n_assess, assess_type)
-  train_tbl <- rsample::training(splits) |> dplyr::select(-dplyr::any_of(c("id", "frequency")))
+  train_tbl <- rsample::training(splits) |> dplyr::select(-dplyr::any_of(c("id")))
 
   # validation split
   logging::loginfo("Validation Split")

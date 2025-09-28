@@ -1,11 +1,11 @@
 # function to impute missing values
-impute_data <- function(data, impute = FALSE, freq) {
+impute_data <- function(data, impute = FALSE, frequency) {
 
   if (impute == FALSE) {
     return(data)
   } else {
     logging::loginfo("Imputing missing values...")
-    n2f <- trunc(nrow(data) / freq)
+    n2f <- trunc(nrow(data) / frequency)
     p <- ifelse(n2f < 1, 1, 2)
     data_impute <- data |> 
     	dplyr::mutate(value = timetk::ts_impute_vec(value, period = p, lambda = "auto"))
@@ -15,14 +15,14 @@ impute_data <- function(data, impute = FALSE, freq) {
 }
 
 # function to detect anomalies and clean data
-anomaly_detection_and_cleaning <- function(data, params) {
+anomaly_detection_and_cleaning <- function(data, params, frequency) {
 	
-	ts_freq <- data$frequency |> unique() |> parse_frequency()
+	logging::loginfo("Detecting anomalies...")
 	data_anom <- data |> 
 		timetk::anomalize(
 			.date_var = date, 
 			.value = value, 
-			.frequency = ts_freq,
+			.frequency = frequency,
 			.trend = "auto", 
 			.method = params$anom_method, 
 			.iqr_alpha = params$anom_alpha,
@@ -32,20 +32,6 @@ anomaly_detection_and_cleaning <- function(data, params) {
 		)
 	
 	return(data_anom)
-	
-}
-
-# function to clean data from anomalies
-clean_data <- function(data, clean = FALSE) {
-	
-	if (clean == FALSE) {
-		return(data)
-	} else {
-		logging::loginfo("Cleaning data from anomalies...")
-		data_clean <- data |> 
-			dplyr::mutate(value = timetk::ts_clean_vec(value))
-		return(data_clean)
-	}
 	
 }
 
@@ -321,8 +307,8 @@ back_transform_accuracy <- function(
 	}
 	
 	# splits <- generate_initial_split(data, n_assess, assess_type)
-	train_tbl <- rsample::training(splits) |> dplyr::select(-dplyr::any_of(c("id", "frequency")))
-	test_tbl <- rsample::testing(splits) |> dplyr::select(-dplyr::any_of(c("id", "frequency")))
+	train_tbl <- rsample::training(splits) |> dplyr::select(-dplyr::any_of(c("id")))
+	test_tbl <- rsample::testing(splits) |> dplyr::select(-dplyr::any_of(c("id")))
 	
 	# add to the default metric set
 	new_mset <- modeltime::default_forecast_accuracy_metric_set(me, rmspe) 
