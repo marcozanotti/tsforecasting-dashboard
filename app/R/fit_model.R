@@ -58,7 +58,6 @@ generate_recipe_spec <- function(data, method) {
 			} else if (any(method_type %in% c("ml", "dl"))) {
 				
 				rcp_spec <- recipes::recipe(value ~ ., data = data) |>
-					# recipes::step_mutate(time_trend = 1:dplyr::n()) |> # timetk::normalize_vec(as.numeric(date), silent = TRUE)) |>
 					timetk::step_timeseries_signature(date) |>
 					recipes::step_rm(dplyr::matches("(diff)|(iso)|(xts)|(index.num)")) |>
 					recipes::step_zv(recipes::all_predictors()) |>
@@ -69,7 +68,6 @@ generate_recipe_spec <- function(data, method) {
 			} else if (any(method_type %in% c("mix", "aml"))) {
 				
 				rcp_spec <- recipes::recipe(value ~ ., data = data) |>
-					# recipes::step_mutate(time_trend = 1:dplyr::n()) |> # timetk::normalize_vec(as.numeric(date), silent = TRUE)) |>
 					timetk::step_timeseries_signature(date) |>
 					recipes::step_rm(dplyr::matches("(diff)|(iso)|(xts)|(index.num)")) |>
 					recipes::step_zv(recipes::all_predictors()) |>
