@@ -57,7 +57,7 @@ invisible(session$onFlushed(function() {
 			htmltools::tags$div(
 				class = "modal-body",
 				style = "text-align: center; margin-top: 20px;",
-				# htmltools::tags$img(src = "tsf_logo.png", width = "200px", alt = "Forecast App Logo"),
+				htmltools::tags$img(src = "forecast_app_files/tsf_logo.png", width = "200px", alt = "Forecast App Logo"),
 				htmltools::tags$p(
 					style = "font-size:18px; max-width:600px; margin:auto; margin-top:20px;",
 					htmltools::tags$b("Welcome to the Forecast App!"),
@@ -216,7 +216,7 @@ output$data_table <- DT::renderDT({
       	editable = "cell", filter = "top",
         options = list(
           ordering = TRUE, pageLength = 20, lengthChange = FALSE, searching = FALSE, 
-          info = FALSE, paging = FALSE, scrollCollapse = TRUE, scrollY = 700, scrollX = TRUE
+          info = FALSE, paging = FALSE, scrollCollapse = TRUE, scrollY = 900, scrollX = TRUE
         )
       )
 	}, 

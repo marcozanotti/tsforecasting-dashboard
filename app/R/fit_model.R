@@ -413,8 +413,8 @@ generate_model_spec <- function(method, params) {
         max_runtime_secs_per_model = !!params$h2o_max_time_model,
         nfolds = !!params$h2o_nfolds,
         sort_metric = !!params$h2o_metric,
-        seed = 1992
-        # include_algos = c("DRF"),
+        seed = 1992,
+        include_algos = c("DRF", "GLM", "XGBoost", "GBM", "DeepLearning", "StackedEnsemble")
         # exclude_algos = c("DeepLearning"),
         # verbosity = NULL
       )

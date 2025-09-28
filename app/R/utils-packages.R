@@ -99,6 +99,15 @@ install_and_load <- function(pkgs, repos = getOption("repos")) {
 }
 
 force_package_install <- function() {
-	rules::committees() # to force the installation of 'rules' package on server side
+	# to force the installation of packages on server side
+	help(earth::earth) 
+	help(kknn::kknn)
+	help(kernlab::ksvm)
+	help(ranger::ranger)
+	help(xgboost::xgboost)
+	help(lightgbm::lightgbm)
+	help(bonsai::train_lightgbm)
+	help(rules::committees)
+	help(Cubist::cubist)
 	return(invisible(NULL))
 }

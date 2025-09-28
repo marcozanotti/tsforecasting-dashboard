@@ -4,7 +4,7 @@
   "platform": "4.5.1",
   "metadata": {
     "appmode": "rmd-shiny",
-    "primary_rmd": "forecast_dashboard.Rmd",
+    "primary_rmd": "forecast_app.Rmd",
     "primary_html": null,
     "content_category": null,
     "has_parameters": false
@@ -31,6 +31,38 @@
         "Repository": "CRAN",
         "Date/Publication": "2024-12-17 18:20:03 UTC",
         "Built": "R 4.5.1; ; 2025-08-11 10:30:58 UTC; unix"
+      }
+    },
+    "Cubist": {
+      "Source": "CRAN",
+      "Repository": "https://cloud.r-project.org",
+      "description": {
+        "Type": "Package",
+        "Package": "Cubist",
+        "Title": "Rule- And Instance-Based Regression Modeling",
+        "Version": "0.5.0",
+        "Authors@R": "c(\n    person(\"Max\", \"Kuhn\", , \"mxkuhn@gmail.com\", role = c(\"aut\", \"cre\")),\n    person(\"Steve\", \"Weston\", role = \"ctb\"),\n    person(\"Chris\", \"Keefer\", role = \"ctb\"),\n    person(\"Nathan\", \"Coulter\", role = \"ctb\"),\n    person(\"Ross\", \"Quinlan\", role = \"aut\",\n           comment = \"Author of imported C code\"),\n    person(\"Rulequest Research Pty Ltd.\", role = \"cph\",\n           comment = \"Copyright holder of imported C code\")\n  )",
+        "Maintainer": "Max Kuhn <mxkuhn@gmail.com>",
+        "Description": "Regression modeling using rules with added instance-based\n    corrections.",
+        "License": "GPL-3",
+        "URL": "https://topepo.github.io/Cubist/, https://github.com/topepo/Cubist",
+        "BugReports": "https://github.com/topepo/Cubist/issues",
+        "Depends": "lattice",
+        "Imports": "reshape2, utils",
+        "Suggests": "covr, dplyr (>= 0.7.4), knitr, mlbench, modeldata, rlang,\nrmarkdown, rules, testthat (>= 3.0.0)",
+        "VignetteBuilder": "knitr",
+        "Biarch": "true",
+        "Config/Needs/website": "pkgdown, caret, tidymodels, rules",
+        "Config/testthat/edition": "3",
+        "Encoding": "UTF-8",
+        "LazyLoad": "yes",
+        "RoxygenNote": "7.3.2",
+        "NeedsCompilation": "yes",
+        "Packaged": "2025-04-03 00:10:35 UTC; max",
+        "Author": "Max Kuhn [aut, cre],\n  Steve Weston [ctb],\n  Chris Keefer [ctb],\n  Nathan Coulter [ctb],\n  Ross Quinlan [aut] (Author of imported C code),\n  Rulequest Research Pty Ltd. [cph] (Copyright holder of imported C code)",
+        "Repository": "CRAN",
+        "Date/Publication": "2025-04-03 16:20:05 UTC",
+        "Built": "R 4.5.1; x86_64-pc-linux-gnu; 2025-09-24 17:24:55 UTC; unix"
       }
     },
     "DALEX": {
@@ -90,27 +122,27 @@
       "Source": "CRAN",
       "Repository": "https://cloud.r-project.org",
       "description": {
-        "Package": "DT",
         "Type": "Package",
+        "Package": "DT",
         "Title": "A Wrapper of the JavaScript Library 'DataTables'",
-        "Version": "0.33",
-        "Authors@R": "c(\n    person(\"Yihui\", \"Xie\", role = \"aut\"),\n    person(\"Joe\", \"Cheng\", email = \"joe@posit.co\", role = c(\"aut\", \"cre\")),\n    person(\"Xianying\", \"Tan\", role = \"aut\"),\n    person(\"JJ\", \"Allaire\", role = \"ctb\"),\n    person(\"Maximilian\", \"Girlich\", role = \"ctb\"),\n    person(\"Greg\", \"Freedman Ellis\", role = \"ctb\"),\n    person(\"Johannes\", \"Rauh\", role = \"ctb\"),\n    person(\"SpryMedia Limited\", role = c(\"ctb\", \"cph\"), comment = \"DataTables in htmlwidgets/lib\"),\n    person(\"Brian\", \"Reavis\", role = c(\"ctb\", \"cph\"), comment = \"selectize.js in htmlwidgets/lib\"),\n    person(\"Leon\", \"Gersen\", role = c(\"ctb\", \"cph\"), comment = \"noUiSlider in htmlwidgets/lib\"),\n    person(\"Bartek\", \"Szopka\", role = c(\"ctb\", \"cph\"), comment = \"jquery.highlight.js in htmlwidgets/lib\"),\n    person(\"Alex\", \"Pickering\", role = c(\"ctb\")),\n    person(\"William\", \"Holmes\", role = c(\"ctb\")),\n    person(\"Mikko\", \"Marttila\", role = c(\"ctb\")),\n    person(\"Andres\", \"Quintero\", role = c(\"ctb\")),\n    person(\"Stéphane\", \"Laurent\", role = c(\"ctb\")),\n    person(given = \"Posit Software, PBC\", role = c(\"cph\", \"fnd\"))\n    )",
-        "Description": "Data objects in R can be rendered as HTML tables using the\n    JavaScript library 'DataTables' (typically via R Markdown or Shiny). The\n    'DataTables' library has been included in this R package. The package name\n    'DT' is an abbreviation of 'DataTables'.",
+        "Version": "0.34.0",
+        "Authors@R": "c(\n    person(\"Yihui\", \"Xie\", role = \"aut\"),\n    person(\"Joe\", \"Cheng\", , \"joe@posit.co\", role = \"aut\"),\n    person(\"Xianying\", \"Tan\", role = \"aut\"),\n    person(\"Garrick\", \"Aden-Buie\", , \"garrick@posit.co\", role = c(\"aut\", \"cre\"),\n           comment = c(ORCID = \"0000-0002-7111-0077\")),\n    person(\"JJ\", \"Allaire\", role = \"ctb\"),\n    person(\"Maximilian\", \"Girlich\", role = \"ctb\"),\n    person(\"Greg\", \"Freedman Ellis\", role = \"ctb\"),\n    person(\"Johannes\", \"Rauh\", role = \"ctb\"),\n    person(\"SpryMedia Limited\", role = c(\"ctb\", \"cph\"),\n           comment = \"DataTables in htmlwidgets/lib\"),\n    person(\"Brian\", \"Reavis\", role = c(\"ctb\", \"cph\"),\n           comment = \"selectize.js in htmlwidgets/lib\"),\n    person(\"Leon\", \"Gersen\", role = c(\"ctb\", \"cph\"),\n           comment = \"noUiSlider in htmlwidgets/lib\"),\n    person(\"Bartek\", \"Szopka\", role = c(\"ctb\", \"cph\"),\n           comment = \"jquery.highlight.js in htmlwidgets/lib\"),\n    person(\"Alex\", \"Pickering\", role = \"ctb\"),\n    person(\"William\", \"Holmes\", role = \"ctb\"),\n    person(\"Mikko\", \"Marttila\", role = \"ctb\"),\n    person(\"Andres\", \"Quintero\", role = \"ctb\"),\n    person(\"Stéphane\", \"Laurent\", role = \"ctb\"),\n    person(\"Posit Software, PBC\", role = c(\"cph\", \"fnd\"))\n  )",
+        "Description": "Data objects in R can be rendered as HTML tables using the\n    JavaScript library 'DataTables' (typically via R Markdown or Shiny).\n    The 'DataTables' library has been included in this R package. The\n    package name 'DT' is an abbreviation of 'DataTables'.",
+        "License": "MIT + file LICENSE",
         "URL": "https://github.com/rstudio/DT",
         "BugReports": "https://github.com/rstudio/DT/issues",
-        "License": "GPL-3 | file LICENSE",
-        "Imports": "htmltools (>= 0.3.6), htmlwidgets (>= 1.3), httpuv, jsonlite\n(>= 0.9.16), magrittr, crosstalk, jquerylib, promises",
-        "Suggests": "knitr (>= 1.8), rmarkdown, shiny (>= 1.6), bslib, future,\ntestit, tibble",
+        "Imports": "crosstalk, htmltools (>= 0.3.6), htmlwidgets (>= 1.3),\njquerylib, jsonlite (>= 0.9.16), magrittr, promises",
+        "Suggests": "bslib, future, httpuv, knitr (>= 1.8), rmarkdown, shiny (>=\n1.6), testit, tibble",
         "VignetteBuilder": "knitr",
-        "RoxygenNote": "7.3.1",
         "Encoding": "UTF-8",
+        "RoxygenNote": "7.3.2",
         "NeedsCompilation": "no",
-        "Packaged": "2024-04-03 14:36:50 UTC; yihui",
-        "Author": "Yihui Xie [aut],\n  Joe Cheng [aut, cre],\n  Xianying Tan [aut],\n  JJ Allaire [ctb],\n  Maximilian Girlich [ctb],\n  Greg Freedman Ellis [ctb],\n  Johannes Rauh [ctb],\n  SpryMedia Limited [ctb, cph] (DataTables in htmlwidgets/lib),\n  Brian Reavis [ctb, cph] (selectize.js in htmlwidgets/lib),\n  Leon Gersen [ctb, cph] (noUiSlider in htmlwidgets/lib),\n  Bartek Szopka [ctb, cph] (jquery.highlight.js in htmlwidgets/lib),\n  Alex Pickering [ctb],\n  William Holmes [ctb],\n  Mikko Marttila [ctb],\n  Andres Quintero [ctb],\n  Stéphane Laurent [ctb],\n  Posit Software, PBC [cph, fnd]",
-        "Maintainer": "Joe Cheng <joe@posit.co>",
+        "Packaged": "2025-09-02 13:12:27 UTC; garrick",
+        "Author": "Yihui Xie [aut],\n  Joe Cheng [aut],\n  Xianying Tan [aut],\n  Garrick Aden-Buie [aut, cre] (ORCID:\n    <https://orcid.org/0000-0002-7111-0077>),\n  JJ Allaire [ctb],\n  Maximilian Girlich [ctb],\n  Greg Freedman Ellis [ctb],\n  Johannes Rauh [ctb],\n  SpryMedia Limited [ctb, cph] (DataTables in htmlwidgets/lib),\n  Brian Reavis [ctb, cph] (selectize.js in htmlwidgets/lib),\n  Leon Gersen [ctb, cph] (noUiSlider in htmlwidgets/lib),\n  Bartek Szopka [ctb, cph] (jquery.highlight.js in htmlwidgets/lib),\n  Alex Pickering [ctb],\n  William Holmes [ctb],\n  Mikko Marttila [ctb],\n  Andres Quintero [ctb],\n  Stéphane Laurent [ctb],\n  Posit Software, PBC [cph, fnd]",
+        "Maintainer": "Garrick Aden-Buie <garrick@posit.co>",
         "Repository": "CRAN",
-        "Date/Publication": "2024-04-04 05:03:17 UTC",
-        "Built": "R 4.5.1; ; 2025-08-18 14:55:18 UTC; unix"
+        "Date/Publication": "2025-09-02 22:00:06 UTC",
+        "Built": "R 4.5.1; ; 2025-09-27 12:28:49 UTC; unix"
       }
     },
     "DiceDesign": {
@@ -135,6 +167,27 @@
         "Repository": "CRAN",
         "Date/Publication": "2023-12-07 12:00:10 UTC",
         "Built": "R 4.5.1; x86_64-pc-linux-gnu; 2025-09-24 17:02:16 UTC; unix"
+      }
+    },
+    "Formula": {
+      "Source": "CRAN",
+      "Repository": "https://cloud.r-project.org",
+      "description": {
+        "Package": "Formula",
+        "Version": "1.2-5",
+        "Date": "2023-02-23",
+        "Title": "Extended Model Formulas",
+        "Description": "Infrastructure for extended formulas with multiple parts on the\n             right-hand side and/or multiple responses on the left-hand side\n\t     (see <doi:10.18637/jss.v034.i01>).",
+        "Authors@R": "c(person(given = \"Achim\", family = \"Zeileis\", role = c(\"aut\", \"cre\"), email = \"Achim.Zeileis@R-project.org\",\n             comment = c(ORCID = \"0000-0003-0918-3766\")),\n             person(given = \"Yves\", family = \"Croissant\", role = \"aut\", email = \"Yves.Croissant@univ-reunion.fr\"))",
+        "Depends": "R (>= 2.0.0), stats",
+        "License": "GPL-2 | GPL-3",
+        "NeedsCompilation": "no",
+        "Packaged": "2023-02-23 22:47:03 UTC; zeileis",
+        "Author": "Achim Zeileis [aut, cre] (<https://orcid.org/0000-0003-0918-3766>),\n  Yves Croissant [aut]",
+        "Maintainer": "Achim Zeileis <Achim.Zeileis@R-project.org>",
+        "Repository": "CRAN",
+        "Date/Publication": "2023-02-24 08:52:30 UTC",
+        "Built": "R 4.5.1; ; 2025-08-18 14:55:32 UTC; unix"
       }
     },
     "GPfit": {
@@ -821,6 +874,36 @@
         "Repository": "CRAN",
         "Date/Publication": "2024-10-03 23:00:54 UTC",
         "Built": "R 4.5.1; x86_64-pc-linux-gnu; 2025-09-24 17:03:06 UTC; unix"
+      }
+    },
+    "bonsai": {
+      "Source": "CRAN",
+      "Repository": "https://cloud.r-project.org",
+      "description": {
+        "Package": "bonsai",
+        "Title": "Model Wrappers for Tree-Based Models",
+        "Version": "0.4.0",
+        "Authors@R": "c(\n    person(\"Daniel\", \"Falbel\", , \"dfalbel@curso-r.com\", role = \"aut\"),\n    person(\"Athos\", \"Damiani\", , \"adamiani@curso-r.com\", role = \"aut\"),\n    person(\"Roel M.\", \"Hogervorst\", , \"hogervorst.rm@gmail.com\", role = \"aut\",\n           comment = c(ORCID = \"0000-0001-7509-0328\")),\n    person(\"Max\", \"Kuhn\", , \"max@posit.co\", role = \"aut\",\n           comment = c(ORCID = \"0000-0003-2402-136X\")),\n    person(\"Simon\", \"Couch\", , \"simon.couch@posit.co\", role = \"aut\",\n           comment = c(ORCID = \"0000-0001-5676-5107\")),\n    person(\"Emil\", \"Hvitfeldt\", , \"emil.hvitfeldt@posit.co\", role = c(\"aut\", \"cre\"),\n           comment = c(ORCID = \"0000-0002-0679-1945\")),\n    person(\"Posit Software, PBC\", role = c(\"cph\", \"fnd\"),\n           comment = c(ROR = \"03wc8by49\"))\n  )",
+        "Description": "Bindings for additional tree-based model engines for use with\n    the 'parsnip' package. Models include gradient boosted decision trees\n    with 'LightGBM' (Ke et al, 2017.), conditional inference trees and\n    conditional random forests with 'partykit' (Hothorn and Zeileis, 2015.\n    and Hothorn et al, 2006. <doi:10.1198/106186006X133933>), and\n    accelerated oblique random forests with 'aorsf' (Jaeger et al, 2022\n    <doi:10.5281/zenodo.7116854>).",
+        "License": "MIT + file LICENSE",
+        "URL": "https://bonsai.tidymodels.org/,\nhttps://github.com/tidymodels/bonsai",
+        "BugReports": "https://github.com/tidymodels/bonsai/issues",
+        "Depends": "parsnip (>= 1.0.1), R (>= 4.1)",
+        "Imports": "cli, dials, dplyr, purrr, rlang (>= 1.1.0), stats, tibble,\nutils, withr",
+        "Suggests": "aorsf (>= 0.1.5), covr, knitr, lightgbm, Matrix, modeldata,\npartykit, rmarkdown, rsample, testthat (>= 3.0.0), tune",
+        "VignetteBuilder": "knitr",
+        "Config/Needs/website": "tidyverse/tidytemplate",
+        "Config/testthat/edition": "3",
+        "Config/usethis/last-upkeep": "2025-04-25",
+        "Encoding": "UTF-8",
+        "RoxygenNote": "7.3.2",
+        "NeedsCompilation": "no",
+        "Packaged": "2025-06-24 17:46:22 UTC; emilhvitfeldt",
+        "Author": "Daniel Falbel [aut],\n  Athos Damiani [aut],\n  Roel M. Hogervorst [aut] (ORCID:\n    <https://orcid.org/0000-0001-7509-0328>),\n  Max Kuhn [aut] (ORCID: <https://orcid.org/0000-0003-2402-136X>),\n  Simon Couch [aut] (ORCID: <https://orcid.org/0000-0001-5676-5107>),\n  Emil Hvitfeldt [aut, cre] (ORCID:\n    <https://orcid.org/0000-0002-0679-1945>),\n  Posit Software, PBC [cph, fnd] (ROR: <https://ror.org/03wc8by49>)",
+        "Maintainer": "Emil Hvitfeldt <emil.hvitfeldt@posit.co>",
+        "Repository": "CRAN",
+        "Date/Publication": "2025-06-25 12:30:02 UTC",
+        "Built": "R 4.5.1; ; 2025-09-24 23:17:13 UTC; unix"
       }
     },
     "broom": {
@@ -1580,6 +1663,30 @@
         "Built": "R 4.5.1; ; 2025-09-24 17:07:45 UTC; unix"
       }
     },
+    "earth": {
+      "Source": "CRAN",
+      "Repository": "https://cloud.r-project.org",
+      "description": {
+        "Package": "earth",
+        "Version": "5.3.4",
+        "Title": "Multivariate Adaptive Regression Splines",
+        "Authors@R": "c(person(given = \"Stephen\", family = \"Milborrow\",\n               role = c(\"aut\", \"cre\"), email = \"milbo@sonic.net\"),\n             person(given = \"Trevor\",  family = \"Hastie\",     role = \"aut\"),\n             person(given = \"Rob\",     family = \"Tibshirani\", role = \"aut\"),\n             person(given = \"Alan\",    family = \"Miller\",     role = \"ctb\"),\n             person(given = \"Thomas\",  family = \"Lumley\",     role = \"ctb\"))",
+        "Depends": "R (>= 3.4.0), Formula (>= 1.2-3), plotmo (>= 3.6.0),",
+        "Suggests": "gam (>= 1.20), mgcv (>= 1.8-26), mda (>= 0.5-2), MASS (>=\n7.3-51)",
+        "Description": "Build regression models using the techniques in Friedman's\n    papers \"Fast MARS\" and \"Multivariate Adaptive Regression\n    Splines\" <doi:10.1214/aos/1176347963>.\n    (The term \"MARS\" is trademarked and thus not used in\n    the name of the package.)",
+        "License": "GPL-3",
+        "LazyData": "yes",
+        "URL": "http://www.milbo.users.sonic.net/earth/",
+        "Packaged": "2024-10-05 19:29:53 UTC; milbo",
+        "Repository": "CRAN",
+        "Date/Publication": "2024-10-05 20:20:02 UTC",
+        "RoxygenNote": "5.1.2",
+        "NeedsCompilation": "yes",
+        "Author": "Stephen Milborrow [aut, cre],\n  Trevor Hastie [aut],\n  Rob Tibshirani [aut],\n  Alan Miller [ctb],\n  Thomas Lumley [ctb]",
+        "Maintainer": "Stephen Milborrow <milbo@sonic.net>",
+        "Built": "R 4.5.1; x86_64-pc-linux-gnu; 2025-09-24 17:21:53 UTC; unix"
+      }
+    },
     "ellipsis": {
       "Source": "CRAN",
       "Repository": "https://cloud.r-project.org",
@@ -2034,6 +2141,35 @@
         "Repository": "CRAN",
         "Date/Publication": "2025-05-09 23:50:06 UTC",
         "Built": "R 4.5.1; ; 2025-08-11 10:11:30 UTC; unix"
+      }
+    },
+    "ggcorrplot": {
+      "Source": "CRAN",
+      "Repository": "https://cloud.r-project.org",
+      "description": {
+        "Type": "Package",
+        "Package": "ggcorrplot",
+        "Title": "Visualization of a Correlation Matrix using 'ggplot2'",
+        "Version": "0.1.4.1",
+        "Authors@R": "\n    c(person(given = \"Alboukadel\",\n             family = \"Kassambara\",\n             role = c(\"aut\", \"cre\"),\n             email = \"alboukadel.kassambara@gmail.com\"),\n      person(given = \"Indrajeet\",\n             family = \"Patil\",\n             role = \"ctb\",\n             email = \"patilindrajeet.science@gmail.com\",\n             comment = c(ORCID = \"0000-0003-1995-6531\", Twitter = \"@patilindrajeets\")))",
+        "Description": "The 'ggcorrplot' package can be used to visualize easily a\n    correlation matrix using 'ggplot2'. It provides a solution for\n    reordering the correlation matrix and displays the significance level\n    on the plot. It also includes a function for computing a matrix of\n    correlation p-values.",
+        "License": "GPL-2",
+        "URL": "http://www.sthda.com/english/wiki/ggcorrplot-visualization-of-a-correlation-matrix-using-ggplot2",
+        "BugReports": "https://github.com/kassambara/ggcorrplot/issues",
+        "Depends": "R (>= 3.3), ggplot2 (>= 3.3.6)",
+        "Imports": "reshape2, stats",
+        "Suggests": "testthat (>= 3.0.0), knitr, spelling, vdiffr (>= 1.0.0)",
+        "Encoding": "UTF-8",
+        "Language": "en-US",
+        "RoxygenNote": "7.1.0",
+        "Config/testthat/edition": "3",
+        "NeedsCompilation": "no",
+        "Packaged": "2023-09-05 15:45:33 UTC; hornik",
+        "Author": "Alboukadel Kassambara [aut, cre],\n  Indrajeet Patil [ctb] (<https://orcid.org/0000-0003-1995-6531>,\n    @patilindrajeets)",
+        "Maintainer": "Alboukadel Kassambara <alboukadel.kassambara@gmail.com>",
+        "Repository": "CRAN",
+        "Date/Publication": "2023-09-05 15:50:48 UTC",
+        "Built": "R 4.5.1; ; 2025-09-24 17:32:25 UTC; unix"
       }
     },
     "ggplot2": {
@@ -2857,6 +2993,28 @@
         "Built": "R 4.5.1; ; 2025-09-24 17:32:36 UTC; unix"
       }
     },
+    "kernlab": {
+      "Source": "CRAN",
+      "Repository": "https://cloud.r-project.org",
+      "description": {
+        "Package": "kernlab",
+        "Version": "0.9-33",
+        "Title": "Kernel-Based Machine Learning Lab",
+        "Authors@R": "c(person(\"Alexandros\", \"Karatzoglou\", role = c(\"aut\", \"cre\"),\n                    email = \"alexandros.karatzoglou@gmail.com\"),\n             person(\"Alex\", \"Smola\", role = \"aut\"),\n             person(\"Kurt\", \"Hornik\", role = \"aut\",\n\t            email = \"Kurt.Hornik@R-project.org\",\n                    comment = c(ORCID = \"0000-0003-4198-9911\")),\n\t     person(\"National ICT Australia (NICTA)\",\n\t            role = \"cph\"),\n\t     person(c(\"Michael\", \"A.\"), \"Maniscalco\",\n\t            role = c(\"ctb\", \"cph\")),\n             person(c(\"Choon\", \"Hui\"), \"Teo\", role = \"ctb\"))",
+        "Description": "Kernel-based machine learning methods for classification,\n        regression, clustering, novelty detection, quantile regression\n        and dimensionality reduction.  Among other methods 'kernlab'\n        includes Support Vector Machines, Spectral Clustering, Kernel\n        PCA, Gaussian Processes and a QP solver.",
+        "Depends": "R (>= 2.10)",
+        "Imports": "methods, stats, grDevices, graphics",
+        "LazyLoad": "Yes",
+        "License": "GPL-2",
+        "NeedsCompilation": "yes",
+        "Packaged": "2024-08-13 14:40:27 UTC; hornik",
+        "Author": "Alexandros Karatzoglou [aut, cre],\n  Alex Smola [aut],\n  Kurt Hornik [aut] (<https://orcid.org/0000-0003-4198-9911>),\n  National ICT Australia (NICTA) [cph],\n  Michael A. Maniscalco [ctb, cph],\n  Choon Hui Teo [ctb]",
+        "Maintainer": "Alexandros Karatzoglou <alexandros.karatzoglou@gmail.com>",
+        "Repository": "CRAN",
+        "Date/Publication": "2024-08-13 15:25:01 UTC",
+        "Built": "R 4.5.1; x86_64-pc-linux-gnu; 2025-08-11 10:45:01 UTC; unix"
+      }
+    },
     "kknn": {
       "Source": "CRAN",
       "Repository": "https://cloud.r-project.org",
@@ -3102,6 +3260,37 @@
         "Repository": "CRAN",
         "Date/Publication": "2023-11-07 10:10:10 UTC",
         "Built": "R 4.5.1; ; 2025-08-11 10:13:49 UTC; unix"
+      }
+    },
+    "lightgbm": {
+      "Source": "CRAN",
+      "Repository": "https://cloud.r-project.org",
+      "description": {
+        "Package": "lightgbm",
+        "Type": "Package",
+        "Title": "Light Gradient Boosting Machine",
+        "Version": "4.6.0",
+        "Date": "2025-02-13",
+        "Authors@R": "c(\n    person(\"Yu\", \"Shi\", email = \"yushi2@microsoft.com\", role = c(\"aut\")),\n    person(\"Guolin\", \"Ke\", email = \"guolin.ke@outlook.com\", role = c(\"aut\")),\n    person(\"Damien\", \"Soukhavong\", email = \"damien.soukhavong@skema.edu\", role = c(\"aut\")),\n    person(\"James\", \"Lamb\", email=\"jaylamb20@gmail.com\", role = c(\"aut\", \"cre\")),\n    person(\"Qi\", \"Meng\", role = c(\"aut\")),\n    person(\"Thomas\", \"Finley\", role = c(\"aut\")),\n    person(\"Taifeng\", \"Wang\", role = c(\"aut\")),\n    person(\"Wei\", \"Chen\", role = c(\"aut\")),\n    person(\"Weidong\", \"Ma\", role = c(\"aut\")),\n    person(\"Qiwei\", \"Ye\", role = c(\"aut\")),\n    person(\"Tie-Yan\", \"Liu\", role = c(\"aut\")),\n    person(\"Nikita\", \"Titov\", role = c(\"aut\")),\n    person(\"Yachen\", \"Yan\", role = c(\"ctb\")),\n    person(\"Microsoft Corporation\", role = c(\"cph\")),\n    person(\"Dropbox, Inc.\", role = c(\"cph\")),\n    person(\"Alberto\", \"Ferreira\", role = c(\"ctb\")),\n    person(\"Daniel\", \"Lemire\", role = c(\"ctb\")),\n    person(\"Victor\", \"Zverovich\", role = c(\"cph\")),\n    person(\"IBM Corporation\", role = c(\"ctb\")),\n    person(\"David\", \"Cortes\", role = c(\"aut\")),\n    person(\"Michael\", \"Mayer\", role = c(\"ctb\"))\n    )",
+        "Description": "Tree based algorithms can be improved by introducing boosting frameworks.\n    'LightGBM' is one such framework, based on Ke, Guolin et al. (2017) <https://papers.nips.cc/paper/6907-lightgbm-a-highly-efficient-gradient-boosting-decision>.\n    This package offers an R interface to work with it.\n    It is designed to be distributed and efficient with the following advantages:\n        1. Faster training speed and higher efficiency.\n        2. Lower memory usage.\n        3. Better accuracy.\n        4. Parallel learning supported.\n        5. Capable of handling large-scale data.\n    In recognition of these advantages, 'LightGBM' has been widely-used in many winning solutions of machine learning competitions.\n    Comparison experiments on public datasets suggest that 'LightGBM' can outperform existing boosting frameworks on both efficiency and accuracy, with significantly lower memory consumption. In addition, parallel experiments suggest that in certain circumstances, 'LightGBM' can achieve a linear speed-up in training time by using multiple machines.",
+        "Encoding": "UTF-8",
+        "License": "MIT + file LICENSE",
+        "URL": "https://github.com/Microsoft/LightGBM",
+        "BugReports": "https://github.com/Microsoft/LightGBM/issues",
+        "NeedsCompilation": "yes",
+        "Biarch": "true",
+        "VignetteBuilder": "knitr",
+        "Suggests": "knitr, markdown, RhpcBLASctl, testthat",
+        "Depends": "R (>= 3.5)",
+        "Imports": "R6 (>= 2.0), data.table (>= 1.9.6), graphics, jsonlite (>=\n1.0), Matrix (>= 1.1-0), methods, parallel, utils",
+        "SystemRequirements": "C++17",
+        "RoxygenNote": "7.3.2",
+        "Packaged": "2025-02-13 20:29:35 UTC; jlamb",
+        "Author": "Yu Shi [aut],\n  Guolin Ke [aut],\n  Damien Soukhavong [aut],\n  James Lamb [aut, cre],\n  Qi Meng [aut],\n  Thomas Finley [aut],\n  Taifeng Wang [aut],\n  Wei Chen [aut],\n  Weidong Ma [aut],\n  Qiwei Ye [aut],\n  Tie-Yan Liu [aut],\n  Nikita Titov [aut],\n  Yachen Yan [ctb],\n  Microsoft Corporation [cph],\n  Dropbox, Inc. [cph],\n  Alberto Ferreira [ctb],\n  Daniel Lemire [ctb],\n  Victor Zverovich [cph],\n  IBM Corporation [ctb],\n  David Cortes [aut],\n  Michael Mayer [ctb]",
+        "Maintainer": "James Lamb <jaylamb20@gmail.com>",
+        "Repository": "CRAN",
+        "Date/Publication": "2025-02-13 22:20:09 UTC",
+        "Built": "R 4.5.1; x86_64-pc-linux-gnu; 2025-09-24 17:28:53 UTC; unix"
       }
     },
     "listenv": {
@@ -3950,6 +4139,79 @@
         "Built": "R 4.5.1; ; 2025-08-11 10:27:58 UTC; unix"
       }
     },
+    "plotmo": {
+      "Source": "CRAN",
+      "Repository": "https://cloud.r-project.org",
+      "description": {
+        "Package": "plotmo",
+        "Version": "3.6.4",
+        "Title": "Plot a Model's Residuals, Response, and Partial Dependence Plots",
+        "Authors@R": "person(given = \"Stephen\",\n                  family = \"Milborrow\",\n                  role = c(\"aut\", \"cre\"),\n                  email = \"milbo@sonic.net\")",
+        "Maintainer": "Stephen Milborrow <milbo@sonic.net>",
+        "Depends": "R (>= 3.4.0), Formula (>= 1.2-3), plotrix",
+        "Description": "Plot model surfaces for a wide variety of models\n        using partial dependence plots and other techniques.\n        Also plot model residuals and other information on the model.",
+        "Suggests": "C50 (>= 0.1.0-24), earth (>= 5.1.2), gbm (>= 2.1.1), glmnet\n(>= 2.0.5), glmnetUtils (>= 1.0.3), MASS (>= 7.3-51), mlr (>=\n2.12.1), neuralnet (>= 1.33), partykit (>= 1.2-2), pre (>=\n0.5.0), rpart (>= 4.1-15), rpart.plot (>= 3.0.8)",
+        "License": "GPL-3",
+        "URL": "http://www.milbo.users.sonic.net",
+        "NeedsCompilation": "no",
+        "Packaged": "2024-08-31 00:01:13 UTC; milbo",
+        "Author": "Stephen Milborrow [aut, cre]",
+        "Repository": "CRAN",
+        "Date/Publication": "2024-08-31 03:10:02 UTC",
+        "Built": "R 4.5.1; ; 2025-09-24 17:21:49 UTC; unix"
+      }
+    },
+    "plotrix": {
+      "Source": "CRAN",
+      "Repository": "https://cloud.r-project.org",
+      "description": {
+        "Package": "plotrix",
+        "Version": "3.8-4",
+        "Date": "2023-11-09",
+        "Title": "Various Plotting Functions",
+        "Author": "Jim Lemon, Ben Bolker, Sander Oom,\n\tEduardo Klein, Barry Rowlingson,\n\tHadley Wickham, Anupam Tyagi,\n\tOlivier Eterradossi, Gabor Grothendieck,\n\tMichael Toews, John Kane, Rolf Turner,\n\tCarl Witthoft, Julian Stander, Thomas Petzoldt,\n\tRemko Duursma, Elisa Biancotto, Ofir Levy,\n\tChristophe Dutang, Peter Solymos, Robby Engelmann, \n\tMichael Hecker, Felix Steinbeck, Hans Borchers,\n\tHenrik Singmann, Ted Toal, Derek Ogle, Darshan Baral,\n\tUlrike Groemping, Bill Venables, The CRAN Team,\n\tDuncan Murdoch",
+        "Maintainer": "Duncan Murdoch <murdoch.duncan@gmail.com>",
+        "Imports": "grDevices, graphics, stats, utils",
+        "Description": "Lots of plots, various labeling, axis and color scaling functions. The author/maintainer died in September 2023.",
+        "License": "GPL (>= 2)",
+        "NeedsCompilation": "no",
+        "Depends": "R (>= 3.5.0)",
+        "Repository": "CRAN",
+        "Date/Publication": "2023-11-10 10:10:02 UTC",
+        "URL": "https://github.com/dmurdoch/plotrix",
+        "BugReports": "https://github.com/dmurdoch/plotrix/issues",
+        "Packaged": "2023-11-09 16:39:28 UTC; murdoch",
+        "Built": "R 4.5.1; ; 2025-09-24 17:21:38 UTC; unix"
+      }
+    },
+    "plyr": {
+      "Source": "CRAN",
+      "Repository": "https://cloud.r-project.org",
+      "description": {
+        "Package": "plyr",
+        "Title": "Tools for Splitting, Applying and Combining Data",
+        "Version": "1.8.9",
+        "Authors@R": "\n    person(\"Hadley\", \"Wickham\", , \"hadley@rstudio.com\", role = c(\"aut\", \"cre\"))",
+        "Description": "A set of tools that solves a common set of problems: you need\n    to break a big problem down into manageable pieces, operate on each\n    piece and then put all the pieces back together.  For example, you\n    might want to fit a model to each spatial location or time point in\n    your study, summarise data by panels or collapse high-dimensional\n    arrays to simpler summary statistics. The development of 'plyr' has\n    been generously supported by 'Becton Dickinson'.",
+        "License": "MIT + file LICENSE",
+        "URL": "http://had.co.nz/plyr, https://github.com/hadley/plyr",
+        "BugReports": "https://github.com/hadley/plyr/issues",
+        "Depends": "R (>= 3.1.0)",
+        "Imports": "Rcpp (>= 0.11.0)",
+        "Suggests": "abind, covr, doParallel, foreach, iterators, itertools,\ntcltk, testthat",
+        "LinkingTo": "Rcpp",
+        "Encoding": "UTF-8",
+        "LazyData": "true",
+        "RoxygenNote": "7.2.3",
+        "NeedsCompilation": "yes",
+        "Packaged": "2023-09-27 13:58:04 UTC; hadleywickham",
+        "Author": "Hadley Wickham [aut, cre]",
+        "Maintainer": "Hadley Wickham <hadley@rstudio.com>",
+        "Repository": "CRAN",
+        "Date/Publication": "2023-10-02 06:50:08 UTC",
+        "Built": "R 4.5.1; x86_64-pc-linux-gnu; 2025-08-18 14:57:36 UTC; unix"
+      }
+    },
     "posterior": {
       "Source": "CRAN",
       "Repository": "https://cloud.r-project.org",
@@ -4311,6 +4573,35 @@
         "Built": "R 4.5.1; ; 2025-08-13 14:41:21 UTC; unix"
       }
     },
+    "ranger": {
+      "Source": "CRAN",
+      "Repository": "https://cloud.r-project.org",
+      "description": {
+        "Package": "ranger",
+        "Type": "Package",
+        "Title": "A Fast Implementation of Random Forests",
+        "Version": "0.17.0",
+        "Date": "2024-11-08",
+        "Authors@R": "c(\n    person(\"Marvin N.\", \"Wright\", email = \"cran@wrig.de\", role = c(\"aut\", \"cre\")),\n    person(\"Stefan\", \"Wager\", role = \"ctb\"),\n    person(\"Philipp\", \"Probst\", role = \"ctb\"))",
+        "Description": "A fast implementation of Random Forests, particularly suited for high\n          dimensional data. Ensembles of classification, regression, survival and\n          probability prediction trees are supported. Data from genome-wide association\n          studies can be analyzed efficiently. In addition to data frames, datasets of\n          class 'gwaa.data' (R package 'GenABEL') and 'dgCMatrix' (R package 'Matrix') \n          can be directly analyzed.",
+        "License": "GPL-3",
+        "Imports": "Rcpp (>= 0.11.2), Matrix",
+        "LinkingTo": "Rcpp, RcppEigen",
+        "Depends": "R (>= 3.1)",
+        "Suggests": "survival, testthat",
+        "Encoding": "UTF-8",
+        "RoxygenNote": "7.3.2",
+        "URL": "https://imbs-hl.github.io/ranger/,\nhttps://github.com/imbs-hl/ranger",
+        "BugReports": "https://github.com/imbs-hl/ranger/issues",
+        "NeedsCompilation": "yes",
+        "Packaged": "2024-11-08 05:11:24 UTC; wright",
+        "Author": "Marvin N. Wright [aut, cre],\n  Stefan Wager [ctb],\n  Philipp Probst [ctb]",
+        "Maintainer": "Marvin N. Wright <cran@wrig.de>",
+        "Repository": "CRAN",
+        "Date/Publication": "2024-11-08 07:40:02 UTC",
+        "Built": "R 4.5.1; x86_64-pc-linux-gnu; 2025-09-24 17:22:07 UTC; unix"
+      }
+    },
     "rappdirs": {
       "Source": "CRAN",
       "Repository": "https://cloud.r-project.org",
@@ -4485,6 +4776,33 @@
         "Repository": "CRAN",
         "Date/Publication": "2024-03-22 09:30:02 UTC",
         "Built": "R 4.5.1; ; 2025-09-24 17:20:49 UTC; unix"
+      }
+    },
+    "reshape2": {
+      "Source": "CRAN",
+      "Repository": "https://cloud.r-project.org",
+      "description": {
+        "Package": "reshape2",
+        "Title": "Flexibly Reshape Data: A Reboot of the Reshape Package",
+        "Version": "1.4.4",
+        "Author": "Hadley Wickham <h.wickham@gmail.com>",
+        "Maintainer": "Hadley Wickham <h.wickham@gmail.com>",
+        "Description": "Flexibly restructure and aggregate data using just two\n    functions: melt and 'dcast' (or 'acast').",
+        "License": "MIT + file LICENSE",
+        "URL": "https://github.com/hadley/reshape",
+        "BugReports": "https://github.com/hadley/reshape/issues",
+        "Depends": "R (>= 3.1)",
+        "Imports": "plyr (>= 1.8.1), Rcpp, stringr",
+        "Suggests": "covr, lattice, testthat (>= 0.8.0)",
+        "LinkingTo": "Rcpp",
+        "Encoding": "UTF-8",
+        "LazyData": "true",
+        "RoxygenNote": "7.1.0",
+        "NeedsCompilation": "yes",
+        "Packaged": "2020-04-09 12:27:19 UTC; hadley",
+        "Repository": "CRAN",
+        "Date/Publication": "2020-04-09 13:50:02 UTC",
+        "Built": "R 4.5.1; x86_64-pc-linux-gnu; 2025-08-18 14:57:40 UTC; unix"
       }
     },
     "rlang": {
@@ -6182,29 +6500,26 @@
     }
   },
   "files": {
-    "forecast_dashboard.log": {
-      "checksum": "8898d740f707eb04b1dbc137bc65ffb2"
-    },
-    "forecast_dashboard.Rmd": {
-      "checksum": "9b49db39460c0b88ee3e5b9e34b87649"
+    "forecast_app.Rmd": {
+      "checksum": "5ceceb89536c2125d45f9cd2a64d54a4"
     },
     "R/explain_model.R": {
-      "checksum": "b27165f6e1bd3d48a6669aaeb8ff7171"
+      "checksum": "90d9e7d5fafcf42a744cd8d6e158fc51"
     },
     "R/fit_model.R": {
-      "checksum": "48421390edfcd7b29574e106be1aba69"
+      "checksum": "2de69c78373dced2a57a27935e296b86"
     },
     "R/generate_feature.R": {
-      "checksum": "ebc862cc41fb72b42aab4a311eba6846"
+      "checksum": "0fe2a531f87e8f7c3905f42ed9e47564"
     },
     "R/generate_forecast.R": {
-      "checksum": "b71704fcfc6e7d3125070fd5bdab072a"
+      "checksum": "21087d13aa5662479eb55f4df58ed8b8"
     },
     "R/get_data.R": {
-      "checksum": "60ca00017b6da585afce8d448c867286"
+      "checksum": "4a7bc8e13c8367fe8bddfd0d1a13d0be"
     },
     "R/global-vars.R": {
-      "checksum": "9ddb6827166494f8c4e052eb87f5d129"
+      "checksum": "805629d651158719e35ffcf2e7e2388d"
     },
     "R/hp_testing.R": {
       "checksum": "fd223bf19d068e631172eb39ef7e012a"
@@ -6213,16 +6528,16 @@
       "checksum": "64be0a753c74c947f685273293c66f95"
     },
     "R/transform_data.R": {
-      "checksum": "79e925aaf476301eef1a775ae2d486ea"
+      "checksum": "d81906f68a057cee3d863f7e17efec39"
     },
     "R/utils-packages.R": {
-      "checksum": "82563d1a94a69674211753456ef6e998"
+      "checksum": "23642f4e3c05d32814f6d6458dff9e9a"
     },
     "R/utils.R": {
-      "checksum": "8d32cc428f684a4f1bf4ac5cd5663a17"
+      "checksum": "b2d0d42ce0d99e9e692a607755fb934e"
     },
     "styles-default.css": {
-      "checksum": "a6526c5941b485706f554bdd32c488d9"
+      "checksum": "fa37465b773adb3aac5dd6128cf472bd"
     },
     "tsf_logo.png": {
       "checksum": "54fb126ef07bce015a7dfaab72edf964"
