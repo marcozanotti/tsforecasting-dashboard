@@ -8,6 +8,9 @@ generate_model_explainer <- function(
 	logging::loginfo("*** Explaining Algorithm ***")
 	logging::loginfo(paste("Method(s):", paste0(method, collapse = ", ")))
 	
+	# remove nas from the value column (to avoid errors in fitting & to remove future rows)
+	data <- data |> tidyr::drop_na(value)
+	
 	# initial split
 	logging::loginfo("Initial Split")
 	splits <- generate_initial_split(data, n_assess, assess_type)
@@ -79,6 +82,8 @@ generate_model_explainer <- function(
 # function to get observation with features from data
 get_observation <- function(data, date, method, n_assess, assess_type) {
 	
+	# remove nas from the value column to remove future rows
+	data <- data |> tidyr::drop_na(value)
 	# attention: just from test data, adapt in case it is needed for train 
 	splits <- generate_initial_split(data, n_assess, assess_type)
 	test_tbl <- rsample::testing(splits) |> dplyr::select(-dplyr::any_of(c("id", "frequency")))

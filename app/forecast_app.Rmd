@@ -38,7 +38,9 @@ mtd_prm <- getOption("tsf.dashboard.methods_params")
 mtd_prm_names <- purrr::map(mtd_prm, names)
 metrics <- toupper(getOption("tsf.dashboard.metrics"))
 transf <- getOption("tsf.dashboard.transformations")
+```
 
+```{r welcome_modal}
 # show modal once after initial UI is flushed to the client
 invisible(session$onFlushed(function() {
 	showModal(
@@ -133,7 +135,7 @@ Data {data-orientation=rows}
 Input {.sidebar}
 ---------------------------------------------------------------------------
 
-```{r}
+```{r data_input}
 shinyWidgets::pickerInput(
 	inputId = "dataset", label = h5("Dataset"), 
   choices = datasets, selected = datasets[1], multiple = FALSE
@@ -159,6 +161,15 @@ numericInput(
 	inputId = "horizon", label = "Forecast horizon", 
 	value = 12, min = 1, max = Inf, step = 1, width = "100%"
 )
+numericInput(
+	inputId = "n_assess", label = "Assessment Period", 
+	value = 24, min = 1, max = Inf, step = 1, width = "100%"
+)
+# shinyWidgets::prettyRadioButtons(
+# 	inputId = "assess_type", label = "Assessment Type",
+# 	choices = c("Expanding", "Rolling"), selected = "Expanding",
+# 	inline = TRUE
+# )
 
 tags$div(
   id = "sidebar-footer",
@@ -167,7 +178,7 @@ tags$div(
 )
 ```
 
-```{r}
+```{r data_server}
 react_val <- reactiveValues(uploaded_data = NULL)
 
 observeEvent(
@@ -249,7 +260,7 @@ Input {.sidebar}
 ---------------------------------------------------------------------------
 
 *Analyze - Visualize* 
-```{r}
+```{r analyze_visualize_input}
 dateRangeInput(
   inputId = "viz_date_range", label = h5("Date Period"),
   start = as.Date("1940-01-01"), end = as.Date("2023-12-31")
@@ -275,7 +286,7 @@ tags$div(
 )
 ```
 
-```{r}
+```{r analyze_visualize_server}
 observeEvent(
   eventExpr = input$dataset,
   handlerExpr = {
@@ -402,7 +413,7 @@ Input {.sidebar}
 ---------------------------------------------------------------------------
 
 *Analyze - Hypothesis Testing* 
-```{r}
+```{r analyze_hypothesis_input}
 shinyWidgets::pickerInput(
   inputId = "test_transf", label = h5("Test on transformed data?"), multiple = TRUE,
   choices = transf, selected = NULL
@@ -428,7 +439,7 @@ tags$div(
 )
 ```
 
-```{r}
+```{r analyze_hypothesis_server}
 data_test <- reactive({
   data_imputed() |> 
     transform_data(transformations = input$test_transf,	freq = ts_freq()) |> 
@@ -515,7 +526,7 @@ Input {.sidebar}
 ---------------------------------------------------------------------------
 
 *Analyze - Anomaly Detection* 
-```{r}
+```{r analyze_anomaly_input}
 shinyWidgets::pickerInput(
   inputId = "anom_method", label = h5("Anomaly Method"), multiple = FALSE,
   choices = c("stl"), selected = "stl"
@@ -535,7 +546,7 @@ tags$div(
 )
 ```
 
-```{r}
+```{r analyze_anomaly_server}
 observeEvent(
   eventExpr = input$anomaly_reset, 
   handlerExpr = {
@@ -634,7 +645,7 @@ Input {.sidebar}
 ---------------------------------------------------------------------------
 
 *Analyze - Transform* 
-```{r}
+```{r analyze_transform_input}
 shinyWidgets::pickerInput(
   inputId = "transf", label = h5("Transformations"), multiple = TRUE,
   choices = transf[1:7], selected = NULL # not possible to do Diff and SDiff !!!!!
@@ -662,7 +673,7 @@ tags$div(
 )
 ```
 
-```{r}
+```{r analyze_transform_server}
 observeEvent(
   eventExpr = input$dataset,
   handlerExpr = {
@@ -788,29 +799,33 @@ Input {.sidebar}
 ---------------------------------------------------------------------------
 
 *Features - Internal Features* 
-```{r}
+```{r features_internal_input}
 shinyjs::useShinyjs(rmd = TRUE) # use Shiny JavaScript to allow delay on buttons
 h5("Calendar & Holidays")
 shinyWidgets::awesomeCheckbox(inputId = "feat_calendar", label = "Add calendar features?", value = FALSE)
 shinyWidgets::awesomeCheckbox(inputId = "feat_holiday", label = "Add holiday features?", value = FALSE)
 textInput(
-	inputId = "feat_fourier_p", label = "Fourier Periods", value = "", placeholder = "Values separated by a comma..."
+	inputId = "feat_fourier_p", label = h5("Fourier Periods"), value = "", placeholder = "Values separated by a comma..."
 )
 sliderInput(
-	inputId = "feat_fourier_k", label = "Fourier Orders",
+	inputId = "feat_fourier_k", label = h5("Fourier Orders"),
 	min = 1, max = 10, value = 1, step = 1
 )
 textInput(
-	inputId = "feat_spline_deg", label = "Spline Degrees", value = "", placeholder = "Values separated by a comma..."
+	inputId = "feat_spline_deg", label = h5("Spline Degrees"), value = "", placeholder = "Values separated by a comma..."
+)
+h5("Lag Orders")
+h6("(must be greater than the forecast horizon)")
+textInput(
+	inputId = "feat_lag", label = NULL, value = "", placeholder = "Values separated by a comma..."
+)
+h5("Lag Rolling Periods")
+h6("(must be greater than 1)")
+textInput(
+	inputId = "feat_roll", label = NULL, value = "", placeholder = "Values separated by a comma..."
 )
 textInput(
-	inputId = "feat_lag", label = "Lag Orders", value = "", placeholder = "Values separated by a comma..."
-)
-textInput(
-	inputId = "feat_roll", label = "Lag Rolling Periods", value = "", placeholder = "Values separated by a comma..."
-)
-textInput(
-	inputId = "feat_inter", label = "Interactions", value = "", placeholder = "Expressions separated by a comma..."
+	inputId = "feat_inter", label = h5("Interactions"), value = "", placeholder = "Expressions separated by a comma..."
 )
 
 tags$div(
@@ -820,7 +835,7 @@ tags$div(
 )
 ```
 
-```{r}
+```{r features_internal_server}
 data_features <- reactive({
 	req(data_transformed())
 	data_transformed() |> 
@@ -917,7 +932,7 @@ Input {.sidebar}
 ---------------------------------------------------------------------------
 
 *Features - External Features* 
-```{r}
+```{r features_external_input}
 shinyjs::useShinyjs(rmd = TRUE) # use Shiny JavaScript to allow delay on buttons
 h5("Upload your dataset: ")
 h6("The dataset must be a .csv file containing columns 'date', 'id', and the desired external features.")
@@ -937,7 +952,7 @@ tags$div(
 )
 ```
 
-```{r}
+```{r features_external_server}
 react_val <- reactiveValues(uploaded_xfeatures = NULL)
 
 observeEvent(
@@ -1046,7 +1061,7 @@ Input {.sidebar}
 ---------------------------------------------------------------------------
 
 *Features - Feature Selection* 
-```{r}
+```{r features_selection_input}
 shinyjs::useShinyjs(rmd = TRUE) # use Shiny JavaScript to allow delay on buttons
 sliderInput(
 	inputId = "featsel_cor_thresh", label = h5("Correlation Threshold"),
@@ -1070,7 +1085,13 @@ textInput(
 )
 
 br()
-shinyWidgets::awesomeCheckbox(inputId = "featsel_save", label = "Use selected feature set?", value = FALSE)
+# shinyWidgets::awesomeCheckbox(inputId = "use_feat_set", label = "Use selected feature set?", value = FALSE)
+
+conditionalPanel(
+  condition = "output.n_feats > 1",
+  shinyWidgets::awesomeCheckbox(inputId = "use_feat_set", label = "Use selected feature set?", value = FALSE),
+  h6("(the selected feature set will be used by the forecasting algorithms)")
+)
 
 tags$div(
   id = "sidebar-footer",
@@ -1079,7 +1100,7 @@ tags$div(
 )
 ```
 
-```{r}
+```{r features_selection_server}
 data_features_full <- reactive({
 	if (!is.null(react_val$uploaded_xfeatures)) {
 		data_features() |> dplyr::left_join(data_xfeatures(), by = c("date", "id", "frequency"))
@@ -1088,10 +1109,13 @@ data_features_full <- reactive({
 	}
 })
 
+output$n_feats <- reactive({ get_features(data_features_full(), number_only = TRUE, remove_date = TRUE) })
+outputOptions(output, "n_feats", suspendWhenHidden = FALSE)
+
 data_feat_selected <- reactive({
 	req(data_features_full()) 
-	n_feat <- get_features(data_features_full(), remove_date = TRUE, number_only = TRUE)
-	if (n_feat > 0) {
+	n_feats <- get_features(data_features_full(), remove_date = TRUE, number_only = TRUE)
+	if (n_feats > 0) {
 		data_features_full() |> 
 			generate_importance(methods = c("Correlation", "PPS", "LASSO", "Random Forest")) |> 
 			normalize_importance() |> 
@@ -1100,6 +1124,15 @@ data_feat_selected <- reactive({
 				data_features = data_features_full(), 
 				n_future = input$horizon
 			)
+	}
+})
+
+data_model <- reactive({
+	req(data_transformed())
+	if (input$use_feat_set) {
+		dplyr::bind_rows(data_feat_selected()$data, data_feat_selected()$future_data)
+	} else {
+		data_transformed() |> add_future_frame(n_future = input$horizon)
 	}
 })
 
@@ -1234,22 +1267,8 @@ Input {.sidebar}
 ---------------------------------------------------------------------------
 
 *Forecast - Test & Evaluate* 
-```{r}
+```{r forecast_test_input}
 shinyjs::useShinyjs(rmd = TRUE) # use Shiny JavaScript to allow delay on buttons
-shinyWidgets::dropdownButton(
-  numericInput(
-    inputId = "n_assess", label = "Assessment Period", 
-    value = 24, min = 1, max = Inf, step = 1, width = "100%"
-  ), 
-  shinyWidgets::prettyRadioButtons(
-    inputId = "assess_type", label = "Assessment Type", 
-    choices = c("Expanding", "Rolling"), selected = "Rolling", 
-    inline = TRUE
-  ),
-  icon = icon("gear"), width = "225px", size = "sm", circle = TRUE,
-  tooltip = shinyWidgets::tooltipOptions(title = "Click to see inputs!")
-)
-
 shinyWidgets::pickerInput(
   inputId = "method", label = h5("Forecast Algorithm"), multiple = FALSE,
   choices = list(
@@ -1261,7 +1280,6 @@ shinyWidgets::pickerInput(
   ), 
   selected = "Naive"
 )
-shinyWidgets::awesomeCheckbox(inputId = "use_feat_set", label = "Use selected fetures?", value = FALSE)
 shinyWidgets::awesomeCheckbox(inputId = "back_transf", label = "Back transform?", value = FALSE)
 
 actionButton(inputId = "apply_forecast", label = "Forecast!", icon = icon("play"))
@@ -1521,13 +1539,10 @@ conditionalPanel(
 # )
 ```
 
-```{r}
+```{r forecast_test_server}
 observeEvent(
   eventExpr = input$tsf_reset, 
   handlerExpr = {
-    shinyWidgets::updateNumericInput(session = session, inputId = "n_assess", value = 24)
-    shinyWidgets::updatePrettyRadioButtons(session = session, inputId = "assess_type", selected = "Rolling")
-    shinyWidgets::updateAwesomeCheckbox(session = session, inputId = "use_feat_set", value = FALSE)
     shinyWidgets::updatePickerInput(session = session, inputId = "method", selected = "Naive")
     shinyWidgets::updateAwesomeCheckbox(session = session, inputId = "back_transf", value = FALSE)
     # shinyjs::delay(ms = 300, expr = {shinyjs::click(id = "apply_forecast")})
@@ -1538,40 +1553,18 @@ forecast_results <- eventReactive(
   eventExpr = input$apply_forecast,
   valueExpr = {
   	shinybusy::show_modal_spinner(color = "#2c3e50", text = "Fitting model... This may take a while.")
-    if (input$use_feat_set) {
-    	
-    	purrr::map(
-    		input$method, 
-        ~ fit_model(
-          data = data_feat_selected()$data, method = ., params = input, 
-          n_assess = input$n_assess, assess_type = input$assess_type, seed = 1992
-        )
-      ) |> 
-        generate_forecast(
-          data = data_feat_selected()$data, method = input$method, 
-          n_future = input$horizon, n_assess = input$n_assess, 
-          assess_type = input$assess_type, 
-          future_data = data_feat_selected()$future_data
-        )
-    	
-    } else {
-    	
-    	purrr::map(
-    		input$method, 
-        ~ fit_model(
-          data = data_transformed(), method = ., params = input, 
-          n_assess = input$n_assess, assess_type = input$assess_type, seed = 1992
-        )
-      ) |> 
-        generate_forecast(
-          data = data_transformed(), method = input$method, n_future = input$horizon,
-          n_assess = input$n_assess, assess_type = input$assess_type
-        )
-    	
-    }
-  	
-  }
-)
+  	purrr::map(
+  		input$method,
+  		~ fit_model(
+  			data = data_model(), method = ., params = input,
+  			n_assess = input$n_assess, assess_type = "Expanding", seed = 1992
+  		)
+  	) |>
+  		generate_forecast(
+  			data = data_model(), method = input$method, n_future = input$horizon,
+  			n_assess = input$n_assess, assess_type = "Expanding"
+  		)
+})
 
 back_forecast_results <- reactive({
 	req(forecast_results())
@@ -1696,18 +1689,9 @@ Input {.sidebar}
 ---------------------------------------------------------------------------
 
 *Forecast - Optimize*  
-```{r}
+```{r forecast_optimize_input}
 shinyjs::useShinyjs(rmd = TRUE) # use Shiny JavaScript to allow delay on buttons
 shinyWidgets::dropdownButton(
-  numericInput(
-    inputId = "tune_n_assess", label = "Assessment Period", 
-    value = 24, min = 1, max = Inf, step = 1
-  ), 
-  shinyWidgets::prettyRadioButtons(
-    inputId = "tune_assess_type", label = "Assessment Type", 
-    choices = c("Expanding", "Rolling"), selected = "Rolling", 
-    inline = TRUE
-  ),
   shinyWidgets::prettyRadioButtons(
     inputId = "tune_valid_type", label = "Validation Type", 
     choices = c("TS CV", "K-Fold CV"), selected = "TS CV", 
@@ -1911,12 +1895,10 @@ tags$div(
 )
 ```
 
-```{r}
+```{r forecast_optimize_server}
 observeEvent(
   eventExpr = input$tune_reset, 
   handlerExpr = {
-    updateNumericInput(session = session, inputId = "tune_n_assess", value = 24)
-    shinyWidgets::updatePrettyRadioButtons(session = session, inputId = "tune_assess_type", selected = "Rolling")
     shinyWidgets::updatePrettyRadioButtons(session = session, inputId = "tune_valid_type", selected = "Time Series CV")
     updateSliderInput(session = session, inputId = "tune_n_folds", value = 5)
     updateSelectInput(session = session, inputId = "tune_valid_metric", selected = "RMSE")
@@ -1940,8 +1922,8 @@ tune_results <- eventReactive(
     purrr::map(
       input$tune_method, 
       ~ fit_model_tuning(
-        data = data_transformed(), method = ., params = input, 
-        n_assess = input$tune_n_assess, assess_type = input$tune_assess_type, 
+        data = data_model(), method = ., params = input, 
+        n_assess = input$n_assess, assess_type = "Expanding", 
         validation_type = input$tune_valid_type, n_folds = input$tune_n_folds,
         validation_metric = input$tune_valid_metric, 
         grid_size = input$tune_grid_size, 
@@ -1950,8 +1932,8 @@ tune_results <- eventReactive(
       )
     ) |> 
       generate_forecast(
-        data = data_transformed(), method = input$tune_method, n_future = input$horizon,
-        n_assess = input$tune_n_assess, assess_type = input$tune_assess_type
+        data = data_model(), method = input$tune_method, n_future = input$horizon,
+        n_assess = input$n_assess, assess_type = "Expanding"
       )
   }
 )
@@ -2087,22 +2069,8 @@ Input {.sidebar}
 ---------------------------------------------------------------------------
 
 *Forecast - Compare*
-```{r}
+```{r forecast_compare_input}
 shinyjs::useShinyjs(rmd = TRUE) # use Shiny JavaScript to allow delay on buttons
-shinyWidgets::dropdownButton(
-  numericInput(
-    inputId = "comp_n_assess", label = "Assessment Period", 
-    value = 24, min = 1, max = Inf, step = 1, width = "100%"
-  ), 
-  shinyWidgets::prettyRadioButtons(
-    inputId = "comp_assess_type", label = "Assessment Type", 
-    choices = c("Expanding", "Rolling"), selected = "Rolling", 
-    inline = TRUE
-  ),
-  icon = icon("gear"), width = "225px", size = "sm", circle = TRUE,
-  tooltip = shinyWidgets::tooltipOptions(title = "Click to see inputs!")
-)
-
 shinyWidgets::pickerInput(
   inputId = "comp_method", label = h5("Forecast Algorithm"), multiple = TRUE,
   choices = list(
@@ -2127,12 +2095,10 @@ tags$div(
 )
 ```
 
-```{r}
+```{r forecast_compare_server}
 observeEvent(
   eventExpr = input$comp_reset, 
   handlerExpr = {
-    updateNumericInput(session = session, inputId = "comp_n_assess", value = 24)
-    shinyWidgets::updatePrettyRadioButtons(session = session, inputId = "comp_assess_type", selected = "Rolling")
     shinyWidgets::updatePickerInput(session = session, inputId = "comp_method", selected = c("ETS", "SARIMA"))
     shinyWidgets::updateAwesomeCheckbox(session = session, inputId = "comp_tune", value = FALSE)
     shinyWidgets::updateAwesomeCheckbox(session = session, inputId = "comp_back_transf", value = FALSE)
@@ -2156,8 +2122,8 @@ compare_results <- eventReactive(
   		if (length(comp_no_tune_mtd) > 0) {
   			for (mtd in comp_no_tune_mtd) {
   				react_val$comp_fit[[mtd]] <- fit_model(
-  					data = data_transformed(), method = mtd, params = input,
-  					n_assess = input$comp_n_assess, assess_type = input$comp_assess_type,
+  					data = data_model(), method = mtd, params = input,
+  					n_assess = input$n_assess, assess_type = "Expanding",
   					seed = 1992
   				)
   			}
@@ -2170,23 +2136,23 @@ compare_results <- eventReactive(
   		}
   		react_val$comp_fit |> 
   			generate_forecast(
-  				data = data_transformed(), method = input$comp_method,
-  				n_future = input$horizon,	n_assess = input$comp_n_assess,
-  				assess_type = input$comp_assess_type
+  				data = data_model(), method = input$comp_method,
+  				n_future = input$horizon,	n_assess = input$n_assess,
+  				assess_type = "Expanding"
   			)
   	} else {
   		purrr::map(
   			input$comp_method,
   			~ fit_model(
-  				data = data_transformed(), method = ., params = input,
-  				n_assess = input$comp_n_assess, assess_type = input$comp_assess_type,
+  				data = data_model(), method = ., params = input,
+  				n_assess = input$n_assess, assess_type = "Expanding",
   				seed = 1992
   			)
   		) |>
   			generate_forecast(
-  				data = data_transformed(), method = input$comp_method,
-  				n_future = input$horizon,	n_assess = input$comp_n_assess,
-  				assess_type = input$comp_assess_type
+  				data = data_model(), method = input$comp_method,
+  				n_future = input$horizon,	n_assess = input$n_assess,
+  				assess_type = "Expanding"
   			)
   	}
   }
@@ -2270,22 +2236,8 @@ Input {.sidebar}
 ---------------------------------------------------------------------------
 
 *Forecast - Explain*  
-```{r}
+```{r forecast_explain_input}
 shinyjs::useShinyjs(rmd = TRUE) # use Shiny JavaScript to allow delay on buttons
-shinyWidgets::dropdownButton(
-  numericInput(
-    inputId = "exp_n_assess", label = "Assessment Period", 
-    value = 24, min = 1, max = Inf, step = 1, width = "100%"
-  ), 
-  shinyWidgets::prettyRadioButtons(
-    inputId = "exp_assess_type", label = "Assessment Type", 
-    choices = c("Expanding", "Rolling"), selected = "Rolling", 
-    inline = TRUE
-  ),
-  icon = icon("gear"), width = "225px", size = "sm", circle = TRUE,
-  tooltip = shinyWidgets::tooltipOptions(title = "Click to see inputs!")
-)
-
 shinyWidgets::pickerInput(
   inputId = "exp_method", label = h5("Forecast Algorithm"), multiple = FALSE,
   choices = list(
@@ -2305,7 +2257,7 @@ actionButton(inputId = "exp_reset", label = "Reset", icon = icon("sync"))
 br()
 br()
 br()
-
+h5("Local Explanation Parameters:")
 shinyWidgets::pickerInput(
   inputId = "exp_features", label = h5("Feature to explain"), multiple = FALSE,
   choices = NULL, selected = NULL, options = list("actions-box" = TRUE)
@@ -2322,12 +2274,10 @@ tags$div(
 )
 ```
 
-```{r}
+```{r forecast_explain_server}
 observeEvent(
   eventExpr = input$exp_reset, 
   handlerExpr = {
-    updateNumericInput(session = session, inputId = "exp_n_assess", value = 24)
-    shinyWidgets::updatePrettyRadioButtons(session = session, inputId = "exp_assess_type", selected = "Rolling")
     updateSelectInput(session = session, inputId = "exp_method", selected = "Linear Regression")
     updateCheckboxInput(session = session, inputId = "exp_tune", value = FALSE)
     updateCheckboxInput(session = session, inputId = "exp_back_transf", value = FALSE)
@@ -2344,13 +2294,13 @@ explainer_results <- eventReactive(
   	if (input$exp_tune) {
   		generate_model_explainer(
   			fitted_model = react_val$tune_fit[[input$exp_method]],
-  			data = data_transformed(), method = input$exp_method,	params = input,
-  			n_assess = input$exp_n_assess, assess_type = input$exp_assess_type
+  			data = data_model(), method = input$exp_method,	params = input,
+  			n_assess = input$n_assess, assess_type = "Expanding"
   		)
   	} else {
   		generate_model_explainer(
-  			data = data_transformed(), method = input$exp_method,	params = input,
-  			n_assess = input$exp_n_assess, assess_type = input$exp_assess_type
+  			data = data_model(), method = input$exp_method,	params = input,
+  			n_assess = input$n_assess, assess_type = "Expanding"
   		)
   	}
   }
@@ -2371,24 +2321,27 @@ observeEvent(
 observeEvent(
   eventExpr = input$exp_apply_forecast,
   handlerExpr = {
-    req(data_transformed())
+    req(data_model())
+  	data_exp_input_update <- data_model() |> 
+  		tidyr::drop_na(value) |> # remove nas from the value column to remove future rows
+  		dplyr::slice_tail(n = input$n_assess)
     updateDateInput(
       session = session, inputId = "exp_date", 
-      value = dplyr::slice_tail(data_transformed(), n = input$exp_n_assess)$date[1], 
-      min = dplyr::slice_tail(data_transformed(), n = input$exp_n_assess)$date[1], 
-      max = dplyr::slice_tail(data_transformed(), n = input$exp_n_assess)$date[input$exp_n_assess]
+      value = data_exp_input_update$date[1], 
+      min = data_exp_input_update$date[1], 
+      max = data_exp_input_update$date[input$n_assess]
     )
   }
 )
 
 exp_observation <- reactive({
-  req(data_transformed())
+  req(data_model())
   req(explainer_results())
   req(input$exp_date)
   shinybusy::remove_modal_spinner()
   get_observation(
-  	data = data_transformed(), date = input$exp_date, method = input$exp_method,
-  	n_assess = input$exp_n_assess, assess_type = input$exp_assess_type
+  	data = data_model(), date = input$exp_date, method = input$exp_method,
+  	n_assess = input$n_assess, assess_type = "Expanding"
   )
 })
 	
@@ -2428,7 +2381,7 @@ output$plot_exp_bd <- renderPlot({
 })
 
 output$plot_exp_locstab <- renderPlot({
-	req(data_transformed())
+	req(data_model())
 	req(explainer_results())
 	req(exp_observation())
 	req(input$exp_features)
@@ -2489,22 +2442,8 @@ Input {.sidebar}
 ---------------------------------------------------------------------------
 
 *Forecast - Combine*
-```{r}
+```{r forecast_combine_input}
 shinyjs::useShinyjs(rmd = TRUE) # use Shiny JavaScript to allow delay on buttons
-shinyWidgets::dropdownButton(
-  numericInput(
-    inputId = "ens_n_assess", label = "Assessment Period", 
-    value = 24, min = 1, max = Inf, step = 1, width = "100%"
-  ), 
-  shinyWidgets::prettyRadioButtons(
-    inputId = "ens_assess_type", label = "Assessment Type", 
-    choices = c("Expanding", "Rolling"), selected = "Rolling", 
-    inline = TRUE
-  ),
-  icon = icon("gear"), width = "225px", size = "sm", circle = TRUE,
-  tooltip = shinyWidgets::tooltipOptions(title = "Click to see inputs!")
-)
-
 shinyWidgets::pickerInput(
   inputId = "ens_method", label = h5("Forecast Algorithms"), 
   choices = list(
@@ -2556,12 +2495,10 @@ tags$div(
 )
 ```
 
-```{r}
+```{r forecast_combine_server}
 observeEvent(
   eventExpr = input$ens_reset, 
   handlerExpr = {
-    updateNumericInput(session = session, inputId = "ens_n_assess", value = 24)
-    shinyWidgets::updatePrettyRadioButtons(session = session, inputId = "ens_assess_type", selected = "Rolling")
     shinyWidgets::updatePickerInput(session = session, inputId = "ens_method", selected = c("ETS", "SARIMA"))
     shinyWidgets::updateAwesomeCheckbox(session = session, inputId = "ens_tune", value = FALSE)
     shinyWidgets::updateAwesomeCheckbox(session = session, inputId = "ens_back_transf", value = FALSE)
@@ -2584,8 +2521,8 @@ observeEvent(
   		if (length(ens_no_tune_mtd) > 0) {
   			for (mtd in ens_no_tune_mtd) {
   				react_val$ens_fit[[mtd]] <- fit_model(
-  					data = data_transformed(), method = mtd, params = input,
-  					n_assess = input$ens_n_assess, assess_type = input$ens_assess_type,
+  					data = data_model(), method = mtd, params = input,
+  					n_assess = input$n_assess, assess_type = "Expanding",
   					seed = 1992
   				)
   			}
@@ -2598,9 +2535,9 @@ observeEvent(
   		}
   		react_val$combine_results <- react_val$ens_fit |> 
   			generate_forecast(
-  				data = data_transformed(), method = input$ens_method,
-  				n_future = input$horizon,	n_assess = input$ens_n_assess,
-  				assess_type = input$ens_assess_type, ensemble_methods = input$ens_type,
+  				data = data_model(), method = input$ens_method,
+  				n_future = input$horizon,	n_assess = input$n_assess,
+  				assess_type = "Expanding", ensemble_methods = input$ens_type,
   				stacking_methods = NULL
   			)
   	} else {
@@ -2608,14 +2545,14 @@ observeEvent(
   			purrr::map(
   				input$ens_method,
   				~ fit_model(
-  					data = data_transformed(), method = ., params = input,
-            n_assess = input$ens_n_assess, assess_type = input$ens_assess_type, seed = 1992
+  					data = data_model(), method = ., params = input,
+            n_assess = input$n_assess, assess_type = "Expanding", seed = 1992
   				)
   			) |>
   			generate_forecast(
-  				data = data_transformed(), method = input$ens_method,
-  				n_future = input$horizon, n_assess = input$ens_n_assess,
-  				assess_type = input$ens_assess_type, ensemble_methods = input$ens_type,
+  				data = data_model(), method = input$ens_method,
+  				n_future = input$horizon, n_assess = input$n_assess,
+  				assess_type = "Expanding", ensemble_methods = input$ens_type,
   				stacking_methods = NULL
   			)
   	}
@@ -2631,8 +2568,8 @@ observeEvent(
   		if (length(ens_no_tune_mtd) > 0) {
   			for (mtd in ens_no_tune_mtd) {
   				react_val$ens_fit[[mtd]] <- fit_model(
-  					data = data_transformed(), method = mtd, params = input,
-  					n_assess = input$ens_n_assess, assess_type = input$ens_assess_type,
+  					data = data_model(), method = mtd, params = input,
+  					n_assess = input$n_assess, assess_type = "Expanding",
   					seed = 1992
   				)
   			}
@@ -2645,9 +2582,9 @@ observeEvent(
   		}
   		react_val$combine_results <- react_val$ens_fit |> 
   			generate_forecast(
-  				data = data_transformed(), method = input$ens_method,
-  				n_future = input$horizon,	n_assess = input$ens_n_assess,
-  				assess_type = input$ens_assess_type, ensemble_methods = NULL,
+  				data = data_model(), method = input$ens_method,
+  				n_future = input$horizon,	n_assess = input$n_assess,
+  				assess_type = "Expanding", ensemble_methods = NULL,
   				stacking_methods = input$stk_type
   			)
   	} else {
@@ -2655,15 +2592,15 @@ observeEvent(
   			purrr::map(
   				input$ens_method,
   				~ fit_model(
-  					data = data_transformed(), method = ., params = input,
-  					n_assess = input$ens_n_assess, assess_type = input$ens_assess_type,
+  					data = data_model(), method = ., params = input,
+  					n_assess = input$n_assess, assess_type = "Expanding",
   					seed = 1992
   				)
   			) |>
   			generate_forecast(
-  				data = data_transformed(), method = input$ens_method,
-  				n_future = input$horizon, n_assess = input$ens_n_assess,
-  				assess_type = input$ens_assess_type, ensemble_methods = NULL,
+  				data = data_model(), method = input$ens_method,
+  				n_future = input$horizon, n_assess = input$n_assess,
+  				assess_type = "Expanding", ensemble_methods = NULL,
   				stacking_methods = input$stk_type
   			)
   	}
@@ -2749,22 +2686,8 @@ Input {.sidebar}
 ---------------------------------------------------------------------------
 
 *Forecast - Scenario*
-```{r}
+```{r forecast_scenario_input}
 shinyjs::useShinyjs(rmd = TRUE) # use Shiny JavaScript to allow delay on buttons
-shinyWidgets::dropdownButton(
-  numericInput(
-    inputId = "scn_n_assess", label = "Assessment Period", 
-    value = 24, min = 1, max = Inf, step = 1, width = "100%"
-  ), 
-  shinyWidgets::prettyRadioButtons(
-    inputId = "scn_assess_type", label = "Assessment Type", 
-    choices = c("Expanding", "Rolling"), selected = "Rolling", 
-    inline = TRUE
-  ),
-  icon = icon("gear"), width = "225px", size = "sm", circle = TRUE,
-  tooltip = shinyWidgets::tooltipOptions(title = "Click to see inputs!")
-)
-
 shinyWidgets::pickerInput(
   inputId = "scn_method", label = h5("Forecast Algorithm"), multiple = FALSE,
   choices = list(
@@ -2807,12 +2730,10 @@ tags$div(
 )
 ```
 
-```{r}
+```{r forecast_scenario_server}
 observeEvent(
   eventExpr = input$scn_reset, 
   handlerExpr = {
-    updateNumericInput(session = session, inputId = "scn_n_assess", value = 24)
-    shinyWidgets::updatePrettyRadioButtons(session = session, inputId = "scn_assess_type", selected = "Rolling")
     updateSelectInput(session = session, inputId = "scn_method", selected = "Ensemble")
     shinyWidgets::updateAwesomeCheckbox(session = session, inputId = "scn_tune", value = FALSE)
     shinyWidgets::updateAwesomeCheckbox(session = session, inputId = "scn_back_transf", value = FALSE)
@@ -2843,8 +2764,8 @@ scenario_results <- eventReactive(
   			if (length(ens_no_tune_mtd) > 0) {
   				for (mtd in ens_no_tune_mtd) {
   					react_val$ens_fit[[mtd]] <- fit_model(
-  						data = data_transformed(), method = mtd, params = input, 
-  						n_assess = input$scn_n_assess, assess_type = input$scn_assess_type,	seed = 1992
+  						data = data_model(), method = mtd, params = input, 
+  						n_assess = input$n_assess, assess_type = "Expanding",	seed = 1992
   					)
   				}
   			}
@@ -2856,9 +2777,9 @@ scenario_results <- eventReactive(
   			}
   			react_val$ens_fit |>
   				generate_forecast(
-  					data = data_transformed(), method = input$ens_method,
-  					n_future = input$horizon, n_assess = input$scn_n_assess,
-  					assess_type = input$scn_assess_type, ensemble_methods = input$ens_type,
+  					data = data_model(), method = input$ens_method,
+  					n_future = input$horizon, n_assess = input$n_assess,
+  					assess_type = "Expanding", ensemble_methods = input$ens_type,
   					stacking_methods = NULL, confidence_level = c(0.05, 0.99)
   				) |> 
   				extract_ensemble_results()
@@ -2866,15 +2787,15 @@ scenario_results <- eventReactive(
   				purrr::map(
   					input$ens_method,
   					~ fit_model(
-  						data = data_transformed(), method = ., params = input,
-  						n_assess = input$scn_n_assess, assess_type = input$scn_assess_type,
+  						data = data_model(), method = ., params = input,
+  						n_assess = input$n_assess, assess_type = "Expanding",
   						seed = 1992
   					)
   				) |>
   				generate_forecast(
-  					data = data_transformed(), method = input$ens_method,
-  					n_future = input$horizon, n_assess = input$scn_n_assess,
-  					assess_type = input$scn_assess_type, ensemble_methods = input$ens_type,
+  					data = data_model(), method = input$ens_method,
+  					n_future = input$horizon, n_assess = input$n_assess,
+  					assess_type = "Expanding", ensemble_methods = input$ens_type,
   					stacking_methods = NULL, confidence_level = c(0.05, 0.99)
   				) |> 
   				extract_ensemble_results()
@@ -2887,8 +2808,8 @@ scenario_results <- eventReactive(
   			if (length(ens_no_tune_mtd) > 0) {
   				for (mtd in ens_no_tune_mtd) {
   					react_val$ens_fit[[mtd]] <- fit_model(
-  						data = data_transformed(), method = mtd, params = input,
-  						n_assess = input$scn_n_assess, assess_type = input$scn_assess_type,	seed = 1992
+  						data = data_model(), method = mtd, params = input,
+  						n_assess = input$n_assess, assess_type = "Expanding",	seed = 1992
   					)
   				}
   			}
@@ -2900,9 +2821,9 @@ scenario_results <- eventReactive(
   			}
   			react_val$ens_fit |>
   				generate_forecast(
-  					data = data_transformed(), method = input$ens_method,
-  					n_future = input$horizon, n_assess = input$scn_n_assess,
-  					assess_type = input$scn_assess_type, ensemble_methods = NULL,
+  					data = data_model(), method = input$ens_method,
+  					n_future = input$horizon, n_assess = input$n_assess,
+  					assess_type = "Expanding", ensemble_methods = NULL,
   					stacking_methods = input$stk_type, confidence_level = c(0.05, 0.99)
   				) |> 
   				extract_ensemble_results()
@@ -2910,14 +2831,14 @@ scenario_results <- eventReactive(
   				purrr::map(
   					input$ens_method,
   					~ fit_model(
-  						data = data_transformed(), method = ., params = input,
-  						n_assess = input$scn_n_assess, assess_type = input$scn_assess_type,	seed = 1992
+  						data = data_model(), method = ., params = input,
+  						n_assess = input$n_assess, assess_type = "Expanding",	seed = 1992
   					)
   				) |>
   				generate_forecast(
-  					data = data_transformed(), method = input$ens_method,
-  					n_future = input$horizon, n_assess = input$scn_n_assess,
-  					assess_type = input$scn_assess_type, ensemble_methods = NULL,
+  					data = data_model(), method = input$ens_method,
+  					n_future = input$horizon, n_assess = input$n_assess,
+  					assess_type = "Expanding", ensemble_methods = NULL,
   					stacking_methods = input$stk_type, confidence_level = c(0.05, 0.99)
   				) |> 
   				extract_ensemble_results()
@@ -2928,22 +2849,22 @@ scenario_results <- eventReactive(
   		if (input$scn_tune) {
   			list(react_val$tune_fit[[input$scn_method]]) |>
   				generate_forecast(
-  					data = data_transformed(), method = input$scn_method,
-  					n_future = input$horizon, n_assess = input$scn_n_assess,
-  					assess_type = input$scn_assess_type, confidence_level = c(0.05, 0.99)
+  					data = data_model(), method = input$scn_method,
+  					n_future = input$horizon, n_assess = input$n_assess,
+  					assess_type = "Expanding", confidence_level = c(0.05, 0.99)
   				)
   		} else {
   			purrr::map(
   				input$scn_method,
   				~ fit_model(
-  					data = data_transformed(), method = ., params = input,
-  					n_assess = input$scn_n_assess, assess_type = input$scn_assess_type, seed = 1992
+  					data = data_model(), method = ., params = input,
+  					n_assess = input$n_assess, assess_type = "Expanding", seed = 1992
   				)
   			) |>
   				generate_forecast(
-  					data = data_transformed(), method = input$scn_method,
-  					n_future = input$horizon, n_assess = input$scn_n_assess,
-  					assess_type = input$scn_assess_type, confidence_level = c(0.05, 0.99)
+  					data = data_model(), method = input$scn_method,
+  					n_future = input$horizon, n_assess = input$n_assess,
+  					assess_type = "Expanding", confidence_level = c(0.05, 0.99)
   				)
   		}
   		
@@ -3068,20 +2989,3 @@ DT::DTOutput(outputId = "scn_aggregate_table")
 ```{r}
 DT::DTOutput(outputId = "scn_wb_table")
 ```
-
-
-
-<!------------------------- global conditionals -------------------------->
-
-```{r}
-observeEvent(
-  eventExpr = input$featsel_save,
-  handlerExpr = {
-    req(data_feat_selected())
-  	if (get_features(data_feat_selected()$data, remove_date = TRUE, number_only = TRUE) > 0) {
-  		shinyWidgets::updateAwesomeCheckbox(inputId = "use_feat_set", session = session, value = TRUE)
-  	}
-  }
-)
-```
-

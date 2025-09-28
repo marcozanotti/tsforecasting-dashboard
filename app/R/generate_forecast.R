@@ -14,19 +14,20 @@ generate_forecast <- function(
   	conf_lvls <- confidence_level
   }
   
+  # future split
+  logging::loginfo("Future Frame")
+  if (is.null(future_data)) {
+  	future_tbl <- data |>	dplyr::slice_tail(n = n_future) # assume that the last n_future rows are the future data
+  	data <- data |> tidyr::drop_na(value) # remove nas from the value column to remove future rows
+  } else {
+  	future_tbl <- future_data
+  }
+  
   # initial split
   logging::loginfo("Initial Split")
   splits <- generate_initial_split(data, n_assess, assess_type)
   train_tbl <- rsample::training(splits) |> dplyr::select(-dplyr::any_of(c("id", "frequency")))
   test_tbl <- rsample::testing(splits) |> dplyr::select(-dplyr::any_of(c("id", "frequency")))
-
-  # future split
-  logging::loginfo("Future Frame")
-  if (is.null(future_data)) {
-  	future_tbl <- timetk::future_frame(data, .date_var = date, .length_out = n_future)
-  } else {
-  	future_tbl <- future_data
-  }
 
   # modeltime table
   logging::loginfo("Modeltime Table")

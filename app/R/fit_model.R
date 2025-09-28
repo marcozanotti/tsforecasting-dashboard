@@ -1,4 +1,9 @@
 # function to generate initial split
+# the argument assess_type is not effectively used with the split function
+# because it creates train and test splits! To effectively implement expanding
+# and rolling window evaluation one must rely on time_series_cv() function,
+# setting assess = 1 and cumulative = TRUE or FALSE. The model fitting then
+# has to be performed using the fit_resamples() function (as in tuning).
 generate_initial_split <- function(data, n_assess, assess_type) {
 
   splits <- timetk::time_series_split(
@@ -531,6 +536,9 @@ fit_model <- function(data, method, params, n_assess, assess_type, seed = 1992) 
 
   check_parameters(method, params)
   set.seed(seed)
+  
+  # remove nas from the value column (to avoid errors in fitting & to remove future rows)
+  data <- data |> tidyr::drop_na(value)
 
   # initial split
   logging::loginfo("Initial Split")
@@ -676,6 +684,9 @@ fit_model_tuning <- function(
   validation_metric <- tolower(validation_metric)
   valid_metric_set <- set_metric_set(validation_metric)
 
+  # remove nas from the value column (to avoid errors in fitting & to remove future rows)
+  data <- data |> tidyr::drop_na(value)
+  
   # initial split
   logging::loginfo("Initial Split")
   splits <- generate_initial_split(data, n_assess, assess_type)

@@ -1,5 +1,5 @@
 # TEST & EVALUATE ---------------------------------------------------------
-data_selected <- get_data(datasets[1])
+data <- data_selected <- get_data(datasets[2])
 ts_freq <- data_selected$frequency |> unique() |> parse_frequency()
 input <- list(
   n_future = 12,
@@ -30,6 +30,9 @@ input <- list(
   method = "Rolling Average",
   window_size = 12
 )
+
+generate_initial_split(data_selected, input$n_assess, "Rolling")
+
 
 fitted_model <- fit_model(
   data = data_selected, method = input$method, params = input,
