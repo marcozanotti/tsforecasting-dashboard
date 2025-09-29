@@ -4,8 +4,8 @@ output:
   flexdashboard::flex_dashboard:
     orientation: rows
     vertical_layout: fill
-    css: styles-default.css
-    logo: tsf_logo.png
+    css: www/styles-default.css
+    logo: www/tsf_logo.png
     social: ["menu"]
     source_code: https://github.com/marcozanotti/tsforecasting-dashboard
     navbar:
@@ -15,8 +15,9 @@ runtime: shiny
 ---
 
 ```{r setup, include=FALSE, message=FALSE}
+shiny::addResourcePath("www", "www/")
 lapply(list.files("R", full.names = TRUE), source)
-pkgs <- c("modeltime", "modeltime.h2o", "rules", "yardstick", "timetk")
+pkgs <- c("modeltime", "modeltime.h2o", "rules", "bonsai", "yardstick", "timetk")
 lapply(pkgs, library, character.only = TRUE)
 options(shiny.sanitize.errors = TRUE)
 set_options()
@@ -57,7 +58,7 @@ invisible(session$onFlushed(function() {
 			htmltools::tags$div(
 				class = "modal-body",
 				style = "text-align: center; margin-top: 20px;",
-				htmltools::tags$img(src = "forecast_app_files/tsf_logo.png", width = "200px", alt = "Forecast App Logo"),
+				htmltools::tags$img(src = "www/tsf_logo.png", width = "200px", alt = "Forecast App Logo"),
 				htmltools::tags$p(
 					style = "font-size:18px; max-width:600px; margin:auto; margin-top:20px;",
 					htmltools::tags$b("Welcome to the Forecast App!"),
@@ -85,48 +86,6 @@ invisible(session$onFlushed(function() {
 observeEvent(eventExpr = input$start_app, handlerExpr = { removeModal() })
 ```
 
-<!--
-Welcome {data-orientation=rows}
-===========================================================================
-```{r, welcomepage}
-htmltools::div(
-  style = "text-align: center; margin-top: 100px;",
-  # Logo
-  htmltools::img(
-    src = "tsf_logo.png",
-    width = "200",
-    alt = "Forecast App Logo"
-  ),
-  # Welcome text
-  htmltools::p(
-    style = "font-size:18px; max-width:600px; margin:auto; margin-top:20px;",
-    htmltools::tags$b("Welcome to the Forecast App!"),
-    htmltools::br(),
-    "This app provides a complete framework for analyzing, modeling, and forecasting time series data. ",
-    "It guides the user through data preparation, exploratory analysis, feature engineering, ",
-    "model training, evaluation, and scenario building."
-  ),
-  # Author and license
-  htmltools::p(
-    style = "font-size:16px; margin-top:20px;",
-    htmltools::tags$b("Author:"), " ",
-    htmltools::a(
-      href = "https://marcozanotti.netlify.app/",
-      target = "_blank",
-      "Marco Zanotti"
-    ),
-    htmltools::br(),
-    htmltools::tags$b("Licensed under:"), " ",
-    htmltools::a(
-      href = "https://opensource.org/licenses/MIT",
-      target = "_blank",
-      "MIT License"
-    )
-  )
-)
-```
--->
-
 
 
 Data {data-orientation=rows}  
@@ -148,27 +107,30 @@ fileInput(
   buttonLabel = "Browse...", placeholder = "sep = ',' dec = '.'"
 )
 actionButton(inputId = "data_import", label = "Import", icon = icon("upload"))
-actionButton(inputId = "data_reset", label = "Reset", icon = icon("sync"))
 br()
 br()
 br()
 selectInput(
-  inputId = "frequency", label = h5("Frequency"), 
+  inputId = "frequency", label = "Frequency",
   choices = frequencies, selected = frequencies[1], multiple = FALSE
 )
 numericInput(
-	inputId = "horizon", label = h5("Forecast horizon"), 
+	inputId = "horizon", label = "Forecast horizon", 
 	value = 12, min = 1, max = Inf, step = 1, width = "100%"
 )
 numericInput(
-	inputId = "n_assess", label = h5("Assessment Period"), 
+	inputId = "n_assess", label = "Hold-out sample size", 
 	value = 24, min = 1, max = Inf, step = 1, width = "100%"
 )
+shinyWidgets::awesomeCheckbox(inputId = "impute", label = "Impute missing values?", value = FALSE)
 # shinyWidgets::prettyRadioButtons(
 # 	inputId = "assess_type", label = "Assessment Type",
 # 	choices = c("Expanding", "Rolling"), selected = "Expanding",
 # 	inline = TRUE
 # )
+br()
+br()
+actionButton(inputId = "data_reset", label = "Reset", icon = icon("sync"))
 
 tags$div(
   id = "sidebar-footer",
@@ -179,17 +141,6 @@ tags$div(
 
 ```{r data_server}
 react_val <- reactiveValues(uploaded_data = NULL)
-
-ts_freq <- reactive({ parse_frequency(input$frequency) })
-
-observeEvent(
-  eventExpr = input$data_reset, 
-  handlerExpr = {
-  	updateSelectInput(session = session, inputId = "dataset", selected = datasets[1])
-  	shinyjs::reset("upload_custom")
-  	react_val$uploaded_data <- NULL
-  }
-)
 
 observeEvent(
 	eventExpr = input$data_import, 
@@ -202,12 +153,39 @@ observeEvent(
   }
 )
 
-data_selected <- reactive({
+data_loaded <- reactive({
   if (is.null(react_val$uploaded_data)) {
-  	get_data(input$dataset)
+  	get_data(input$dataset) 
   } else {
     get_data("custom", path = react_val$uploaded_data$datapath)
   }
+})
+
+data_selected <- reactive({
+	req(data_loaded())
+	if (input$impute) {
+		data_loaded() |> dplyr::arrange(date) |> impute_data(impute = input$impute)
+	} else {
+  	data_loaded() |> dplyr::arrange(date)
+  }
+})
+
+data_params <- reactive({ 
+	req(data_loaded()) 
+	n <- nrow(data_loaded())
+	freq <- ifelse(input$frequency == "Auto", timetk::tk_get_frequency(data_loaded()[["date"]]), parse_frequency(input$frequency)) 
+	date_min <- min(data_loaded()[["date"]])
+	date_max <- max(data_loaded()[["date"]])
+	acf_n_lags <- parse_acf_lags(freq)
+	horizon <- set_horizon(freq)
+	n_assess <- round(n * 0.2) # 20% of data
+	date_assess_min <- tail(data_loaded()[["date"]], n = horizon + n_assess)[1]
+	date_assess_max <- tail(data_loaded()[["date"]], n = horizon + n_assess)[n_assess]
+	list(
+		"n" = n, "freq" = freq, "date_min" = date_min, "date_max" = date_max, 
+		"acf_n_lags" = acf_n_lags, "horizon" = horizon, "n_assess" = n_assess,
+		"date_assess_min" = date_assess_min, "date_assess_max" = date_assess_max
+	)
 })
 
 output$data_table <- DT::renderDT({
@@ -258,24 +236,6 @@ Input {.sidebar}
 
 *Analyze - Visualize* 
 ```{r analyze_visualize_input}
-dateRangeInput(
-  inputId = "viz_date_range", label = h5("Date Period"),
-  start = as.Date("1940-01-01"), end = as.Date("2023-12-31")
-)
-shinyWidgets::materialSwitch(
-  inputId = "viz_smooth_line", label = h5("Smooth Line"), 
-  value = TRUE, status = "primary", inline = TRUE
-)
-numericInput(
-  inputId = "viz_acf_lag", label = h5("ACF Lag"),
-  value = 48, min = 1, max = 300, step = 1, width = "45%"
-)
-br()
-shinyWidgets::awesomeCheckbox(inputId = "impute", label = "Impute missing values?", value = TRUE)
-br()
-actionButton(inputId = "viz_reset", label = "Reset", icon = icon("sync"))
-
-
 tags$div(
   id = "sidebar-footer",
   HTML("&copy; 2025 Marco Zanotti <br> Licensed under "),
@@ -284,74 +244,27 @@ tags$div(
 ```
 
 ```{r analyze_visualize_server}
-observeEvent(
-  eventExpr = input$dataset,
-  handlerExpr = {
-    req(data_selected())
-    updateDateRangeInput(
-      session = session, inputId = "viz_date_range",
-      start = min(data_selected()$date), end = max(data_selected()$date)
-    )
-  }
-)
-
-observeEvent(
-  eventExpr = input$frequency, 
-  handlerExpr = {
-    updateNumericInput(
-      session = session, inputId = "viz_acf_lag", 
-      value = ifelse(ts_freq() < 60, ts_freq() * 3, 150), 
-      min = 1, max = 300, step = 1
-    )
-  }
-)
-
-observeEvent(
-  eventExpr = input$viz_reset, 
-  handlerExpr = {
-    shinyWidgets::updateMaterialSwitch(session = session, inputId = "viz_smooth_line", value = TRUE)
-    updateNumericInput(session = session, inputId = "viz_acf_lag", value = ifelse(ts_freq() < 60, ts_freq() * 3, ts_freq()))
-    shinyWidgets::updateSwitchInput(session = session, inputId = "viz_impute", value = FALSE)
-    shinyWidgets::updateAwesomeCheckbox(session = session, inputId = "impute", value = TRUE)
-  }
-)
-
-data_imputed <- reactive({
-	req(data_selected())
-  data_selected() |> 
-    impute_data(impute = input$impute, frequency = ts_freq())
-})
-
-data_visualized <- reactive({
-	req(data_imputed())
-  data_imputed() |> 
-    dplyr::filter(dplyr::between(date, input$viz_date_range[1], input$viz_date_range[2]))
-})
-
 output$viz_ts_plot_smooth <- plotly::renderPlotly({
-	req(data_visualized())
-  data_visualized() |>
+  data_selected() |>
     timetk::plot_time_series(
       .date_var = date, .value = value,
-      .smooth = input$viz_smooth_line, # ifelse(ts_freq() > 60, FALSE, TRUE),
-      .interactive = TRUE
+      .smooth = TRUE, .smooth_size = 0.5, 
+      .interactive = TRUE, 
     )
 })
 
 output$viz_autocorr_plot <- plotly::renderPlotly({
-	req(data_visualized())
-  data_visualized() |>
+  data_selected() |>
     timetk::plot_acf_diagnostics(
       .date_var = date, .value = value, 
-      .lags = input$viz_acf_lag, # ifelse(ts_freq() < 60, ts_freq() * 3, 150)
+      .lags = data_params()$acf_n_lags, 
       .interactive = TRUE,
       .title = "Autocorrelation", .y_lab = NULL,
     )
 })
 
 output$viz_decomp_plot <- plotly::renderPlotly({
-	req(data_visualized())
-  data_visualized() |>
+  data_selected() |>
     timetk::plot_stl_diagnostics(
     	.date_var = date, .value = value, 
     	.feature_set = c("season", "trend", "remainder"), .interactive = TRUE,
@@ -360,8 +273,7 @@ output$viz_decomp_plot <- plotly::renderPlotly({
 })
 
 output$viz_season_plot <- plotly::renderPlotly({
-	req(data_visualized())
-  data_visualized() |>
+  data_selected() |>
     timetk::plot_seasonal_diagnostics(
       .date_var = date, .value = value, 
       .interactive = TRUE, .title = "Seasonality"
@@ -370,32 +282,28 @@ output$viz_season_plot <- plotly::renderPlotly({
 ```
 
 
-Row 1 {data-height=400}
+Row 1 {.tabset}
 ---------------------------------------------------------------------------
 
-### {.no-padding}
+### Time Series Plot {.no-padding}
 
 ```{r}
 plotly::plotlyOutput(outputId = "viz_ts_plot_smooth")
 ```
 
-### {.no-padding}
+### Autocorrelation {.no-padding}
 
 ```{r}
 plotly::plotlyOutput(outputId = "viz_autocorr_plot")
 ```
 
-
-Row 2 {data-height=600}
----------------------------------------------------------------------------
-
-### {.no-padding}
+### Decomposition {.no-padding}
 
 ```{r}
 plotly::plotlyOutput(outputId = "viz_decomp_plot")
 ```
 
-### {.no-padding}
+### Seasonality {.no-padding}
 
 ```{r}
 plotly::plotlyOutput(outputId = "viz_season_plot")
@@ -438,8 +346,8 @@ tags$div(
 
 ```{r analyze_hypothesis_server}
 data_test <- reactive({
-  data_imputed() |> 
-    transform_data(transformations = input$test_transf,	freq = ts_freq()) |> 
+  data_selected() |> 
+    transform_data(transformations = input$test_transf,	frequency = data_params()$freq) |> 
 		purrr::pluck("data_transformed")
 })
 
@@ -477,7 +385,7 @@ output$test_autocorr_plot <- plotly::renderPlotly({
   data_test() |>
     timetk::plot_acf_diagnostics(
       .date_var = date, .value = value, 
-      .lags = ifelse(ts_freq() < 60, ts_freq() * 3, 150),
+      .lags = data_params()$acf_n_lags,
       .interactive = TRUE, .title = "Autocorrelation", .y_lab = NULL
     )
 })
@@ -531,10 +439,6 @@ shinyWidgets::pickerInput(
 sliderInput(inputId = "anom_alpha", label = h5("Significance Level"), min = 0.00, max = 1, value = 0.02, step = 0.01)
 sliderInput(inputId = "anom_max_anomalies", label = h5("Max Anomalies (%)"), min = 0.00, max = 1, value = 0.1, step = 0.01)
 sliderInput(inputId = "anom_clean_alpha", label = h5("Cleaning level"), min = 0.00, max = 1, value = 0.75, step = 0.01)
-br()
-shinyWidgets::awesomeCheckbox(inputId = "anom_clean", label = "Save cleaned data?", value = FALSE)
-br()
-actionButton(inputId = "anomaly_reset", label = "Reset", icon = icon("sync"))
 
 tags$div(
   id = "sidebar-footer",
@@ -544,37 +448,11 @@ tags$div(
 ```
 
 ```{r analyze_anomaly_server}
-observeEvent(
-  eventExpr = input$anomaly_reset, 
-  handlerExpr = {
-  	shinyWidgets::updatePickerInput(session = session, inputId = "anom_method", selected = "stl")
-    updateSliderInput(session = session, inputId = "anom_alpha", value = 0.02)
-    updateSliderInput(session = session, inputId = "anom_max_anomalies", value = 0.1)
-    shinyWidgets::updateSwitchInput(session = session, inputId = "anom_clean", value = FALSE)
-  }
-)
-
-data_anomaly <- reactive({
-  data_imputed() |> 
-		anomaly_detection_and_cleaning(params = input, frequency = ts_freq())
-})
-
-data_cleaned <- reactive({
-  if (!input$anom_clean) {
-  	data_imputed()
-  } else {
-  	data_imputed() |>
-  		dplyr::select(-value) |> 
-  		dplyr::left_join(
-  			data_anomaly() |> 
-  				dplyr::select(date, observed_clean) |> 
-  				dplyr::rename("value" = "observed_clean")
-  		)
-  }
-})
+data_anomaly <- reactive({ detect_anomalies(data_selected(), params = input) })
+data_cleaned <- reactive({ clean_anomalies(data_selected(), data_anomaly()) })
 
 output$anomaly_plot <- plotly::renderPlotly({
-  data_anomaly() |> 
+  data_anomaly()|> 
 		timetk::plot_anomalies(.date_var = date) |> 
 		plotly::layout(showlegend = FALSE)
 })
@@ -643,25 +521,14 @@ Input {.sidebar}
 
 *Analyze - Transform* 
 ```{r analyze_transform_input}
+dateRangeInput(
+  inputId = "transf_date_range", label = h5("Date Period"),
+  start = as.Date("1940-01-01"), end = Sys.Date()
+)
 shinyWidgets::pickerInput(
   inputId = "transf", label = h5("Transformations"), multiple = TRUE,
   choices = transf[1:7], selected = NULL # not possible to do Diff and SDiff !!!!!
 )
-br()
-dateRangeInput(
-  inputId = "transf_date_range", label = h5("Date Period"),
-  start = as.Date("1940-01-01"), end = as.Date("2023-12-31")
-)
-shinyWidgets::materialSwitch(
-  inputId = "transf_smooth_line", label = h5("Smooth Line"), 
-  value = TRUE, status = "primary", inline = TRUE
-)
-numericInput(
-  inputId = "transf_acf_lag", label = h5("ACF Lag"),
-  value = 48, min = 1, max = 300, step = 1
-)
-br()
-actionButton(inputId = "transf_reset", label = "Reset", icon = icon("sync"))
 
 tags$div(
   id = "sidebar-footer",
@@ -671,49 +538,15 @@ tags$div(
 ```
 
 ```{r analyze_transform_server}
-observeEvent(
-  eventExpr = input$dataset,
-  handlerExpr = {
-    req(data_selected())
-    updateDateRangeInput(
-      session = session, inputId = "transf_date_range",
-      start = min(data_selected()$date), end = max(data_selected()$date)
-    )
-  }
-)
-
-observeEvent(
-  eventExpr = input$frequency, 
-  handlerExpr = {
-    updateNumericInput(
-      session = session, inputId = "transf_acf_lag", 
-      value = ifelse(ts_freq() < 60, ts_freq() * 3, 150), 
-      min = 1, max = 300, step = 1
-    )
-  }
-)
-
-observeEvent(
-  eventExpr = input$transf_reset, 
-  handlerExpr = {
-    shinyWidgets::updateMaterialSwitch(session = session, inputId = "transf_smooth_line", value = TRUE)
-    updateNumericInput(
-    	session = session, inputId = "transf_acf_lag", 
-    	value = ifelse(ts_freq() < 60, ts_freq() * 3, ts_freq())
-    )
-   shinyWidgets:: updatePickerInput(session = session, inputId = "transf", selected = NULL)
-  }
-)
-
 transform_params <- reactive({
 	data_cleaned() |> 
-    transform_data(transformations = input$transf,	freq = ts_freq()) |> 
+    transform_data(transformations = input$transf,	frequency = data_params()$freq) |> 
 		purrr::pluck("transform_params")
 })
 
 data_transformed <- reactive({
   data_cleaned() |> 
-    transform_data(transformations = input$transf,	freq = ts_freq()) |> 
+    transform_data(transformations = input$transf,	frequency = data_params()$freq) |> 
 		purrr::pluck("data_transformed") |> 
     dplyr::filter(dplyr::between(date, input$transf_date_range[1], input$transf_date_range[2]))
 })
@@ -722,7 +555,7 @@ output$transf_ts_plot_smooth <- plotly::renderPlotly({
   data_transformed() |>
     timetk::plot_time_series(
       .date_var = date, .value = value,
-      .smooth = input$transf_smooth_line, # ifelse(ts_freq() > 60, FALSE, TRUE),
+      .smooth = TRUE, .smooth_size = 0.5, 
       .interactive = TRUE
     )
 })
@@ -731,7 +564,7 @@ output$transf_autocorr_plot <- plotly::renderPlotly({
   data_transformed() |>
     timetk::plot_acf_diagnostics(
       .date_var = date, .value = value, 
-      .lags = input$transf_acf_lag, # ifelse(ts_freq() < 60, ts_freq() * 3, 150)
+      .lags = data_params()$acf_n_lags, 
       .interactive = TRUE,
       .title = "Autocorrelation", .y_lab = NULL,
     )
@@ -940,7 +773,6 @@ fileInput(
   buttonLabel = "Browse...", placeholder = "sep = ',' dec = '.'"
 )
 actionButton(inputId = "xfeat_import", label = "Import", icon = icon("upload"))
-actionButton(inputId = "xfeat_reset", label = "Reset", icon = icon("sync"))
 
 tags$div(
   id = "sidebar-footer",
@@ -951,14 +783,6 @@ tags$div(
 
 ```{r features_external_server}
 react_val <- reactiveValues(uploaded_xfeatures = NULL)
-
-observeEvent(
-  eventExpr = input$xfeat_reset, 
-  handlerExpr = {
-  	shinyjs::reset("upload_xfeatures")
-  	react_val$uploaded_xfeatures <- NULL
-  }
-)
 
 observeEvent(
 	eventExpr = input$xfeat_import, 
@@ -1008,7 +832,7 @@ output$xfeat_crosscorr_plot <- plotly::renderPlotly({
   	tidyr::drop_na() |> 
     timetk::plot_acf_diagnostics(
     	.date_var = date, .value = value, .ccf_vars = get_features(data_xfeatures(), names_only = TRUE)[-1],
-    	.lags = ifelse(ts_freq() < 60, ts_freq() * 3, 150),
+    	.lags = data_params()$acf_n_lags,
     	.show_white_noise_bars = TRUE, .show_ccf_vars_only = TRUE,
     	.interactive = TRUE, .title = NULL, .y_lab = NULL,
     	.facet_ncol = ifelse(length(get_features(data_xfeatures(), names_only = TRUE)[-1]) > 3, 2, 1)
@@ -1278,7 +1102,6 @@ shinyWidgets::pickerInput(
 shinyWidgets::awesomeCheckbox(inputId = "back_transf", label = "Back transform?", value = FALSE)
 
 actionButton(inputId = "apply_forecast", label = "Forecast!", icon = icon("play"))
-actionButton(inputId = "tsf_reset", label = "Reset", icon = icon("sync"))
 
 br() # break rule
 br() # break rule
@@ -1535,15 +1358,6 @@ conditionalPanel(
 ```
 
 ```{r forecast_test_server}
-observeEvent(
-  eventExpr = input$tsf_reset, 
-  handlerExpr = {
-    shinyWidgets::updatePickerInput(session = session, inputId = "method", selected = "Naive")
-    shinyWidgets::updateAwesomeCheckbox(session = session, inputId = "back_transf", value = FALSE)
-    # shinyjs::delay(ms = 300, expr = {shinyjs::click(id = "apply_forecast")})
-  }
-)
-
 forecast_results <- eventReactive(
   eventExpr = input$apply_forecast,
   valueExpr = {
@@ -1651,25 +1465,25 @@ plotly::plotlyOutput(outputId = "plot_oos_forecast")
 Row {data-height=500} 
 ---------------------------------------------------------------------------
 
-### Evaluation Metrics {.no-padding}
+### Evaluation Metrics {data-width=250 .no-padding}
 
 ```{r}
 DT::DTOutput(outputId = "accuracy_table")
 ```
 
-### Algorithm Summary {.no-padding}
+### Algorithm Summary {data-width=250 .no-padding}
 
 ```{r}
 verbatimTextOutput(outputId = "model_summary")
 ```
 
-### Residuals Time Plot {.no-padding}
+### Residuals Time Plot {data-width=250 .no-padding}
 
 ```{r}
 plotly::plotlyOutput(outputId = "plot_resid_ts")
 ```
 
-### Residuals ACF {.no-padding}
+### Residuals ACF {data-width=250 .no-padding}
 
 ```{r}
 plotly::plotlyOutput(outputId = "plot_resid_acf")
@@ -1699,8 +1513,6 @@ shinyWidgets::pickerInput(
 shinyWidgets::awesomeCheckbox(inputId = "exp_back_transf", label = "Back transform?", value = FALSE)
 
 actionButton(inputId = "exp_apply_forecast", label = "Explain!", icon = icon("play"))
-actionButton(inputId = "exp_reset", label = "Reset", icon = icon("sync"))
-
 br()
 br()
 br()
@@ -1722,17 +1534,6 @@ tags$div(
 ```
 
 ```{r forecast_explain_server}
-observeEvent(
-  eventExpr = input$exp_reset, 
-  handlerExpr = {
-    updateSelectInput(session = session, inputId = "exp_method", selected = "Linear Regression")
-    updateCheckboxInput(session = session, inputId = "exp_back_transf", value = FALSE)
-    updateTextInput(session = session, inputId = "exp_features", value = "")
-    updateTextInput(session = session, inputId = "exp_date", value = "")
-    # shinyjs::delay(ms = 300, expr = {shinyjs::click(id = "tune_apply_forecast")})
-  }
-)
-
 explainer_results <- eventReactive(
   eventExpr = input$exp_apply_forecast,
   valueExpr = {
@@ -1916,7 +1717,6 @@ shinyWidgets::pickerInput(
 )
 shinyWidgets::awesomeCheckbox(inputId = "tune_back_transf", label = "Back transform?", value = FALSE)
 actionButton(inputId = "tune_apply_forecast", label = "Optimize!", icon = icon("play"))
-actionButton(inputId = "tune_reset", label = "Reset", icon = icon("sync"))
 
 br()
 br()
@@ -2095,22 +1895,6 @@ tags$div(
 ```
 
 ```{r forecast_optimize_server}
-observeEvent(
-  eventExpr = input$tune_reset, 
-  handlerExpr = {
-    shinyWidgets::updatePrettyRadioButtons(session = session, inputId = "tune_valid_type", selected = "Time Series CV")
-    updateSliderInput(session = session, inputId = "tune_n_folds", value = 5)
-    updateSelectInput(session = session, inputId = "tune_valid_metric", selected = "RMSE")
-    shinyWidgets::updateAwesomeCheckbox(session = session, inputId = "tune_bayes", value = TRUE)
-    updateSliderInput(session = session, inputId = "tune_grid_size", value = 10)
-    updateSelectInput(session = session, inputId = "tune_method", selected = "Elastic Net")
-    shinyWidgets::updateAwesomeCheckbox(session = session, inputId = "tune_back_transf", value = FALSE)
-    shinyWidgets::updatePickerInput(session = session, inputId = "tune_elanet", selected = mtd_prm_names[["Elastic Net"]])
-    shinyWidgets::updateAwesomeCheckbox(session = session, inputId = "use_optim_model", value = FALSE)
-    # shinyjs::delay(ms = 300, expr = {shinyjs::click(id = "tune_apply_forecast")})
-  }
-)
-
 react_val <- reactiveValues(
 	tune_fit = purrr::set_names(vector("list", length(tune_methods)), tune_methods)
 )
@@ -2236,25 +2020,25 @@ plotly::plotlyOutput(outputId = "plot_tune_oos_forecast")
 Row {data-height=500} 
 ---------------------------------------------------------------------------
 
-### Evaluation Metrics {.no-padding}
+### Evaluation Metrics {data-width=250 .no-padding}
 
 ```{r}
 DT::DTOutput(outputId = "tune_accuracy_table")
 ```
 
-### Algorithm Summary {.no-padding}
+### Algorithm Summary {data-width=250 .no-padding}
 
 ```{r}
 verbatimTextOutput(outputId = "tune_model_summary")
 ```
 
-### Residuals Time Plot {.no-padding}
+### Residuals Time Plot {data-width=250 .no-padding}
 
 ```{r}
 plotly::plotlyOutput(outputId = "plot_tune_resid_ts")
 ```
 
-### Residuals ACF {.no-padding}
+### Residuals ACF {data-width=250 .no-padding}
 
 ```{r}
 plotly::plotlyOutput(outputId = "plot_tune_resid_acf")
@@ -2285,7 +2069,6 @@ shinyWidgets::pickerInput(
 shinyWidgets::awesomeCheckbox(inputId = "comp_back_transf", label = "Back transform?", value = FALSE)
 
 actionButton(inputId = "comp_apply_forecast", label = "Forecast!", icon = icon("play"))
-actionButton(inputId = "comp_reset", label = "Reset", icon = icon("sync"))
 
 tags$div(
   id = "sidebar-footer",
@@ -2295,15 +2078,6 @@ tags$div(
 ```
 
 ```{r forecast_compare_server}
-observeEvent(
-  eventExpr = input$comp_reset, 
-  handlerExpr = {
-    shinyWidgets::updatePickerInput(session = session, inputId = "comp_method", selected = c("ETS", "SARIMA"))
-    shinyWidgets::updateAwesomeCheckbox(session = session, inputId = "comp_back_transf", value = FALSE)
-    # shinyjs::delay(ms = 300, expr = {shinyjs::click(id = "tune_apply_forecast")})
-  }
-)
-
 react_val <- reactiveValues(
 	comp_fit = purrr::set_names(
 		vector("list", length(all_methods)), 
@@ -2473,12 +2247,6 @@ shinyWidgets::pickerInput(
 
 actionButton(inputId = "stk_apply_forecast", label = "Combine!", icon = icon("play"))
 
-br()
-br()
-br()
-
-actionButton(inputId = "ens_reset", label = "Reset", icon = icon("sync"))
-
 tags$div(
   id = "sidebar-footer",
   HTML("&copy; 2025 Marco Zanotti <br> Licensed under "),
@@ -2487,18 +2255,6 @@ tags$div(
 ```
 
 ```{r forecast_combine_server}
-observeEvent(
-  eventExpr = input$ens_reset, 
-  handlerExpr = {
-    shinyWidgets::updatePickerInput(session = session, inputId = "ens_method", selected = c("ETS", "SARIMA"))
-    shinyWidgets::updateAwesomeCheckbox(session = session, inputId = "ens_back_transf", value = FALSE)
-    shinyWidgets::updatePickerInput(session = session, inputId = "ens_type", selected = "Average")
-    shinyWidgets::updatePickerInput(session = session, inputId = "stk_type", selected = "Linear Regression")
-    # shinyWidgets::updateAwesomeCheckbox(session = session, inputId = "stk_tune", value = FALSE)
-    # shinyjs::delay(ms = 300, expr = {shinyjs::click(id = "tune_apply_forecast")})
-  }
-)
-
 react_val <- reactiveValues(combine_results = NULL)
 react_val <- reactiveValues(ens_fit = purrr::set_names(vector("list", length(all_methods)),	all_methods))
 
@@ -2691,10 +2447,7 @@ shinyWidgets::pickerInput(
   selected = "Naive"
 )
 shinyWidgets::awesomeCheckbox(inputId = "scn_back_transf", label = "Back transform?", value = FALSE)
-
 actionButton(inputId = "scn_apply_forecast", label = "Forecast!", icon = icon("play"))
-actionButton(inputId = "scn_reset", label = "Reset", icon = icon("sync"))
-
 br()
 br()
 br()
@@ -2720,20 +2473,7 @@ tags$div(
 ```
 
 ```{r forecast_scenario_server}
-observeEvent(
-  eventExpr = input$scn_reset, 
-  handlerExpr = {
-    updateSelectInput(session = session, inputId = "scn_method", selected = "Ensemble")
-    shinyWidgets::updateAwesomeCheckbox(session = session, inputId = "scn_back_transf", value = FALSE)
-    updateSliderInput(session = session, inputId = "scn_conf_lvl", value = 0.9)
-    updateSelectInput(session = session, inputId = "scn_aggreg_fun", selected = "sum")
-    updateNumericInput(session = session, inputId = "scn_adjust", value = 0)
-    # shinyjs::delay(ms = 300, expr = {shinyjs::click(id = "tune_apply_forecast")})
-  }
-)
-
 react_val <- reactiveValues(aggregate_n_future = NULL)
-
 observeEvent(
   eventExpr = input$scn_apply_forecast, 
   handlerExpr = {
@@ -2977,3 +2717,153 @@ DT::DTOutput(outputId = "scn_aggregate_table")
 ```{r}
 DT::DTOutput(outputId = "scn_wb_table")
 ```
+
+
+
+<!--- Global Options -->
+```{r global_options, include=FALSE}
+shinyjs::useShinyjs(rmd = TRUE) # use Shiny JavaScript
+
+# --- Data
+ids_data <- c("dataset", "upload_custom", "frequency", "horizon", "n_assess", "impute")
+# --- Analyze
+ids_analyze_visualize <- c()  # none yet
+ids_analyze_htest     <- c("test_transf")
+ids_analyze_anomaly   <- c("anom_method", "anom_alpha", "anom_max_anomalies", "anom_clean_alpha")
+ids_analyze_transform <- c("transf_date_range", "transf")
+# --- Features
+ids_features_internal <- c(
+	"feat_calendar", "feat_holiday", "feat_fourier_k", "feat_fourier_p",
+  "feat_spline_deg", "feat_lag", "feat_roll", "feat_inter"
+)
+ids_features_external <- c("upload_xfeatures")
+ids_features_selection <- c(
+	"featsel_cor_thresh", "featsel_pps_thresh", "featsel_lasso_thresh", 
+	"featsel_rf_thresh", "featsel_reg_formula", "use_feat_set"
+)
+# --- Forecast
+ids_test <- c(
+  "method", "back_transf", "apply_forecast",
+  # Rolling Average
+  "window_size",
+  # ETS
+  "auto_ets", "error", "trend", "season", "damping",
+  "smooth_level", "smooth_trend", "smooth_season",
+  # SARIMA
+  "auto_arima", "non_seasonal_ar", "non_seasonal_differences", "non_seasonal_ma",
+  "seasonal_ar", "seasonal_differences", "seasonal_ma",
+  # TBATS
+  "auto_tbats", "tbats_seasonal_period_1", "tbats_seasonal_period_2", "tbats_seasonal_period_3",
+  # STLM
+  "auto_stlm", "trend_model", "stlm_seasonal_period_1", "stlm_seasonal_period_2", "stlm_seasonal_period_3",
+  # Prophet
+  "auto_prophet", "growth", "logistic_cap", "logistic_floor",
+  "changepoint_num", "changepoint_range", "prophet_season",
+  "seasonality_yearly", "seasonality_weekly", "seasonality_daily",
+  "prior_scale_changepoints", "prior_scale_seasonality", "prior_scale_holidays",
+  # Elastic Net
+  "penalty", "mixture",
+  # MARS
+  "num_terms", "prod_degree", "prune_method",
+  # KNN
+  "neighbors",
+  # SVM
+  "boundary", "cost", "margin", "rbf_sigma",
+  # Random Forest
+  "rf_mtry", "rf_trees", "rf_min_n",
+  # Boosted Trees
+  "boost_method", "boost_mtry", "boost_trees", "boost_min_n",
+  "boost_tree_depth", "boost_learn_rate", "boost_loss_reduction", "boost_sample_size",
+  # Cubist
+  "committees", "cub_neighbors", "max_rules",
+  # Feed-Forward
+  "ff_hidden_units", "ff_penalty", "ff_epochs",
+  # Feed-Forward AR
+  "ffar_non_seasonal_ar", "ffar_seasonal_ar",
+  "ffar_hidden_units", "ffar_penalty", "ffar_epochs", "ffar_num_networks",
+  # ARIMA-Boost
+  "arima_boost_mtry", "arima_boost_trees", "arima_boost_min_n",
+  "arima_boost_tree_depth", "arima_boost_learn_rate", "arima_boost_loss_reduction", "arima_boost_sample_size",
+  # Prophet-Boost
+  "prophet_boost_mtry", "prophet_boost_trees", "prophet_boost_min_n",
+  "prophet_boost_tree_depth", "prophet_boost_learn_rate", "prophet_boost_loss_reduction", "prophet_boost_sample_size",
+  # H2O AutoML
+  "h2o_max_time", "h2o_max_time_model", "h2o_nfolds", "h2o_metric"
+)
+ids_explain <- c("exp_method", "exp_back_transf", "exp_apply_forecast", "exp_features", "exp_date")
+ids_optim <- c(
+  "tune_valid_type", "tune_n_folds", "tune_valid_metric", "tune_bayes", "tune_grid_size",
+  "tune_method", "tune_back_transf", "tune_apply_forecast",
+  "tune_elanet", "tune_mars", "tune_knn", "tune_boundary", "tune_svm_linear", "tune_svm_rbf",
+  "tune_rf", "tune_boost_method", "tune_boost", "tune_cub", "tune_ff", "tune_ffar",
+  "tune_arima_boost", "tune_prophet_boost", "use_optim_model"
+)
+ids_comp <- c("comp_method", "comp_back_transf", "comp_apply_forecast")
+ids_ens <- c(
+	"ens_method", "ens_back_transf", "ens_type", "stk_type",
+  "stk_apply_forecast", "ens_reset"
+)
+ids_scn <- c(
+	"scn_method", "scn_back_transf", "scn_apply_forecast",
+  "scn_conf_lvl", "scn_aggreg_fun", "scn_adjust"
+)
+ids_all <- c(
+	ids_data, ids_analyze_visualize, ids_analyze_htest, ids_analyze_anomaly,
+  ids_analyze_transform, ids_features_internal, ids_features_external,
+  ids_features_selection, ids_test, ids_explain, ids_optim, ids_comp, ids_ens, 
+	ids_scn
+)
+
+# reset button
+observeEvent(
+  eventExpr = input$data_reset, 
+  handlerExpr = {
+		reset_ids(ids_all)
+  	react_val$uploaded_data <- NULL
+  	react_val$uploaded_xfeatures <- NULL
+  }
+)
+
+# update date range when dataset or data_import
+observeEvent(
+	eventExpr = input$dataset, 
+	handlerExpr = {
+		shinyjs::reset("frequency")
+		updateNumericInput(session = session, inputId = "horizon", value = data_params()$horizon)
+		updateNumericInput(session = session, inputId = "n_assess", value = data_params()$n_assess)
+		updateDateRangeInput(
+			session = session, inputId = "transf_date_range",
+			start = data_params()$date_min, end = data_params()$date_max,
+			min = data_params()$date_min, max = data_params()$date_max
+		)
+		updateDateInput(
+			session = session, inputId = "exp_date",
+			value = data_params()$date_assess_min,
+			min = data_params()$date_assess_min, max = data_params()$date_assess_max
+		)
+})
+observeEvent(
+	eventExpr = input$data_import, 
+	handlerExpr = {
+		shinyjs::reset("frequency")
+		updateNumericInput(session = session, inputId = "horizon", value = data_params()$horizon)
+		updateNumericInput(session = session, inputId = "n_assess", value = data_params()$n_assess)
+		updateDateRangeInput(
+			session = session, inputId = "transf_date_range",
+			start = data_params()$date_min, end = data_params()$date_max,
+			min = data_params()$date_min, max = data_params()$date_max
+		)
+		updateDateInput(
+			session = session, inputId = "exp_date",
+			value = data_params()$date_assess_min,
+			min = data_params()$date_assess_min, max = data_params()$date_assess_max
+		)
+})
+observeEvent(
+	eventExpr = input$frequency, 
+	handlerExpr = {
+		updateNumericInput(session = session, inputId = "horizon", value = set_horizon(parse_frequency(input$frequency)))
+})
+```
+
+

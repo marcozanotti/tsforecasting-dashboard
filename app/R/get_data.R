@@ -13,9 +13,9 @@ get_data <- function(dataset_name, path = NULL) {
     )
   } else if (dataset_name == "Electricity Demand") { # Half-Hourly
     data <- tibble::tibble(
-      "date" = tsibbledata::vic_elec$Time,
+      "date" = tail(tsibbledata::vic_elec$Time, n = 8830),
       "id" = "Electricity Demand",
-      "value" = tsibbledata::vic_elec$Demand
+      "value" = tail(tsibbledata::vic_elec$Demand, n = 8830)
     )
   } else if (dataset_name == "Stock Price") { # Daily
     data <- tibble::tibble(

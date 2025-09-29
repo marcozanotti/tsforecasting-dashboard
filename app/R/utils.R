@@ -5,12 +5,12 @@ set_options <- function() {
   op.tsf.dashboard <- list(
   	tsf.dashboard.datasets = c(
   		"",
-  		"Air Passengers", "EU Population", # "Electricity Demand", 
+  		"Air Passengers", "EU Population", "Electricity Demand", 
   		"People Traffic", "Stock Price", "Tobacco Prod"
   	),
   	tsf.dashboard.frequencies = c(
-  		"year", "semester", "quarter", "month", "week", "bus-day", "day", 
-  		"bus-hour", "hour", "bus-half-hour", "half-hour"
+  		"Auto", "Year (1)", "Semester (2)", "Quarter (4)", "Month (12)", "Week (52)", "Bus-day (5)", "Day (7)", 
+  		"Hour (24)", "Half-hour (48)"
   	),
     tsf.dashboard.methods = list(
       "ts" = c("Naive", "Seasonal Naive", "Rolling Average", "ETS", "Theta", "SARIMA", "TBATS", "STLM", "Prophet"),
@@ -115,32 +115,84 @@ set_options <- function() {
 
 # function to convert frequency from character to numeric
 parse_frequency <- function(frequency) {
-  if (frequency == "year") {
+  if (frequency == "Auto") {
+    freq <- NULL
+	} else if (frequency == "Year (1)") {
     freq <- 1
-  } else if (frequency == "semester") {
+  } else if (frequency == "Semester (2)") {
     freq <- 2
-  } else if (frequency == "quarter") {
+  } else if (frequency == "Quarter (4)") {
     freq <- 4
-  } else if (frequency == "month") {
+  } else if (frequency == "Month (12)") {
     freq <- 12
-  } else if (frequency == "week") {
+  } else if (frequency == "Week (52)") {
     freq <- 52
-  } else if (frequency == "bus-day") {
-    freq <- 252
-  } else if (frequency == "day") {
-    freq <- 365
-  } else if (frequency == "bus-hour") {
-    freq <- 252 * 24
-  } else if (frequency == "hour") {
-    freq <- 365 * 24
-  } else if (frequency == "bus-half-hour") {
-    freq <- 252 * 48
-  } else if (frequency == "half-hour") {
-    freq <- 365 * 48
+  } else if (frequency == "Bus-day (5)") {
+    freq <- 5
+  } else if (frequency == "Day (7)") {
+    freq <- 7
+  } else if (frequency == "Hour (24)") {
+    freq <- 24
+  } else if (frequency == "Half-hour (48)") {
+    freq <- 48
   } else {
     stop(paste("Unknown frequency", frequency))
   }
   return(freq)
+}
+
+# function to convert the frequency value (number) into the number of ACF lags
+parse_acf_lags <- function(frequency) {
+  if (frequency == 1) {
+    lags <- 12
+  } else if (frequency == 2) {
+    lags <- 12
+  } else if (frequency == 4) {
+  	lags <- 24
+  } else if (frequency == 12) {
+  	lags <- 24
+  } else if (frequency == 52 | frequency == 13) {
+    lags <- 24
+  } else if (frequency == 5) {
+    lags <- 60
+  } else if (frequency == 7) {
+    lags <- 60
+  } else if (frequency == 24) {
+    lags <- 168
+  } else if (frequency == 48) {
+    lags <- 336
+  } else {
+    stop(paste("Unknown frequency", frequency))
+  }
+  return(lags)
+}
+
+# function to set the forecast horizon based on frequency
+set_horizon <- function(frequency) {
+  if (is.null(frequency)) {
+    h <- NULL
+	} else if (frequency == 1) {
+    h <- 6
+  } else if (frequency == 2) {
+    h <- 2 * 3
+  } else if (frequency == 4) {
+    h <- 8
+  } else if (frequency == 12) {
+    h <- 12
+  } else if (frequency == 52 | frequency == 13) {
+    h <- 13
+  } else if (frequency == 5) {
+    h <- 5 * 4 * 3 + 5
+  } else if (frequency == 7) {
+    h <- 7 * 4 * 3 + 8
+  } else if (frequency == 24) {
+    h <- 24 * 7
+  } else if (frequency == 48) {
+    h <- 48 * 7
+  } else {
+    stop(paste("Unknown frequency", frequency))
+  }
+  return(h)
 }
 
 # function to understand if the method is a time series or a machine learning one
@@ -305,4 +357,9 @@ parse_textinput <- function(x, format_to = "numeric") {
 		stop("Unknown format_to argument.")
 	}
 	return(x_res)
+}
+
+# function to reset shiny inputs
+reset_ids <- function(ids) {
+	lapply(ids, function(id) shinyjs::reset(id))
 }

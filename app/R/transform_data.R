@@ -1,10 +1,13 @@
 # function to impute missing values
-impute_data <- function(data, impute = FALSE, frequency) {
+# the argument frequency has been removed because if it is passed by the user it 
+# creates problems when the data frequency is not constant in reactive objects
+impute_data <- function(data, impute = FALSE) {
 
   if (impute == FALSE) {
     return(data)
   } else {
     logging::loginfo("Imputing missing values...")
+  	frequency <- timetk::tk_get_frequency(data[["date"]])
     n2f <- trunc(nrow(data) / frequency)
     p <- ifelse(n2f < 1, 1, 2)
     data_impute <- data |> 
@@ -14,24 +17,41 @@ impute_data <- function(data, impute = FALSE, frequency) {
 
 }
 
-# function to detect anomalies and clean data
-anomaly_detection_and_cleaning <- function(data, params, frequency) {
+# function to detect anomalies from data
+# the argument frequency has been removed because if it is passed by the user it 
+# creates problems when the data frequency is not constant in reactive objects
+detect_anomalies <- function(data, params) {
 	
 	logging::loginfo("Detecting anomalies...")
-	data_anom <- data |> 
-		timetk::anomalize(
+	data_anom <- timetk::anomalize(
+			.data = data,
 			.date_var = date, 
 			.value = value, 
-			.frequency = frequency,
+			.frequency = "auto", # frequency
 			.trend = "auto", 
 			.method = params$anom_method, 
 			.iqr_alpha = params$anom_alpha,
 			.max_anomalies = params$anom_max_anomalies, 
 			.clean_alpha = params$anom_clean_alpha,
 			.message = FALSE
-		)
-	
+	)
 	return(data_anom)
+	
+}
+
+# function to clean anomalies from data
+clean_anomalies <- function(data, data_anom) {
+
+	logging::loginfo("Cleaning anomalies...")
+	data_cleaned <- data |>
+		dplyr::select(-value) |>
+		dplyr::left_join(
+			data_anom |>
+				dplyr::select(date, observed_clean) |>
+				dplyr::rename("value" = "observed_clean"), 
+			by = c("date")
+		)
+	return(data_cleaned)
 	
 }
 

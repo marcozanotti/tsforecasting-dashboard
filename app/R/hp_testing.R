@@ -23,6 +23,11 @@ compute_hptests <- function(data, digits = 4) {
   x <- data$value
   x <- x[which(!is.na(x))]
   k <- trunc((length(x) - 1) ^ (1 / 3))
+  n <- length(x)
+  if (n > 5000) {
+    logging::logwarn("Sample size > 5000, cutting to 5000.")
+  	x <- tail(x, n = 5000)
+  }
 
   res <- tibble::tibble(
     "Type" = c(rep("normality", 2), rep("autocorrelation", 2), rep("stationarity", 3)),
