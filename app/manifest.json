@@ -903,7 +903,7 @@
         "Maintainer": "Emil Hvitfeldt <emil.hvitfeldt@posit.co>",
         "Repository": "CRAN",
         "Date/Publication": "2025-06-25 12:30:02 UTC",
-        "Built": "R 4.5.1; ; 2025-09-24 23:17:13 UTC; unix"
+        "Built": "R 4.5.1; ; 2025-09-29 12:26:50 UTC; unix"
       }
     },
     "broom": {
@@ -6501,13 +6501,13 @@
   },
   "files": {
     "forecast_app.Rmd": {
-      "checksum": "5ceceb89536c2125d45f9cd2a64d54a4"
+      "checksum": "3f0e23e57ffec8163e89cb8217fd6362"
     },
     "R/explain_model.R": {
       "checksum": "90d9e7d5fafcf42a744cd8d6e158fc51"
     },
     "R/fit_model.R": {
-      "checksum": "2de69c78373dced2a57a27935e296b86"
+      "checksum": "fd1ab68788fbca90a44c66f6d2fd875c"
     },
     "R/generate_feature.R": {
       "checksum": "0fe2a531f87e8f7c3905f42ed9e47564"
@@ -6516,30 +6516,30 @@
       "checksum": "21087d13aa5662479eb55f4df58ed8b8"
     },
     "R/get_data.R": {
-      "checksum": "4a7bc8e13c8367fe8bddfd0d1a13d0be"
+      "checksum": "e377cefbf393b6b721a2a13906cafbf9"
     },
     "R/global-vars.R": {
       "checksum": "805629d651158719e35ffcf2e7e2388d"
     },
     "R/hp_testing.R": {
-      "checksum": "fd223bf19d068e631172eb39ef7e012a"
+      "checksum": "87bb5f7fa0762df63f12bb4071f46c4b"
     },
     "R/metrics.R": {
       "checksum": "64be0a753c74c947f685273293c66f95"
     },
     "R/transform_data.R": {
-      "checksum": "d81906f68a057cee3d863f7e17efec39"
+      "checksum": "bb9fc22c2bcfe3f965ce6267c260568f"
     },
     "R/utils-packages.R": {
       "checksum": "23642f4e3c05d32814f6d6458dff9e9a"
     },
     "R/utils.R": {
-      "checksum": "b2d0d42ce0d99e9e692a607755fb934e"
+      "checksum": "47abae7412e1b76f6e5e90ac60b4421f"
     },
-    "styles-default.css": {
+    "www/styles-default.css": {
       "checksum": "fa37465b773adb3aac5dd6128cf472bd"
     },
-    "tsf_logo.png": {
+    "www/tsf_logo.png": {
       "checksum": "54fb126ef07bce015a7dfaab72edf964"
     }
   },
