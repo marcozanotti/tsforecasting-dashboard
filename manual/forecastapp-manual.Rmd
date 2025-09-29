@@ -23,7 +23,7 @@ The app is organized into four main sections —**Data**, **Analyze**, **Feature
 
 All actions performed in the app are **automatically saved**, meaning that any transformation, cleaning, or feature engineering applied to the series is carried forward to the subsequent steps. This ensures a consistent and reproducible workflow from raw data to final forecasts.  
 
-The app also provides great flexibility in analysis: interactive visualizations, configurable model parameters, and multiple options for evaluation and explanation allow users to tailor the process to their specific needs. Common controls, such as the **gear button** ⚙️, enable the selection of specific parameters. The **play button** ▶️ is used to execute actions like generating forecasts or running tests, while a **reset button** 🔄 is often available to clear all settings and start fresh. Moreover, 
+The app also provides great flexibility in analysis: interactive visualizations, configurable model parameters, and multiple options for evaluation and explanation allow users to tailor the process to their specific needs. Common controls, such as the **gear button** ⚙️, enable the selection of specific parameters. The **play button** ▶️ is used to execute actions like generating forecasts or running tests, while a **reset button** 🔄 is available to clear all settings and start fresh. Moreover, 
 for most tables displayed throughout the dashboard, an **Export** button is available, allowing users to download the table contents in **CSV** or **Excel** format for further use.  
 
 Follow this user guide to leverage the full potential of the Forecast App to obtain accurate forecasts, understand model behavior, and explore different scenarios for informed decision-making.  
@@ -63,9 +63,7 @@ The following frequencies are supported:
 - `week` (52 observations per year)  
 - `bus-day` (252 observations per year, business days)  
 - `day` (365 observations per year, calendar days)  
-- `bus-hour` (252 × 24 observations per year, business hours)  
 - `hour` (365 × 24 observations per year, calendar hours)  
-- `bus-half-hour` (252 × 48 observations per year, business half-hours)  
 - `half-hour` (365 × 48 observations per year, calendar half-hours)  
 
 #### Options available
@@ -74,6 +72,7 @@ Once a dataset is loaded, you have to set some important global parameters that 
 - **Frequency**: set the frequency of the time series (e.g., daily, weekly, monthly).  
 - **Forecast Horizon**: specify how many future periods to forecast.  
 - **Assessment Period**: define the historical period to be used for model assessment.  
+- **Impute missing values**: apply automatic interpolation based on the declared frequency to handle missing observations without the need of manual imputation.
 
 #### Explore the data
 You can briefly explore the dataset:  
@@ -113,21 +112,13 @@ These tools are designed to help you diagnose potential issues in the data and a
 
 The **Visualize** subsection allows you to explore the main characteristics of your time series through a set of interactive plots.  
 
-#### Options available
-When visualizing the data, you can adjust several parameters:  
-
-- **Select time period**: choose a start and end date to focus on a specific portion of the series.  
-- **Add smooth line**: overlay a smoothed curve on the time series plot to highlight the underlying trend.  
-- **ACF lags**: specify the number of lags to display in the Autocorrelation Function (ACF) plot.  
-- **Impute missing values**: apply automatic interpolation based on the declared frequency to handle missing observations before plotting.  
-
 #### Panels displayed
-Four plots are displayed simultaneously in a 2 × 2 layout:  
+Four plots are displayed:  
 
-1. **Time series plot** (top-left): shows the raw time series (with optional smoothing and imputation).  
-2. **Autocorrelation plot (ACF)** (top-right): displays correlations between the series and its lagged values.  
-3. **Decomposition plot** (bottom-left): breaks down the series into trend, seasonal, and residual components.  
-4. **Seasonality plot** (bottom-right): visualizes recurring seasonal patterns within the chosen frequency.  
+1. **Time series plot** shows the raw time series (with optional smoothing and imputation).  
+2. **Autocorrelation plot (ACF)**: displays correlations between the series and its lagged values.  
+3. **Decomposition plot**: breaks down the series into trend, seasonal, and residual components.  
+4. **Seasonality plot**: visualizes recurring seasonal patterns within the chosen frequency.  
 
 This visualization step helps you gain an initial understanding of the structure, seasonality, and quality of your time series before applying more advanced analysis or forecasting techniques. 
 
@@ -175,7 +166,6 @@ The subsection is organized into four panels:
 3. **Time series plot**: visualizes the raw (or transformed) series to support interpretation of the tests.  
 4. **Autocorrelation plot (ACF)**: highlights the presence of autocorrelation in the series.
 
-
 This subsection helps you assess whether the series is normally distributed, autocorrelated, or stationary — information that is crucial when deciding which forecasting models and preprocessing steps are most appropriate.  
 
 
@@ -190,7 +180,6 @@ You can adjust several parameters when detecting anomalies:
 - **Significance level**: set the statistical threshold for identifying anomalies.  
 - **Maximum % of anomalies**: limit the proportion of points flagged as anomalies.  
 - **Cleaning level**: define the quantile threshold used for the cleaning step.   
-- **Save cleaned data?**: save the cleaned version of the time series for use in subsequent analysis.  
 
 #### Panels displayed
 Two plots are generated to visualize the results:  
@@ -220,8 +209,6 @@ You can adjust the following parameters:
   - *Differencing*  
   - *Seasonal Differencing*  
 - **Time period**: select the start and end of the series to transform.  
-- **Smooth line**: add a smoothing line to visualize trends.  
-- **Number of lags for ACF plot**: adjust the lag parameter for the autocorrelation plot.  
 
 #### Panels displayed
 Four plots are generated to help you assess the effects of transformations:  
@@ -278,7 +265,6 @@ The **External Features** subsection allows you to include features from externa
 
 #### Options available
 - **Upload external dataset**: the dataset must follow the same structure as in Section 1, with columns `date`, `id`, and two or more feature columns.  
-- **Feature visualization**: choose how to explore the uploaded features: table, structure, or summary statistics.  
 
 #### Panels displayed
 1. **Table**: view the features data in tabular format.  
@@ -460,7 +446,6 @@ The **Combine** subsection allows the user to create ensembles of forecasting al
 - **Select ensemble method**: choose between simple mean of all selected forecasts, 
 weighted mean based on the ranking of algorithms' performance, or median of forecasts.
 - **Select stacking method**: choose the meta-learner for stacking (linear regression, elastic net, or boosted tree).
-- **Optimize stack?**: toggle to perform hyperparameter tuning for the stacking model.  
 - **Combine button**: click to produce the combined forecasts through simple ensembles or stacking.  
 
 #### Panels displayed
@@ -477,7 +462,6 @@ The **Scenario Analysis** subsection allows the user to generate alternative fut
 
 #### Options available
 - **Select forecast algorithm**: choose the algorithm to use for scenario generation (can also be a combination of models).  
-- **Use optimized algorithm?**: toggle to use the hyperparameter-optimized version if available.  
 - **Back-transform**: choose whether to back-transform forecasts if a transformation was applied.  
 - **Forecast button**: click to generate the baseline out-of-sample forecasts.  
 

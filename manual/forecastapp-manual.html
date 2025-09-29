@@ -7,7 +7,7 @@
 
         <meta name="author" content="Marco Zanotti" />
     
-        <meta name="date" content="2025-09-28" />
+        <meta name="date" content="2025-09-29" />
     
     <title>Forecast App - Manual</title>
 
@@ -1508,7 +1508,7 @@ margin-left: 0 !important;
       <p class="authors">
            <span class="glyphicon glyphicon-user"></span> Marco Zanotti
       </p>
-         <p class="date"><span class="glyphicon glyphicon-calendar"></span> 2025-09-28</p>
+         <p class="date"><span class="glyphicon glyphicon-calendar"></span> 2025-09-29</p>
            
 
    
@@ -1559,8 +1559,8 @@ specific needs. Common controls, such as the <strong>gear
 button</strong> ⚙️, enable the selection of specific parameters. The
 <strong>play button</strong> ▶️ is used to execute actions like
 generating forecasts or running tests, while a <strong>reset
-button</strong> 🔄 is often available to clear all settings and start
-fresh. Moreover, for most tables displayed throughout the dashboard, an
+button</strong> 🔄 is available to clear all settings and start fresh.
+Moreover, for most tables displayed throughout the dashboard, an
 <strong>Export</strong> button is available, allowing users to download
 the table contents in <strong>CSV</strong> or <strong>Excel</strong>
 format for further use.</p>
@@ -1620,14 +1620,8 @@ days)<br />
 </li>
 <li><code>day</code> (365 observations per year, calendar days)<br />
 </li>
-<li><code>bus-hour</code> (252 × 24 observations per year, business
-hours)<br />
-</li>
 <li><code>hour</code> (365 × 24 observations per year, calendar
 hours)<br />
-</li>
-<li><code>bus-half-hour</code> (252 × 48 observations per year, business
-half-hours)<br />
 </li>
 <li><code>half-hour</code> (365 × 48 observations per year, calendar
 half-hours)</li>
@@ -1645,7 +1639,11 @@ parameters that will be used throughout the app:</p>
 to forecast.<br />
 </li>
 <li><strong>Assessment Period</strong>: define the historical period to
-be used for model assessment.</li>
+be used for model assessment.<br />
+</li>
+<li><strong>Impute missing values</strong>: apply automatic
+interpolation based on the declared frequency to handle missing
+observations without the need of manual imputation.</li>
 </ul>
 </div>
 <div id="explore-the-data" class="section level4">
@@ -1709,39 +1707,21 @@ feature creation and forecasting.</p>
 <p>The <strong>Visualize</strong> subsection allows you to explore the
 main characteristics of your time series through a set of interactive
 plots.</p>
-<div id="options-available-1" class="section level4">
-<h4>Options available</h4>
-<p>When visualizing the data, you can adjust several parameters:</p>
-<ul>
-<li><strong>Select time period</strong>: choose a start and end date to
-focus on a specific portion of the series.<br />
-</li>
-<li><strong>Add smooth line</strong>: overlay a smoothed curve on the
-time series plot to highlight the underlying trend.<br />
-</li>
-<li><strong>ACF lags</strong>: specify the number of lags to display in
-the Autocorrelation Function (ACF) plot.<br />
-</li>
-<li><strong>Impute missing values</strong>: apply automatic
-interpolation based on the declared frequency to handle missing
-observations before plotting.</li>
-</ul>
-</div>
 <div id="panels-displayed" class="section level4">
 <h4>Panels displayed</h4>
-<p>Four plots are displayed simultaneously in a 2 × 2 layout:</p>
+<p>Four plots are displayed:</p>
 <ol style="list-style-type: decimal">
-<li><strong>Time series plot</strong> (top-left): shows the raw time
-series (with optional smoothing and imputation).<br />
+<li><strong>Time series plot</strong> shows the raw time series (with
+optional smoothing and imputation).<br />
 </li>
-<li><strong>Autocorrelation plot (ACF)</strong> (top-right): displays
-correlations between the series and its lagged values.<br />
+<li><strong>Autocorrelation plot (ACF)</strong>: displays correlations
+between the series and its lagged values.<br />
 </li>
-<li><strong>Decomposition plot</strong> (bottom-left): breaks down the
-series into trend, seasonal, and residual components.<br />
+<li><strong>Decomposition plot</strong>: breaks down the series into
+trend, seasonal, and residual components.<br />
 </li>
-<li><strong>Seasonality plot</strong> (bottom-right): visualizes
-recurring seasonal patterns within the chosen frequency.</li>
+<li><strong>Seasonality plot</strong>: visualizes recurring seasonal
+patterns within the chosen frequency.</li>
 </ol>
 <p>This visualization step helps you gain an initial understanding of
 the structure, seasonality, and quality of your time series before
@@ -1779,7 +1759,7 @@ required by forecasting models.</p>
 </ul></li>
 </ul>
 </div>
-<div id="options-available-2" class="section level4">
+<div id="options-available-1" class="section level4">
 <h4>Options available</h4>
 <p>Before running the tests, you can choose whether to apply a
 transformation to the series using a dropdown menu. The available
@@ -1836,7 +1816,7 @@ appropriate.</p>
 identify and optionally clean unusual observations in your time series.
 Detecting anomalies is important because extreme values can distort
 model estimation and forecasts.</p>
-<div id="options-available-3" class="section level4">
+<div id="options-available-2" class="section level4">
 <h4>Options available</h4>
 <p>You can adjust several parameters when detecting anomalies:</p>
 <ul>
@@ -1850,10 +1830,7 @@ for identifying anomalies.<br />
 points flagged as anomalies.<br />
 </li>
 <li><strong>Cleaning level</strong>: define the quantile threshold used
-for the cleaning step.<br />
-</li>
-<li><strong>Save cleaned data?</strong>: save the cleaned version of the
-time series for use in subsequent analysis.</li>
+for the cleaning step.</li>
 </ul>
 </div>
 <div id="panels-displayed-2" class="section level4">
@@ -1881,7 +1858,7 @@ transformations to your time series to improve its statistical
 properties and suitability for forecasting models. Transformations can
 stabilize variance, reduce skewness, or remove trends and
 seasonality.</p>
-<div id="options-available-4" class="section level4">
+<div id="options-available-3" class="section level4">
 <h4>Options available</h4>
 <p>You can adjust the following parameters:</p>
 <ul>
@@ -1908,13 +1885,7 @@ apply to the series. Available transformations include:
 </li>
 </ul></li>
 <li><strong>Time period</strong>: select the start and end of the series
-to transform.<br />
-</li>
-<li><strong>Smooth line</strong>: add a smoothing line to visualize
-trends.<br />
-</li>
-<li><strong>Number of lags for ACF plot</strong>: adjust the lag
-parameter for the autocorrelation plot.</li>
+to transform.</li>
 </ul>
 </div>
 <div id="panels-displayed-3" class="section level4">
@@ -1963,7 +1934,7 @@ features to use in your models.</li>
 create features derived directly from your time series. These features
 can capture trends, seasonality, and other patterns that improve the
 accuracy of forecasting models.</p>
-<div id="options-available-5" class="section level4">
+<div id="options-available-4" class="section level4">
 <h4>Options available</h4>
 <ul>
 <li><strong>Add calendar features</strong>: include day, week, month,
@@ -2027,15 +1998,12 @@ equal than two and are computed only on the maximum lag order.</p>
 include features from external datasets that may influence your time
 series. These features help improve forecast accuracy by incorporating
 additional information.</p>
-<div id="options-available-6" class="section level4">
+<div id="options-available-5" class="section level4">
 <h4>Options available</h4>
 <ul>
 <li><strong>Upload external dataset</strong>: the dataset must follow
 the same structure as in Section 1, with columns <code>date</code>,
-<code>id</code>, and two or more feature columns.<br />
-</li>
-<li><strong>Feature visualization</strong>: choose how to explore the
-uploaded features: table, structure, or summary statistics.</li>
+<code>id</code>, and two or more feature columns.</li>
 </ul>
 </div>
 <div id="panels-displayed-5" class="section level4">
@@ -2074,7 +2042,7 @@ otherwise it is not possible to perform Feature selection.</p>
 identify the most relevant features to use in your forecasting models.
 Different statistical and machine learning methods help evaluate the
 predictive power of internal and external features.</p>
-<div id="options-available-7" class="section level4">
+<div id="options-available-6" class="section level4">
 <h4>Options available</h4>
 <ul>
 <li><strong>Absolute Correlation Threshold</strong>: set the minimum
@@ -2161,7 +2129,7 @@ assess their impact on forecasts.</li>
 <p>The <strong>Test &amp; Evaluate</strong> subsection allows you to fit
 a forecasting model and evaluate its performance over the specified
 assessment period.</p>
-<div id="options-available-8" class="section level4">
+<div id="options-available-7" class="section level4">
 <h4>Options available</h4>
 <ul>
 <li><strong>Select forecast algorithm</strong>: choose the model to use
@@ -2275,7 +2243,7 @@ frameworks.
 <p>The <strong>Explain</strong> subsection allows the user to understand
 how the selected forecasting algorithm produces its predictions using
 eXplainable AI techniques. The process is divided into two steps.</p>
-<div id="options-available-9" class="section level4">
+<div id="options-available-8" class="section level4">
 <h4>Options available</h4>
 <ul>
 <li><strong>Step 1: Select Algorithm</strong>
@@ -2329,7 +2297,7 @@ ARIMA-Boost, Prophet-Boost, and H2O AutoML.</p>
 <h3>Optimize</h3>
 <p>The <strong>Optimize</strong> subsection allows you to perform
 hyperparameter tuning for a selected forecasting model.</p>
-<div id="options-available-10" class="section level4">
+<div id="options-available-9" class="section level4">
 <h4>Options available</h4>
 <ul>
 <li><strong>Select forecast algorithm</strong>: choose the model for
@@ -2399,7 +2367,7 @@ ARIMA-Boost, and Prophet-Boost.</p>
 <h3>Compare</h3>
 <p>The <strong>Compare</strong> subsection allows you to compare the
 forecasts of multiple algorithms.</p>
-<div id="options-available-11" class="section level4">
+<div id="options-available-10" class="section level4">
 <h4>Options available</h4>
 <ul>
 <li><strong>Select forecast algorithm</strong>: choose the models to
@@ -2437,7 +2405,7 @@ algorithm.</li>
 <p>The <strong>Combine</strong> subsection allows the user to create
 ensembles of forecasting algorithms using simple combination methods or
 stacking approaches.</p>
-<div id="options-available-12" class="section level4">
+<div id="options-available-11" class="section level4">
 <h4>Options available</h4>
 <ul>
 <li><strong>Select forecast algorithm</strong>: select one or more
@@ -2450,9 +2418,6 @@ of all selected forecasts, weighted mean based on the ranking of
 algorithms’ performance, or median of forecasts.</li>
 <li><strong>Select stacking method</strong>: choose the meta-learner for
 stacking (linear regression, elastic net, or boosted tree).</li>
-<li><strong>Optimize stack?</strong>: toggle to perform hyperparameter
-tuning for the stacking model.<br />
-</li>
 <li><strong>Combine button</strong>: click to produce the combined
 forecasts through simple ensembles or stacking.</li>
 </ul>
@@ -2481,14 +2446,11 @@ model.</li>
 generate alternative future scenarios based on one selected forecasting
 model. This step is always performed after obtaining forecasts, either
 from a single model or from combinations (ensembles or stacking).</p>
-<div id="options-available-13" class="section level4">
+<div id="options-available-12" class="section level4">
 <h4>Options available</h4>
 <ul>
 <li><strong>Select forecast algorithm</strong>: choose the algorithm to
 use for scenario generation (can also be a combination of models).<br />
-</li>
-<li><strong>Use optimized algorithm?</strong>: toggle to use the
-hyperparameter-optimized version if available.<br />
 </li>
 <li><strong>Back-transform</strong>: choose whether to back-transform
 forecasts if a transformation was applied.<br />
