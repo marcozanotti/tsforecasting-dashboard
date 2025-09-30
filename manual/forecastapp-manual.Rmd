@@ -480,3 +480,102 @@ Once the baseline forecast is produced, the user can define three scenario param
 > ⚠️ **Note:** If combinations of models were used, only the best performing combination (in ensemble or stacking) is used for scenario analysis.  
 
 > ⚠️ **Note:** The worst and best case scenarios are not affected by the manual adjustments.
+
+
+
+## Typical User Workflow
+
+This section describes the typical process of using the application from start to finish. While users may explore the app in different ways, the following workflow ensures a structured and reproducible analysis.
+
+### 1. Import the Data
+1. **Load the dataset**  
+   - Choose between a predefined dataset (via the dataset selector) or upload a custom file.  
+   - Once loaded, the available date range (`min_date` and `max_date`) is automatically detected.  
+2. **Set basic parameters**  
+   - **Frequency** of the time series.  
+   - **Forecast Horizon** to specify how far ahead forecasts will be generated.  
+   - **Assessment Period** to define the evaluation window.  
+3. **Data editing**  
+   - The dataset table is editable: users can directly modify values before proceeding.  
+4. **Export**  
+   - Tables can be exported to CSV or Excel for external use.
+
+
+### 2. Analyze the Data
+
+#### a. Visualization
+- Inspect raw and cleaned time series with interactive plots.  
+- Visualize transformations and decompositions.  
+
+#### b. Hypothesis Testing
+- Apply a range of statistical tests on the data.  
+
+#### c. Anomaly Detection
+- Select the **Anomaly Method** (currently only STL).  
+- Set the **Cleaning Level** (quantile for filtering).  
+- Review anomalies in a dedicated table.  
+
+#### d. Transformation
+- Adjust the **Date Period** using the date range selector.  
+- Apply selected transformations to the dataset.
+
+
+### 3. Create Features
+
+#### a. Internal Features
+- Add **calendar features**, **holiday features**, **Fourier terms**, **splines**, **lags**, **rolling periods**, and **interactions**.  
+- Inputs are flexible and can be updated interactively.
+
+#### b. External Features
+- Upload external regressors to enrich the dataset.
+
+#### c. Feature Selection
+- Compute **correlation**, **predictive power score (PPS)**, **LASSO**, and **Random Forest** importance.  
+- All scores are normalized between 0 and 1.  
+- Adjust thresholds to refine selection.  
+- Save the selected feature set for forecasting.  
+- Inspect the final dataset containing only selected features in a dedicated panel.  
+
+
+### 4. Test some Models
+- Run preliminary models with default configurations.  
+- Evaluate **point accuracy** and **probabilistic accuracy** on the assessment period.  
+- Use metrics such as RMSE, MAE, or coverage probabilities.  
+- Identify baseline performance before optimization.  
+
+
+### 5. Explain
+- Analyze **feature importance** across different algorithms.  
+- Understand the drivers of the forecast through variable importance plots, coefficients, or SHAP-style explanations.  
+- Facilitate interpretability for both technical and non-technical stakeholders.  
+
+
+### 6. Optimize
+1. Choose a **Forecast Algorithm** from machine learning, deep learning, or mixed methods.  
+2. Configure **validation strategy**:  
+   - Time Series CV or K-Fold CV.  
+   - Number of folds, metric, and whether to use Bayesian optimization.  
+3. Adjust **grid size** for search.  
+4. Set hyperparameters to optimize (depending on the algorithm).  
+5. Launch optimization with the **Optimize!** button.  
+6. Once completed, the optimized model can be reused:  
+   - Enable the option **Use current optimized algorithm?** to carry it forward into the Forecasting section.
+
+
+### 7. Compare
+- Evaluate multiple algorithms side by side.  
+- Compare models on accuracy, computation time, and robustness.  
+- Results are presented both visually and in tabular format.  
+
+
+### 8. Combine
+- Build **ensemble models** by combining forecasts from different algorithms.  
+- Evaluate whether ensembling improves predictive performance over single models.  
+- Trade off **accuracy gains** with **computational cost**.  
+
+
+### 9. ... and finally Forecast!
+- Translate forecasts into **business scenarios**.  
+- Adjust forecasts based on external or managerial inputs.  
+- Generate alternative **what-if scenarios** (e.g., demand shocks, promotions, policy changes).  
+- Facilitate communication of results with stakeholders through scenario-driven visualizations.  
