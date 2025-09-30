@@ -190,14 +190,6 @@ output$data_summ <- renderPrint({
 	req(data_loaded()) 
 	skimr::skim(react_val[["data_edited"]]) 
 })
-
-output$DEBUG <- renderPrint({ 
-	list(
-		"uploaded_data" = react_val$uploaded_data,
-		"data_edited" = react_val$data_edited,
-		"acf_n_lags" = react_val$acf_n_lags
-	)
-})
 ```
 
 
@@ -214,11 +206,6 @@ DT::DTOutput(outputId = "data_table")
 
 ```{r}
 verbatimTextOutput(outputId = "data_summ")
-```
-
-### Debug {.no-padding}
-```{r}
-verbatimTextOutput(outputId = "DEBUG")
 ```
 
 
@@ -2834,9 +2821,44 @@ observeEvent(
   	react_val$comp_fit <- NULL
   	react_val$combine_results <- NULL
   	react_val$ens_fit <- purrr::set_names(vector("list", length(all_methods)),	all_methods)
-  	react_val$aggregate_n_future <- NULL
-  	# reset outputs
-  	output$plot_test_forecast <- plotly::renderPlotly({ return() })
+  	react_val$aggregate_n_future <- input$horizon
+  	# # reset outputs
+  	# # test & evaluate
+  	# output$plot_test_forecast <- plotly::renderPlotly({ return() })
+  	# output$plot_oos_forecast <- plotly::renderPlotly({ return() })
+  	# output$accuracy_table <- DT::renderDataTable({ return() })
+  	# output$model_summary <- textOutput({ return() })
+  	# output$plot_resid_ts <- plotly::renderPlotly({ return() })
+  	# output$plot_resid_acf <- plotly::renderPlotly({ return() })
+  	# # explain
+  	# output$exp_features_table <- DT::renderDataTable({ return() })
+  	# output$plot_exp_featimp <- plotOutput({ return() })
+  	# output$plot_exp_varresp <- plotOutput({ return() })
+  	# output$plot_exp_bd <- plotOutput({ return() })
+  	# output$plot_exp_locstab <- plotOutput({ return() })
+  	# # optimize
+  	# output$plot_tune_test_forecast <- plotly::renderPlotly({ return() })
+  	# output$plot_tune_oos_forecast <- plotly::renderPlotly({ return() })
+  	# output$tune_accuracy_table <- DT::renderDataTable({ return() })
+  	# output$tune_model_summary <- textOutput({ return() })
+  	# output$plot_tune_resid_ts <- plotly::renderPlotly({ return() })
+  	# output$plot_tune_resid_acf <- plotly::renderPlotly({ return() })
+  	# # compare
+  	# output$plot_comp_test_forecast <- plotly::renderPlotly({ return() })
+  	# output$plot_comp_oos_forecast <- plotly::renderPlotly({ return() })
+  	# output$comp_accuracy_table <- DT::renderDataTable({ return() })
+  	# output$comp_model_summary <- textOutput({ return() })
+  	# # combine
+  	# output$plot_ens_test_forecast <- plotly::renderPlotly({ return() })
+  	# output$plot_ens_oos_forecast <- plotly::renderPlotly({ return() })
+  	# output$ens_accuracy_table <- DT::renderDataTable({ return() })
+  	# output$ens_model_summary <- textOutput({ return() })
+  	# # scenario
+  	# output$plot_scn_oos_forecast_fan <- plotly::renderPlotly({ return() })
+  	# output$plot_scn_oos_forecast_wb <- plotly::renderPlotly({ return() })
+  	# output$scn_accuracy_table <- DT::renderDataTable({ return() })
+  	# output$scn_aggregate_table <- DT::renderDataTable({ return() })
+  	# output$scn_wb_table <- DT::renderDataTable({ return() })
   }
 )
 
