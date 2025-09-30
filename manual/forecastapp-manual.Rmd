@@ -78,7 +78,6 @@ Once a dataset is loaded, you have to set some important global parameters that 
 You can briefly explore the dataset:  
 
 - **Table**: view the raw data in tabular format  
-- **Structure**: check the internal structure of the dataset (variable types, number of rows, etc.)  
 - **Summary statistics**: obtain basic descriptive statistics of the time series (mean, median, min, max, missing values, etc.)  
 
 This initial exploration helps you quickly assess whether the data has been uploaded correctly and is ready for further analysis.  
@@ -249,10 +248,9 @@ The **Internal Features** subsection allows you to create features derived direc
 
 #### Panels displayed
 1. **Table**: view the features data in tabular format.  
-2. **Structure**: check the internal structure of the features (variable types, number of rows, etc.).  
-3. **Summary statistics**: obtain basic descriptive statistics of the features (mean, median, min, max, missing values, etc.).  
-4. **Time series plot with features**: displays the original series together with all added features for visual inspection.  
-5. **Correlation**: shows the correlation between the time series and internal features.  
+2. **Summary statistics**: obtain basic descriptive statistics of the features (mean, median, min, max, missing values, etc.).  
+3. **Time series plot with features**: displays the original series together with all added features for visual inspection.  
+4. **Correlation**: shows the correlation between the time series and internal features.  
 
 > ⚠️ **Note:** Lag orders must be greater or equal than the forecast horizon in order to be used in forecasting.   
 
@@ -268,10 +266,9 @@ The **External Features** subsection allows you to include features from externa
 
 #### Panels displayed
 1. **Table**: view the features data in tabular format.  
-2. **Structure**: check the internal structure of the features (variable types, number of rows, etc.).  
-3. **Summary statistics**: obtain basic descriptive statistics of the features (mean, median, min, max, missing values, etc.).  
-2. **Time series plot with features**: displays the original series together with the selected external features.  
-3. **Cross-correlation plot**: visualizes the correlation between the time series and external features to assess potential predictive power.  
+2. **Summary statistics**: obtain basic descriptive statistics of the features (mean, median, min, max, missing values, etc.).  
+3. **Time series plot with features**: displays the original series together with the selected external features.  
+4. **Cross-correlation plot**: visualizes the correlation between the time series and external features to assess potential predictive power.  
 
 > ⚠️ **Note:** External features must be available in the future for the whole forecast horizon to be used in forecasting.   
 

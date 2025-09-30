@@ -65,6 +65,10 @@ transform_data <- function(data, transformations, frequency) {
 	}
 	init_params <- vector("list", length = length(trf_prm)) |> purrr::set_names(trf_prm)
 	
+	if (is.character(frequency)) {
+		frequency <- parse_frequency(frequency)
+	}
+	
 	if (all(!trf_prm %in% transformations)) {
 		data_transf <- data
 	} else {

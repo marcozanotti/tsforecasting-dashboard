@@ -141,34 +141,13 @@ parse_frequency <- function(frequency) {
   return(freq)
 }
 
-# function to convert the frequency value (number) into the number of ACF lags
-parse_acf_lags <- function(frequency) {
-  if (frequency == 1) {
-    lags <- 12
-  } else if (frequency == 2) {
-    lags <- 12
-  } else if (frequency == 4) {
-  	lags <- 24
-  } else if (frequency == 12) {
-  	lags <- 24
-  } else if (frequency == 52 | frequency == 13) {
-    lags <- 24
-  } else if (frequency == 5) {
-    lags <- 60
-  } else if (frequency == 7) {
-    lags <- 60
-  } else if (frequency == 24) {
-    lags <- 168
-  } else if (frequency == 48) {
-    lags <- 336
-  } else {
-    stop(paste("Unknown frequency", frequency))
-  }
-  return(lags)
-}
-
 # function to set the forecast horizon based on frequency
 set_horizon <- function(frequency) {
+	
+	if (is.character(frequency)) {
+		frequency <- parse_frequency(frequency)
+	}
+	
   if (is.null(frequency)) {
     h <- NULL
 	} else if (frequency == 1) {
@@ -182,9 +161,9 @@ set_horizon <- function(frequency) {
   } else if (frequency == 52 | frequency == 13) {
     h <- 13
   } else if (frequency == 5) {
-    h <- 5 * 4 * 3 + 5
+    h <- 5 * 4 * 3
   } else if (frequency == 7) {
-    h <- 7 * 4 * 3 + 8
+    h <- 7 * 4 * 3 + 6
   } else if (frequency == 24) {
     h <- 24 * 7
   } else if (frequency == 48) {
@@ -193,6 +172,39 @@ set_horizon <- function(frequency) {
     stop(paste("Unknown frequency", frequency))
   }
   return(h)
+}
+
+# function to convert the frequency value (number) into the number of ACF lags
+set_acf_lags <- function(frequency, horizon) {
+	
+	if (is.character(frequency)) {
+		frequency <- parse_frequency(frequency)
+	}
+	
+	if (is.null(frequency)) {
+		lags <- NULL
+	}	else if (frequency == 1) {
+		lags <- horizon * 2
+	} else if (frequency == 2) {
+		lags <- horizon * 2
+	} else if (frequency == 4) {
+		lags <- horizon * 3
+	} else if (frequency == 12) {
+		lags <- horizon * 4
+	} else if (frequency == 52 | frequency == 13) {
+		lags <- horizon * 4
+	} else if (frequency == 5) {
+		lags <- horizon
+	} else if (frequency == 7) {
+		lags <- horizon
+	} else if (frequency == 24) {
+		lags <- horizon
+	} else if (frequency == 48) {
+		lags <- horizon
+	} else {
+		stop(paste("Unknown frequency", frequency))
+	}
+	return(lags)
 }
 
 # function to understand if the method is a time series or a machine learning one

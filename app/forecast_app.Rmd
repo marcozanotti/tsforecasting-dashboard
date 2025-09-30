@@ -123,11 +123,6 @@ numericInput(
 	value = 24, min = 1, max = Inf, step = 1, width = "100%"
 )
 shinyWidgets::awesomeCheckbox(inputId = "impute", label = "Impute missing values?", value = FALSE)
-# shinyWidgets::prettyRadioButtons(
-# 	inputId = "assess_type", label = "Assessment Type",
-# 	choices = c("Expanding", "Rolling"), selected = "Expanding",
-# 	inline = TRUE
-# )
 br()
 br()
 actionButton(inputId = "data_reset", label = "Reset", icon = icon("sync"))
@@ -140,7 +135,7 @@ tags$div(
 ```
 
 ```{r data_server}
-react_val <- reactiveValues(uploaded_data = NULL)
+react_val <- reactiveValues(uploaded_data = NULL,	data_edited = NULL, acf_n_lags = NULL)
 
 observeEvent(
 	eventExpr = input$data_import, 
@@ -155,41 +150,27 @@ observeEvent(
 
 data_loaded <- reactive({
   if (is.null(react_val$uploaded_data)) {
-  	get_data(input$dataset) 
+  	data <- get_data(input$dataset) 
   } else {
-    get_data("custom", path = react_val$uploaded_data$datapath)
+    data <- get_data("custom", path = react_val$uploaded_data$datapath)
   }
+	react_val[["data_edited"]] <- data
+	return(data)
 })
 
-data_selected <- reactive({
+data_imputed <- reactive({
 	req(data_loaded())
 	if (input$impute) {
-		data_loaded() |> dplyr::arrange(date) |> impute_data(impute = input$impute)
+		data <- data_loaded() |> dplyr::arrange(date) |> impute_data(impute = input$impute)
 	} else {
-  	data_loaded() |> dplyr::arrange(date)
-  }
-})
-
-data_params <- reactive({ 
-	req(data_loaded()) 
-	n <- nrow(data_loaded())
-	freq <- ifelse(input$frequency == "Auto", timetk::tk_get_frequency(data_loaded()[["date"]]), parse_frequency(input$frequency)) 
-	date_min <- min(data_loaded()[["date"]])
-	date_max <- max(data_loaded()[["date"]])
-	acf_n_lags <- parse_acf_lags(freq)
-	horizon <- set_horizon(freq)
-	n_assess <- round(n * 0.2) # 20% of data
-	date_assess_min <- tail(data_loaded()[["date"]], n = horizon + n_assess)[1]
-	date_assess_max <- tail(data_loaded()[["date"]], n = horizon + n_assess)[n_assess]
-	list(
-		"n" = n, "freq" = freq, "date_min" = date_min, "date_max" = date_max, 
-		"acf_n_lags" = acf_n_lags, "horizon" = horizon, "n_assess" = n_assess,
-		"date_assess_min" = date_assess_min, "date_assess_max" = date_assess_max
-	)
+  	data <- data_loaded() |> dplyr::arrange(date)
+	}
+	react_val[["data_edited"]] <- data
+	return(data)
 })
 
 output$data_table <- DT::renderDT({
-  data_selected() |>
+  data_imputed() |>
       DT::datatable(
       	editable = "cell", filter = "top",
         options = list(
@@ -200,8 +181,23 @@ output$data_table <- DT::renderDT({
 	}, 
 	server = TRUE
 )
-output$data_str <- renderPrint({ dplyr::glimpse(data_selected()) })
-output$data_summ <- renderPrint({ skimr::skim(data_selected()) })
+
+observeEvent(input$data_table_cell_edit, {
+	react_val[["data_edited"]] <- DT::editData(react_val[["data_edited"]], input$data_table_cell_edit, 'data_table')
+})
+
+output$data_summ <- renderPrint({ 
+	req(data_loaded()) 
+	skimr::skim(react_val[["data_edited"]]) 
+})
+
+output$DEBUG <- renderPrint({ 
+	list(
+		"uploaded_data" = react_val$uploaded_data,
+		"data_edited" = react_val$data_edited,
+		"acf_n_lags" = react_val$acf_n_lags
+	)
+})
 ```
 
 
@@ -214,16 +210,15 @@ Row 1 {.tabset}
 DT::DTOutput(outputId = "data_table")
 ```
 
-### Structure {.no-padding}
-
-```{r}
-verbatimTextOutput(outputId = "data_str")
-```
-
 ### Summary {.no-padding}
 
 ```{r}
 verbatimTextOutput(outputId = "data_summ")
+```
+
+### Debug {.no-padding}
+```{r}
+verbatimTextOutput(outputId = "DEBUG")
 ```
 
 
@@ -244,8 +239,13 @@ tags$div(
 ```
 
 ```{r analyze_visualize_server}
+data_viz <- reactive({ 
+	req(data_imputed())
+	react_val[["data_edited"]] 
+})
+
 output$viz_ts_plot_smooth <- plotly::renderPlotly({
-  data_selected() |>
+  data_viz() |>
     timetk::plot_time_series(
       .date_var = date, .value = value,
       .smooth = TRUE, .smooth_size = 0.5, 
@@ -254,17 +254,17 @@ output$viz_ts_plot_smooth <- plotly::renderPlotly({
 })
 
 output$viz_autocorr_plot <- plotly::renderPlotly({
-  data_selected() |>
+  data_viz() |>
     timetk::plot_acf_diagnostics(
       .date_var = date, .value = value, 
-      .lags = data_params()$acf_n_lags, 
+      .lags = react_val[["acf_n_lags"]], 
       .interactive = TRUE,
       .title = "Autocorrelation", .y_lab = NULL,
     )
 })
 
 output$viz_decomp_plot <- plotly::renderPlotly({
-  data_selected() |>
+  data_viz() |>
     timetk::plot_stl_diagnostics(
     	.date_var = date, .value = value, 
     	.feature_set = c("season", "trend", "remainder"), .interactive = TRUE,
@@ -273,7 +273,7 @@ output$viz_decomp_plot <- plotly::renderPlotly({
 })
 
 output$viz_season_plot <- plotly::renderPlotly({
-  data_selected() |>
+  data_viz() |>
     timetk::plot_seasonal_diagnostics(
       .date_var = date, .value = value, 
       .interactive = TRUE, .title = "Seasonality"
@@ -346,8 +346,9 @@ tags$div(
 
 ```{r analyze_hypothesis_server}
 data_test <- reactive({
-  data_selected() |> 
-    transform_data(transformations = input$test_transf,	frequency = data_params()$freq) |> 
+	req(data_imputed())
+  react_val[["data_edited"]] |> 
+    transform_data(transformations = input$test_transf,	frequency = input$frequency) |> 
 		purrr::pluck("data_transformed")
 })
 
@@ -385,7 +386,7 @@ output$test_autocorr_plot <- plotly::renderPlotly({
   data_test() |>
     timetk::plot_acf_diagnostics(
       .date_var = date, .value = value, 
-      .lags = data_params()$acf_n_lags,
+      .lags = react_val[["acf_n_lags"]],
       .interactive = TRUE, .title = "Autocorrelation", .y_lab = NULL
     )
 })
@@ -448,8 +449,14 @@ tags$div(
 ```
 
 ```{r analyze_anomaly_server}
-data_anomaly <- reactive({ detect_anomalies(data_selected(), params = input) })
-data_cleaned <- reactive({ clean_anomalies(data_selected(), data_anomaly()) })
+data_anomaly <- reactive({ 
+	req(data_imputed())
+	detect_anomalies(react_val[["data_edited"]], params = input)
+})
+data_cleaned <- reactive({ 
+	req(data_imputed())
+	clean_anomalies(react_val[["data_edited"]], data_anomaly()) 
+})
 
 output$anomaly_plot <- plotly::renderPlotly({
   data_anomaly()|> 
@@ -540,13 +547,13 @@ tags$div(
 ```{r analyze_transform_server}
 transform_params <- reactive({
 	data_cleaned() |> 
-    transform_data(transformations = input$transf,	frequency = data_params()$freq) |> 
+    transform_data(transformations = input$transf,	frequency = input$frequency) |> 
 		purrr::pluck("transform_params")
 })
 
 data_transformed <- reactive({
   data_cleaned() |> 
-    transform_data(transformations = input$transf,	frequency = data_params()$freq) |> 
+    transform_data(transformations = input$transf,	frequency = input$frequency) |> 
 		purrr::pluck("data_transformed") |> 
     dplyr::filter(dplyr::between(date, input$transf_date_range[1], input$transf_date_range[2]))
 })
@@ -564,7 +571,7 @@ output$transf_autocorr_plot <- plotly::renderPlotly({
   data_transformed() |>
     timetk::plot_acf_diagnostics(
       .date_var = date, .value = value, 
-      .lags = data_params()$acf_n_lags, 
+      .lags = react_val[["acf_n_lags"]], 
       .interactive = TRUE,
       .title = "Autocorrelation", .y_lab = NULL,
     )
@@ -683,7 +690,6 @@ output$feat_table <- DT::renderDT({
 			)
 		)
 })
-output$feat_str <- renderPrint({ dplyr::glimpse(data_features()) })
 output$feat_summ <- renderPrint({ skimr::skim(data_features()) })
 
 output$feat_ts_plot <- plotly::renderPlotly({
@@ -727,12 +733,6 @@ Row 1 {.tabset}
 
 ```{r}
 DT::DTOutput(outputId = "feat_table")
-```
-
-### Structure {.no-padding}
-
-```{r}
-verbatimTextOutput(outputId = "feat_str")
 ```
 
 ### Summary {.no-padding}
@@ -809,7 +809,6 @@ output$xfeat_table <- DT::renderDT({
         )
       )
 })
-output$xfeat_str <- renderPrint({ dplyr::glimpse(data_xfeatures()) })
 output$xfeat_summ <- renderPrint({ skimr::skim(data_xfeatures()) })
 
 output$xfeat_ts_plot <- plotly::renderPlotly({
@@ -832,7 +831,7 @@ output$xfeat_crosscorr_plot <- plotly::renderPlotly({
   	tidyr::drop_na() |> 
     timetk::plot_acf_diagnostics(
     	.date_var = date, .value = value, .ccf_vars = get_features(data_xfeatures(), names_only = TRUE)[-1],
-    	.lags = data_params()$acf_n_lags,
+    	.lags = react_val[["acf_n_lags"]],
     	.show_white_noise_bars = TRUE, .show_ccf_vars_only = TRUE,
     	.interactive = TRUE, .title = NULL, .y_lab = NULL,
     	.facet_ncol = ifelse(length(get_features(data_xfeatures(), names_only = TRUE)[-1]) > 3, 2, 1)
@@ -847,12 +846,6 @@ Row 1 {.tabset}
 
 ```{r}
 DT::DTOutput(outputId = "xfeat_table")
-```
-
-### Structure {.no-padding}
-
-```{r}
-verbatimTextOutput(outputId = "xfeat_str")
 ```
 
 ### Summary {.no-padding}
@@ -1097,7 +1090,7 @@ shinyWidgets::pickerInput(
     `Mixed Algorithms` = mix_methods,
     `Auto ML` = aml_methods
   ), 
-  selected = "Naive"
+  selected = "ETS"
 )
 shinyWidgets::awesomeCheckbox(inputId = "back_transf", label = "Back transform?", value = FALSE)
 
@@ -1376,6 +1369,7 @@ forecast_results <- eventReactive(
 })
 
 back_forecast_results <- reactive({
+	req(data_model())
 	req(forecast_results())
 	shinybusy::remove_modal_spinner()
 	forecast_results() |> 
@@ -1585,6 +1579,7 @@ exp_observation <- reactive({
 })
 	
 output$exp_features_table <- DT::renderDT({
+	req(data_model())
   req(explainer_results()) 
 	tibble::tibble(explainer_results()$features) |>
 		DT::datatable(
@@ -1597,6 +1592,7 @@ output$exp_features_table <- DT::renderDT({
 })
 
 output$plot_exp_featimp <- renderPlot({
+	req(data_model())
 	req(explainer_results())
 	explainer_results()$explainer |> 
 		explain_model(type = "feature_importance") |>
@@ -1604,6 +1600,7 @@ output$plot_exp_featimp <- renderPlot({
 })
 
 output$plot_exp_varresp <- renderPlot({
+	req(data_model())
 	req(explainer_results())
 	req(input$exp_features)
 	explainer_results()$explainer |> 
@@ -1612,6 +1609,7 @@ output$plot_exp_varresp <- renderPlot({
 })
 
 output$plot_exp_bd <- renderPlot({
+	req(data_model())
 	req(explainer_results())
 	req(exp_observation())
 	explainer_results()$explainer |> 
@@ -1932,6 +1930,7 @@ observeEvent(
 )
 
 back_tune_results <- reactive({
+	req(data_model())
 	req(tune_results())
 	tune_results() |> 
 		back_transform_forecast(
@@ -1970,6 +1969,7 @@ output$tune_accuracy_table <- DT::renderDT({
 })
 
 output$tune_model_summary <- renderPrint({
+	req(data_model())
   tune_results()$fit |> parse_model_fit()
 })
 
@@ -2131,6 +2131,7 @@ compare_results <- eventReactive(
 )
 
 back_compare_results <- reactive({
+	req(data_model())
 	req(compare_results())
 	shinybusy::remove_modal_spinner()
 	compare_results() |> 
@@ -2165,6 +2166,7 @@ output$comp_accuracy_table <- DT::renderDT({
 })
 
 output$comp_model_summary <- renderPrint({
+	req(data_model())
   compare_results()$fit |> parse_model_fit()
 })
 ```
@@ -2255,8 +2257,10 @@ tags$div(
 ```
 
 ```{r forecast_combine_server}
-react_val <- reactiveValues(combine_results = NULL)
-react_val <- reactiveValues(ens_fit = purrr::set_names(vector("list", length(all_methods)),	all_methods))
+react_val <- reactiveValues(
+	combine_results = NULL,
+	ens_fit = purrr::set_names(vector("list", length(all_methods)),	all_methods)
+)
 
 observeEvent(
   eventExpr = input$ens_apply_forecast, 
@@ -2354,6 +2358,7 @@ observeEvent(
 )
 
 back_combine_results <- reactive({
+	req(data_model())
 	req(react_val$combine_results)
 	shinybusy::remove_modal_spinner()
 	react_val$combine_results |> 
@@ -2388,6 +2393,7 @@ output$ens_accuracy_table <- DT::renderDT({
 })
 
 output$ens_model_summary <- renderPrint({
+	req(data_model())
   req(react_val$combine_results$fit)
   react_val$combine_results$fit |> parse_model_fit()
 })
@@ -2444,7 +2450,7 @@ shinyWidgets::pickerInput(
     `Mixed Algorithms` = mix_methods,
     `Auto ML` = aml_methods
   ), 
-  selected = "Naive"
+  selected = "ETS"
 )
 shinyWidgets::awesomeCheckbox(inputId = "scn_back_transf", label = "Back transform?", value = FALSE)
 actionButton(inputId = "scn_apply_forecast", label = "Forecast!", icon = icon("play"))
@@ -2601,6 +2607,7 @@ scenario_results <- eventReactive(
 )
 
 back_scenario_results <- reactive({
+	req(data_model())
 	req(scenario_results())
 	shinybusy::remove_modal_spinner()
 	scenario_results() |> 
@@ -2814,56 +2821,66 @@ ids_all <- c(
 	ids_scn
 )
 
-# reset button
 observeEvent(
   eventExpr = input$data_reset, 
   handlerExpr = {
-		reset_ids(ids_all)
+  	# reset inputs
+  	reset_ids(ids_all)
   	react_val$uploaded_data <- NULL
+  	react_val$data_edited <- NULL
+  	react_val$acf_n_lags <- NULL
   	react_val$uploaded_xfeatures <- NULL
+  	react_val$tune_fit <- NULL
+  	react_val$comp_fit <- NULL
+  	react_val$combine_results <- NULL
+  	react_val$ens_fit <- purrr::set_names(vector("list", length(all_methods)),	all_methods)
+  	react_val$aggregate_n_future <- NULL
+  	# reset outputs
+  	output$plot_test_forecast <- plotly::renderPlotly({ return() })
   }
 )
 
-# update date range when dataset or data_import
 observeEvent(
 	eventExpr = input$dataset, 
 	handlerExpr = {
+		req(data_loaded())
 		shinyjs::reset("frequency")
-		updateNumericInput(session = session, inputId = "horizon", value = data_params()$horizon)
-		updateNumericInput(session = session, inputId = "n_assess", value = data_params()$n_assess)
+		n <- nrow(data_loaded())
+		freq <- timetk::tk_get_frequency(data_loaded()[["date"]])
+		horizon <- set_horizon(freq)
+		date_min <- min(data_loaded()[["date"]])
+		date_max <- max(data_loaded()[["date"]])
+		updateNumericInput(session = session, inputId = "horizon", value = horizon)
+		updateNumericInput(session = session, inputId = "n_assess", value = round(n * 0.2))
 		updateDateRangeInput(
 			session = session, inputId = "transf_date_range",
-			start = data_params()$date_min, end = data_params()$date_max,
-			min = data_params()$date_min, max = data_params()$date_max
+			start = date_min, end = date_max,	min = date_min, max = date_max
 		)
-		updateDateInput(
-			session = session, inputId = "exp_date",
-			value = data_params()$date_assess_min,
-			min = data_params()$date_assess_min, max = data_params()$date_assess_max
-		)
+		react_val[["acf_n_lags"]] <- set_acf_lags(freq, horizon)
 })
 observeEvent(
 	eventExpr = input$data_import, 
 	handlerExpr = {
+		req(data_loaded())
 		shinyjs::reset("frequency")
-		updateNumericInput(session = session, inputId = "horizon", value = data_params()$horizon)
-		updateNumericInput(session = session, inputId = "n_assess", value = data_params()$n_assess)
+		n <- nrow(data_loaded())
+		freq <- timetk::tk_get_frequency(data_loaded()[["date"]])
+		horizon <- set_horizon(freq)
+		date_min <- min(data_loaded()[["date"]])
+		date_max <- max(data_loaded()[["date"]])
+		updateNumericInput(session = session, inputId = "horizon", value = horizon)
+		updateNumericInput(session = session, inputId = "n_assess", value = round(n * 0.2))
 		updateDateRangeInput(
 			session = session, inputId = "transf_date_range",
-			start = data_params()$date_min, end = data_params()$date_max,
-			min = data_params()$date_min, max = data_params()$date_max
+			start = date_min, end = date_max,	min = date_min, max = date_max
 		)
-		updateDateInput(
-			session = session, inputId = "exp_date",
-			value = data_params()$date_assess_min,
-			min = data_params()$date_assess_min, max = data_params()$date_assess_max
-		)
+		react_val[["acf_n_lags"]] <- set_acf_lags(freq, horizon)
 })
 observeEvent(
-	eventExpr = input$frequency, 
+	eventExpr = input$frequency,
 	handlerExpr = {
-		updateNumericInput(session = session, inputId = "horizon", value = set_horizon(parse_frequency(input$frequency)))
+		horizon <- set_horizon(input$frequency)
+		updateNumericInput(session = session, inputId = "horizon", value = horizon)
+		react_val[["acf_n_lags"]] <- set_acf_lags(input$frequency, horizon)
 })
 ```
-
-
